@@ -281,95 +281,9 @@ async function saveAppData() {
 // 4. UI RENDERING FUNCTIONS
 // ============================================================================
 function renderAll() {
-    renderPrograms();
-    renderTeams();
     renderPublishedResults();
     updateLiveScoreboard();
     updateAdminUI();
-}
-
-function renderPrograms() {
-    const tbody = document.getElementById("programListBody");
-    if (!tbody) return;
-
-    const titleEl = document.getElementById("programTableTitle");
-    const offstageBtn = document.querySelector('.type-btn[data-type="offstage"]');
-
-    if (currentCategory === "general") {
-        if (offstageBtn) offstageBtn.style.display = "none";
-        if (currentType === "offstage") currentType = "onstage";
-    } else {
-        if (offstageBtn) offstageBtn.style.display = "inline-block";
-    }
-
-    const catNames = { senior: "SENIOR", junior: "JUNIOR", subjunior: "SUB JUNIOR", general: "GENERAL" };
-    const typeNames = {
-        onstage: currentCategory === "general" ? "GENERAL PROGRAMS" : "ON STAGE",
-        offstage: "OFF STAGE",
-        sports: "SPORTS"
-    };
-
-    if (titleEl) titleEl.textContent = `${catNames[currentCategory]} — ${typeNames[currentType]}`;
-
-    const list = (appData.programs[currentCategory] && appData.programs[currentCategory][currentType]) || [];
-    tbody.innerHTML = "";
-
-    if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px;">പ്രോഗ്രാമുകൾ ചേർത്തിട്ടില്ല.</td></tr>`;
-        return;
-    }
-
-    list.forEach((item, index) => {
-        const tr = document.createElement("tr");
-        const editButtonHTML = isAdmin
-            ? `<button class="edit-row-btn" onclick="openEditProgramModal(${index})">✏️ Edit</button>`
-            : "";
-
-        tr.innerHTML = `
-            <td><strong>${item.no}</strong></td>
-            <td><strong>${item.name}</strong> ${editButtonHTML}</td>
-            <td>${item.teamA || '<span style="color:#aaa;">-</span>'}</td>
-            <td>${item.teamB || '<span style="color:#aaa;">-</span>'}</td>
-        `;
-        tbody.appendChild(tr);
-    });
-}
-
-function renderTeams() {
-    const renderTeamColumn = (teamKey, containerId) => {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-        container.innerHTML = "";
-        const categories = [
-            { key: "senior", label: "Senior" },
-            { key: "junior", label: "Junior" },
-            { key: "subjunior", label: "Sub Junior" }
-        ];
-
-        categories.forEach(cat => {
-            const heading = document.createElement("div");
-            heading.className = "team-cat-title";
-            heading.textContent = cat.label;
-            container.appendChild(heading);
-
-            const students = (appData.teams[teamKey] && appData.teams[teamKey][cat.key]) || [];
-            students.forEach((student, idx) => {
-                const div = document.createElement("div");
-                div.className = "student-item";
-                const adminBtns = isAdmin
-                    ? `<div>
-                        <button class="edit-row-btn" onclick="editStudent('${teamKey}', '${cat.key}', ${idx})">✏️</button>
-                        <button class="edit-row-btn" style="background:#dc2626;" onclick="deleteStudent('${teamKey}', '${cat.key}', ${idx})">🗑️</button>
-                       </div>`
-                    : "";
-                div.innerHTML = `<span>${student}</span> ${adminBtns}`;
-                container.appendChild(div);
-            });
-        });
-    };
-
-    renderTeamColumn("teamA", "teamAContainer");
-    renderTeamColumn("teamB", "teamBContainer");
 }
 
 function updateAdminUI() {
@@ -386,7 +300,7 @@ function updateAdminUI() {
     } else {
         if (adminBar) adminBar.style.display = "none";
         if (adminBtn) adminBtn.style.display = "inline-block";
-        adminOnlyBtns.forEach(btn => btn.style.display = "none";
+        adminOnlyBtns.forEach(btn => btn.style.display = "none");
         if (posterBuilderCard) posterBuilderCard.style.display = "none";
     }
 }
@@ -465,4 +379,90 @@ window.onPosterProgramSelect = function() {
     updatePosterPreview();
 };
 
-window.onWinnerSelect = function(ra
+window.onWinnerSelect = function(rank) {
+    const sel = document.getElementById(`selWinner${rank}`);
+    const nameInput = document.getElementById(`win${rank}Name`);
+    const teamInput = document.getElementById(`win${rank}Team`);
+    if (!sel || !sel.value) return;
+
+    const [name, team] = sel.value.split("|");
+    if (nameInput) nameInput.value = name.toUpperCase();
+    if (teamInput) teamInput.value = team.toUpperCase();
+    updatePosterPreview();
+};
+
+window.updatePosterPreview = function() {
+    const resNo = document.getElementById("resNoInput")?.value || "01";
+    const catVal = document.getElementById("resCatSelect")?.value || "senior";
+    const progName = document.getElementById("resProgCustom")?.value || "പ്രോഗ്രാം";
+
+    const catLabels = {
+        subjunior: "SUB JUNIOR",
+        junior: "JUNIOR",
+        senior: "SENIOR",
+        general: "GENERAL"
+    };
+
+    const setElText = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+    };
+
+    setElText("previewResNo", resNo);
+    setElText("previewCat", catLabels[catVal] || "SENIOR");
+    setElText("previewProg", progName);
+
+    setElText("previewWin1Name", document.getElementById("win1Name")?.value || "-");
+    setElText("previewWin1Team", document.getElementById("win1Team")?.value || "");
+
+    setElText("previewWin2Name", document.getElementById("win2Name")?.value || "-");
+    setElText("previewWin2Team", document.getElementById("win2Team")?.value || "");
+
+    setElText("previewWin3Name", document.getElementById("win3Name")?.value || "-");
+    setElText("previewWin3Team", document.getElementById("win3Team")?.value || "");
+};
+
+window.changePosterTheme = function() {
+    const themeSelect = document.getElementById("themeStyleSelect");
+    const posterCanvas = document.getElementById("posterCanvas");
+    if (!themeSelect || !posterCanvas) return;
+
+    posterCanvas.classList.remove("theme-milad", "theme-sahityotsav", "theme-alif");
+    posterCanvas.classList.add(themeSelect.value);
+};
+
+// Calculate Category-wise and Total Points for Live Scoreboard
+function updateLiveScoreboard() {
+    let totals = { A: 0, B: 0 };
+    let cats = {
+        senior: { A: 0, B: 0 },
+        junior: { A: 0, B: 0 },
+        subjunior: { A: 0, B: 0 },
+        general: { A: 0, B: 0 }
+    };
+
+    if (appData.results && appData.results.length > 0) {
+        appData.results.forEach(r => {
+            const getPts = (rank) => (rank === 1 ? 5 : rank === 2 ? 3 : 1);
+            
+            let cKey = "senior";
+            let cText = (r.category || "").toUpperCase();
+            if (cText.includes("JUNIOR") && !cText.includes("SUB")) cKey = "junior";
+            else if (cText.includes("SUB")) cKey = "subjunior";
+            else if (cText.includes("GENERAL") || cText.includes("SPORTS")) cKey = "general";
+
+            const processWin = (teamStr, rank) => {
+                if (!teamStr) return;
+                let pts = getPts(rank);
+                let t = teamStr.toUpperCase();
+                if (t.includes("TEAM A") || t.includes("A")) {
+                    totals.A += pts;
+                    if (cats[cKey]) cats[cKey].A += pts;
+                } else if (t.includes("TEAM B") || t.includes("B")) {
+                    totals.B += pts;
+                    if (cats[cKey]) cats[cKey].B += pts;
+                }
+            };
+
+            processWin(r.win1Team, 1);
+            processWin
