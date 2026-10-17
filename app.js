@@ -28,7 +28,7 @@ if (typeof firebase !== "undefined") {
 }
 
 // ============================================================================
-// 2. DEFAULT SOURCE DATA (യഥാർത്ഥ പ്രോഗ്രാമുകളും ടീം ലിസ്റ്റുകളും)
+// 2. DEFAULT SOURCE DATA
 // ============================================================================
 const defaultData = {
     programs: {
@@ -245,7 +245,7 @@ async function loadAppData() {
                 await docRef.set(defaultData);
             }
         } catch (err) {
-            console.warn("Firestore Load Error, using local backup:", err);
+            console.warn("Firestore Load Error:", err);
             const saved = localStorage.getItem("eid_irshad_2k26_data");
             if (saved) {
                 appData = JSON.parse(saved);
@@ -260,7 +260,9 @@ async function loadAppData() {
         }
     }
     renderAll();
-    initPosterBuilder();
+    if (document.getElementById("resCatSelect")) {
+        initPosterBuilder();
+    }
 }
 
 async function saveAppData() {
@@ -276,23 +278,7 @@ async function saveAppData() {
 }
 
 // ============================================================================
-// 4. MULTI-PAGE NAVIGATION
-// ============================================================================
-window.openPage = function(pageName) {
-    document.querySelectorAll(".page-view").forEach(el => el.classList.remove("active"));
-    const target = document.getElementById(`page-${pageName}`);
-    if (target) {
-        target.classList.add("active");
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-    if (pageName === "results") {
-        initPosterBuilder();
-        renderPublishedResults();
-    }
-};
-
-// ============================================================================
-// 5. UI RENDERING FUNCTIONS
+// 4. UI RENDERING FUNCTIONS
 // ============================================================================
 function renderAll() {
     renderPrograms();
@@ -303,6 +289,8 @@ function renderAll() {
 
 function renderPrograms() {
     const tbody = document.getElementById("programListBody");
+    if (!tbody) return;
+
     const titleEl = document.getElementById("programTableTitle");
     const offstageBtn = document.querySelector('.type-btn[data-type="offstage"]');
 
@@ -323,7 +311,6 @@ function renderPrograms() {
     if (titleEl) titleEl.textContent = `${catNames[currentCategory]} — ${typeNames[currentType]}`;
 
     const list = (appData.programs[currentCategory] && appData.programs[currentCategory][currentType]) || [];
-    if (!tbody) return;
     tbody.innerHTML = "";
 
     if (list.length === 0) {
@@ -401,7 +388,7 @@ function updateAdminUI() {
 }
 
 // ============================================================================
-// 6. RESULT POSTER MAKER FUNCTIONS
+// 5. RESULT POSTER MAKER FUNCTIONS
 // ============================================================================
 function initPosterBuilder() {
     const resNoInput = document.getElementById("resNoInput");
@@ -520,7 +507,7 @@ window.updatePosterPreview = function() {
 window.downloadResultPoster = async function() {
     const posterEl = document.getElementById("posterCanvas");
     if (!posterEl || typeof html2canvas === "undefined") {
-        alert("പോസ്റ്റർ ഡൗൺലോഡ് തയ്യാറാകുന്നതേയുള്ളൂ, ദയവായി ഒന്നുകൂടി ശ്രമിക്കുക.");
+        alert("ഡൗൺലോഡ് തയ്യാറാകുന്നുണ്ട്, ദയവായി കാത്തിരിക്കുക.");
         return;
     }
     try {
@@ -538,7 +525,7 @@ window.downloadResultPoster = async function() {
 window.publishResultToSite = async function() {
     const resObj = {
         resNo: document.getElementById("resNoInput")?.value || "01",
-        category: document.getElementById(" previewCat")?.textContent || document.getElementById("resCatSelect")?.value.toUpperCase(),
+        category: document.getElementById("previewCat")?.textContent || "SENIOR",
         program: document.getElementById("resProgCustom")?.value || "",
         win1Name: document.getElementById("win1Name")?.value || "-",
         win1Team: document.getElementById("win1Team")?.value || "",
@@ -593,7 +580,7 @@ window.deletePublishedResult = async function(idx) {
 };
 
 // ============================================================================
-// 7. FILTER HANDLERS
+// 6. FILTER HANDLERS
 // ============================================================================
 window.selectCategory = function(cat, btnEl) {
     currentCategory = cat;
@@ -610,7 +597,7 @@ window.selectType = function(type, btnEl) {
 };
 
 // ============================================================================
-// 8. ADMIN AUTHENTICATION & EDITING FUNCTIONS (100% RELIABLE LOGIN)
+// 7. ADMIN AUTHENTICATION & EDITING FUNCTIONS
 // ============================================================================
 window.openAdminModal = function() {
     const errEl = document.getElementById("loginError");
@@ -642,7 +629,7 @@ window.loginAdmin = async function() {
             } catch (e) {
                 try {
                     await auth.createUserWithEmailAndPassword(email, pass);
-                } catch ( ignoreErr ) {}
+                } catch (ignore) {}
             }
         }
         closeAdminModal();
@@ -807,7 +794,7 @@ window.deleteStudent = async function(teamKey, catKey, idx) {
 };
 
 window.resetToDefaultData = async function() {
-    if (!confirm("ശ്രദ്ധിക്കുക: നിങ്ങൾ വരുത്തിയ മാറ്റങ്ങൾ മാഞ്ഞ് ആദ്യത്തെ യഥാർത്ഥ ലിസ്റ്റിലേക്ക് തിരിച്ചുപോകും. തുടരണോ?")) return;
+    if (!confirm("ശ്രദ്ധിക്കുക: നിങ്ങൾ വരുത്തിയ മാറ്റങ്ങൾ മാഞ്ഞ് ആദ്യത്തെ ലിസ്റ്റിലേക്ക് തിരിച്ചുപോകും. തുടരണോ?")) return;
     appData = JSON.parse(JSON.stringify(defaultData));
     await saveAppData();
 };
