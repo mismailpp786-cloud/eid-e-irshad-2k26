@@ -3,45 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ടീം ലിസ്റ്റ് — EID-E IRSHAD 2K26</title>
+    <title>ടീം ലിസ്റ്റ് (ZELLIJ & IZNIK) — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .teams-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .team-a-header { background: #b91c1c; color: #fff; padding: 14px 18px; font-weight: 800; }
+        .team-b-header { background: #1d4ed8; color: #fff; padding: 14px 18px; font-weight: 800; }
+        .team-list-body { padding: 16px; background: #fff; }
+        .team-cat-title { font-size: 1rem; font-weight: 800; color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px; margin: 12px 0 8px; }
+        .student-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 8px; border-bottom: 1px dashed #e2e8f0; font-weight: 600; font-size: 0.92rem; }
+        .subpage-header { background: #0f172a; color: #fff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #fbbf24; }
+        .back-home-btn { background: #fbbf24; color: #0f172a; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+        @media (max-width: 768px) { .teams-grid { grid-template-columns: 1fr; } }
+    </style>
 </head>
 <body>
 
-    <!-- TOP ADMIN BAR -->
-    <div id="adminBar" class="admin-bar" style="display: none;">
-        <span>⚙️ അഡ്മിൻ മോഡ് സജീവമാണ്</span>
-        <div class="admin-actions">
-            <button class="btn-reset" onclick="resetToDefaultData()">🔄 Reset</button>
-            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
-        </div>
-    </div>
-
     <div class="subpage-header">
-        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ ഹോം പേജിലേക്ക് മടങ്ങുക</button>
-        <h2>👥 ടീം ലിസ്റ്റ് (Team A & Team B)</h2>
-        <button class="admin-top-btn" id="adminBtn" onclick="openAdminModal()">🔐 Admin Login</button>
+        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ ഹോം പേജിലേക്ക്</button>
+        <h2>👥 ടീം ലിസ്റ്റ് (ZELLIJ & IZNIK)</h2>
     </div>
 
     <main class="container">
         <div class="teams-grid">
-            <!-- Team A Card -->
+            <!-- Team A: ZELLIJ -->
             <div class="card">
                 <div class="card-header team-a-header">
-                    <h3>🔴 TEAM A</h3>
-                    <button class="admin-only-btn" style="display:none;" onclick="addNewStudent('teamA')">+ ആളെ ചേർക്കുക</button>
+                    <h3>🔴 ZELLIJ (Team A)</h3>
                 </div>
-                <div class="team-list-body" id="teamAContainer"></div>
+                <div class="team-list-body" id="teamAContainer">
+                    <div class="team-cat-title">Senior</div>
+                    <div class="student-item"><span>300. Safwan (C)</span></div>
+                    <div class="student-item"><span>301. Ramees (Vc)</span></div>
+                    <div class="student-item"><span>302. fayiz (Vc)</span></div>
+                    <div class="student-item"><span>303. Thangal</span></div>
+                    <div class="student-item"><span>304. Asaf</span></div>
+                    <div class="student-item"><span>305. Thasnif</span></div>
+                    <div class="student-item"><span>306. Thwahir</span></div>
+                    <div class="student-item"><span>307. Irfan</span></div>
+
+                    <div class="team-cat-title">Junior</div>
+                    <div class="student-item"><span>308. Qasim</span></div>
+                    <div class="student-item"><span>309. Sinan MT</span></div>
+                    <div class="student-item"><span>310. Ashiq</span></div>
+                    <div class="student-item"><span>311. Saeed</span></div>
+
+                    <div class="team-cat-title">Sub Junior</div>
+                    <div class="student-item"><span>312. Shahin</span></div>
+                    <div class="student-item"><span>313. Muhsin</span></div>
+                    <div class="student-item"><span>314. Razi</span></div>
+                    <div class="student-item"><span>315. Anshid</span></div>
+                </div>
             </div>
 
-            <!-- Team B Card -->
+            <!-- Team B: IZNIK -->
             <div class="card">
                 <div class="card-header team-b-header">
-                    <h3>🔵 TEAM B</h3>
-                    <button class="admin-only-btn" style="display:none;" onclick="addNewStudent('teamB')">+ ആളെ ചേർക്കുക</button>
+                    <h3>🔵 IZNIK (Team B)</h3>
                 </div>
-                <div class="team-list-body" id="teamBContainer"></div>
+                <div class="team-list-body" id="teamBContainer">
+                    <div class="team-cat-title">Senior</div>
+                    <div class="student-item"><span>100. Shibili (C)</span></div>
+                    <div class="student-item"><span>101. Ismail (Vc)</span></div>
+                    <div class="student-item"><span>102. Abdul vahab (Vc)</span></div>
+                    <div class="student-item"><span>103. Sinan P.k</span></div>
+                    <div class="student-item"><span>104. Adhil</span></div>
+                    <div class="student-item"><span>105. Rahees</span></div>
+                    <div class="student-item"><span>106. Amir</span></div>
+                    <div class="student-item"><span>107. Afsal</span></div>
+
+                    <div class="team-cat-title">Junior</div>
+                    <div class="student-item"><span>108. Sinan edayoor</span></div>
+                    <div class="student-item"><span>109. Sinan cherushola</span></div>
+                    <div class="student-item"><span>110. Aslam</span></div>
+                    <div class="student-item"><span>111. Hijaz</span></div>
+                    <div class="student-item"><span>112. Jazeel</span></div>
+
+                    <div class="team-cat-title">Sub Junior</div>
+                    <div class="student-item"><span>113. Nijad</span></div>
+                    <div class="student-item"><span>114. Farhan</span></div>
+                    <div class="student-item"><span>115. Nusaif</span></div>
+                </div>
             </div>
         </div>
     </main>
@@ -50,9 +93,5 @@
         &copy; 2026 EID-E IRSHAD — IRSHADUNNASIHEEN SAHITHYA SAMAJAM
     </footer>
 
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="app.js"></script>
 </body>
 </html>
