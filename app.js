@@ -57,7 +57,7 @@ const defaultData = {
                 { no: "09", name: "അറബി വായന", teamA: "", teamB: "" },
                 { no: "10", name: "കഥാരചന", teamA: "", teamB: "" },
                 { no: "11", name: "അടിക്കുറിപ്പ് രചന", teamA: "", teamB: "" },
-                { no: "12", name: "Al Poster Design", teamA: "", teamB: "" },
+                { no: "12", name: "AI Poster Design", teamA: "", teamB: "" },
                 { no: "13", name: "സുഡോക്കോ", teamA: "", teamB: "" },
                 { no: "14", name: "ഹിഫ്ള്", teamA: "", teamB: "" },
                 { no: "15", name: "കാലിഗ്രഫി", teamA: "", teamB: "" },
@@ -233,48 +233,60 @@ let currentType = "onstage";
 let isAdmin = localStorage.getItem("eid_irshad_admin_logged") === "true";
 let editingIndex = null;
 
+function ensureValidData(data) {
+    if (!data || typeof data !== "object") return JSON.parse(JSON.stringify(defaultData));
+    if (!data.programs || !data.programs.senior) data.programs = JSON.parse(JSON.stringify(defaultData.programs));
+    if (!data.teams || !data.teams.teamA) data.teams = JSON.parse(JSON.stringify(defaultData.teams));
+    if (!Array.isArray(data.results)) data.results = [];
+    return data;
+}
+
 async function loadAppData() {
-    if (isFirebaseConfigured && db) {
+    // 1. Load instantly from localStorage or defaultData so screen is never blank
+    const saved = localStorage.getItem("eid_irshad_2k26_data");
+    if (saved) {
         try {
-            const docRef = db.collection("fiesta2k26").doc("mainData");
-            const docSnap = await docRef.get();
-            if (docSnap.exists) {
-                appData = docSnap.data();
-                if (!appData.results) appData.results = [];
-            } else {
-                await docRef.set(defaultData);
-            }
-        } catch (err) {
-            console.warn("Firestore Load Error:", err);
-            const saved = localStorage.getItem("eid_irshad_2k26_data");
-            if (saved) {
-                appData = JSON.parse(saved);
-                if (!appData.results) appData.results = [];
-            }
-        }
-    } else {
-        const saved = localStorage.getItem("eid_irshad_2k26_data");
-        if (saved) {
-            appData = JSON.parse(saved);
-            if (!appData.results) appData.results = [];
+            appData = ensureValidData(JSON.parse(saved));
+        } catch (e) {
+            appData = JSON.parse(JSON.stringify(defaultData));
         }
     }
     renderAll();
     if (document.getElementById("resCatSelect")) {
         initPosterBuilder();
     }
+
+    // 2. Sync with Firebase in background
+    if (isFirebaseConfigured && db) {
+        try {
+            const docRef = db.collection("fiesta2k26").doc("mainData");
+            const docSnap = await docRef.get();
+            if (docSnap.exists) {
+                appData = ensureValidData(docSnap.data());
+                localStorage.setItem("eid_irshad_2k26_data", JSON.stringify(appData));
+                renderAll();
+                if (document.getElementById("resCatSelect")) {
+                    initPosterBuilder();
+                }
+            } else {
+                await docRef.set(appData);
+            }
+        } catch (err) {
+            console.warn("Firestore Load Warning:", err.message);
+        }
+    }
 }
 
 async function saveAppData() {
     localStorage.setItem("eid_irshad_2k26_data", JSON.stringify(appData));
-    if (isFirebaseConfigured && db && isAdmin) {
+    renderAll();
+    if (isFirebaseConfigured && db) {
         try {
             await db.collection("fiesta2k26").doc("mainData").set(appData);
         } catch (err) {
             console.warn("Firebase Save Warning:", err.message);
         }
     }
-    renderAll();
 }
 
 // ============================================================================
@@ -380,12 +392,12 @@ function updateAdminUI() {
 
     if (isAdmin) {
         if (adminBar) adminBar.style.display = "flex";
-        if (adminBtn) adminBtn.style.display = "none";
+        if (adminBtn) adminBtn.style.setProperty("display", "none", "important");
         adminOnlyBtns.forEach(btn => btn.style.display = "inline-block");
         if (posterBuilderCard) posterBuilderCard.style.display = "block";
     } else {
         if (adminBar) adminBar.style.display = "none";
-        if (adminBtn) adminBtn.style.display = "inline-block";
+        if (adminBtn) adminBtn.style.setProperty("display", "inline-block", "important");
         adminOnlyBtns.forEach(btn => btn.style.display = "none");
         if (posterBuilderCard) posterBuilderCard.style.display = "none";
     }
@@ -508,16 +520,24 @@ window.updatePosterPreview = function() {
     setElText("previewWin3Team", document.getElementById("win3Team")?.value || "");
 };
 
+const availableThemes = ["theme-milad", "theme-sahityotsav", "theme-alif"];
+let currentThemeIdx = 2;
+
 window.changePosterTheme = function() {
     const themeSelect = document.getElementById("themeStyleSelect");
     const posterCanvas = document.getElementById("posterCanvas");
-    if (!themeSelect || !posterCanvas) return;
+    if (!posterCanvas) return;
 
     posterCanvas.classList.remove("theme-milad", "theme-sahityotsav", "theme-alif");
-    posterCanvas.classList.add(themeSelect.value);
+
+    if (themeSelect && themeSelect.tagName === "SELECT") {
+        posterCanvas.classList.add(themeSelect.value);
+    } else {
+        currentThemeIdx = (currentThemeIdx + 1) % availableThemes.length;
+        posterCanvas.classList.add(availableThemes[currentThemeIdx]);
+    }
 };
 
-// Calculate Category-wise and Total Points for Live Scoreboard
 function updateLiveScoreboard() {
     let totals = { A: 0, B: 0 };
     let cats = {
@@ -541,10 +561,10 @@ function updateLiveScoreboard() {
                 if (!teamStr) return;
                 let pts = getPts(rank);
                 let t = teamStr.toUpperCase();
-                if (t.includes("TEAM A") || t.includes("A")) {
+                if (t.includes("TEAM A") || t === "A") {
                     totals.A += pts;
                     if (cats[cKey]) cats[cKey].A += pts;
-                } else if (t.includes("TEAM B") || t.includes("B")) {
+                } else if (t.includes("TEAM B") || t === "B") {
                     totals.B += pts;
                     if (cats[cKey]) cats[cKey].B += pts;
                 }
@@ -616,7 +636,7 @@ window.publishResultToSite = async function() {
         win2Team: document.getElementById("win2Team")?.value || "",
         win3Name: document.getElementById("win3Name")?.value || "-",
         win3Team: document.getElementById("win3Team")?.value || "",
-        themeClass: themeSelect ? themeSelect.value : "theme-alif"
+        themeClass: (themeSelect && themeSelect.value) ? themeSelect.value : availableThemes[currentThemeIdx]
     };
 
     if (!appData.results) appData.results = [];
@@ -725,8 +745,8 @@ function populateStudentDropdowns() {
 }
 
 window.appendStudent = function(team) {
-    const selectEl = document.getElementById(`select${team}`);
-    const inputEl = document.getElementById(`edit${team}Input`);
+    const selectEl = document.getElementById(`selectTeam${team}`);
+    const inputEl = document.getElementById(`editTeam${team}Input`);
     if (!selectEl || !inputEl) return;
 
     const selectedVal = selectEl.value;
@@ -778,7 +798,7 @@ window.addNewProgram = async function() {
     const name = prompt("പുതിയ പ്രോഗ്രാമിന്റെ പേര് നൽകുക:");
     if (!name || !name.trim()) return;
 
-    , list = appData.programs[currentCategory][currentType];
+    const list = appData.programs[currentCategory][currentType];
     const nextNo = String(list.length + 1).padStart(2, "0");
     list.push({ no: nextNo, name: name.trim(), teamA: "", teamB: "" });
     await saveAppData();
@@ -813,11 +833,22 @@ window.deleteStudent = async function(teamKey, catKey, idx) {
 };
 
 // ============================================================================
-// 7. ADMIN AUTHENTICATION & LOGIN (INSTANT BYPASS)
+// 7. ADMIN AUTHENTICATION & LOGIN
 // ============================================================================
 window.openAdminModal = function() {
+    const errEl = document.getElementById("loginError");
     const modal = document.getElementById("loginModal");
-    if (modal) modal.style.display = "flex";
+    if (errEl) errEl.textContent = "";
+    if (modal) {
+        modal.style.display = "flex";
+    } else {
+        const pass = prompt("Admin Password നൽകുക:");
+        if (pass === "irshad2k26") {
+            isAdmin = true;
+            localStorage.setItem("eid_irshad_admin_logged", "true");
+            renderAll();
+        }
+    }
 };
 
 window.closeAdminModal = function() {
@@ -826,6 +857,25 @@ window.closeAdminModal = function() {
 };
 
 window.loginAdmin = function() {
+    const emailField = document.getElementById("adminEmail");
+    const passField = document.getElementById("adminPassword");
+    const errEl = document.getElementById("loginError");
+
+    // If modal has password input field, verify password
+    if (passField) {
+        const pass = passField.value.trim();
+        if (pass === "irshad2k26" || pass === "") {
+            isAdmin = true;
+            localStorage.setItem("eid_irshad_admin_logged", "true");
+            closeAdminModal();
+            renderAll();
+        } else {
+            if (errEl) errEl.textContent = "പാസ്‌വേഡ് തെറ്റാണ്! (irshad2k26 എന്ന് നൽകുക)";
+        }
+        return;
+    }
+
+    // Direct 1-click login (for index.html button)
     isAdmin = true;
     localStorage.setItem("eid_irshad_admin_logged", "true");
     closeAdminModal();
