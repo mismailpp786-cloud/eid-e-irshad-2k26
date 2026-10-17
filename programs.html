@@ -25,6 +25,7 @@
     </div>
 
     <main class="container">
+        <!-- Category Filter Buttons -->
         <div class="filter-group">
             <button class="cat-btn active" onclick="selectCategory('senior', this)">Senior</button>
             <button class="cat-btn" onclick="selectCategory('junior', this)">Junior</button>
@@ -32,12 +33,14 @@
             <button class="cat-btn" onclick="selectCategory('general', this)">General</button>
         </div>
 
+        <!-- Sub-category Type Filter Buttons -->
         <div class="sub-filter-group">
             <button class="type-btn active" data-type="onstage" onclick="selectType('onstage', this)">🎤 On Stage</button>
             <button class="type-btn" data-type="offstage" onclick="selectType('offstage', this)">✍️ Off Stage</button>
             <button class="type-btn" data-type="sports" onclick="selectType('sports', this)">⚽ Sports</button>
         </div>
 
+        <!-- Programs Table Card -->
         <div class="card">
             <div class="card-header">
                 <h3 id="programTableTitle">SENIOR — ON STAGE</h3>
