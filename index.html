@@ -10,11 +10,9 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Anek Malayalam', sans-serif; background-color: #f7f9fb; color: #2c3e50; line-height: 1.6; }
         
-        /* PAGE VIEWS */
         .page-sec { display: none; }
         .page-sec.active { display: block; }
 
-        /* ADMIN BAR */
         .admin-bar { background: #059669; color: #fff; padding: 10px 15px; display: none; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 0.9rem; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
         .admin-actions button { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; margin-left: 5px; }
         .btn-reset { background: #d97706; color: #fff; }
@@ -41,7 +39,6 @@
         .d-sun { background-color: #db2777; }
         .org-info { font-size: 0.85rem; color: #cbd5e1; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 12px; }
 
-        /* SUBPAGE HEADER */
         .subpage-header { background: #0f172a; color: #fff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; border-bottom: 3px solid #fbbf24; position: sticky; top: 0; z-index: 90; }
         .subpage-header h2 { font-size: 1.15rem; color: #fbbf24; font-weight: 800; }
         .back-home-btn { background: #fbbf24; color: #0f172a; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; cursor: pointer; }
@@ -57,7 +54,6 @@
         .nav-card-info p { font-size: 0.85rem; color: #64748b; font-weight: 600; }
         .nav-card-arrow { font-size: 1.4rem; font-weight: 900; color: #3b82f6; margin-left: auto; }
 
-        /* CARDS & TABLES */
         .card { background: #ffffff; border-radius: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 20px; border: 1px solid #e2e8f0; }
         .card-header { background: #1e293b; color: #fbbf24; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .card-header h3 { font-size: 1.05rem; font-weight: 800; }
@@ -88,7 +84,7 @@
         .team-cat-title { font-size: 1rem; font-weight: 800; color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px; margin: 12px 0 8px; }
         .student-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 8px; border-bottom: 1px dashed #e2e8f0; font-weight: 600; font-size: 0.92rem; }
 
-        /* POSTER BUILDER & GRAPHIC THEMES */
+        /* ==================== NEW REFERENCE 1 POSTER STYLE ==================== */
         .builder-body { padding: 18px; }
         .builder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
         .builder-form label { display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 4px; color: #334155; }
@@ -96,100 +92,60 @@
         .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .winner-select-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
         .poster-action-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
-        .btn-theme-switch { width: 100%; background: #7c3aed; color: #fff; border: none; padding: 11px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.95rem; margin-top: 6px; box-shadow: 0 3px 10px rgba(124,58,237,0.3); }
         .btn-download-poster { flex: 1; background: #2563eb; color: #fff; border: none; padding: 11px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.9rem; }
         .btn-publish-result { flex: 1; background: #059669; color: #fff; border: none; padding: 11px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.9rem; }
         .poster-preview-wrapper { display: flex; justify-content: center; overflow-x: auto; }
 
-        /* GRAPHIC POSTER CANVAS WITH RICH PATTERNS */
-        .ref-poster {
-            width: 390px;
-            min-height: 450px;
-            border-radius: 16px;
-            box-shadow: 0 12px 32px rgba(0,0,0,0.28);
-            padding: 22px;
+        /* REF-1 EXACT REPLICA CANVAS */
+        .ref1-poster {
+            width: 420px;
+            min-height: 440px;
+            background-color: #f6f3eb;
+            background-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.02) 0, rgba(0,0,0,0.02) 1px, transparent 1px);
+            background-size: 16px 16px;
+            color: #1e293b;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             position: relative;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
-            background-size: cover;
-            background-position: center;
+            border: 2px solid #e5e0d1;
         }
-        /* Theme 1: Royal Maroon Islamic Arch Pattern */
-        .ref-poster.theme-1 {
-            background-color: #581c1c;
-            background-image: 
-                radial-gradient(circle at 50% 15%, rgba(251, 191, 36, 0.25) 0%, transparent 55%),
-                repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 2px, transparent 2px, transparent 10px),
-                linear-gradient(160deg, #7f1d1d 0%, #450a0a 60%, #2a0404 100%);
-            color: #ffffff;
-            border: 4px solid #fbbf24;
-        }
-        .ref-poster.theme-1 .ref-winners-card { background: rgba(255, 255, 255, 0.95); color: #1e293b; border: 2px solid #fbbf24; }
-        .ref-poster.theme-1 .ref-cat-label { color: #991b1b; }
-        .ref-poster.theme-1 .ref-prog-label, .ref-poster.theme-1 .rank-name { color: #111827; }
-        .ref-poster.theme-1 .rank-place { color: #b91c1c; }
+        .ref1-top-bar { display: flex; justify-content: flex-end; align-items: center; font-size: 0.75rem; font-weight: 700; color: #0f172a; margin-bottom: 10px; }
+        .ref1-top-bar span { display: flex; align-items: center; gap: 4px; }
+        .ref1-body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; align-items: center; }
+        .ref1-left-content { display: flex; flex-direction: column; }
+        .ref1-prog-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 15px; }
+        .ref1-prog-no { font-size: 2.6rem; font-weight: 900; color: #0f172a; line-height: 1; font-family: 'Montserrat', sans-serif; }
+        .ref1-prog-meta { display: flex; flex-direction: column; }
+        .ref1-prog-name { font-size: 1.15rem; font-weight: 900; color: #0f172a; line-height: 1.2; }
+        .ref1-prog-cat { font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; }
 
-        /* Theme 2: Classic Cream & Emerald Floral Aesthetic */
-        .ref-poster.theme-2 {
-            background-color: #fefce8;
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(16, 185, 129, 0.15) 0%, transparent 45%),
-                radial-gradient(circle at 90% 90%, rgba(217, 119, 6, 0.18) 0%, transparent 50%),
-                repeating-radial-gradient(circle at 50% 50%, rgba(0,0,0,0.015) 0, rgba(0,0,0,0.015) 4px, transparent 4px, transparent 18px),
-                linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-            color: #064e3b;
-            border: 4px solid #059669;
-        }
-        .ref-poster.theme-2 .ref-winners-card { background: #ffffff; color: #0f172a; border: 2px solid #a7f3d0; box-shadow: 0 8px 20px rgba(5, 150, 105, 0.12); }
-        .ref-poster.theme-2 .ref-cat-label { color: #059669; }
-        .ref-poster.theme-2 .ref-prog-label, .ref-poster.theme-2 .rank-name { color: #064e3b; }
-        .ref-poster.theme-2 .rank-place { color: #d97706; }
-        .ref-poster.theme-2 .ref-result-badge { background: #064e3b; color: #fbbf24; }
-        .ref-poster.theme-2 .ref-poster-footer { border-top-color: rgba(6, 78, 59, 0.2); }
-        .ref-poster.theme-2 .f-venue { color: #b45309; }
+        .ref1-winners-list { display: flex; flex-direction: column; gap: 10px; }
+        .ref1-winner-item { display: flex; flex-direction: column; }
+        .ref1-w-title { font-size: 0.95rem; font-weight: 900; color: #0f172a; display: flex; align-items: center; gap: 6px; }
+        .ref1-w-sub { font-size: 0.75rem; font-weight: 700; color: #64748b; padding-left: 18px; }
 
-        /* Theme 3: Modern Indigo & Gold Geometric Fiesta */
-        .ref-poster.theme-3 {
-            background-color: #1e1b4b;
-            background-image: 
-                radial-gradient(circle at 85% 15%, rgba(236, 72, 153, 0.35) 0%, transparent 45%),
-                radial-gradient(circle at 15% 85%, rgba(59, 130, 246, 0.35) 0%, transparent 45%),
-                linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
-            color: #ffffff;
-            border: 4px solid #38bdf8;
-        }
-        .ref-poster.theme-3 .ref-winners-card { background: rgba(255, 255, 255, 0.95); color: #0f172a; border: 2px solid #38bdf8; }
-        .ref-poster.theme-3 .ref-cat-label { color: #4f46e5; }
-        .ref-poster.theme-3 .ref-prog-label, .ref-poster.theme-3 .rank-name { color: #0f172a; }
-        .ref-poster.theme-3 .rank-place { color: #4f46e5; }
+        .ref1-right-art { display: flex; justify-content: center; align-items: center; }
+        .ref1-art-box { width: 100%; height: 175px; background: #e2dccb; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; border: 1.5px dashed #cbd5e1; }
+        .ref1-art-box img { width: 100%; height: 100%; object-fit: cover; }
 
-        .ref-poster-top { display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 2; }
-        .ref-social { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; }
-        .social-icons { background: rgba(0,0,0,0.25); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; }
-        .ref-result-badge { background: #fbbf24; color: #0f172a; width: 52px; height: 52px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
-        .badge-lbl { font-size: 0.45rem; font-weight: 800; letter-spacing: 0.5px; }
-        .badge-num { font-size: 1.25rem; font-weight: 900; line-height: 1; }
-        .ref-theme-box { text-align: center; margin: 6px 0; position: relative; z-index: 2; }
-        .ref-poster-middle { margin: 8px 0; position: relative; z-index: 2; }
-        .ref-winners-card { border-radius: 14px; padding: 16px; box-shadow: 0 6px 20px rgba(0,0,0,0.18); }
-        .ref-cat-label { font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
-        .ref-prog-label { font-size: 1.1rem; font-weight: 900; margin-bottom: 12px; border-bottom: 2px solid rgba(0,0,0,0.08); padding-bottom: 6px; }
-        .ref-winner-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
-        .rank-num { font-size: 1.05rem; font-weight: 900; min-width: 36px; }
-        .rank-1 { color: #16a34a; }
-        .rank-2 { color: #d97706; }
-        .rank-3 { color: #dc2626; }
-        .rank-details { line-height: 1.15; }
-        .rank-name { font-size: 0.88rem; font-weight: 800; text-transform: uppercase; }
-        .rank-place { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; }
-        .ref-poster-footer { border-top: 1px solid rgba(255,255,255,0.25); padding-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.68rem; position: relative; z-index: 2; }
-        .f-logo-badge { background: #fbbf24; color: #0f172a; font-weight: 900; padding: 4px 8px; border-radius: 6px; font-size: 0.65rem; }
-        .f-venue { font-weight: 800; color: #fbbf24; }
+        .ref1-footer { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1.5px solid #e2e8f0; padding-top: 12px; margin-top: 15px; }
+        .ref1-org-side { display: flex; flex-direction: column; }
+        .ref1-org-title { font-size: 1rem; font-weight: 900; color: #0f172a; letter-spacing: 0.5px; }
+        .ref1-org-sub { font-size: 0.75rem; font-weight: 800; color: #475569; }
 
-        .results-gallery { padding: 18px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+        .ref1-center-calligraphy { text-align: center; }
+        .ref1-callig-img { max-height: 38px; width: auto; }
+        .ref1-fallback-callig { font-size: 1.05rem; font-weight: 900; color: #991b1b; }
+
+        .ref1-date-side { text-align: right; font-size: 0.68rem; font-weight: 700; color: #334155; line-height: 1.25; }
+        .ref1-date-side .year { font-weight: 900; }
+
+        .results-gallery { padding: 18px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
 
         /* SCOREBOARD VERTICAL BAR CHART */
         .vertical-chart-container { display: flex; justify-content: center; align-items: flex-end; height: 300px; gap: 45px; padding: 20px 0 10px; border-bottom: 3px solid #334155; }
@@ -217,13 +173,12 @@
         @media (max-width: 768px) {
             .main-title { font-size: 2.1rem; }
             .teams-grid, .builder-grid, .points-grid { grid-template-columns: 1fr; }
-            .ref-poster { width: 100%; max-width: 360px; }
+            .ref1-poster { width: 100%; max-width: 380px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- TOP ADMIN BAR -->
     <div id="adminBar" class="admin-bar">
         <span>⚙️ അഡ്മിൻ മോഡ് സജീവമാണ്</span>
         <div class="admin-actions">
@@ -232,7 +187,7 @@
         </div>
     </div>
 
-    <!-- ==================== 1. HOME VIEW ==================== -->
+    <!-- 1. HOME VIEW -->
     <div id="sec-home" class="page-sec active">
         <header class="hero">
             <div class="hero-top-bar">
@@ -264,9 +219,7 @@
 
         <main class="container">
             <div class="card">
-                <div class="card-header">
-                    <h3>📜 മേളയുടെ പൊതുനിയമങ്ങളും വിവരങ്ങളും</h3>
-                </div>
+                <div class="card-header"><h3>📜 മേളയുടെ പൊതുനിയമങ്ങളും വിവരങ്ങളും</h3></div>
                 <div class="rules-body">
                     <ol class="rules-list">
                         <li>മത്സരങ്ങളിൽ പങ്കെടുക്കുന്ന മുഴുവൻ വിദ്യാർത്ഥികളും കൃത്യസമയത്ത് സ്റ്റേജിൽ/വേദിയിൽ ഹാജരാകേണ്ടതാണ്.</li>
@@ -290,838 +243,6 @@
             <div class="home-nav-grid">
                 <div class="nav-card" onclick="switchSection('programs')">
                     <div class="nav-card-icon">📋</div>
-                    <div class="nav-card-info">
-                        <h3>പ്രോഗ്രാം ലിസ്റ്റ്</h3>
-                        <p>Senior, Junior, Sub Junior, General മത്സരങ്ങളും മത്സരാർത്ഥികളും</p>
-                    </div>
+                    <div class="nav-card-info"><h3>പ്രോഗ്രാം ലിസ്റ്റ്</h3><p>Senior, Junior, Sub Junior, General മത്സരങ്ങളും മത്സരാർത്ഥികളും</p></div>
                     <div class="nav-card-arrow">➔</div>
-                </div>
-
-                <div class="nav-card highlight-card" onclick="switchSection('results')">
-                    <div class="nav-card-icon">🏆</div>
-                    <div class="nav-card-info">
-                        <h3>മത്സര ഫലങ്ങൾ (Results & Posters)</h3>
-                        <p>വിജയികളുടെ വിവരങ്ങളും റിസൾട്ട് പോസ്റ്ററുകളും കാണാം</p>
-                    </div>
-                    <div class="nav-card-arrow">➔</div>
-                </div>
-
-                <div class="nav-card" onclick="switchSection('teams')">
-                    <div class="nav-card-icon">👥</div>
-                    <div class="nav-card-info">
-                        <h3>ടീം ലിസ്റ്റ് (Team A & Team B)</h3>
-                        <p>ഇരു ടീമുകളിലെയും മുഴുവൻ വിദ്യാർത്ഥികളുടെയും വിവരങ്ങൾ</p>
-                    </div>
-                    <div class="nav-card-arrow">➔</div>
-                </div>
-
-                <div class="nav-card" onclick="switchSection('points')" style="border-color: #2563eb; background: #eff6ff;">
-                    <div class="nav-card-icon">📊</div>
-                    <div class="nav-card-info">
-                        <h3>ലൈവ് സ്കോർബോർഡ് (Live Points)</h3>
-                        <p>തത്സമയം മാറിക്കൊണ്ടിരിക്കുന്ന പോയിന്റ് നില കാണാം</p>
-                    </div>
-                    <div class="nav-card-arrow">➔</div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- ==================== 2. PROGRAMS VIEW ==================== -->
-    <div id="sec-programs" class="page-sec">
-        <div class="subpage-header">
-            <button class="back-home-btn" onclick="switchSection('home')">⬅️ ഹോം പേജിലേക്ക്</button>
-            <h2>📋 പ്രോഗ്രാം ലിസ്റ്റ്</h2>
-            <button class="admin-top-btn" onclick="openAdminModal()">🔐 Admin Login</button>
-        </div>
-        <main class="container">
-            <div class="filter-group">
-                <button class="cat-btn active" onclick="selectCategory('senior', this)">Senior</button>
-                <button class="cat-btn" onclick="selectCategory('junior', this)">Junior</button>
-                <button class="cat-btn" onclick="selectCategory('subjunior', this)">Sub Junior</button>
-                <button class="cat-btn" onclick="selectCategory('general', this)">General</button>
-            </div>
-            <div class="sub-filter-group">
-                <button class="type-btn active" data-type="onstage" onclick="selectType('onstage', this)">🎤 On Stage</button>
-                <button class="type-btn" data-type="offstage" onclick="selectType('offstage', this)">✍️ Off Stage</button>
-                <button class="type-btn" data-type="sports" onclick="selectType('sports', this)">⚽ Sports</button>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <h3 id="programTableTitle">SENIOR — ON STAGE</h3>
-                    <button class="admin-only-btn" onclick="addNewProgram()">+ പുതിയ പ്രോഗ്രാം ചേർക്കുക</button>
-                </div>
-                <div class="table-responsive">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 12%;">No</th>
-                                <th style="width: 44%;">Program Name</th>
-                                <th style="width: 22%;">Team A</th>
-                                <th style="width: 22%;">Team B</th>
-                            </tr>
-                        </thead>
-                        <tbody id="programListBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- ==================== 3. TEAMS VIEW ==================== -->
-    <div id="sec-teams" class="page-sec">
-        <div class="subpage-header">
-            <button class="back-home-btn" onclick="switchSection('home')">⬅️ ഹോം പേജിലേക്ക്</button>
-            <h2>👥 ടീം ലിസ്റ്റ് (Team A & Team B)</h2>
-            <button class="admin-top-btn" onclick="openAdminModal()">🔐 Admin Login</button>
-        </div>
-        <main class="container">
-            <div class="teams-grid">
-                <div class="card">
-                    <div class="card-header team-a-header">
-                        <h3>🔴 TEAM A</h3>
-                        <button class="admin-only-btn" onclick="addNewStudent('teamA')">+ ആളെ ചേർക്കുക</button>
-                    </div>
-                    <div class="team-list-body" id="teamAContainer"></div>
-                </div>
-                <div class="card">
-                    <div class="card-header team-b-header">
-                        <h3>🔵 TEAM B</h3>
-                        <button class="admin-only-btn" onclick="addNewStudent('teamB')">+ ആളെ ചേർക്കുക</button>
-                    </div>
-                    <div class="team-list-body" id="teamBContainer"></div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- ==================== 4. RESULTS & POSTER VIEW ==================== -->
-    <div id="sec-results" class="page-sec">
-        <div class="subpage-header">
-            <button class="back-home-btn" onclick="switchSection('home')">⬅️ ഹോം പേജിലേക്ക്</button>
-            <h2>🏆 മത്സര ഫലങ്ങൾ & പോസ്റ്ററുകൾ</h2>
-            <button class="admin-top-btn" onclick="openAdminModal()">🔐 Admin Login</button>
-        </div>
-        <main class="container">
-            <div class="card" id="posterBuilderCard" style="display: none;">
-                <div class="card-header" style="background: #1c4e9c;">
-                    <h3>🎨 റിസൾട്ട് പോസ്റ്റർ തയ്യാറാക്കുക (Admin Only)</h3>
-                </div>
-                <div class="builder-body">
-                    <div class="builder-grid">
-                        <div class="builder-form">
-                            <div class="form-row-2">
-                                <div>
-                                    <label>Result No:</label>
-                                    <input type="text" id="resNoInput" value="01" oninput="updatePosterPreview()">
-                                </div>
-                                <div>
-                                    <label>കാറ്റഗറി (Category):</label>
-                                    <select id="resCatSelect" onchange="onPosterCategoryChange()">
-                                        <option value="subjunior">SUB JUNIOR</option>
-                                        <option value="junior">JUNIOR</option>
-                                        <option value="senior" selected>SENIOR</option>
-                                        <option value="general">GENERAL</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-row-2">
-                                <div>
-                                    <label>വിഭാഗം (Type):</label>
-                                    <select id="resTypeSelect" onchange="onPosterCategoryChange()">
-                                        <option value="onstage">On Stage</option>
-                                        <option value="offstage">Off Stage</option>
-                                        <option value="sports">Sports</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label>പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക:</label>
-                                    <select id="resProgSelect" onchange="onPosterProgramSelect()"></select>
-                                </div>
-                            </div>
-                            <label>പ്രോഗ്രാമിന്റെ പേര്:</label>
-                            <input type="text" id="resProgCustom" oninput="updatePosterPreview()">
-
-                            <div class="winner-select-box">
-                                <label style="color:#16a34a;">🥇 First Place (01st):</label>
-                                <select id="selWinner1" onchange="onWinnerSelect(1)"></select>
-                                <div class="form-row-2">
-                                    <input type="text" id="win1Name" placeholder="പേര്" oninput="updatePosterPreview()">
-                                    <input type="text" id="win1Team" placeholder="ടീം" oninput="updatePosterPreview()">
-                                </div>
-                            </div>
-
-                            <div class="winner-select-box">
-                                <label style="color:#d97706;">🥈 Second Place (02nd):</label>
-                                <select id="selWinner2" onchange="onWinnerSelect(2)"></select>
-                                <div class="form-row-2">
-                                    <input type="text" id="win2Name" placeholder="പേര്" oninput="updatePosterPreview()">
-                                    <input type="text" id="win2Team" placeholder="ടീം" oninput="updatePosterPreview()">
-                                </div>
-                            </div>
-
-                            <div class="winner-select-box">
-                                <label style="color:#dc2626;">🥉 Third Place (03rd):</label>
-                                <select id="selWinner3" onchange="onWinnerSelect(3)"></select>
-                                <div class="form-row-2">
-                                    <input type="text" id="win3Name" placeholder="പേര്" oninput="updatePosterPreview()">
-                                    <input type="text" id="win3Team" placeholder="ടീം" oninput="updatePosterPreview()">
-                                </div>
-                            </div>
-
-                            <!-- SINGLE CHANGE THEME SWITCH -->
-                            <button type="button" class="btn-theme-switch" onclick="cyclePosterTheme()">🎨 Change Theme</button>
-
-                            <div class="poster-action-btns">
-                                <button class="btn-download-poster" onclick="downloadResultPoster()">📥 പോസ്റ്റർ ഡൗൺലോഡ്</button>
-                                <button class="btn-publish-result" onclick="publishResultToSite()">💾 സൈറ്റിൽ സേവ് ചെയ്യുക</button>
-                            </div>
-                        </div>
-
-                        <!-- POSTER PREVIEW -->
-                        <div class="poster-preview-wrapper">
-                            <div id="posterCanvas" class="ref-poster theme-1">
-                                <div class="ref-poster-top">
-                                    <div class="ref-social">
-                                        <span class="social-icons">f 𝕏 ◎ ▶</span>
-                                        <span>eideirshad2k26</span>
-                                    </div>
-                                    <div class="ref-result-badge">
-                                        <span class="badge-lbl">RESULT</span>
-                                        <span class="badge-num" id="previewResNo">01</span>
-                                    </div>
-                                </div>
-
-                                <div class="ref-theme-box">
-                                    <img src="calligraphy.png" alt="Calligraphy" style="max-height: 42px; width: auto;" onerror="this.style.display='none'; document.getElementById('prev-callig-text').style.display='block';">
-                                    <div id="prev-callig-text" style="display:none; font-size: 1.05rem; font-weight:800;">EID-E IRSHAD 2K26</div>
-                                </div>
-
-                                <div class="ref-poster-middle">
-                                    <div class="ref-winners-card">
-                                        <div class="ref-cat-label" id="previewCat">SENIOR</div>
-                                        <div class="ref-prog-label" id="previewProg">ഖിറാഅത്ത്</div>
-
-                                        <div class="ref-winner-row">
-                                            <div class="rank-num rank-1">01<sup>st</sup></div>
-                                            <div class="rank-details">
-                                                <div class="rank-name" id="previewWin1Name">-</div>
-                                                <div class="rank-place" id="previewWin1Team"></div>
-                                            </div>
-                                        </div>
-                                        <div class="ref-winner-row">
-                                            <div class="rank-num rank-2">02<sup>nd</sup></div>
-                                            <div class="rank-details">
-                                                <div class="rank-name" id="previewWin2Name">-</div>
-                                                <div class="rank-place" id="previewWin2Team"></div>
-                                            </div>
-                                        </div>
-                                        <div class="ref-winner-row">
-                                            <div class="rank-num rank-3">03<sup>rd</sup></div>
-                                            <div class="rank-details">
-                                                <div class="rank-name" id="previewWin3Name">-</div>
-                                                <div class="rank-place" id="previewWin3Team"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="ref-poster-footer">
-                                    <div>
-                                        <div style="font-weight:900;">IRSHADUNNASIHEEN</div>
-                                        <div style="opacity:0.85;">SAHITHYA SAMAJAM</div>
-                                    </div>
-                                    <div class="f-logo-badge">EID-E IRSHAD</div>
-                                    <div style="text-align:right;">
-                                        <div style="font-weight:800;">2026 NOV 27, 28, 29</div>
-                                        <div class="f-venue">CAMPUS FIESTA</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h3>📢 പ്രസിദ്ധീകരിച്ച മത്സര ഫലങ്ങൾ (Published Results)</h3>
-                </div>
-                <div id="publishedResultsContainer" class="results-gallery"></div>
-            </div>
-        </main>
-    </div>
-
-    <!-- ==================== 5. LIVE SCOREBOARD VIEW ==================== -->
-    <div id="sec-points" class="page-sec" style="background:#0f172a; min-height:100vh; padding-bottom:30px;">
-        <div class="subpage-header" style="background: #020617;">
-            <button class="back-home-btn" onclick="switchSection('home')">⬅️ ഹോം പേജിലേക്ക്</button>
-            <h2>📊 LIVE SCOREBOARD</h2>
-            <span style="color:#fbbf24; font-size:0.85rem; font-weight:700;">⚡ Live Points</span>
-        </div>
-        <main class="container" style="max-width: 850px;">
-            <div class="card" style="background: #1e293b; border: 1px solid #334155; padding: 22px;">
-                <h3 style="text-align:center; color:#fbbf24; margin-bottom:15px;">🏆 TEAM POINTS COMPARISON</h3>
-                <div class="vertical-chart-container">
-                    <div class="chart-column">
-                        <div class="chart-score-label" id="barScoreA">0</div>
-                        <div class="chart-bar-track"><div id="verticalBarA" class="chart-bar-fill fill-team-a" style="height: 15%;"></div></div>
-                        <div class="chart-team-name">TEAM A</div>
-                    </div>
-                    <div class="chart-vs">VS</div>
-                    <div class="chart-column">
-                        <div class="chart-score-label" id="barScoreB">0</div>
-                        <div class="chart-bar-track"><div id="verticalBarB" class="chart-bar-fill fill-team-b" style="height: 15%;"></div></div>
-                        <div class="chart-team-name">TEAM B</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card" style="background: #1e293b; border: 1px solid #334155;">
-                <div class="card-header" style="background: #020617;"><h3>📋 കാറ്റഗറി തിരിച്ചുള്ള പോയിന്റ് നില</h3></div>
-                <div style="padding: 18px;">
-                    <div class="cat-progress-row"><span>Senior Category</span><span>Team A: <strong id="srPtsA">0</strong> | Team B: <strong id="srPtsB">0</strong></span></div>
-                    <div class="cat-progress-row"><span>Junior Category</span><span>Team A: <strong id="jrPtsA">0</strong> | Team B: <strong id="jrPtsB">0</strong></span></div>
-                    <div class="cat-progress-row"><span>Sub Junior Category</span><span>Team A: <strong id="subPtsA">0</strong> | Team B: <strong id="subPtsB">0</strong></span></div>
-                    <div class="cat-progress-row"><span>Sports & General</span><span>Team A: <strong id="genPtsA">0</strong> | Team B: <strong id="genPtsB">0</strong></span></div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- ADMIN LOGIN MODAL -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeAdminModal()">&times;</span>
-            <h3>🔐 Admin Login</h3>
-            <label>Password (irshad2k26):</label>
-            <input type="password" id="adminPassword" value="irshad2k26">
-            <button class="btn-submit" style="margin-top:14px;" onclick="loginAdmin()">✅ Login as Admin</button>
-        </div>
-    </div>
-
-    <!-- EDIT PROGRAM MODAL -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeEditModal()">&times;</span>
-            <h3>പ്രോഗ്രാം എഡിറ്റ് ചെയ്യുക</h3>
-            <label>പ്രോഗ്രാമിന്റെ പേര്:</label>
-            <input type="text" id="editProgName">
-            <label>Team A മത്സരാർത്ഥികൾ:</label>
-            <input type="text" id="editTeamAInput">
-            <select id="selectTeamA" onchange="appendStudent('A')"></select>
-            <label>Team B മത്സരാർത്ഥികൾ:</label>
-            <input type="text" id="editTeamBInput">
-            <select id="selectTeamB" onchange="appendStudent('B')"></select>
-            <div class="modal-buttons">
-                <button class="btn-submit" onclick="saveProgramChanges()">💾 Save</button>
-                <button class="btn-delete" onclick="deleteCurrentProgram()">🗑️ Delete</button>
-            </div>
-        </div>
-    </div>
-
-    <footer>&copy; 2026 EID-E IRSHAD — IRSHADUNNASIHEEN SAHITHYA SAMAJAM</footer>
-
-    <script>
-        const defaultData = {
-            programs: {
-                senior: {
-                    onstage: [
-                        { no: "01", name: "ഖിറാഅത്ത്", teamA: "", teamB: "" },
-                        { no: "02", name: "മലയാള പ്രസംഗം", teamA: "", teamB: "" },
-                        { no: "03", name: "അറബിക് പ്രസംഗം", teamA: "", teamB: "" },
-                        { no: "04", name: "മധുരമലയാളം", teamA: "", teamB: "" },
-                        { no: "05", name: "ഖുർആൻ പ്രഭാഷണം", teamA: "", teamB: "" },
-                        { no: "06", name: "അനൗൺസ്മെന്റ്", teamA: "", teamB: "" },
-                        { no: "07", name: "മലയാള ഗാനം", teamA: "", teamB: "" },
-                        { no: "08", name: "അറബി ഗാനം", teamA: "", teamB: "" },
-                        { no: "09", name: "നിമിഷ പ്രസംഗം", teamA: "", teamB: "" },
-                        { no: "10", name: "സംഘഗാനം", teamA: "", teamB: "" }
-                    ],
-                    offstage: [
-                        { no: "01", name: "മലയാള പ്രബന്ധം", teamA: "", teamB: "" },
-                        { no: "02", name: "ഇംഗ്ലീഷ് പ്രബന്ധം", teamA: "", teamB: "" },
-                        { no: "03", name: "അറബിക് പ്രബന്ധം", teamA: "", teamB: "" },
-                        { no: "04", name: "മലയാളം കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                        { no: "05", name: "ഇംഗ്ലീഷ് കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                        { no: "06", name: "അറബിക് കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                        { no: "07", name: "ചിത്ര രചന", teamA: "", teamB: "" },
-                        { no: "08", name: "പോസ്റ്റർ ഡിസൈൻ", teamA: "", teamB: "" },
-                        { no: "09", name: "അറബി വായന", teamA: "", teamB: "" },
-                        { no: "10", name: "കഥാരചന", teamA: "", teamB: "" },
-                        { no: "11", name: "അടിക്കുറിപ്പ് രചന", teamA: "", teamB: "" },
-                        { no: "12", name: "AI Poster Design", teamA: "", teamB: "" },
-                        { no: "13", name: "സുഡോക്കോ", teamA: "", teamB: "" },
-                        { no: "14", name: "ഹിഫ്ള്", teamA: "", teamB: "" },
-                        { no: "15", name: "കാലിഗ്രഫി", teamA: "", teamB: "" },
-                        { no: "16", name: "കമ്പ്യൂട്ടർ ടൈപ്പിംഗ്", teamA: "", teamB: "" },
-                        { no: "17", name: "ട്രാൻസിലേഷൻ M to A", teamA: "", teamB: "" },
-                        { no: "18", name: "ട്രാൻസിലേഷൻ M to E", teamA: "", teamB: "" },
-                        { no: "19", name: "അറബിക് പദപ്പയറ്റ്", teamA: "", teamB: "" },
-                        { no: "20", name: "ക്വിസ്", teamA: "", teamB: "" },
-                        { no: "21", name: "Writing", teamA: "", teamB: "" },
-                        { no: "22", name: "മദ്ഹ്ഗാന രചന", teamA: "", teamB: "" }
-                    ],
-                    sports: [
-                        { no: "01", name: "100m Race", teamA: "", teamB: "" },
-                        { no: "02", name: "Long Jump", teamA: "", teamB: "" },
-                        { no: "03", name: "Shot Put", teamA: "", teamB: "" },
-                        { no: "04", name: "Cut Post Shoot", teamA: "", teamB: "" },
-                        { no: "05", name: "Discus Throw", teamA: "", teamB: "" }
-                    ]
-                },
-                junior: {
-                    onstage: [
-                        { no: "01", name: "ഖിറാഅത്ത്", teamA: "", teamB: "" },
-                        { no: "02", name: "മലയാള പ്രസംഗം", teamA: "", teamB: "" },
-                        { no: "03", name: "ഇംഗ്ലീഷ് പ്രസംഗം", teamA: "", teamB: "" },
-                        { no: "04", name: "മധുരമലയാളം", teamA: "", teamB: "" },
-                        { no: "05", name: "അനൗൺസ്മെന്റ്", teamA: "", teamB: "" },
-                        { no: "06", name: "മലയാള ഗാനം", teamA: "", teamB: "" },
-                        { no: "07", name: "അറബി ഗാനം", teamA: "", teamB: "" },
-                        { no: "08", name: "കവിത പാരായണം", teamA: "", teamB: "" },
-                        { no: "09", name: "സംഘഗാനം", teamA: "", teamB: "" }
-                    ],
-                    offstage: [
-                        { no: "01", name: "മലയാള പ്രബന്ധം", teamA: "", teamB: "" },
-                        { no: "02", name: "ഇംഗ്ലീഷ് പ്രബന്ധം", teamA: "", teamB: "" },
-                        { no: "03", name: "അറബിക് പ്രബന്ധം", teamA: "", teamB: "" },
-                        { no: "04", name: "മലയാളം കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                        { no: "05", name: "ഇംഗ്ലീഷ് കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                        { no: "06", name: "അറബിക് കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                        { no: "07", name: "ചിത്ര രചന", teamA: "", teamB: "" },
-                        { no: "08", name: "പോസ്റ്റർ ഡിസൈൻ", teamA: "", teamB: "" },
-                        { no: "09", name: "അറബി വായന", teamA: "", teamB: "" },
-                        { no: "10", name: "കഥാരചന", teamA: "", teamB: "" },
-                        { no: "11", name: "അടിക്കുറിപ്പ് രചന", teamA: "", teamB: "" },
-                        { no: "12", name: "ഇംഗ്ലീഷ് വായന", teamA: "", teamB: "" },
-                        { no: "13", name: "IQ Test", teamA: "", teamB: "" },
-                        { no: "14", name: "അറബിക് പദപ്പയറ്റ്", teamA: "", teamB: "" },
-                        { no: "15", name: "ഹിഫ്ള്", teamA: "", teamB: "" },
-                        { no: "16", name: "കാലിഗ്രഫി", teamA: "", teamB: "" },
-                        { no: "17", name: "ക്വിസ്", teamA: "", teamB: "" }
-                    ],
-                    sports: [
-                        { no: "01", name: "100m Race", teamA: "", teamB: "" },
-                        { no: "02", name: "Long Jump", teamA: "", teamB: "" },
-                        { no: "03", name: "Shot Put", teamA: "", teamB: "" },
-                        { no: "04", name: "Cut Post Shoot", teamA: "", teamB: "" },
-                        { no: "05", name: "Lemon & Spoon Race", teamA: "", teamB: "" }
-                    ]
-                },
-                subjunior: {
-                    onstage: [
-                        { no: "01", name: "ഖിറാഅത്ത്", teamA: "", teamB: "" },
-                        { no: "02", name: "മലയാള പ്രസംഗം", teamA: "", teamB: "" },
-                        { no: "03", name: "കഥ പറയൽ", teamA: "", teamB: "" },
-                        { no: "04", name: "ബാങ്ക് വിളി", teamA: "", teamB: "" },
-                        { no: "05", name: "മലയാള ഗാനം", teamA: "", teamB: "" },
-                        { no: "06", name: "അറബി ഗാനം", teamA: "", teamB: "" },
-                        { no: "07", name: "സംഘഗാനം", teamA: "", teamB: "" }
-                    ],
-                    offstage: [
-                        { no: "01", name: "മലയാള പ്രബന്ധം", teamA: "", teamB: "" },
-                        { no: "02", name: "പെൻസിൽ ഡ്രോയിംഗ്", teamA: "", teamB: "" },
-                        { no: "03", name: "ഇംഗ്ലീഷ് വായന", teamA: "", teamB: "" },
-                        { no: "04", name: "മലയാളം കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                        { no: "05", name: "ഇംഗ്ലീഷ് കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                        { no: "06", name: "അറബിക് കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                        { no: "07", name: "ചിത്ര രചന", teamA: "", teamB: "" },
-                        { no: "08", name: "മലയാളം വായന", teamA: "", teamB: "" },
-                        { no: "09", name: "കാലിഗ്രഫി", teamA: "", teamB: "" },
-                        { no: "10", name: "ഖുർആൻ മെമ്മറി", teamA: "", teamB: "" },
-                        { no: "11", name: "കഥാരചന", teamA: "", teamB: "" },
-                        { no: "12", name: "ക്വിസ്", teamA: "", teamB: "" },
-                        { no: "13", name: "മെമ്മറി ടെസ്റ്റ്", teamA: "", teamB: "" }
-                    ],
-                    sports: [
-                        { no: "01", name: "50m Race", teamA: "", teamB: "" },
-                        { no: "02", name: "Long Jump", teamA: "", teamB: "" },
-                        { no: "03", name: "Biscuit Eating", teamA: "", teamB: "" },
-                        { no: "04", name: "Cut Post Shoot", teamA: "", teamB: "" },
-                        { no: "05", name: "Filling a Bottle", teamA: "", teamB: "" }
-                    ]
-                },
-                general: {
-                    onstage: [
-                        { no: "01", name: "മോട്ടിവേഷൻ സ്പീച്ച്", teamA: "", teamB: "" },
-                        { no: "02", name: "കഥാപ്രസംഗം", teamA: "", teamB: "" },
-                        { no: "03", name: "ബുർദ", teamA: "", teamB: "" },
-                        { no: "04", name: "റീൽ മേക്കിങ്", teamA: "", teamB: "" },
-                        { no: "05", name: "ക്യാമ്പസ് സോങ്", teamA: "", teamB: "" },
-                        { no: "06", name: "തദ്‌രീസ്", teamA: "", teamB: "" },
-                        { no: "07", name: "ഖുതുബ & മആശറ", teamA: "", teamB: "" },
-                        { no: "08", name: "സയൻസ് പ്രൊജക്ട്", teamA: "", teamB: "" },
-                        { no: "09", name: "Table Talk", teamA: "", teamB: "" },
-                        { no: "10", name: "ഖവാലി", teamA: "", teamB: "" },
-                        { no: "11", name: "സ്പോട്ട് മാഗസിൻ", teamA: "", teamB: "" }
-                    ],
-                    offstage: [],
-                    sports: [
-                        { no: "01", name: "Penalty Shootout", teamA: "", teamB: "" },
-                        { no: "02", name: "Tug of War", teamA: "", teamB: "" },
-                        { no: "03", name: "Relay Race", teamA: "", teamB: "" }
-                    ]
-                }
-            },
-            teams: {
-                teamA: {
-                    senior: ["300. Safwan (C)", "301. Ramees (Vc)", "302. fayiz (Vc)", "303. Thangal", "304. Asaf", "305. Thasnif", "306. Thwahir", "307. Irfan"],
-                    junior: ["308. Qasim", "309. Sinan MT", "310. Ashiq", "311. Saeed"],
-                    subjunior: ["312. Shahin", "313. Muhsin", "314. Razi", "315. Anshid"]
-                },
-                teamB: {
-                    senior: ["100. Shibili (C)", "101. Ismail (Vc)", "102. Abdul vahab (Vc)", "103. Sinan P.k", "104. Adhil", "105. Rahees", "106. Amir", "107. Afsal"],
-                    junior: ["108. Sinan edayoor", "109. Sinan cherushola", "110. Aslam", "111. Hijaz", "112. Jazeel"],
-                    subjunior: ["113. Nijad", "114. Farhan", "115. Nusaif"]
-                }
-            },
-            results: []
-        };
-
-        let appData = JSON.parse(JSON.stringify(defaultData));
-        let currentCategory = "senior";
-        let currentType = "onstage";
-        let isAdmin = localStorage.getItem("eid_irshad_admin_logged") === "true";
-        let editingIndex = null;
-        let currentThemeIdx = 0;
-        const themesList = ["theme-1", "theme-2", "theme-3"];
-
-        function loadData() {
-            try {
-                const saved = localStorage.getItem("eid_irshad_2k26_v2");
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    if (parsed && parsed.programs && parsed.teams) appData = parsed;
-                }
-            } catch (e) {}
-            renderAll();
-            initPosterBuilder();
-        }
-
-        function saveData() {
-            localStorage.setItem("eid_irshad_2k26_v2", JSON.stringify(appData));
-            renderAll();
-        }
-
-        function switchSection(sec) {
-            document.querySelectorAll(".page-sec").forEach(el => el.classList.remove("active"));
-            document.getElementById("sec-" + sec).classList.add("active");
-            window.scrollTo(0, 0);
-            renderAll();
-            if (sec === "results") initPosterBuilder();
-        }
-
-        function renderAll() {
-            renderPrograms();
-            renderTeams();
-            renderPublishedResults();
-            updateLiveScoreboard();
-            updateAdminUI();
-        }
-
-        function updateAdminUI() {
-            document.getElementById("adminBar").style.display = isAdmin ? "flex" : "none";
-            document.querySelectorAll(".admin-top-btn").forEach(b => b.style.display = isAdmin ? "none" : "inline-block");
-            document.querySelectorAll(".admin-only-btn").forEach(b => b.style.display = isAdmin ? "inline-block" : "none");
-            const pb = document.getElementById("posterBuilderCard");
-            if (pb) pb.style.display = isAdmin ? "block" : "none";
-        }
-
-        function renderPrograms() {
-            const tbody = document.getElementById("programListBody");
-            const offBtn = document.querySelector('.type-btn[data-type="offstage"]');
-            if (currentCategory === "general") {
-                offBtn.style.display = "none";
-                if (currentType === "offstage") currentType = "onstage";
-            } else {
-                offBtn.style.display = "inline-block";
-            }
-            const catNames = { senior: "SENIOR", junior: "JUNIOR", subjunior: "SUB JUNIOR", general: "GENERAL" };
-            const typeNames = { onstage: "ON STAGE", offstage: "OFF STAGE", sports: "SPORTS" };
-            document.getElementById("programTableTitle").textContent = `${catNames[currentCategory]} — ${typeNames[currentType]}`;
-
-            const list = appData.programs[currentCategory][currentType] || [];
-            tbody.innerHTML = list.map((item, idx) => `
-                <tr>
-                    <td><strong>${item.no}</strong></td>
-                    <td><strong>${item.name}</strong> ${isAdmin ? `<button class="edit-row-btn" onclick="openEditProgramModal(${idx})">✏️ Edit</button>` : ""}</td>
-                    <td>${item.teamA || "-"}</td>
-                    <td>${item.teamB || "-"}</td>
-                </tr>
-            `).join("");
-        }
-
-        function renderTeams() {
-            ["teamA", "teamB"].forEach(tKey => {
-                const container = document.getElementById(tKey === "teamA" ? "teamAContainer" : "teamBContainer");
-                let html = "";
-                [
-                    { key: "senior", label: "Senior" },
-                    { key: "junior", label: "Junior" },
-                    { key: "subjunior", label: "Sub Junior" }
-                ].forEach(c => {
-                    html += `<div class="team-cat-title">${c.label}</div>`;
-                    (appData.teams[tKey][c.key] || []).forEach((st, idx) => {
-                        const btns = isAdmin ? `<div><button class="edit-row-btn" onclick="editStudent('${tKey}','${c.key}',${idx})">✏️</button><button class="edit-row-btn" style="background:#dc2626;" onclick="deleteStudent('${tKey}','${c.key}',${idx})">🗑️</button></div>` : "";
-                        html += `<div class="student-item"><span>${st}</span>${btns}</div>`;
-                    });
-                });
-                container.innerHTML = html;
-            });
-        }
-
-        function selectCategory(cat, btn) {
-            currentCategory = cat;
-            document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-            renderPrograms();
-        }
-
-        function selectType(type, btn) {
-            currentType = type;
-            document.querySelectorAll(".type-btn").forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-            renderPrograms();
-        }
-
-        function openEditProgramModal(idx) {
-            editingIndex = idx;
-            const item = appData.programs[currentCategory][currentType][idx];
-            document.getElementById("editProgName").value = item.name;
-            document.getElementById("editTeamAInput").value = item.teamA;
-            document.getElementById("editTeamBInput").value = item.teamB;
-
-            const getList = (tKey) => currentCategory === "general"
-                ? [...appData.teams[tKey].senior, ...appData.teams[tKey].junior, ...appData.teams[tKey].subjunior]
-                : (appData.teams[tKey][currentCategory] || []);
-
-            document.getElementById("selectTeamA").innerHTML = `<option value="">-- Team A ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുക --</option>` + getList("teamA").map(s => `<option value="${s}">${s}</option>`).join("");
-            document.getElementById("selectTeamB").innerHTML = `<option value="">-- Team B ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുക --</option>` + getList("teamB").map(s => `<option value="${s}">${s}</option>`).join("");
-            document.getElementById("editModal").style.display = "flex";
-        }
-
-        function appendStudent(team) {
-            const sel = document.getElementById("selectTeam" + team);
-            const inp = document.getElementById("editTeam" + team + "Input");
-            if (!sel.value) return;
-            inp.value = inp.value.trim() ? inp.value + ", " + sel.value : sel.value;
-            sel.value = "";
-        }
-
-        function closeEditModal() { document.getElementById("editModal").style.display = "none"; }
-
-        function saveProgramChanges() {
-            const item = appData.programs[currentCategory][currentType][editingIndex];
-            item.name = document.getElementById("editProgName").value.trim();
-            item.teamA = document.getElementById("editTeamAInput").value.trim();
-            item.teamB = document.getElementById("editTeamBInput").value.trim();
-            closeEditModal();
-            saveData();
-        }
-
-        function deleteCurrentProgram() {
-            if (!confirm("ഈ പ്രോഗ്രാം ഒഴിവാക്കണോ?")) return;
-            appData.programs[currentCategory][currentType].splice(editingIndex, 1);
-            closeEditModal();
-            saveData();
-        }
-
-        function addNewProgram() {
-            const name = prompt("പുതിയ പ്രോഗ്രാമിന്റെ പേര്:");
-            if (!name) return;
-            const list = appData.programs[currentCategory][currentType];
-            list.push({ no: String(list.length + 1).padStart(2, "0"), name: name.trim(), teamA: "", teamB: "" });
-            saveData();
-        }
-
-        function addNewStudent(tKey) {
-            const cat = prompt("വിഭാഗം (senior / junior / subjunior):", "senior");
-            if (!cat || !["senior", "junior", "subjunior"].includes(cat.toLowerCase())) return;
-            const name = prompt("വിദ്യാർത്ഥിയുടെ കോഡും പേരും:");
-            if (!name) return;
-            appData.teams[tKey][cat.toLowerCase()].push(name.trim());
-            saveData();
-        }
-
-        function editStudent(tKey, cKey, idx) {
-            const val = prompt("പേര് തിരുത്തുക:", appData.teams[tKey][cKey][idx]);
-            if (val) { appData.teams[tKey][cKey][idx] = val.trim(); saveData(); }
-        }
-
-        function deleteStudent(tKey, cKey, idx) {
-            if (confirm("ഒഴിവാക്കണോ?")) { appData.teams[tKey][cKey].splice(idx, 1); saveData(); }
-        }
-
-        /* POSTER BUILDER */
-        function initPosterBuilder() {
-            document.getElementById("resNoInput").value = String((appData.results || []).length + 1).padStart(2, "0");
-            onPosterCategoryChange();
-        }
-
-        function onPosterCategoryChange() {
-            const cat = document.getElementById("resCatSelect").value;
-            let type = document.getElementById("resTypeSelect").value;
-            if (cat === "general" && type === "offstage") {
-                type = "onstage";
-                document.getElementById("resTypeSelect").value = "onstage";
-            }
-            const list = appData.programs[cat][type] || [];
-            document.getElementById("resProgSelect").innerHTML = list.map(p => `<option value="${p.name}">${p.no}. ${p.name}</option>`).join("");
-
-            const getSt = (tKey, lbl) => {
-                const arr = cat === "general" ? [...appData.teams[tKey].senior, ...appData.teams[tKey].junior, ...appData.teams[tKey].subjunior] : (appData.teams[tKey][cat] || []);
-                return arr.map(s => `<option value="${s.replace(/\(C\)|\(Vc\)/gi, "").trim()}|${lbl}">${s} (${lbl})</option>`);
-            };
-            const opts = `<option value="">-- തിരഞ്ഞെടുക്കുക --</option>` + [...getSt("teamA", "TEAM A"), ...getSt("teamB", "TEAM B")].join("");
-            [1, 2, 3].forEach(r => document.getElementById("selWinner" + r).innerHTML = opts);
-            onPosterProgramSelect();
-        }
-
-        function onPosterProgramSelect() {
-            document.getElementById("resProgCustom").value = document.getElementById("resProgSelect").value || "";
-            updatePosterPreview();
-        }
-
-        function onWinnerSelect(rank) {
-            const val = document.getElementById("selWinner" + rank).value;
-            if (!val) return;
-            const [name, team] = val.split("|");
-            document.getElementById("win" + rank + "Name").value = name.toUpperCase();
-            document.getElementById("win" + rank + "Team").value = team.toUpperCase();
-            updatePosterPreview();
-        }
-
-        function updatePosterPreview() {
-            const catLabels = { subjunior: "SUB JUNIOR", junior: "JUNIOR", senior: "SENIOR", general: "GENERAL" };
-            document.getElementById("previewResNo").textContent = document.getElementById("resNoInput").value || "01";
-            document.getElementById("previewCat").textContent = catLabels[document.getElementById("resCatSelect").value];
-            document.getElementById("previewProg").textContent = document.getElementById("resProgCustom").value || "-";
-            [1, 2, 3].forEach(r => {
-                document.getElementById("previewWin" + r + "Name").textContent = document.getElementById("win" + r + "Name").value || "-";
-                document.getElementById("previewWin" + r + "Team").textContent = document.getElementById("win" + r + "Team").value || "";
-            });
-        }
-
-        function cyclePosterTheme() {
-            const canvas = document.getElementById("posterCanvas");
-            themesList.forEach(t => canvas.classList.remove(t));
-            currentThemeIdx = (currentThemeIdx + 1) % themesList.length;
-            canvas.classList.add(themesList[currentThemeIdx]);
-        }
-
-        async function downloadResultPoster() {
-            const el = document.getElementById("posterCanvas");
-            const canvas = await html2canvas(el, { scale: 3, useCORS: true });
-            const link = document.createElement("a");
-            link.download = `EID-E-IRSHAD-Result-${document.getElementById("resNoInput").value}.png`;
-            link.href = canvas.toDataURL("image/png");
-            link.click();
-        }
-
-        function publishResultToSite() {
-            appData.results.unshift({
-                resNo: document.getElementById("resNoInput").value || "01",
-                category: document.getElementById("previewCat").textContent,
-                program: document.getElementById("resProgCustom").value || "-",
-                win1Name: document.getElementById("win1Name").value || "-",
-                win1Team: document.getElementById("win1Team").value || "",
-                win2Name: document.getElementById("win2Name").value || "-",
-                win2Team: document.getElementById("win2Team").value || "",
-                win3Name: document.getElementById("win3Name").value || "-",
-                win3Team: document.getElementById("win3Team").value || "",
-                themeClass: themesList[currentThemeIdx]
-            });
-            saveData();
-            initPosterBuilder();
-            alert("മത്സരഫലം സൈറ്റിൽ സേവ് ചെയ്തു!");
-        }
-
-        function renderPublishedResults() {
-            const container = document.getElementById("publishedResultsContainer");
-            if (!appData.results || appData.results.length === 0) {
-                container.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:15px; color:#64748b;">മത്സര ഫലങ്ങൾ ഒന്നും തന്നെ പ്രസിദ്ധീകരിച്ചിട്ടില്ല.</p>`;
-                return;
-            }
-            container.innerHTML = appData.results.map((r, i) => `
-                <div class="ref-poster ${r.themeClass || 'theme-1'}" style="width:100%; min-height:360px; padding:16px;">
-                    <div class="ref-poster-top">
-                        <span style="font-size:0.75rem; font-weight:800;">EID-E IRSHAD 2K26</span>
-                        <div class="ref-result-badge" style="width:42px; height:42px;"><span class="badge-num" style="font-size:1rem;">${r.resNo}</span></div>
-                    </div>
-                    <div class="ref-winners-card" style="margin:10px 0;">
-                        <div class="ref-cat-label">${r.category}</div>
-                        <div class="ref-prog-label">${r.program}</div>
-                        <div class="ref-winner-row"><div class="rank-num rank-1">01<sup>st</sup></div><div class="rank-details"><div class="rank-name">${r.win1Name}</div><div class="rank-place">${r.win1Team}</div></div></div>
-                        <div class="ref-winner-row"><div class="rank-num rank-2">02<sup>nd</sup></div><div class="rank-details"><div class="rank-name">${r.win2Name}</div><div class="rank-place">${r.win2Team}</div></div></div>
-                        <div class="ref-winner-row"><div class="rank-num rank-3">03<sup>rd</sup></div><div class="rank-details"><div class="rank-name">${r.win3Name}</div><div class="rank-place">${r.win3Team}</div></div></div>
-                    </div>
-                    ${isAdmin ? `<button class="btn-delete" onclick="deleteResult(${i})">🗑️ ഒഴിവാക്കുക</button>` : ""}
-                </div>
-            `).join("");
-        }
-
-        function deleteResult(idx) {
-            if (confirm("ഈ റിസൾട്ട് ഒഴിവാക്കണോ?")) { appData.results.splice(idx, 1); saveData(); }
-        }
-
-        function updateLiveScoreboard() {
-            let totals = { A: 0, B: 0 };
-            let cats = { senior: { A: 0, B: 0 }, junior: { A: 0, B: 0 }, subjunior: { A: 0, B: 0 }, general: { A: 0, B: 0 } };
-            (appData.results || []).forEach(r => {
-                let cKey = "senior";
-                let cText = (r.category || "").toUpperCase();
-                if (cText.includes("JUNIOR") && !cText.includes("SUB")) cKey = "junior";
-                else if (cText.includes("SUB")) cKey = "subjunior";
-                else if (cText.includes("GENERAL")) cKey = "general";
-
-                const addPts = (tStr, pts) => {
-                    if (!tStr) return;
-                    if (tStr.toUpperCase().includes("A")) { totals.A += pts; cats[cKey].A += pts; }
-                    else if (tStr.toUpperCase().includes("B")) { totals.B += pts; cats[cKey].B += pts; }
-                };
-                addPts(r.win1Team, 5);
-                addPts(r.win2Team, 3);
-                addPts(r.win3Team, 1);
-            });
-
-            document.getElementById("barScoreA").textContent = totals.A;
-            document.getElementById("barScoreB").textContent = totals.B;
-            document.getElementById("srPtsA").textContent = cats.senior.A;
-            document.getElementById("srPtsB").textContent = cats.senior.B;
-            document.getElementById("jrPtsA").textContent = cats.junior.A;
-            document.getElementById("jrPtsB").textContent = cats.junior.B;
-            document.getElementById("subPtsA").textContent = cats.subjunior.A;
-            document.getElementById("subPtsB").textContent = cats.subjunior.B;
-            document.getElementById("genPtsA").textContent = cats.general.A;
-            document.getElementById("genPtsB").textContent = cats.general.B;
-
-            let maxVal = Math.max(totals.A, totals.B, 10);
-            document.getElementById("verticalBarA").style.height = Math.max(15, Math.round((totals.A / maxVal) * 100)) + "%";
-            document.getElementById("verticalBarB").style.height = Math.max(15, Math.round((totals.B / maxVal) * 100)) + "%";
-        }
-
-        function openAdminModal() { document.getElementById("loginModal").style.display = "flex"; }
-        function closeAdminModal() { document.getElementById("loginModal").style.display = "none"; }
-        function loginAdmin() {
-            isAdmin = true;
-            localStorage.setItem("eid_irshad_admin_logged", "true");
-            closeAdminModal();
-            renderAll();
-        }
-        function logoutAdmin() {
-            isAdmin = false;
-            localStorage.removeItem("eid_irshad_admin_logged");
-            renderAll();
-        }
-        function resetToDefaultData() {
-            if (confirm("മുഴുവൻ മാറ്റങ്ങളും മാഞ്ഞ് ആദ്യത്തെ നിലയിലേക്ക് ആക്കണോ?")) {
-                appData = JSON.parse(JSON.stringify(defaultData));
-                saveData();
-            }
-        }
-
-        loadData();
-    </script>
-</body>
-</html>
+           
