@@ -5,199 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EID-E IRSHAD — CAMPUS FIESTA 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Anek Malayalam', sans-serif; background-color: #f7f9fb; color: #2c3e50; line-height: 1.6; }
-        
-        .page-sec { display: none; }
-        .page-sec.active { display: block; }
-
-        .admin-bar { background: #059669; color: #fff; padding: 10px 15px; display: none; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 0.9rem; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .admin-actions button { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; margin-left: 5px; }
-        .btn-reset { background: #d97706; color: #fff; }
-        .btn-logout { background: #dc2626; color: #fff; }
-
-        /* HERO HEADER */
-        .hero { background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #312e81 100%); color: #ffffff; text-align: center; padding: 20px 15px 35px; border-bottom: 5px solid #f59e0b; box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
-        .hero-top-bar { display: flex; justify-content: space-between; align-items: center; max-width: 980px; margin: 0 auto 12px; }
-        .admin-top-btn { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1.5px solid #fbbf24; padding: 6px 16px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; cursor: pointer; }
-        .hero-content { max-width: 750px; margin: 0 auto; }
-        .calligraphy-img { max-width: 220px; width: 60%; height: auto; margin-bottom: 8px; }
-        .fallback-calligraphy { font-size: 1.3rem; color: #fbbf24; font-weight: 800; margin-bottom: 8px; }
-        .main-title { font-family: 'Montserrat', sans-serif; font-size: 2.8rem; font-weight: 900; color: #fbbf24; letter-spacing: 2px; line-height: 1.1; text-shadow: 2px 3px 0px rgba(0,0,0,0.4); margin-bottom: 5px; }
-        .sub-title { font-family: 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: 800; color: #f8fafc; letter-spacing: 3px; margin-bottom: 12px; }
-        .ribbon { display: inline-block; background: linear-gradient(90deg, #d97706, #f59e0b, #d97706); color: #0f172a; padding: 6px 24px; font-weight: 800; font-size: 0.9rem; border-radius: 6px; margin-bottom: 20px; }
-        .date-container { display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-        .month-year { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.1rem; text-align: right; line-height: 1.1; margin-right: 6px; }
-        .month-year span { font-size: 1.5rem; color: #fbbf24; }
-        .date-box { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 10px; font-family: 'Montserrat', sans-serif; box-shadow: 0 3px 10px rgba(0,0,0,0.3); }
-        .date-box .num { font-size: 1.3rem; font-weight: 900; line-height: 1.1; }
-        .date-box .day { font-size: 0.55rem; font-weight: 700; margin-top: 2px; }
-        .d-fri { background-color: #2563eb; }
-        .d-sat { background-color: #7c3aed; }
-        .d-sun { background-color: #db2777; }
-        .org-info { font-size: 0.85rem; color: #cbd5e1; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 12px; }
-
-        .subpage-header { background: #0f172a; color: #fff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; border-bottom: 3px solid #fbbf24; position: sticky; top: 0; z-index: 90; }
-        .subpage-header h2 { font-size: 1.15rem; color: #fbbf24; font-weight: 800; }
-        .back-home-btn { background: #fbbf24; color: #0f172a; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; cursor: pointer; }
-
-        .container { max-width: 980px; margin: 22px auto; padding: 0 15px; }
-        .section-heading { text-align: center; font-size: 1.2rem; color: #1e293b; margin: 22px 0 15px; font-weight: 800; }
-        .home-nav-grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 30px; }
-        .nav-card { background: #ffffff; border-radius: 14px; padding: 16px 18px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 2px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.04); transition: 0.2s; }
-        .nav-card:hover { transform: translateY(-2px); border-color: #3b82f6; }
-        .highlight-card { background: linear-gradient(135deg, #ffffff 0%, #fef3c7 100%); border-color: #f59e0b; }
-        .nav-card-icon { font-size: 2rem; background: #f1f5f9; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; border-radius: 12px; flex-shrink: 0; }
-        .nav-card-info h3 { font-size: 1.15rem; color: #1e293b; font-weight: 800; }
-        .nav-card-info p { font-size: 0.85rem; color: #64748b; font-weight: 600; }
-        .nav-card-arrow { font-size: 1.4rem; font-weight: 900; color: #3b82f6; margin-left: auto; }
-
-        .card { background: #ffffff; border-radius: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 20px; border: 1px solid #e2e8f0; }
-        .card-header { background: #1e293b; color: #fbbf24; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .card-header h3 { font-size: 1.05rem; font-weight: 800; }
-        .rules-body { padding: 20px 24px; }
-        .rules-list li { margin-bottom: 8px; font-weight: 600; }
-        .points-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; margin-top: 14px; }
-        .points-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9rem; margin-top: 8px; }
-        .point-item { background: #fff; padding: 10px; border-radius: 8px; border-left: 4px solid #3b82f6; }
-        .rules-footer { text-align: right; font-weight: 800; color: #1e293b; margin-top: 12px; }
-
-        .filter-group, .sub-filter-group { display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
-        .cat-btn { padding: 8px 18px; border: 2px solid #3b82f6; background: #fff; color: #3b82f6; font-weight: 800; border-radius: 25px; cursor: pointer; font-size: 0.9rem; }
-        .cat-btn.active { background: #3b82f6; color: #fff; }
-        .type-btn { padding: 7px 15px; border: 1px solid #cbd5e1; background: #f1f5f9; color: #475569; font-weight: 700; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
-        .type-btn.active { background: #ef4444; color: #fff; border-color: #ef4444; }
-        .admin-only-btn { background: #059669; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.82rem; display: none; }
-
-        .table-responsive { width: 100%; overflow-x: auto; }
-        .data-table { width: 100%; border-collapse: collapse; text-align: left; }
-        .data-table th, .data-table td { padding: 11px 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.92rem; }
-        .data-table th { background: #f8fafc; color: #1e293b; font-weight: 800; }
-        .edit-row-btn { background: #3b82f6; color: #fff; border: none; padding: 4px 9px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; margin-left: 5px; }
-
-        .teams-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .team-a-header { background: #b91c1c; }
-        .team-b-header { background: #1d4ed8; }
-        .team-list-body { padding: 16px; }
-        .team-cat-title { font-size: 1rem; font-weight: 800; color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px; margin: 12px 0 8px; }
-        .student-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 8px; border-bottom: 1px dashed #e2e8f0; font-weight: 600; font-size: 0.92rem; }
-
-        /* POSTER BUILDER (REF-1 STYLE) */
-        .builder-body { padding: 18px; }
-        .builder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
-        .builder-form label { display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 4px; color: #334155; }
-        .builder-form input, .builder-form select { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: 'Anek Malayalam', sans-serif; font-size: 0.9rem; margin-bottom: 10px; }
-        .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .winner-select-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
-        .poster-action-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
-        .btn-download-poster { flex: 1; background: #2563eb; color: #fff; border: none; padding: 11px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.9rem; }
-        .btn-publish-result { flex: 1; background: #059669; color: #fff; border: none; padding: 11px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.9rem; }
-        .poster-preview-wrapper { display: flex; justify-content: center; overflow-x: auto; }
-
-        /* REF-1 EXACT REPLICA CANVAS */
-        .ref1-poster {
-            width: 420px;
-            min-height: 440px;
-            background-color: #f6f3eb;
-            background-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.02) 0, rgba(0,0,0,0.02) 1px, transparent 1px);
-            background-size: 16px 16px;
-            color: #1e293b;
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
-            border: 2px solid #e5e0d1;
-        }
-        .ref1-top-bar { display: flex; justify-content: flex-end; align-items: center; font-size: 0.75rem; font-weight: 700; color: #0f172a; margin-bottom: 10px; }
-        .ref1-top-bar span { display: flex; align-items: center; gap: 4px; }
-        .ref1-body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; align-items: center; }
-        .ref1-left-content { display: flex; flex-direction: column; }
-        .ref1-prog-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 15px; }
-        .ref1-prog-no { font-size: 2.6rem; font-weight: 900; color: #0f172a; line-height: 1; font-family: 'Montserrat', sans-serif; }
-        .ref1-prog-meta { display: flex; flex-direction: column; }
-        .ref1-prog-name { font-size: 1.15rem; font-weight: 900; color: #0f172a; line-height: 1.2; }
-        .ref1-prog-cat { font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; }
-
-        .ref1-winners-list { display: flex; flex-direction: column; gap: 10px; }
-        .ref1-winner-item { display: flex; flex-direction: column; }
-        .ref1-w-title { font-size: 0.95rem; font-weight: 900; color: #0f172a; display: flex; align-items: center; gap: 6px; }
-        .ref1-w-sub { font-size: 0.75rem; font-weight: 700; color: #64748b; padding-left: 18px; }
-
-        .ref1-right-art { display: flex; justify-content: center; align-items: center; }
-        .ref1-art-box { width: 100%; height: 175px; background: #e2dccb; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; border: 1.5px dashed #cbd5e1; }
-        .ref1-art-box img { width: 100%; height: 100%; object-fit: cover; }
-
-        .ref1-footer { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1.5px solid #e2e8f0; padding-top: 12px; margin-top: 15px; }
-        .ref1-org-side { display: flex; flex-direction: column; }
-        .ref1-org-title { font-size: 1rem; font-weight: 900; color: #0f172a; letter-spacing: 0.5px; }
-        .ref1-org-sub { font-size: 0.75rem; font-weight: 800; color: #475569; }
-
-        .ref1-center-calligraphy { text-align: center; }
-        .ref1-callig-img { max-height: 38px; width: auto; }
-        .ref1-fallback-callig { font-size: 1.05rem; font-weight: 900; color: #991b1b; }
-
-        .ref1-date-side { text-align: right; font-size: 0.68rem; font-weight: 700; color: #334155; line-height: 1.25; }
-        .ref1-date-side .year { font-weight: 900; }
-
-        .results-gallery { padding: 18px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
-
-        /* SCOREBOARD VERTICAL BAR CHART */
-        .vertical-chart-container { display: flex; justify-content: center; align-items: flex-end; height: 300px; gap: 45px; padding: 20px 0 10px; border-bottom: 3px solid #334155; }
-        .chart-column { display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; flex: 1; max-width: 130px; }
-        .chart-score-label { font-size: 1.8rem; font-weight: 900; color: #fbbf24; margin-bottom: 8px; font-family: 'Montserrat', sans-serif; }
-        .chart-bar-track { width: 68px; height: 210px; background: #0f172a; border-radius: 12px 12px 0 0; overflow: hidden; border: 2px solid #334155; display: flex; align-items: flex-end; }
-        .chart-bar-fill { width: 100%; border-radius: 10px 10px 0 0; transition: height 0.6s ease; }
-        .fill-team-a { background: linear-gradient(180deg, #ef4444 0%, #991b1b 100%); }
-        .fill-team-b { background: linear-gradient(180deg, #3b82f6 0%, #1e40af 100%); }
-        .chart-team-name { margin-top: 10px; font-size: 1.1rem; font-weight: 900; color: #fff; }
-        .chart-vs { font-size: 1.6rem; font-weight: 900; color: #64748b; margin-bottom: 45px; }
-        .cat-progress-row { margin-bottom: 12px; background: #0f172a; padding: 14px; border-radius: 10px; border: 1px solid #334155; color: #fff; display: flex; justify-content: space-between; font-weight: 800; }
-
-        /* MODALS */
-        .modal { display: none; position: fixed; z-index: 500; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); align-items: center; justify-content: center; padding: 15px; }
-        .modal-content { background: #fff; width: 100%; max-width: 440px; padding: 22px; border-radius: 14px; position: relative; }
-        .close-btn { position: absolute; right: 16px; top: 10px; font-size: 1.6rem; cursor: pointer; color: #64748b; }
-        .modal-content label { display: block; font-weight: 700; font-size: 0.85rem; margin-top: 10px; margin-bottom: 4px; }
-        .modal-content input, .modal-content select { width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; }
-        .modal-buttons { display: flex; gap: 10px; margin-top: 16px; }
-        .btn-submit { flex: 1; background: #1e293b; color: #fbbf24; border: none; padding: 11px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; }
-        .btn-delete { background: #dc2626; color: #fff; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; }
-        footer { text-align: center; padding: 22px; font-size: 0.85rem; color: #64748b; margin-top: 30px; border-top: 1px solid #e2e8f0; }
-
-        @media (max-width: 768px) {
-            .main-title { font-size: 2.1rem; }
-            .teams-grid, .builder-grid, .points-grid { grid-template-columns: 1fr; }
-            .ref1-poster { width: 100%; max-width: 380px; }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="adminBar" class="admin-bar">
-        <span>⚙️ അഡ്മിൻ മോഡ് സജീവമാണ്</span>
-        <div class="admin-actions">
-            <button class="btn-reset" onclick="resetToDefaultData()">🔄 Reset Data</button>
-            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
-        </div>
-    </div>
-
-    <!-- 1. HOME VIEW -->
-    <div id="sec-home" class="page-sec active">
+    <!-- HOME PAGE VIEW -->
+    <div class="page-view active">
         <header class="hero">
-            <div class="hero-top-bar">
-                <span style="font-size: 0.85rem; color: #cbd5e1; font-weight: 700;">✨ EID-E IRSHAD 2K26</span>
-                <button class="admin-top-btn" onclick="openAdminModal()">🔐 Admin Login</button>
-            </div>
             <div class="hero-content">
                 <div class="calligraphy-box">
-                    <img src="calligraphy.png" alt="Calligraphy" class="calligraphy-img" onerror="this.style.display='none'; document.getElementById('fallback-text').style.display='block';">
-                    <div id="fallback-text" class="fallback-calligraphy" style="display:none;">സർഗാത്മകത പൂക്കുന്നു</div>
+                    <div class="fallback-calligraphy">സർഗാത്മകത പൂക്കുന്നു</div>
                 </div>
                 <h1 class="main-title">EID-E IRSHAD</h1>
                 <div class="sub-title">CAMPUS FIESTA 2K26</div>
@@ -218,8 +35,11 @@
         </header>
 
         <main class="container">
-            <div class="card">
-                <div class="card-header"><h3>📜 മേളയുടെ പൊതുനിയമങ്ങളും വിവരങ്ങളും</h3></div>
+            <!-- Rules & Event Details -->
+            <div class="card home-rules-card">
+                <div class="card-header">
+                    <h3>📜 മേളയുടെ പൊതുനിയമങ്ങളും വിവരങ്ങളും</h3>
+                </div>
                 <div class="rules-body">
                     <ol class="rules-list">
                         <li>മത്സരങ്ങളിൽ പങ്കെടുക്കുന്ന മുഴുവൻ വിദ്യാർത്ഥികളും കൃത്യസമയത്ത് സ്റ്റേജിൽ/വേദിയിൽ ഹാജരാകേണ്ടതാണ്.</li>
@@ -228,6 +48,7 @@
                         <li>സ്റ്റേജ്, ഓഫ്-സ്റ്റേജ്, സ്പോർട്സ് ഇനങ്ങളിൽ സമയപരിധി കർശനമായി പാലിക്കേണ്ടതാണ്.</li>
                         <li>ആശയക്കുഴപ്പങ്ങൾ ഉണ്ടായാൽ ജനറൽ കൺവീനറുടെ തീരുമാനം അന്തിമമായിരിക്കും.</li>
                     </ol>
+
                     <div class="points-box">
                         <h4>📊 പോയിന്റ് നിലവാരം (Points System)</h4>
                         <div class="points-grid">
@@ -235,15 +56,58 @@
                             <div class="point-item"><strong>ഗ്രൂപ്പ് ഇനങ്ങൾ (Group):</strong><br>🥇 First: 10 Pts | 🥈 Second: 6 Pts | 🥉 Third: 3 Pts</div>
                         </div>
                     </div>
-                    <div class="rules-footer">- കൺവീനർ, ഈദ്-ഇ ഇർഷാദ് കാമ്പസ് ഫിയെസ്ത 2K26</div>
+
+                    <div class="rules-footer">
+                        - കൺവീനർ, ഈദ്-ഇ ഇർഷാദ് കാമ്പസ് ഫിയെസ്ത 2K26
+                    </div>
                 </div>
             </div>
 
+            <!-- Navigation Cards -->
             <h2 class="section-heading">👇 കൂടുതൽ വിവരങ്ങൾക്കായി താഴെ ക്ലിക്ക് ചെയ്യുക</h2>
             <div class="home-nav-grid">
-                <div class="nav-card" onclick="switchSection('programs')">
+                <div class="nav-card" onclick="location.href='programs.html'">
                     <div class="nav-card-icon">📋</div>
-                    <div class="nav-card-info"><h3>പ്രോഗ്രാം ലിസ്റ്റ്</h3><p>Senior, Junior, Sub Junior, General മത്സരങ്ങളും മത്സരാർത്ഥികളും</p></div>
+                    <div class="nav-card-info">
+                        <h3>പ്രോഗ്രാം ലിസ്റ്റ്</h3>
+                        <p>Senior, Junior, Sub Junior, General മത്സരങ്ങളും മത്സരാർത്ഥികളും</p>
+                    </div>
                     <div class="nav-card-arrow">➔</div>
                 </div>
-                <div class="na
+
+                <div class="nav-card highlight-card" onclick="location.href='results.html'">
+                    <div class="nav-card-icon">🏆</div>
+                    <div class="nav-card-info">
+                        <h3>മത്സര ഫലങ്ങൾ (Results & Posters)</h3>
+                        <p>വിജയികളുടെ വിവരങ്ങളും റിസൾട്ട് പോസ്റ്ററുകളും കാണാം</p>
+                    </div>
+                    <div class="nav-card-arrow">➔</div>
+                </div>
+
+                <div class="nav-card" onclick="location.href='teams.html'">
+                    <div class="nav-card-icon">👥</div>
+                    <div class="nav-card-info">
+                        <h3>ടീം ലിസ്റ്റ് (ZELLIJ & IZNIK)</h3>
+                        <p>ഇരു ടീമുകളിലെയും മുഴുവൻ വിദ്യാർത്ഥികളുടെയും വിവരങ്ങൾ</p>
+                    </div>
+                    <div class="nav-card-arrow">➔</div>
+                </div>
+
+                <div class="nav-card" onclick="location.href='points.html'" style="border-color: #2563eb; background: #eff6ff;">
+                    <div class="nav-card-icon">📊</div>
+                    <div class="nav-card-info">
+                        <h3>ലൈവ് സ്കോർബോർഡ് (Live Points)</h3>
+                        <p>തത്സമയം മാറിക്കൊണ്ടിരിക്കുന്ന പോയിന്റ് നില കാണാം</p>
+                    </div>
+                    <div class="nav-card-arrow">➔</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        &copy; 2026 EID-E IRSHAD — IRSHADUNNASIHEEN SAHITHYA SAMAJAM
+    </footer>
+
+</body>
+</html>
