@@ -375,15 +375,18 @@ function updateAdminUI() {
     const adminBar = document.getElementById("adminBar");
     const adminBtn = document.getElementById("adminBtn");
     const adminOnlyBtns = document.querySelectorAll(".admin-only-btn");
+    const posterBuilderCard = document.getElementById("posterBuilderCard");
 
     if (isAdmin) {
         if (adminBar) adminBar.style.display = "flex";
         if (adminBtn) adminBtn.style.display = "none";
         adminOnlyBtns.forEach(btn => btn.style.display = "inline-block");
+        if (posterBuilderCard) posterBuilderCard.style.display = "block"; // Show only for admin
     } else {
         if (adminBar) adminBar.style.display = "none";
         if (adminBtn) adminBtn.style.display = "inline-block";
         adminOnlyBtns.forEach(btn => btn.style.display = "none");
+        if (posterBuilderCard) posterBuilderCard.style.display = "none"; // Hide for public
     }
 }
 
@@ -645,10 +648,10 @@ window.loginAdmin = async function() {
             closeAdminModal();
             renderAll();
         } catch (err) {
-            if (errEl) errEl.textContent = "ലോഗിൻ പരാജയപ്പെട്ടു! Email: admin@irshad.com, Pass: irshad2k26 എന്ന് നൽകുക.";
+            if (errEl) errEl.textContent = "ലോഗിൻ പരാജയപ്പെട്ടു! ദയവായി ശരിയായ ഐഡിയും പാസ്‌വേഡും നൽകുക.";
         }
     } else {
-        if (errEl) errEl.textContent = "Email: admin@irshad.com, Pass: irshad2k26 എന്ന് നൽകുക.";
+        if (errEl) errEl.textContent = "ലോഗിൻ പരാജയപ്പെട്ടു! ദയവായി ശരിയായ ഐഡിയും പാസ്‌വേഡും നൽകുക.";
     }
 };
 
@@ -730,7 +733,7 @@ window.saveProgramChanges = async function() {
     if (editingIndex === null) return;
     const item = appData.programs[currentCategory][currentType][editingIndex];
     
-    const nameField = document.getElementById("editProgName");
+    .nameField = document.getElementById("editProgName");
     const inputA = document.getElementById("editTeamAInput");
     const inputB = document.getElementById("editTeamBInput");
 
