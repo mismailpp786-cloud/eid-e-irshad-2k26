@@ -3,116 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EID-E IRSHAD — CAMPUS FIESTA 2K26</title>
+    <title>EID-E IRSHAD — CAMPUS FEST 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* PRO THEME VARIABLES */
         :root {
-            --bg-color: #f7f9fb;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
-            --text-color: #2c3e50;
+            --text-color: #1e293b;
             --text-muted: #64748b;
             --border-color: #e2e8f0;
-            --header-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #312e81 100%);
+            --header-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #172554 100%);
         }
         [data-theme="dark"] {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-color: #f8fafc;
+            --bg-color: #090d16;
+            --card-bg: #131c31;
+            --text-color: #f1f5f9;
             --text-muted: #94a3b8;
-            --border-color: #334155;
-            --header-bg: linear-gradient(135deg, #020617 0%, #0f172a 50%, #172554 100%);
+            --border-color: #1e293b;
+            --header-bg: linear-gradient(135deg, #020617 0%, #090d16 50%, #0f172a 100%);
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
             transition: background 0.3s ease, color 0.3s ease;
+            font-family: 'Anek Malayalam', 'Montserrat', sans-serif;
         }
 
-        /* DYNAMIC COUNTDOWN SPLASH SCREEN */
+        /* CUSTOM SCROLLBAR TRICK */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: #f59e0b; border-radius: 4px; }
+
+        /* LIVE COUNTDOWN SPLASH SCREEN */
         #introSplash {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100vh;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             color: #ffffff; display: flex; flex-direction: column;
             justify-content: space-between; align-items: center;
             padding: 30px 20px; z-index: 9999; text-align: center;
-            font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
             transition: opacity 0.5s ease, visibility 0.5s ease;
         }
         #introSplash.fade-out { opacity: 0; visibility: hidden; }
-        .intro-top-brand { display: flex; justify-content: space-between; width: 100%; max-width: 600px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; color: #cbd5e1; text-transform: uppercase; }
-        .intro-center-box { display: flex; flex-direction: column; align-items: center; max-width: 600px; }
-        .intro-sun-circle { width: 170px; height: 170px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 0 40px rgba(0,0,0,0.25); margin-bottom: 20px; }
-        .intro-sun-circle h2 { font-size: 2.8rem; font-weight: 900; line-height: 1; }
-        .intro-sun-circle span { font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
-        .intro-title { font-size: 2.2rem; font-weight: 900; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-        .intro-subtitle { font-size: 1rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 12px; }
-        .intro-calligraphy-text { font-family: 'Anek Malayalam', sans-serif; font-size: 1.25rem; font-weight: 800; background: rgba(0,0,0,0.25); padding: 6px 20px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.25); margin-bottom: 15px; }
-        .intro-details { font-size: 0.85rem; color: #e2e8f0; line-height: 1.4; margin-bottom: 20px; }
-        .btn-enter-site { border: none; padding: 12px 32px; border-radius: 30px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s ease; }
-        .btn-enter-site:hover { transform: translateY(-2px); }
-        .intro-footer { font-size: 0.7rem; color: #94a3b8; letter-spacing: 1px; }
+        .intro-top-brand { display: flex; justify-content: space-between; width: 100%; max-width: 650px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; color: #cbd5e1; text-transform: uppercase; font-family: 'Montserrat', sans-serif; }
+        .intro-center-box { display: flex; flex-direction: column; align-items: center; max-width: 650px; width: 100%; }
+        
+        /* COUNTDOWN GRID BOXES */
+        .countdown-container {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .countdown-box {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            border-radius: 12px;
+            padding: 12px 10px;
+            min-width: 65px;
+            backdrop-filter: blur(5px);
+        }
+        .countdown-box span.num {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 900;
+            font-family: 'Montserrat', sans-serif;
+            color: #fbbf24;
+            line-height: 1;
+        }
+        .countdown-box span.label {
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #e2e8f0;
+            margin-top: 4px;
+            font-family: 'Montserrat', sans-serif;
+        }
 
-        /* HERO & TOP UTILITIES */
-        .hero { background: var(--header-bg); color: #ffffff; text-align: center; padding: 30px 15px 40px; border-bottom: 5px solid #f59e0b; box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
-        .hero-top-bar { display: flex; justify-content: space-between; align-items: center; max-width: 980px; margin: 0 auto 12px; padding: 0 10px; flex-wrap: wrap; gap: 10px; }
+        .intro-title { font-size: 2.2rem; font-weight: 900; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 2px 2px 6px rgba(0,0,0,0.4); font-family: 'Montserrat', sans-serif; }
+        .intro-subtitle { font-size: 1rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 15px; font-family: 'Montserrat', sans-serif; }
+        
+        /* CALLIGRAPHY PNG TRICK */
+        .intro-calligraphy-box { margin-bottom: 15px; }
+        .intro-calligraphy-img { max-height: 52px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+
+        .intro-details { font-size: 0.85rem; color: #e2e8f0; line-height: 1.5; margin-bottom: 20px; }
+        .btn-enter-site { border: none; padding: 13px 36px; border-radius: 30px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.3); transition: 0.2s; font-family: 'Montserrat', sans-serif; background: #fbbf24; color: #0f172a; }
+        .btn-enter-site:hover { transform: translateY(-3px); filter: brightness(1.1); }
+        .intro-footer { font-size: 0.7rem; color: #94a3b8; letter-spacing: 1px; font-family: 'Montserrat', sans-serif; }
+
+        /* HERO & GLASSMORPHISM TOP BAR */
+        .hero { background: var(--header-bg); color: #ffffff; text-align: center; padding: 30px 15px 45px; border-bottom: 5px solid #f59e0b; box-shadow: 0 4px 20px rgba(0,0,0,0.25); position: relative; }
+        .hero-top-bar { display: flex; justify-content: space-between; align-items: center; max-width: 980px; margin: 0 auto 15px; padding: 8px 14px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.1); flex-wrap: wrap; gap: 10px; }
         .top-controls { display: flex; gap: 8px; align-items: center; }
-        .admin-top-btn { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1.5px solid #fbbf24; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.82rem; cursor: pointer; }
-        .theme-toggle-btn { background: rgba(255, 255, 255, 0.15); color: #fff; border: 1.5px solid rgba(255,255,255,0.3); padding: 6px 12px; border-radius: 20px; font-weight: 800; font-size: 0.82rem; cursor: pointer; }
+        
+        .admin-top-btn { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1.5px solid #fbbf24; padding: 6px 16px; border-radius: 20px; font-weight: 800; font-size: 0.82rem; cursor: pointer; transition: 0.2s; }
+        .admin-top-btn:hover { background: #fbbf24; color: #0f172a; }
+        
+        .theme-toggle-btn { background: rgba(255, 255, 255, 0.15); color: #fff; border: 1.5px solid rgba(255,255,255,0.3); padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.82rem; cursor: pointer; transition: 0.2s; }
+        .theme-toggle-btn:hover { background: rgba(255, 255, 255, 0.3); }
 
-        /* CARDS & OVERRIDES */
-        .card { background: var(--card-bg) !important; border-color: var(--border-color) !important; color: var(--text-color) !important; }
-        .card-header { background: #1e293b; color: #fbbf24; }
-        .points-box { background: var(--bg-color) !important; border-color: var(--border-color) !important; }
-        .point-item { background: var(--card-bg) !important; color: var(--text-color) !important; }
-        .nav-card { background: var(--card-bg) !important; border-color: var(--border-color) !important; color: var(--text-color) !important; }
-        .nav-card-info h3 { color: var(--text-color) !important; }
-        .nav-card-info p { color: var(--text-muted) !important; }
-        footer { color: var(--text-muted) !important; border-color: var(--border-color) !important; }
+        /* CALLIGRAPHY IN HERO */
+        .calligraphy-box { margin-bottom: 12px; display: flex; justify-content: center; }
+        .hero-calligraphy-img { max-height: 65px; width: auto; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3)); }
+
+        /* CARDS & THEME OVERRIDES */
+        .card { background: var(--card-bg) !important; border-color: var(--border-color) !important; color: var(--text-color) !important; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-radius: 12px; margin-bottom: 20px; }
+        .card-header { background: #1e293b; color: #fbbf24; padding: 14px 18px; border-radius: 12px 12px 0 0; font-weight: 800; }
+        .points-box { background: var(--bg-color) !important; border-color: var(--border-color) !important; border-radius: 10px; padding: 14px; margin-top: 15px; }
+        .point-item { background: var(--card-bg) !important; color: var(--text-color) !important; border-radius: 8px; padding: 10px; margin-top: 8px; border: 1px solid var(--border-color); }
+        
+        .nav-card { background: var(--card-bg) !important; border-color: var(--border-color) !important; color: var(--text-color) !important; border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 15px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: 1px solid var(--border-color); }
+        .nav-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .nav-card-info h3 { color: var(--text-color) !important; font-weight: 800; margin-bottom: 3px; }
+        .nav-card-info p { color: var(--text-muted) !important; font-size: 0.85rem; }
+        
+        footer { color: var(--text-muted) !important; border-color: var(--border-color) !important; text-align: center; padding: 20px; font-size: 0.85rem; font-family: 'Montserrat', sans-serif; }
 
         /* ADMIN BAR & MODAL */
         .admin-bar { background: #059669; color: #fff; padding: 10px 15px; display: none; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 0.9rem; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
         .admin-actions button { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; margin-left: 5px; }
         .btn-logout { background: #dc2626; color: #fff; }
+        
         .modal { display: none; position: fixed; z-index: 500; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); align-items: center; justify-content: center; padding: 15px; }
-        .modal-content { background: #fff; width: 100%; max-width: 380px; padding: 24px; border-radius: 14px; position: relative; color: #1e293b; text-align: left; }
-        .close-btn { position: absolute; right: 16px; top: 12px; font-size: 1.6rem; cursor: pointer; color: #64748b; }
+        .modal-content { background: var(--card-bg); width: 100%; max-width: 380px; padding: 24px; border-radius: 14px; position: relative; color: var(--text-color); text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .close-btn { position: absolute; right: 16px; top: 12px; font-size: 1.6rem; cursor: pointer; color: var(--text-muted); }
         .modal-content label { display: block; font-weight: 700; font-size: 0.85rem; margin-top: 10px; margin-bottom: 4px; }
-        .modal-content input { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; margin-bottom: 10px; }
+        .modal-content input { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); border-radius: 8px; font-size: 0.95rem; margin-bottom: 10px; }
         .btn-submit { background: #1e293b; color: #fbbf24; border: none; padding: 11px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 10px; }
         #loginError { color: #dc2626; font-size: 0.85rem; font-weight: 700; margin-top: 5px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <!-- DYNAMIC COUNTDOWN SPLASH SCREEN -->
+    <!-- LIVE COUNTDOWN SPLASH SCREEN -->
     <div id="introSplash">
         <div class="intro-top-brand">
             <span>IRSHADUNNASIHEEN SAMAJAM</span>
             <span>EID-E IRSHAD 2K26</span>
         </div>
         <div class="intro-center-box">
-            <div class="intro-sun-circle" id="splashCircle">
-                <h2 id="countdownNum">--</h2>
-                <span id="splashCircleSub">Days To Go</span>
+            
+            <!-- COUNTDOWN TIMER (DAYS, HOURS, MINUTES, SECONDS) -->
+            <div class="countdown-container">
+                <div class="countdown-box">
+                    <span class="num" id="cdDays">00</span>
+                    <span class="label">Days</span>
+                </div>
+                <div class="countdown-box">
+                    <span class="num" id="cdHours">00</span>
+                    <span class="label">Hours</span>
+                </div>
+                <div class="countdown-box">
+                    <span class="num" id="cdMins">00</span>
+                    <span class="label">Mins</span>
+                </div>
+                <div class="countdown-box">
+                    <span class="num" id="cdSecs">00</span>
+                    <span class="label">Secs</span>
+                </div>
             </div>
+
             <h1 class="intro-title" id="splashTitle">EID-E IRSHAD</h1>
-            <div class="intro-subtitle" id="splashSubtitle">CAMPUS FIESTA 2K26</div>
-            <div class="intro-calligraphy-text" id="splashCalligraphy">✨ സർഗാത്മകത പൂക്കുന്നു ✨</div>
-            <div class="intro-details">
-                <strong>റഹ്മാനിയ്യ അറബിക് കോളേജ്, അട്ടശ്ശേരി</strong><br>
-                നവംബർ 27, 28, 29 (2026) • Art, Literature & Sports
+            <div class="intro-subtitle" id="splashSubtitle">CAMPUS FEST 2K26</div>
+            
+            <!-- CALLIGRAPHY PNG -->
+            <div class="intro-calligraphy-box">
+                <img src="calligraphy.png" alt="Calligraphy" class="intro-calligraphy-img" onerror="this.style.display='none';">
             </div>
-            <button class="btn-enter-site" id="splashBtn" onclick="closeIntroSplash()">മേളയിലേക്ക് പ്രവേശിക്കുക ➔</button>
+
+            <div class="intro-details">
+                <strong>Rahmaniyya Arabic College, Attassery</strong><br>
+                November 27, 28, 29 (2026) • Art, Literature & Sports
+            </div>
+            <button class="btn-enter-site" id="splashBtn" onclick="closeIntroSplash()">Enter Fest ➔</button>
         </div>
-        <div class="intro-footer">Rahmaniyya Arabic College &bull; All Rights Reserved</div>
+        <div class="intro-footer">IRSHADUNNASIHEEN SAMAJAM &bull; All Rights Reserved</div>
     </div>
 
     <!-- ADMIN BAR -->
     <div id="adminBar" class="admin-bar">
-        <span>⚙️ അഡ്മിൻ മോഡ് സജീവമാണ്</span>
+        <span>⚙️ Admin Mode Active</span>
         <div class="admin-actions">
             <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
         </div>
@@ -122,41 +195,43 @@
     <div class="page-view active">
         <header class="hero">
             <div class="hero-top-bar">
-                <span style="font-size: 0.85rem; color: #cbd5e1; font-weight: 700;">✨ EID-E IRSHAD 2K26</span>
+                <span style="font-size: 0.82rem; color: #cbd5e1; font-weight: 700; font-family: 'Montserrat', sans-serif;">✨ EID-E IRSHAD 2K26</span>
                 <div class="top-controls">
                     <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark Mode</button>
                     <button class="admin-top-btn" id="adminBtn" onclick="openAdminModal()">🔐 Admin Login</button>
                 </div>
             </div>
             <div class="hero-content">
+                <!-- CALLIGRAPHY PNG IN HERO -->
                 <div class="calligraphy-box">
-                    <div class="fallback-calligraphy">സർഗാത്മകത പൂക്കുന്നു</div>
+                    <img src="calligraphy.png" alt="Calligraphy" class="hero-calligraphy-img" onerror="this.style.display='none';">
                 </div>
-                <h1 class="main-title">EID-E IRSHAD</h1>
-                <div class="sub-title">CAMPUS FIESTA 2K26</div>
-                <div class="ribbon">ART • LITERATURE • SPORTS</div>
+                
+                <h1 class="main-title" style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:2.8rem; letter-spacing:2px;">EID-E IRSHAD</h1>
+                <div class="sub-title" style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:1.1rem; letter-spacing:3px; color:#fbbf24; margin-top:4px;">CAMPUS FEST 2K26</div>
+                <div class="ribbon" style="font-family:'Montserrat',sans-serif; font-size:0.8rem; margin:8px 0 16px; letter-spacing:2px; color:#e2e8f0;">ART • LITERATURE • SPORTS</div>
                 
                 <div class="date-container">
-                    <div class="month-year"><span>2026</span><br>NOV</div>
-                    <div class="date-box d-fri"><span class="num">27</span><span class="day">FRI</span></div>
-                    <div class="date-box d-sat"><span class="num">28</span><span class="day">SAT</span></div>
-                    <div class="date-box d-sun"><span class="num">29</span><span class="day">SUN</span></div>
+                    <div class="month-year"><span style="font-family:'Montserrat',sans-serif;">2026</span><br>NOV</div>
+                    <div class="date-box d-fri"><span class="num" style="font-family:'Montserrat',sans-serif;">27</span><span class="day" style="font-family:'Montserrat',sans-serif;">FRI</span></div>
+                    <div class="date-box d-sat"><span class="num" style="font-family:'Montserrat',sans-serif;">28</span><span class="day" style="font-family:'Montserrat',sans-serif;">SAT</span></div>
+                    <div class="date-box d-sun"><span class="num" style="font-family:'Montserrat',sans-serif;">29</span><span class="day" style="font-family:'Montserrat',sans-serif;">SUN</span></div>
                 </div>
                 
-                <div class="org-info">
+                <div class="org-info" style="font-family:'Montserrat',sans-serif; font-size:0.8rem; line-height:1.5; color:#cbd5e1; margin-top:15px;">
                     IRSHADUNNASIHEEN SAHITHYA SAMAJAM<br>
                     Rahmaniyya Arabic College, Attassery, Po Trikkadeeri, Palakkad Dt, Kerala - 679502
                 </div>
             </div>
         </header>
 
-        <main class="container">
+        <main class="container" style="max-width: 900px; margin: 25px auto; padding: 0 15px;">
             <div class="card home-rules-card">
                 <div class="card-header">
-                    <h3>📜 മേളയുടെ പൊതുനിയമങ്ങളും വിവരങ്ങളും</h3>
+                    <h3>📜 ഫെസ്റ്റിന്റെ പൊതുനിയമങ്ങളും വിവരങ്ങളും</h3>
                 </div>
-                <div class="rules-body">
-                    <ol class="rules-list">
+                <div class="rules-body" style="padding: 18px;">
+                    <ol class="rules-list" style="padding-left: 18px; line-height: 1.7;">
                         <li>മത്സരങ്ങളിൽ പങ്കെടുക്കുന്ന മുഴുവൻ വിദ്യാർത്ഥികളും കൃത്യസമയത്ത് സ്റ്റേജിൽ/വേദിയിൽ ഹാജരാകേണ്ടതാണ്.</li>
                         <li>വിധികർത്താക്കളുടെ തീരുമാനം അന്തിമമായിരിക്കും. അതിൽ തർക്കങ്ങൾ അനുവദനീയമല്ല.</li>
                         <li>ഓരോ മത്സരത്തിലും പങ്കെടുക്കുന്നവരുടെ എണ്ണം അതത് കാറ്റഗറി കോർഡിനേറ്റർമാർ മുൻകൂട്ടി ഉറപ്പുവരുത്തണം.</li>
@@ -165,55 +240,55 @@
                     </ol>
 
                     <div class="points-box">
-                        <h4>📊 പോയിന്റ് നിലവാരം (Points System)</h4>
-                        <div class="points-grid">
+                        <h4 style="font-weight: 800; margin-bottom: 8px;">📊 പോയിന്റ് നിലവാരം (Points System)</h4>
+                        <div class="points-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                             <div class="point-item"><strong>വ്യക്തിഗത ഇനങ്ങൾ (Individual):</strong><br>🥇 First: 5 Pts | 🥈 Second: 3 Pts | 🥉 Third: 1 Pt</div>
                             <div class="point-item"><strong>ഗ്രൂപ്പ് ഇനങ്ങൾ (Group):</strong><br>🥇 First: 10 Pts | 🥈 Second: 6 Pts | 🥉 Third: 3 Pts</div>
                         </div>
                     </div>
 
-                    <div class="rules-footer">
-                        - കൺവീനർ, ഈദ്-ഇ ഇർഷാദ് കാമ്പസ് ഫിയെസ്ത 2K26
+                    <div class="rules-footer" style="text-align: right; margin-top: 15px; font-weight: 700; color: var(--text-muted);">
+                        - Convener, EID-E IRSHAD Campus Fest 2K26
                     </div>
                 </div>
             </div>
 
-            <h2 class="section-heading">👇 കൂടുതൽ വിവരങ്ങൾക്കായി താഴെ ക്ലിക്ക് ചെയ്യുക</h2>
-            <div class="home-nav-grid">
+            <h2 class="section-heading" style="text-align: center; font-size: 1.1rem; font-weight: 800; margin: 25px 0 15px;">👇 കൂടുതൽ വിവരങ്ങൾക്കായി താഴെ ക്ലിക്ക് ചെയ്യുക</h2>
+            <div class="home-nav-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div class="nav-card" onclick="location.href='programs.html'">
-                    <div class="nav-card-icon">📋</div>
+                    <div class="nav-card-icon" style="font-size: 2rem;">📋</div>
                     <div class="nav-card-info">
                         <h3>പ്രോഗ്രാം ലിസ്റ്റ്</h3>
-                        <p>Senior, Junior, Sub Junior, General മത്സരങ്ങളും മത്സരാർത്ഥികളും</p>
+                        <p>Senior, Junior, Sub Junior, General മത്സരങ്ങൾ</p>
                     </div>
-                    <div class="nav-card-arrow">➔</div>
+                    <div class="nav-card-arrow" style="margin-left: auto; font-weight: 900;">➔</div>
                 </div>
 
-                <div class="nav-card highlight-card" onclick="location.href='results.html'">
-                    <div class="nav-card-icon">🏆</div>
+                <div class="nav-card highlight-card" onclick="location.href='results.html'" style="border-color: #f59e0b;">
+                    <div class="nav-card-icon" style="font-size: 2rem;">🏆</div>
                     <div class="nav-card-info">
-                        <h3>മത്സര ഫലങ്ങൾ (Results & Posters)</h3>
-                        <p>വിജയികളുടെ വിവരങ്ങളും റിസൾട്ട് പോസ്റ്ററുകളും കാണാം</p>
+                        <h3>മത്സര ഫലങ്ങൾ</h3>
+                        <p>വിജയികളുടെ വിവരങ്ങളും റിസൾട്ട് പോസ്റ്ററുകളും</p>
                     </div>
-                    <div class="nav-card-arrow">➔</div>
+                    <div class="nav-card-arrow" style="margin-left: auto; font-weight: 900;">➔</div>
                 </div>
 
                 <div class="nav-card" onclick="location.href='teams.html'">
-                    <div class="nav-card-icon">👥</div>
+                    <div class="nav-card-icon" style="font-size: 2rem;">👥</div>
                     <div class="nav-card-info">
-                        <h3>ടീം ലിസ്റ്റ് (ZELLIJ & IZNIK)</h3>
-                        <p>ഇരു ടീമുകളിലെയും മുഴുവൻ വിദ്യാർത്ഥികളുടെയും വിവരങ്ങൾ</p>
+                        <h3>ടീം ലിസ്റ്റ്</h3>
+                        <p>ZELLIJ & IZNIK മുഴുവൻ അംഗങ്ങളുടെ വിവരങ്ങൾ</p>
                     </div>
-                    <div class="nav-card-arrow">➔</div>
+                    <div class="nav-card-arrow" style="margin-left: auto; font-weight: 900;">➔</div>
                 </div>
 
-                <div class="nav-card" onclick="location.href='points.html'" style="border-color: #2563eb; background: #eff6ff;">
-                    <div class="nav-card-icon">📊</div>
+                <div class="nav-card" onclick="location.href='points.html'" style="border-color: #2563eb;">
+                    <div class="nav-card-icon" style="font-size: 2rem;">📊</div>
                     <div class="nav-card-info">
-                        <h3>ലൈവ് സ്കോർബോർഡ് (Live Points)</h3>
-                        <p>തത്സമയം മാറിക്കൊണ്ടിരിക്കുന്ന പോയിന്റ് നില കാണാം</p>
+                        <h3>ലൈവ് സ്കോർബോർഡ്</h3>
+                        <p>തത്സമയം മാറിക്കൊണ്ടിരിക്കുന്ന പോയിന്റ് നില</p>
                     </div>
-                    <div class="nav-card-arrow">➔</div>
+                    <div class="nav-card-arrow" style="margin-left: auto; font-weight: 900;">➔</div>
                 </div>
             </div>
         </main>
@@ -223,22 +298,21 @@
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeAdminModal()">&times;</span>
-            <h3 style="margin-bottom: 12px;">🔐 Admin Login</h3>
+            <h3 style="margin-bottom: 12px; font-weight: 800;">🔐 Admin Login</h3>
             <label>Admin Email:</label>
             <input type="email" id="adminEmail" value="admin@irshad.com">
             <label>Password:</label>
-            <input type="password" id="adminPassword" placeholder="പാസ്‌വേഡ് നൽകുക">
+            <input type="password" id="adminPassword" placeholder="Enter password">
             <button class="btn-submit" onclick="loginAdmin()">Login</button>
             <div id="loginError"></div>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 EID-E IRSHAD — IRSHADUNNASIHEEN SAHITHYA SAMAJAM
+        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
     </footer>
 
     <script>
-        // THEME TOGGLE LOGIC
         function toggleTheme() {
             const html = document.documentElement;
             const currentTheme = html.getAttribute("data-theme");
@@ -248,61 +322,51 @@
             document.getElementById("themeToggleBtn").textContent = newTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
         }
 
+        // LIVE COUNTDOWN TIMER (DAYS, HOURS, MINUTES, SECONDS)
+        function updateCountdown() {
+            const eventDate = new Date("2026-11-27T00:00:00").getTime();
+            const now = new Date().getTime();
+            const diff = eventDate - now;
+
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('cdDays').textContent = String(days).padStart(2, '0');
+                document.getElementById('cdHours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('cdMins').textContent = String(mins).padStart(2, '0');
+                document.getElementById('cdSecs').textContent = String(secs).padStart(2, '0');
+            } else {
+                document.getElementById('cdDays').textContent = "00";
+                document.getElementById('cdHours').textContent = "00";
+                document.getElementById('cdMins').textContent = "00";
+                document.getElementById('cdSecs').textContent = "00";
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem("eid_theme") || "light";
             document.documentElement.setAttribute("data-theme", savedTheme);
             document.getElementById("themeToggleBtn").textContent = savedTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
 
-            // Countdown calculation
-            const eventDate = new Date("2026-11-27T00:00:00").getTime();
-            const now = new Date().getTime();
-            const diff = eventDate - now;
-            const daysLeft = Math.ceil(diff / (1000 * 60 * 60 * 24));
-            
-            const numEl = document.getElementById('countdownNum');
-            if (numEl) {
-                numEl.textContent = daysLeft > 0 ? daysLeft : 0;
-            }
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
 
-            // Daily changing theme
+            // Daily changing theme for splash background
             const today = new Date();
             const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
             
             const themes = [
-                {
-                    bg: "linear-gradient(135deg, #450a0a 0%, #7f1d1d 50%, #1e1b4b 100%)",
-                    circle: "radial-gradient(circle, #fbbf24 0%, #d97706 100%)",
-                    circleText: "#0f172a", circleSub: "#450a0a", title: "#fbbf24", btnBg: "#fbbf24", btnText: "#0f172a"
-                },
-                {
-                    bg: "linear-gradient(135deg, #064e3b 0%, #022c22 50%, #0f172a 100%)",
-                    circle: "radial-gradient(circle, #34d399 0%, #059669 100%)",
-                    circleText: "#ffffff", circleSub: "#022c22", title: "#34d399", btnBg: "#34d399", btnText: "#022c22"
-                },
-                {
-                    bg: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #0f172a 100%)",
-                    circle: "radial-gradient(circle, #38bdf8 0%, #0284c7 100%)",
-                    circleText: "#ffffff", circleSub: "#0f172a", title: "#38bdf8", btnBg: "#38bdf8", btnText: "#0f172a"
-                },
-                {
-                    bg: "linear-gradient(135deg, #701a75 0%, #4a044e 50%, #1e1b4b 100%)",
-                    circle: "radial-gradient(circle, #f472b6 0%, #db2777 100%)",
-                    circleText: "#ffffff", circleSub: "#4a044e", title: "#f472b6", btnBg: "#f472b6", btnText: "#4a044e"
-                }
+                "linear-gradient(135deg, #450a0a 0%, #7f1d1d 50%, #1e1b4b 100%)",
+                "linear-gradient(135deg, #064e3b 0%, #022c22 50%, #0f172a 100%)",
+                "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #0f172a 100%)",
+                "linear-gradient(135deg, #701a75 0%, #4a044e 50%, #1e1b4b 100%)"
             ];
 
-            const activeTheme = themes[dayOfYear % themes.length];
             const splash = document.getElementById('introSplash');
-            const circle = document.getElementById('splashCircle');
-            const circleSub = document.getElementById('splashCircleSub');
-            const title = document.getElementById('splashTitle');
-            const btn = document.getElementById('splashBtn');
-
-            if (splash) splash.style.background = activeTheme.bg;
-            if (circle) { circle.style.background = activeTheme.circle; circle.style.color = activeTheme.circleText; }
-            if (circleSub) circleSub.style.color = activeTheme.circleSub;
-            if (title) title.style.color = activeTheme.title;
-            if (btn) { btn.style.background = activeTheme.btnBg; btn.style.color = activeTheme.btnText; }
+            if (splash) splash.style.background = themes[dayOfYear % themes.length];
         });
 
         function closeIntroSplash() {
@@ -347,9 +411,9 @@
                 localStorage.setItem("eid_irshad_admin_logged", "true");
                 closeAdminModal();
                 updateAdminUI();
-                alert("അഡ്മിൻ ലോഗിൻ വിജയിച്ചു!");
+                alert("Admin login successful!");
             } else {
-                err.textContent = "തെറ്റായ ഐഡിയോ പാസ്‌വേഡോ ആണ്!";
+                err.textContent = "Invalid email or password!";
             }
         }
 
@@ -357,7 +421,7 @@
             isAdmin = false;
             localStorage.removeItem("eid_irshad_admin_logged");
             updateAdminUI();
-            alert("അഡ്മിൻ മോഡിൽ നിന്ന് പുറത്തുകടന്നിരിക്കുന്നു.");
+            alert("Logged out from admin mode.");
         }
 
         updateAdminUI();
