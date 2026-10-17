@@ -4,174 +4,132 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EID-E IRSHAD — CAMPUS FIESTA 2K26</title>
-    <!-- Google Fonts for Malayalam & English -->
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
-    <!-- Header / Hero Section -->
     <header class="hero">
         <div class="hero-content">
-            <!-- Cropped Malayalam Calligraphy Image -->
             <div class="calligraphy-box">
-                <img src="calligraphy.png" alt="സർഗാത്മകത പൂക്കുന്നു" class="calligraphy-img" onerror="this.style.display='none'; document.getElementById('fallback-calligraphy').style.display='block';">
-                <div id="fallback-calligraphy" class="fallback-calligraphy" style="display:none;">സർഗാത്മകത പൂക്കുന്നു</div>
+                <img src="calligraphy.png" alt="Calligraphy" class="calligraphy-img" onerror="this.style.display='none'; document.getElementById('fallback-text').style.display='block';">
+                <div id="fallback-text" class="fallback-calligraphy" style="display:none;">സർഗാത്മകത പൂക്കുന്നു</div>
             </div>
-
             <h1 class="main-title">EID-E IRSHAD</h1>
-            <h2 class="sub-title">CAMPUS FIESTA 2K26</h2>
-            <div class="ribbon">Rahmaniyya Campus Fiesta</div>
-
-            <!-- Event Dates -->
+            <div class="sub-title">CAMPUS FIESTA 2K26</div>
+            <div class="ribbon">ART • LITERATURE • SPORTS</div>
+            
             <div class="date-container">
-                <div class="month-year">NOVEMBER<br><span>2026</span></div>
-                <div class="date-box d-fri"><span class="num">27</span><span class="day">FRIDAY</span></div>
-                <div class="date-box d-sat"><span class="num">28</span><span class="day">SATURDAY</span></div>
-                <div class="date-box d-sun"><span class="num">29</span><span class="day">SUNDAY</span></div>
+                <div class="month-year"><span>2026</span><br>FEB</div>
+                <div class="date-box d-fri"><span class="num">20</span><span class="day">FRI</span></div>
+                <div class="date-box d-sat"><span class="num">21</span><span class="day">SAT</span></div>
+                <div class="date-box d-sun"><span class="num">22</span><span class="day">SUN</span></div>
             </div>
-
-            <p class="org-info">
-                <strong>IRSHADUNNASIHEEN SAHITHYA SAMAJAM</strong><br>
-                Rahmaniyya Arabic College, Attassery, Po Trikkadeeri, Palakkad Dt, Kerala - 679502
-            </p>
+            
+            <div class="org-info">
+                IRSHADUNNASIHEEN SAHITHYA SAMAJAM
+            </div>
         </div>
     </header>
 
-    <!-- Main Navigation Menu -->
     <nav class="main-nav">
         <button class="nav-btn active" onclick="switchTab('programs', this)">📋 പ്രോഗ്രാം ലിസ്റ്റ്</button>
         <button class="nav-btn" onclick="switchTab('teams', this)">👥 ടീം ലിസ്റ്റ്</button>
         <button class="nav-btn" onclick="switchTab('rules', this)">📜 പൊതുനിയമങ്ങൾ</button>
-        <button class="nav-btn admin-nav-btn" onclick="openAdminModal()" id="adminBtn">🔐 Admin Login</button>
+        <button class="nav-btn admin-nav-btn" id="adminBtn" onclick="openAdminModal()">🔐 Admin Login</button>
     </nav>
 
-    <!-- Admin Control Bar (Visible only when Admin logs in) -->
     <div id="adminBar" class="admin-bar" style="display: none;">
-        <span>✅ <strong>Admin Mode Active:</strong> പ്രോഗ്രാമുകളിലും ടീം ലിസ്റ്റിലും മാറ്റങ്ങൾ വരുത്താം.</span>
+        <span>⚙️ അഡ്മിൻ മോഡ് സജീവമാണ് (Admin Mode Active)</span>
         <div class="admin-actions">
-            <button onclick="resetToDefaultData()" class="btn-reset">🔄 Reset Default</button>
-            <button onclick="logoutAdmin()" class="btn-logout">Logout</button>
+            <button class="btn-reset" onclick="resetToDefaultData()">🔄 Reset Data</button>
+            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
         </div>
     </div>
 
     <main class="container">
-
-        <!-- 1. PROGRAMS SECTION -->
+        
+        <!-- Tab 1: Programs -->
         <section id="tab-programs" class="tab-content active">
-            <!-- Category Buttons -->
             <div class="filter-group">
-                <button class="cat-btn active" onclick="selectCategory('senior', this)">SENIOR</button>
-                <button class="cat-btn" onclick="selectCategory('junior', this)">JUNIOR</button>
-                <button class="cat-btn" onclick="selectCategory('subjunior', this)">SUB JUNIOR</button>
-                <button class="cat-btn" onclick="selectCategory('general', this)">GENERAL</button>
+                <button class="cat-btn active" onclick="selectCategory('senior', this)">Senior</button>
+                <button class="cat-btn" onclick="selectCategory('junior', this)">Junior</button>
+                <button class="cat-btn" onclick="selectCategory('subjunior', this)">Sub Junior</button>
+                <button class="cat-btn" onclick="selectCategory('general', this)">General</button>
             </div>
 
-            <!-- Stage / Sports Type Buttons -->
-            <div class="sub-filter-group" id="typeFilters">
-                <button class="type-btn active" data-type="onstage" onclick="selectType('onstage', this)">🎤 On Stage</button>
-                <button class="type-btn" data-type="offstage" onclick="selectType('offstage', this)">✍️ Off Stage</button>
-                <button class="type-btn" data-type="sports" onclick="selectType('sports', this)">⚽ Sports</button>
+            <div class="sub-filter-group">
+                <button class="type-btn active" data-type="onstage" onclick="selectType('onstage', this)">On Stage</button>
+                <button class="type-btn" data-type="offstage" onclick="selectType('offstage', this)">Off Stage</button>
+                <button class="type-btn" data-type="sports" onclick="selectType('sports', this)">Sports</button>
             </div>
 
             <div class="card">
                 <div class="card-header">
-                    <h3 id="programTableTitle">SENIOR - ON STAGE</h3>
-                    <button id="addProgramBtn" class="admin-only-btn" style="display:none;" onclick="addNewProgram()">+ പുതിയ പ്രോഗ്രാം ചേർക്കുക</button>
+                    <h3 id="programTableTitle">SENIOR — ON STAGE</h3>
+                    <button class="admin-only-btn" style="display:none;" onclick="addNewProgram()">+ പുതിയ പ്രോഗ്രാം ചേർക്കുക</button>
                 </div>
                 <div class="table-responsive">
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th width="10%">No</th>
-                                <th width="34%">Program Name</th>
-                                <th width="28%">Team A</th>
-                                <th width="28%">Team B</th>
+                                <th style="width: 15%;">No</th>
+                                <th style="width: 45%;">Program Name</th>
+                                <th style="width: 20%;">Team A</th>
+                                <th style="width: 20%;">Team B</th>
                             </tr>
                         </thead>
                         <tbody id="programListBody">
-                            <!-- Data loaded via app.js -->
+                            <!-- JS dynamically fills this -->
                         </tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <!-- 2. TEAMS SECTION -->
+        <!-- Tab 2: Teams -->
         <section id="tab-teams" class="tab-content">
             <div class="teams-grid">
-                <!-- Team A -->
-                <div class="card team-card">
+                <div class="card">
                     <div class="card-header team-a-header">
-                        <h3>TEAM A</h3>
-                        <button class="admin-only-btn" style="display:none;" onclick="addNewStudent('teamA')">+ Add Student</button>
+                        <h3>🔴 TEAM A</h3>
+                        <button class="admin-only-btn" style="display:none;" onclick="addNewStudent('teamA')">+ ആളെ ചേർക്കുക</button>
                     </div>
-                    <div id="teamAContainer" class="team-list-body"></div>
+                    <div class="team-list-body" id="teamAContainer"></div>
                 </div>
 
-                <!-- Team B -->
-                <div class="card team-card">
+                <div class="card">
                     <div class="card-header team-b-header">
-                        <h3>TEAM B</h3>
-                        <button class="admin-only-btn" style="display:none;" onclick="addNewStudent('teamB')">+ Add Student</button>
+                        <h3>🔵 TEAM B</h3>
+                        <button class="admin-only-btn" style="display:none;" onclick="addNewStudent('teamB')">+ ആളെ ചേർക്കുക</button>
                     </div>
-                    <div id="teamBContainer" class="team-list-body"></div>
+                    <div class="team-list-body" id="teamBContainer"></div>
                 </div>
             </div>
         </section>
 
-        <!-- 3. GENERAL RULES SECTION -->
+        <!-- Tab 3: Rules -->
         <section id="tab-rules" class="tab-content">
-            <div class="card rules-card">
-                <div class="card-header">
-                    <h3>EID-E IRSHAD 2k26 — പൊതുനിയമങ്ങൾ</h3>
+            <div class="card">
+                <div class="card-header" style="background:#5a0b05;">
+                    <h3>📜 മേളയുടെ പൊതുനിയമങ്ങൾ</h3>
                 </div>
                 <div class="rules-body">
                     <ol class="rules-list">
-                        <li>സീനിയർ, ജൂനിയർ, സബ് ജൂനിയർ എന്നീ മൂന്ന് വിഭാഗങ്ങളിലായാണ് മത്സരങ്ങൾ നടക്കുക.</li>
-                        <li>പരിപാടിയുടെ പൂർണ്ണ നിയന്ത്രണം ഉസ്‌താദുമാരുടെ ആശീർവാദത്തോടെ കമ്മിറ്റിക്കായിരിക്കും.</li>
-                        <li>ഒരു മത്സരാർത്ഥിക്ക് പങ്കെടുക്കാൻ കഴിയുന്ന പരമാവധി വ്യക്തിഗത ഇനങ്ങൾ:
-                            <div class="table-responsive" style="margin-top: 10px;">
-                                <table class="rules-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Category</th>
-                                            <th>ARTS</th>
-                                            <th>SPORTS</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><strong>SENIOR</strong></td>
-                                            <td>On Stage: 04 | Off Stage: 09</td>
-                                            <td>3 Programs</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>JUNIOR</strong></td>
-                                            <td>On Stage: 07 | Off Stage: 13</td>
-                                            <td>3 Programs</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>SUB JUNIOR</strong></td>
-                                            <td>On Stage: 06 | Off Stage: 10</td>
-                                            <td>5 Programs</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </li>
-                        <li>നേരത്തെ പേര് നൽകിയ മത്സരാർത്ഥി തന്നെയാണ് മത്സര സമയത്ത് മത്സരിക്കേണ്ടത്. മത്സരാർത്ഥിയെ മാറ്റാൻ പാടുള്ളതല്ല. ക്രമക്കേട് അനുവദിക്കുന്നതല്ല.</li>
-                        <li>വ്യക്തമായ കാരണത്താൽ മത്സരാർത്ഥിയെ മാറ്റേണ്ടിവന്നാൽ നേരത്തെ പ്രോഗ്രാം കമ്മിറ്റിയെ അറിയിക്കേണ്ടതാണ്.</li>
-                        <li>സംശയങ്ങൾ, പരാതികൾ തുടങ്ങിയവ സംബന്ധിച്ച് പ്രോഗ്രാം കമ്മിറ്റിയുമായുള്ള എല്ലാ ബന്ധപ്പെടലുകളും ടീം ലീഡർമാർ മുഖേന ആയിരിക്കണം.</li>
-                        <li>വിധികർത്താക്കളുടെ തീരുമാനം അന്തിമമായിരിക്കും.</li>
-                        <li>മത്സരങ്ങൾ സംബന്ധിച്ചോ മത്സരാർത്ഥികൾ സംബന്ധിച്ചോ എന്തെങ്കിലും പരാതികൾ ഉണ്ടെങ്കിൽ, റിസൾട്ട് വന്നതിന് ശേഷം അരമണിക്കൂറിനുള്ളിൽ എഴുതി സമർപ്പിക്കേണ്ടതാണ്.</li>
-                        <li>മത്സരസമയത്തെ സദസ്സിലെ അച്ചടക്കം 10 പോയിന്റുകൾ ലഭിക്കാവുന്ന ഒരു മത്സര ഇനമായിരിക്കും. സദസ്സിന്റെ നിറവ്, കസേരകളുടെ ക്രമീകരണം, അച്ചടക്കം തുടങ്ങിയവ മാനദണ്ഡങ്ങളായിരിക്കും. എതിർ ടീമിന് 5 പോയിന്റ് ലഭിക്കുന്നതായിരിക്കും. (ഉസ്‌താദുമാരുടെയും ജഡ്ജിമാരുടെയും നിർദ്ദേശപ്രകാരമായിരിക്കും വിജയിയെ തീരുമാനിക്കുക.)</li>
-                        <li>ഒരു വിദ്യാർത്ഥിക്ക് ചുരുങ്ങിയത് ഒരു സ്റ്റേജ് പ്രോഗ്രാമിലെങ്കിലും പങ്കെടുക്കുന്നത് നിർബന്ധമാണ്. ഏതെങ്കിലും വിദ്യാർത്ഥിക്ക് സ്റ്റേജ് പരിപാടി ഇല്ലെന്ന് ബോധ്യപ്പെട്ടാൽ ടീമിന്റെ 10 പോയിന്റ് നഷ്ടപ്പെടുന്നതാണ്.</li>
-                        <li>വ്യക്തിഗത പരിപാടികളുടെ മാർക്ക് മാനദണ്ഡമാക്കിയാണ് കലാപ്രതിഭയെ നിർണയിക്കുക. എന്നാൽ രണ്ടുപേർ കലാപ്രതിഭാപട്ടത്തിന് അർഹരായാൽ, അവർ ഗ്രൂപ്പ് ഇനങ്ങളിൽ പങ്കെടുത്ത് ലഭിച്ച മാർക്കിന്റെ വിഹിതം കൂടി പരിഗണിക്കുന്നതാണ്.</li>
-                        <li>മത്സരത്തിൽ സമയനിഷ്‌ഠ കൃത്യമായി പാലിക്കേണ്ടതാണ്.</li>
-                        <li>EID-E-IRSHAD പ്രോഗ്രാം കമ്മിറ്റിയുടെ തീരുമാനം അന്തിമമായിരിക്കും.</li>
+                        <li>മത്സരങ്ങളിൽ പങ്കെടുക്കുന്ന മുഴുവൻ വിദ്യാർത്ഥികളും കൃത്യസമയത്ത് സ്റ്റേജിൽ/വേദിയിൽ ഹാജരാകേണ്ടതാണ്.</li>
+                        <li>വിധികർത്താക്കളുടെ തീരുമാനമേ അന്തിമമായിരിക്കുന്നതാണ്. അതിൽ തർക്കങ്ങൾ അനുവദനീയമല്ല.</li>
+                        <li>ഓരോ മത്സരത്തിലും പങ്കെടുക്കുന്നവരുടെ എണ്ണം അതത് കാറ്റഗറി കോർഡിനേറ്റർമാർ മുൻകൂട്ടി ഉറപ്പുവരുത്തണം.</li>
+                        <li>ഹയർ സെക്കൻഡറി/ഡിഗ്രി വിഭാഗങ്ങളുടെ ടൈമിംഗും കൃത്യസമയ പാലനവും കർശനമായിരിക്കും.</li>
+                        <li>ആശയക്കുഴപ്പങ്ങൾ ഉണ്ടായാൽ ജനറൽ കൺവീനറുടെ തീരുമാനം അന്തിമമായിരിക്കും.</li>
                     </ol>
-                    <p class="rules-footer">EID-E-IRSHAD 2k26 പ്രോഗ്രാം കമ്മിറ്റി</p>
+                    <div class="rules-footer">
+                        - കൺവീനർ, ഈദ്-ഇ ഇർഷാദ് കാമ്പസ് ഫിയെസ്ത 2K26
+                    </div>
                 </div>
             </div>
         </section>
@@ -183,50 +141,48 @@
         <div class="modal-content">
             <span class="close-btn" onclick="closeAdminModal()">&times;</span>
             <h3>🔐 Admin Login</h3>
-            <p>പ്രോഗ്രാമുകളും മത്സരാർത്ഥികളുടെ പേരുകളും എഡിറ്റ് ചെയ്യാൻ ലോഗിൻ ചെയ്യുക.</p>
-            <input type="email" id="adminEmail" placeholder="Admin Email" required>
-            <input type="password" id="adminPassword" placeholder="Password" required>
-            <button onclick="loginAdmin()" class="btn-submit">Login</button>
-            <p id="loginError" class="error-msg"></p>
+            <p style="font-size:0.85rem; color:#666; margin-bottom:12px;">പ്രോഗ്രാമുകളും മത്സരനാമങ്ങളും എഡിറ്റ് ചെയ്യാൻ ലോഗിൻ ചെയ്യുക.</p>
+            <label>Email ID:</label>
+            <input type="email" id="adminEmail" placeholder="admin@irshad.com">
+            <label>Password:</label>
+            <input type="password" id="adminPassword" placeholder="********">
+            <div id="loginError" class="error-msg"></div>
+            <button class="btn-submit" onclick="loginAdmin()">Login</button>
         </div>
     </div>
 
-    <!-- Edit Program / Student Selection Modal -->
+    <!-- Edit Program Modal -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeEditModal()">&times;</span>
-            <h3 id="editModalTitle">പ്രോഗ്രാം എഡിറ്റ് ചെയ്യുക</h3>
+            <h3>പ്രോഗ്രാം എഡിറ്റ് ചെയ്യുക</h3>
             
             <label>പ്രോഗ്രാമിന്റെ പേര്:</label>
             <input type="text" id="editProgName">
-
+            
             <label>Team A മത്സരാർത്ഥികൾ (താഴെ നിന്ന് സെലക്ട് ചെയ്യാം അല്ലെങ്കിൽ ടൈപ്പ് ചെയ്യാം):</label>
             <input type="text" id="editTeamAInput" placeholder="ഉദാ: 300. Safwan (C)">
-            <select id="selectTeamA" onchange="appendStudent('TeamA')">
+            <select id="selectTeamA" onchange="appendStudent('A')" style="margin-top:5px; margin-bottom:10px;">
                 <option value="">-- Team A ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുക --</option>
             </select>
 
             <label>Team B മത്സരാർത്ഥികൾ:</label>
             <input type="text" id="editTeamBInput" placeholder="ഉദാ: 100. Shibili (C)">
-            <select id="selectTeamB" onchange="appendStudent('TeamB')">
+            <select id="selectTeamB" onchange="appendStudent('B')" style="margin-top:5px;">
                 <option value="">-- Team B ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുക --</option>
             </select>
 
             <div class="modal-buttons">
-                <button onclick="saveProgramChanges()" class="btn-submit">💾 Save Changes</button>
-                <button onclick="deleteCurrentProgram()" class="btn-delete">🗑️ Delete</button>
+                <button class="btn-submit" onclick="saveProgramChanges()">Save Changes</button>
+                <button class="btn-delete" onclick="deleteCurrentProgram()">Delete</button>
             </div>
         </div>
     </div>
 
     <footer>
-        <p>© 2026 EID-E IRSHAD — IRSHADUNNASIHEEN SAHITHYA SAMAJAM</p>
+        &copy; 2026 EID-E IRSHAD — IRSHADUNNASIHEEN SAHITHYA SAMAJAM
     </footer>
 
-    <!-- Firebase SDKs & Custom App Script -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
