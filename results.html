@@ -8,6 +8,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <style>
+        /* ADMIN BAR & HEADER */
+        .admin-bar { background: #059669; color: #fff; padding: 10px 15px; display: none; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 0.9rem; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .admin-actions button { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; margin-left: 5px; }
+        .btn-logout { background: #dc2626; color: #fff; }
+        .subpage-header { background: #0f172a; color: #fff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; border-bottom: 3px solid #fbbf24; }
+        .subpage-header h2 { font-size: 1.15rem; color: #fbbf24; font-weight: 800; }
+        .back-home-btn { background: #fbbf24; color: #0f172a; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+        .admin-top-btn { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1.5px solid #fbbf24; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.82rem; cursor: pointer; }
+
+        /* BUILDER FORM (ADMIN ONLY) */
         .builder-body { padding: 18px; }
         .builder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
         .builder-form label { display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 4px; color: #334155; }
@@ -19,177 +29,379 @@
         .btn-publish-result { flex: 1; background: #059669; color: #fff; border: none; padding: 11px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.9rem; }
         .poster-preview-wrapper { display: flex; justify-content: center; overflow-x: auto; }
 
-        /* REF-1 EXACT REPLICA CANVAS */
+        /* REF-1 EXACT REPLICA POSTER DESIGN */
         .ref1-poster {
             width: 420px;
-            min-height: 440px;
-            background-color: #f6f3eb;
-            background-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.02) 0, rgba(0,0,0,0.02) 1px, transparent 1px);
-            background-size: 16px 16px;
-            color: #1e293b;
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            min-height: 430px;
+            background-color: #f6f4ee;
+            background-image: 
+                radial-gradient(rgba(0,0,0,0.03) 1px, transparent 0),
+                radial-gradient(rgba(180, 160, 120, 0.05) 1px, transparent 0);
+            background-size: 24px 24px;
+            background-position: 0 0, 12px 12px;
+            color: #0f2942;
+            padding: 26px 26px 20px;
+            border-radius: 8px;
+            box-shadow: 0 10px 28px rgba(0,0,0,0.15);
             position: relative;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
-            border: 2px solid #e5e0d1;
+            border: 1px solid #e5e0d5;
         }
-        .ref1-top-bar { display: flex; justify-content: flex-end; align-items: center; font-size: 0.75rem; font-weight: 700; color: #0f172a; margin-bottom: 10px; }
-        .ref1-top-bar span { display: flex; align-items: center; gap: 4px; }
-        .ref1-body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; align-items: center; }
-        .ref1-left-content { display: flex; flex-direction: column; }
-        .ref1-prog-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 15px; }
-        .ref1-prog-no { font-size: 2.6rem; font-weight: 900; color: #0f172a; line-height: 1; font-family: 'Montserrat', sans-serif; }
-        .ref1-prog-meta { display: flex; flex-direction: column; }
-        .ref1-prog-name { font-size: 1.15rem; font-weight: 900; color: #0f172a; line-height: 1.2; }
-        .ref1-prog-cat { font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; }
+        .ref1-top-bar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        .ref1-fb-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .ref1-fb-icon {
+            background: #2563eb;
+            color: #fff;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 900;
+        }
 
-        .ref1-winners-list { display: flex; flex-direction: column; gap: 10px; }
-        .ref1-winner-item { display: flex; flex-direction: column; }
-        .ref1-w-title { font-size: 0.95rem; font-weight: 900; color: #0f172a; display: flex; align-items: center; gap: 6px; }
-        .ref1-w-sub { font-size: 0.75rem; font-weight: 700; color: #64748b; padding-left: 18px; }
+        .ref1-body-grid {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 10px;
+            align-items: center;
+            margin: 6px 0 14px;
+        }
+        .ref1-left-content {
+            display: flex;
+            flex-direction: column;
+            padding-left: 4px;
+        }
+        .ref1-prog-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .ref1-prog-no {
+            font-size: 2.75rem;
+            font-weight: 900;
+            color: #0b2e4f;
+            line-height: 0.95;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: -1px;
+        }
+        .ref1-prog-meta {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .ref1-prog-name {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #0b2e4f;
+            line-height: 1.15;
+        }
+        .ref1-prog-cat {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #334155;
+            margin-top: 2px;
+        }
 
-        .ref1-right-art { display: flex; justify-content: center; align-items: center; }
-        .ref1-art-box { width: 100%; height: 175px; background: #e2dccb; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; border: 1.5px dashed #cbd5e1; }
-        .ref1-art-box img { width: 100%; height: 100%; object-fit: cover; }
+        .ref1-winners-list {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+        }
+        .ref1-winner-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .ref1-w-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #0b2e4f;
+            line-height: 1.2;
+        }
+        .ref1-w-sub {
+            font-size: 0.73rem;
+            font-weight: 600;
+            color: #475569;
+            padding-left: 16px;
+            line-height: 1.2;
+        }
 
-        .ref1-footer { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1.5px solid #e2e8f0; padding-top: 12px; margin-top: 15px; }
-        .ref1-org-side { display: flex; flex-direction: column; }
-        .ref1-org-title { font-size: 1rem; font-weight: 900; color: #0f172a; letter-spacing: 0.5px; }
-        .ref1-org-sub { font-size: 0.75rem; font-weight: 800; color: #475569; }
+        .ref1-right-art {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .ref1-art-box {
+            width: 100%;
+            height: 190px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        .ref1-art-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.12));
+        }
 
-        .ref1-center-calligraphy { text-align: center; }
-        .ref1-fallback-callig { font-size: 1.05rem; font-weight: 900; color: #991b1b; }
+        .ref1-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-top: 10px;
+            margin-top: 6px;
+        }
+        .ref1-org-side {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+        }
+        .ref1-org-title {
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: #1e293b;
+            letter-spacing: 0.5px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .ref1-org-sub {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: #1e293b;
+        }
 
-        .ref1-date-side { text-align: right; font-size: 0.68rem; font-weight: 700; color: #334155; line-height: 1.25; }
-        .ref1-date-side .year { font-weight: 900; }
+        .ref1-center-calligraphy {
+            text-align: center;
+            padding: 0 6px;
+        }
+        .ref1-callig-img {
+            max-height: 44px;
+            width: auto;
+        }
+        .ref1-fallback-callig {
+            font-size: 0.95rem;
+            font-weight: 900;
+            color: #881313;
+            line-height: 1.1;
+        }
+        .ref1-fallback-callig small {
+            display: block;
+            font-size: 0.65rem;
+            color: #7f1d1d;
+            font-weight: 800;
+        }
 
-        .results-gallery { padding: 18px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
-        .subpage-header { background: #0f172a; color: #fff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #fbbf24; }
-        .back-home-btn { background: #fbbf24; color: #0f172a; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; cursor: pointer; }
-        @media (max-width: 768px) { .builder-grid { grid-template-columns: 1fr; } .ref1-poster { width: 100%; max-width: 380px; } }
+        .ref1-date-side {
+            text-align: right;
+            font-size: 0.62rem;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1.25;
+        }
+
+        /* GALLERY */
+        .results-gallery { padding: 18px; display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 22px; justify-items: center; }
+        .published-card-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 420px; }
+        .published-card-actions { display: flex; gap: 8px; width: 100%; margin-top: 8px; }
+        .btn-card-dl { flex: 1; background: #1e293b; color: #fbbf24; border: none; padding: 8px 12px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 0.82rem; }
+        .btn-card-del { background: #dc2626; color: #fff; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 0.82rem; }
+
+        /*LOGIN MODAL */
+        .modal { display: none; position: fixed; z-index: 500; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); align-items: center; justify-content: center; padding: 15px; }
+        .modal-content { background: #fff; width: 100%; max-width: 380px; padding: 24px; border-radius: 14px; position: relative; color: #1e293b; }
+        .close-btn { position: absolute; right: 16px; top: 12px; font-size: 1.6rem; cursor: pointer; color: #64748b; }
+        .modal-content label { display: block; font-weight: 700; font-size: 0.85rem; margin-top: 10px; margin-bottom: 4px; }
+        .modal-content input { width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; }
+        .btn-submit { background: #1e293b; color: #fbbf24; border: none; padding: 11px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 14px; }
+        #loginError { color: #dc2626; font-size: 0.85rem; font-weight: 700; margin-top: 8px; text-align: center; }
+
+        @media (max-width: 768px) {
+            .builder-grid { grid-template-columns: 1fr; }
+            .ref1-poster { width: 100%; max-width: 380px; padding: 18px; }
+            .results-gallery { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- ADMIN BAR (VISIBLE ONLY WHEN LOGGED IN) -->
+    <div id="adminBar" class="admin-bar">
+        <span>⚙️ അഡ്മിൻ മോഡ് സജീവമാണ് (പോസ്റ്റർ നിർമ്മിക്കാം)</span>
+        <div class="admin-actions">
+            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
+        </div>
+    </div>
+
     <div class="subpage-header">
         <button class="back-home-btn" onclick="location.href='index.html'">⬅️ ഹോം പേജിലേക്ക്</button>
         <h2>🏆 മത്സര ഫലങ്ങൾ & പോസ്റ്ററുകൾ</h2>
+        <button class="admin-top-btn" id="adminBtn" onclick="openAdminModal()">🔐 Admin Login</button>
     </div>
 
     <main class="container">
-        <!-- Poster Builder Form -->
-        <div class="card">
-            <div class="card-header" style="background: #1c4e9c;"><h3>🎨 റിസൾട്ട് പോസ്റ്റർ നിർമ്മാണം (Ref-1 Style)</h3></div>
+        <!-- POSTER BUILDER CARD (STRICTLY HIDDEN FOR NORMAL USERS, VISIBLE ONLY TO ADMIN) -->
+        <div class="card" id="posterBuilderCard" style="display: none;">
+            <div class="card-header" style="background: #1c4e9c;">
+                <h3>🎨 റിസൾട്ട് പോസ്റ്റർ നിർമ്മാണം (Admin Only)</h3>
+            </div>
             <div class="builder-body">
                 <div class="builder-grid">
                     <div class="builder-form">
                         <div class="form-row-2">
                             <div>
-                                <label>പ്രോഗ്രാം നമ്പർ (No):</label>
-                                <input type="text" id="resNoInput" value="47" oninput="updatePosterPreview()">
+                                <label>Result No:</label>
+                                <input type="text" id="resNoInput" value="01" oninput="updatePosterPreview()">
                             </div>
                             <div>
                                 <label>കാറ്റഗറി (Category):</label>
-                                <select id="resCatSelect" onchange="updatePosterPreview()">
-                                    <option value="SENIOR" selected>SENIOR</option>
-                                    <option value="JUNIOR">JUNIOR</option>
-                                    <option value="SUB JUNIOR">SUB JUNIOR</option>
-                                    <option value="GENERAL">GENERAL</option>
+                                <select id="resCatSelect" onchange="onPosterCategoryChange()">
+                                    <option value="senior" selected>Senior</option>
+                                    <option value="junior">Junior</option>
+                                    <option value="subjunior">Sub Junior</option>
+                                    <option value="general">General</option>
                                 </select>
                             </div>
                         </div>
-                        <label>പ്രോഗ്രാമിന്റെ പേര്:</label>
-                        <input type="text" id="resProgCustom" value="Qawali" oninput="updatePosterPreview()">
 
-                        <div class="winner-select-box">
-                            <label style="color:#16a34a;">🥇 First Place:</label>
-                            <div class="form-row-2">
-                                <input type="text" id="win1Name" value="Ijjlan ek" placeholder="പേര്" oninput="updatePosterPreview()">
-                                <input type="text" id="win1Team" value="ZELLIJ" placeholder="ടീം" oninput="updatePosterPreview()">
+                        <div class="form-row-2">
+                            <div>
+                                <label>വിഭാഗം (Type):</label>
+                                <select id="resTypeSelect" onchange="onPosterCategoryChange()">
+                                    <option value="onstage">On Stage</option>
+                                    <option value="offstage">Off Stage</option>
+                                    <option value="sports">Sports</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>പ്രോഗ്രാം ലിസ്റ്റ്:</label>
+                                <select id="resProgSelect" onchange="onPosterProgramSelect()"></select>
                             </div>
                         </div>
 
+                        <label>പ്രോഗ്രാമിന്റെ പേര് (എഡിറ്റ് ചെയ്യാം):</label>
+                        <input type="text" id="resProgCustom" value="ഖിറാഅത്ത്" oninput="updatePosterPreview()">
+
+                        <!-- Winner 1 -->
                         <div class="winner-select-box">
-                            <label style="color:#d97706;">🥈 Second Place:</label>
+                            <label style="color:#16a34a;">🥇 1st Place (First):</label>
+                            <select id="selWinner1" onchange="onWinnerSelect(1)"></select>
                             <div class="form-row-2">
-                                <input type="text" id="win2Name" value="Riswinjas" placeholder="പേര്" oninput="updatePosterPreview()">
-                                <input type="text" id="win2Team" value="IZNIK" placeholder="ടീം" oninput="updatePosterPreview()">
+                                <input type="text" id="win1Name" placeholder="പേര്" value="Safwan" oninput="updatePosterPreview()">
+                                <input type="text" id="win1Team" placeholder="ടീം (ZELLIJ / IZNIK)" value="ZELLIJ" oninput="updatePosterPreview()">
                             </div>
                         </div>
 
+                        <!-- Winner 2 -->
                         <div class="winner-select-box">
-                            <label style="color:#dc2626;">🥉 Third Place:</label>
+                            <label style="color:#d97706;">🥈 2nd Place (Second):</label>
+                            <select id="selWinner2" onchange="onWinnerSelect(2)"></select>
                             <div class="form-row-2">
-                                <input type="text" id="win3Name" value="Abdul Hadi k" placeholder="പേര്" oninput="updatePosterPreview()">
-                                <input type="text" id="win3Team" value="ZELLIJ" placeholder="ടീം" oninput="updatePosterPreview()">
+                                <input type="text" id="win2Name" placeholder="പേര്" value="Shibili" oninput="updatePosterPreview()">
+                                <input type="text" id="win2Team" placeholder="ടീം (ZELLIJ / IZNIK)" value="IZNIK" oninput="updatePosterPreview()">
                             </div>
                         </div>
+
+                        <!-- Winner 3 -->
+                        <div class="winner-select-box">
+                            <label style="color:#dc2626;">🥉 3rd Place (Third):</label>
+                            <select id="selWinner3" onchange="onWinnerSelect(3)"></select>
+                            <div class="form-row-2">
+                                <input type="text" id="win3Name" placeholder="പേര്" value="Ramees" oninput="updatePosterPreview()">
+                                <input type="text" id="win3Team" placeholder="ടീം (ZELLIJ / IZNIK)" value="ZELLIJ" oninput="updatePosterPreview()">
+                            </div>
+                        </div>
+
+                        <label>🖼️ പോസ്റ്റർ സൈഡ് ചിത്രം മാറ്റാൻ (Optional Image Upload):</label>
+                        <input type="file" id="artUploadInput" accept="image/*" onchange="handleArtUpload(event)">
 
                         <div class="poster-action-btns">
-                            <button class="btn-download-poster" onclick="downloadResultPoster()">📥 പോസ്റ്റർ ഡൗൺലോഡ്</button>
-                            <button class="btn-publish-result" onclick="publishResultToSite()">💾 സൈറ്റിൽ സേവ് ചെയ്യുക</button>
+                            <button class="btn-download-poster" onclick="downloadResultPoster('posterCanvas', document.getElementById('resNoInput').value)">📥 പോസ്റ്റർ ഡൗൺലോഡ്</button>
+                            <button class="btn-publish-result" onclick="publishResultToSite()">💾 സൈറ്റിൽ പബ്ലിഷ് ചെയ്യുക</button>
                         </div>
                     </div>
 
-                    <!-- PREVIEW CANVAS (REF-1 EXACT) -->
+                    <!-- LIVE POSTER PREVIEW (REF-1 STYLE) -->
                     <div class="poster-preview-wrapper">
                         <div id="posterCanvas" class="ref1-poster">
                             <div class="ref1-top-bar">
-                                <span>🌐 eideirshad2k26</span>
+                                <span class="ref1-fb-badge"><span class="ref1-fb-icon">f</span> eideirshad2k26</span>
                             </div>
 
                             <div class="ref1-body-grid">
-                                <!-- Left Content -->
+                                <!-- Left Side: Number, Program, Winners -->
                                 <div class="ref1-left-content">
                                     <div class="ref1-prog-header">
-                                        <div class="ref1-prog-no" id="previewResNo">47</div>
+                                        <div class="ref1-prog-no" id="previewResNo">01</div>
                                         <div class="ref1-prog-meta">
-                                            <div class="ref1-prog-name" id="previewProg">Qawali</div>
-                                            <div class="ref1-prog-cat" id="previewCat">SENIOR</div>
+                                            <div class="ref1-prog-name" id="previewProg">ഖിറാഅത്ത്</div>
+                                            <div class="ref1-prog-cat" id="previewCat">Senior</div>
                                         </div>
                                     </div>
 
                                     <div class="ref1-winners-list">
                                         <div class="ref1-winner-item">
-                                            <div class="ref1-w-title">1. <span id="previewWin1Name">Ijjlan ek</span></div>
+                                            <div class="ref1-w-title">1. <span id="previewWin1Name">Safwan</span></div>
                                             <div class="ref1-w-sub" id="previewWin1Team">ZELLIJ</div>
                                         </div>
                                         <div class="ref1-winner-item">
-                                            <div class="ref1-w-title">2. <span id="previewWin2Name">Riswinjas</span></div>
+                                            <div class="ref1-w-title">2. <span id="previewWin2Name">Shibili</span></div>
                                             <div class="ref1-w-sub" id="previewWin2Team">IZNIK</div>
                                         </div>
                                         <div class="ref1-winner-item">
-                                            <div class="ref1-w-title">3. <span id="previewWin3Name">Abdul Hadi k</span></div>
+                                            <div class="ref1-w-title">3. <span id="previewWin3Name">Ramees</span></div>
                                             <div class="ref1-w-sub" id="previewWin3Team">ZELLIJ</div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Right Illustration Box -->
+                                <!-- Right Side: Illustration -->
                                 <div class="ref1-right-art">
                                     <div class="ref1-art-box">
-                                        <img src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=400&q=80" alt="Art">
+                                        <img id="previewArtImg" src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=500&q=80" alt="Illustration" crossorigin="anonymous">
                                     </div>
                                 </div>
                             </div>
 
+                            <!-- Footer: Left Org, Center Calligraphy, Right Dates & College -->
                             <div class="ref1-footer">
                                 <div class="ref1-org-side">
-                                    <div class="ref1-org-title">RAC</div>
-                                    <div class="ref1-org-sub">റെയ്ഞ്ച്</div>
+                                    <div class="ref1-org-title">ISS</div>
+                                    <div class="ref1-org-sub">ഇർഷാദുന്നാസിഹീൻ<br>സാഹിത്യ സമാജം</div>
                                 </div>
 
                                 <div class="ref1-center-calligraphy">
-                                    <div class="ref1-fallback-callig">ഈദ്-ഇ ഇർഷാദ്</div>
+                                    <img src="calligraphy.png" alt="Calligraphy" class="ref1-callig-img" onerror="this.style.display='none'; document.getElementById('ref1-fb-callig').style.display='block';">
+                                    <div id="ref1-fb-callig" class="ref1-fallback-callig" style="display:none;">
+                                        <small>കാമ്പസ് ഫിയെസ്ത</small>
+                                        ഈദ്-ഇ ഇർഷാദ്
+                                    </div>
                                 </div>
 
                                 <div class="ref1-date-side">
-                                    <div class="year">2026</div>
+                                    <div>2026</div>
                                     <div>നവംബർ 27, 28, 29</div>
+                                    <div>റഹ്മാനിയ്യ അറബിക് കോളേജ്</div>
+                                    <div>അട്ടശ്ശേരി</div>
                                 </div>
                             </div>
                         </div>
@@ -198,109 +410,306 @@
             </div>
         </div>
 
-        <!-- Published Results Gallery -->
+        <!-- PUBLISHED RESULTS GALLERY (VISIBLE TO EVERYONE) -->
         <div class="card">
-            <div class="card-header"><h3>📢 പ്രസിദ്ധീകരിച്ച മത്സര ഫലങ്ങൾ (Published Results)</h3></div>
+            <div class="card-header">
+                <h3>📢 പ്രസിദ്ധീകരിച്ച മത്സര ഫലങ്ങൾ (Published Results)</h3>
+            </div>
             <div id="publishedResultsContainer" class="results-gallery"></div>
         </div>
     </main>
+
+    <!-- ADMIN LOGIN MODAL -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAdminModal()">&times;</span>
+            <h3 style="margin-bottom: 12px;">🔐 Admin Login</h3>
+            <label>Admin Email:</label>
+            <input type="email" id="adminEmail" value="admin@irshad.com">
+            <label>Password:</label>
+            <input type="password" id="adminPassword" placeholder="പാസ്‌വേഡ് നൽകുക">
+            <button class="btn-submit" onclick="loginAdmin()">Login</button>
+            <div id="loginError"></div>
+        </div>
+    </div>
 
     <footer>
         &copy; 2026 EID-E IRSHAD — IRSHADUNNASIHEEN SAHITHYA SAMAJAM
     </footer>
 
     <script>
-        function updatePosterPreview() {
-            document.getElementById("previewResNo").textContent = document.getElementById("resNoInput").value || "47";
-            document.getElementById("previewCat").textContent = document.getElementById("resCatSelect").value;
-            document.getElementById("previewProg").textContent = document.getElementById("resProgCustom").value || "Qawali";
+        const defaultPrograms = {
+            senior: {
+                onstage: [{ no: "01", name: "ഖിറാഅത്ത്" }, { no: "02", name: "മലയാള പ്രസംഗം" }, { no: "03", name: "അറബിക് പ്രസംഗം" }, { no: "04", name: "മധുരമലയാളം" }, { no: "05", name: "ഖുർആൻ പ്രഭാഷണം" }, { no: "06", name: "അനൗൺസ്മെന്റ്" }, { no: "07", name: "മലയാള ഗാനം" }, { no: "08", name: "അറബി ഗാനം" }, { no: "09", name: "നിമിഷ പ്രസംഗം" }, { no: "10", name: "സംഘഗാനം" }],
+                offstage: [{ no: "01", name: "മലയാള പ്രബന്ധം" }, { no: "02", name: "ഇംഗ്ലീഷ് പ്രബന്ധം" }, { no: "03", name: "അറബിക് പ്രബന്ധം" }, { no: "04", name: "മലയാളം കയ്യെഴുത്ത്" }, { no: "05", name: "ഇംഗ്ലീഷ് കയ്യെഴുത്ത്" }, { no: "06", name: "അറബിക് കയ്യെഴുത്ത്" }, { no: "07", name: "ചിത്ര രചന" }, { no: "08", name: "പോസ്റ്റർ ഡിസൈൻ" }, { no: "09", name: "അറബി വായന" }, { no: "10", name: "കഥാരചന" }, { no: "11", name: "അടിക്കുറിപ്പ് രചന" }, { no: "12", name: "AI Poster Design" }, { no: "13", name: "സുഡോക്കോ" }, { no: "14", name: "ഹിഫ്ള്" }, { no: "15", name: "കാലിഗ്രഫി" }, { no: "16", name: "കമ്പ്യൂട്ടർ ടൈപ്പിംഗ്" }, { no: "17", name: "ട്രാൻസിലേഷൻ M to A" }, { no: "18", name: "ട്രാൻസിലേഷൻ M to E" }, { no: "19", name: "അറബിക് പദപ്പയറ്റ്" }, { no: "20", name: "ക്വിസ്" }, { no: "21", name: "Writing" }, { no: "22", name: "മദ്ഹ്ഗാന രചന" }],
+                sports: [{ no: "01", name: "100m Race" }, { no: "02", name: "Long Jump" }, { no: "03", name: "Shot Put" }, { no: "04", name: "Cut Post Shoot" }, { no: "05", name: "Discus Throw" }]
+            },
+            junior: {
+                onstage: [{ no: "01", name: "ഖിറാഅത്ത്" }, { no: "02", name: "മലയാള പ്രസംഗം" }, { no: "03", name: "ഇംഗ്ലീഷ് പ്രസംഗം" }, { no: "04", name: "മധുരമലയാളം" }, { no: "05", name: "അനൗൺസ്മെന്റ്" }, { no: "06", name: "മലയാള ഗാനം" }, { no: "07", name: "അറബി ഗാനം" }, { no: "08", name: "കവിത പാരായണം" }, { no: "09", name: "സംഘഗാനം" }],
+                offstage: [{ no: "01", name: "മലയാള പ്രബന്ധം" }, { no: "02", name: "ഇംഗ്ലീഷ് പ്രബന്ധം" }, { no: "03", name: "അറബിക് പ്രബന്ധം" }, { no: "04", name: "മലയാളം കയ്യെഴുത്ത്" }, { no: "05", name: "ഇംഗ്ലീഷ് കയ്യെഴുത്ത്" }, { no: "06", name: "അറബിക് കയ്യെഴുത്ത്" }, { no: "07", name: "ചിത്ര രചന" }, { no: "08", name: "പോസ്റ്റർ ഡിസൈൻ" }, { no: "09", name: "അറബി വായന" }, { no: "10", name: "കഥാരചന" }, { no: "11", name: "അടിക്കുറിപ്പ് രചന" }, { no: "12", name: "ഇംഗ്ലീഷ് വായന" }, { no: "13", name: "IQ Test" }, { no: "14", name: "അറബിക് പദപ്പയറ്റ്" }, { no: "15", name: "ഹിഫ്ള്" }, { no: "16", name: "കാലിഗ്രഫി" }, { no: "17", name: "ക്വിസ്" }],
+                sports: [{ no: "01", name: "100m Race" }, { no: "02", name: "Long Jump" }, { no: "03", name: "Shot Put" }, { no: "04", name: "Cut Post Shoot" }, { no: "05", name: "Lemon & Spoon Race" }]
+            },
+            subjunior: {
+                onstage: [{ no: "01", name: "ഖിറാഅത്ത്" }, { no: "02", name: "മലയാള പ്രസംഗം" }, { no: "03", name: "കഥ പറയൽ" }, { no: "04", name: "ബാങ്ക് വിളി" }, { no: "05", name: "മലയാള ഗാനം" }, { no: "06", name: "അറബി ഗാനം" }, { no: "07", name: "സംഘഗാനം" }],
+                offstage: [{ no: "01", name: "മലയാള പ്രബന്ധം" }, { no: "02", name: "പെൻസിൽ ഡ്രോയിംഗ്" }, { no: "03", name: "ഇംഗ്ലീഷ് വായന" }, { no: "04", name: "മലയാളം കയ്യെഴുത്ത്" }, { no: "05", name: "ഇംഗ്ലീഷ് കയ്യെഴുത്ത്" }, { no: "06", name: "അറബിക് കയ്യെഴുത്ത്" }, { no: "07", name: "ചിത്ര രചന" }, { no: "08", name: "മലയാളം വായന" }, { no: "09", name: "കാലിഗ്രഫി" }, { no: "10", name: "ഖുർആൻ മെമ്മറി" }, { no: "11", name: "കഥാരചന" }, { no: "12", name: "ക്വിസ്" }, { no: "13", name: "മെമ്മറി ടെസ്റ്റ്" }],
+                sports: [{ no: "01", name: "50m Race" }, { no: "02", name: "Long Jump" }, { no: "03", name: "Biscuit Eating" }, { no: "04", name: "Cut Post Shoot" }, { no: "05", name: "Filling a Bottle" }]
+            },
+            general: {
+                onstage: [{ no: "01", name: "മോട്ടിവേഷൻ സ്പീച്ച്" }, { no: "02", name: "കഥാപ്രസംഗം" }, { no: "03", name: "ബുർദ" }, { no: "04", name: "റീൽ മേക്കിങ്" }, { no: "05", name: "ക്യാമ്പസ് സോങ്" }, { no: "06", name: "തദ്‌രീസ്" }, { no: "07", name: "ഖുതുബ & മആശറ" }, { no: "08", name: "സയൻസ് പ്രൊജക്ട്" }, { no: "09", name: "Table Talk" }, { no: "10", name: "ഖവാലി" }, { no: "11", name: "സ്പോട്ട് മാഗസിൻ" }],
+                offstage: [],
+                sports: [{ no: "01", name: "Penalty Shootout" }, { no: "02", name: "Tug of War" }, { no: "03", name: "Relay Race" }]
+            }
+        };
 
-            document.getElementById("previewWin1Name").textContent = document.getElementById("win1Name").value || "-";
-            document.getElementById("previewWin1Team").textContent = document.getElementById("win1Team").value || "";
+        const defaultTeams = {
+            teamA: {
+                senior: ["300. Safwan (C)", "301. Ramees (Vc)", "302. fayiz (Vc)", "303. Thangal", "304. Asaf", "305. Thasnif", "306. Thwahir", "307. Irfan"],
+                junior: ["308. Qasim", "309. Sinan MT", "310. Ashiq", "311. Saeed"],
+                subjunior: ["312. Shahin", "313. Muhsin", "314. Razi", "315. Anshid"]
+            },
+            teamB: {
+                senior: ["100. Shibili (C)", "101. Ismail (Vc)", "102. Abdul vahab (Vc)", "103. Sinan P.k", "104. Adhil", "105. Rahees", "106. Amir", "107. Afsal"],
+                junior: ["108. Sinan edayoor", "109. Sinan cherushola", "110. Aslam", "111. Hijaz", "112. Jazeel"],
+                subjunior: ["113. Nijad", "114. Farhan", "115. Nusaif"]
+            }
+        };
 
-            document.getElementById("previewWin2Name").textContent = document.getElementById("win2Name").value || "-";
-            document.getElementById("previewWin2Team").textContent = document.getElementById("win2Team").value || "";
+        let programsData = JSON.parse(localStorage.getItem("eid_programs_data")) || defaultPrograms;
+        let teamsData = JSON.parse(localStorage.getItem("eid_teams_data")) || defaultTeams;
+        let isAdmin = localStorage.getItem("eid_irshad_admin_logged") === "true";
+        let currentArtDataUrl = "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=500&q=80";
 
-            document.getElementById("previewWin3Name").textContent = document.getElementById("win3Name").value || "-";
-            document.getElementById("previewWin3Team").textContent = document.getElementById("win3Team").value || "";
+        function updateAdminUI() {
+            document.getElementById("adminBar").style.display = isAdmin ? "flex" : "none";
+            document.getElementById("adminBtn").style.display = isAdmin ? "none" : "inline-block";
+            document.getElementById("posterBuilderCard").style.display = isAdmin ? "block" : "none";
+            renderPublishedResults();
         }
 
-        async function downloadResultPoster() {
-            const el = document.getElementById("posterCanvas");
+        function initPosterBuilder() {
+            let results = JSON.parse(localStorage.getItem("eid_results_list") || "[]");
+            document.getElementById("resNoInput").value = String(results.length + 1).padStart(2, "0");
+            onPosterCategoryChange();
+        }
+
+        function onPosterCategoryChange() {
+            const cat = document.getElementById("resCatSelect").value;
+            let type = document.getElementById("resTypeSelect").value;
+            if (cat === "general" && type === "offstage") {
+                type = "onstage";
+                document.getElementById("resTypeSelect").value = "onstage";
+            }
+
+            const list = (programsData[cat] && programsData[cat][type]) || [];
+            document.getElementById("resProgSelect").innerHTML = list.map(p => `<option value="${p.name}">${p.no}. ${p.name}</option>`).join("");
+
+            const getStudents = (tKey, teamName) => {
+                const arr = cat === "general"
+                    ? [...teamsData[tKey].senior, ...teamsData[tKey].junior, ...teamsData[tKey].subjunior]
+                    : (teamsData[tKey][cat] || []);
+                return arr.map(s => {
+                    const cleanName = s.replace(/^[0-9]+\.\s*/, "").replace(/\(C\)|\(Vc\)/gi, "").trim();
+                    return `<option value="${cleanName}|${teamName}">${s} (${teamName})</option>`;
+                });
+            };
+
+            const optionsHTML = `<option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>` +
+                [...getStudents("teamA", "ZELLIJ"), ...getStudents("teamB", "IZNIK")].join("");
+
+            [1, 2, 3].forEach(r => document.getElementById("selWinner" + r).innerHTML = optionsHTML);
+            onPosterProgramSelect();
+        }
+
+        function onPosterProgramSelect() {
+            const prog = document.getElementById("resProgSelect").value;
+            if (prog) document.getElementById("resProgCustom").value = prog;
+            updatePosterPreview();
+        }
+
+        function onWinnerSelect(rank) {
+            const val = document.getElementById("selWinner" + rank).value;
+            if (!val) return;
+            const [name, team] = val.split("|");
+            document.getElementById("win" + rank + "Name").value = name;
+            document.getElementById("win" + rank + "Team").value = team;
+            updatePosterPreview();
+        }
+
+        function handleArtUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentArtDataUrl = e.target.result;
+                document.getElementById("previewArtImg").src = currentArtDataUrl;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updatePosterPreview() {
+            const catNames = { senior: "Senior", junior: "Junior", subjunior: "Sub Junior", general: "General" };
+            const catVal = document.getElementById("resCatSelect").value;
+
+            document.getElementById("previewResNo").textContent = document.getElementById("resNoInput").value || "01";
+            document.getElementById("previewCat").textContent = catNames[catVal] || "Senior";
+            document.getElementById("previewProg").textContent = document.getElementById("resProgCustom").value || "-";
+
+            [1, 2, 3].forEach(r => {
+                document.getElementById("previewWin" + r + "Name").textContent = document.getElementById("win" + r + "Name").value || "-";
+                document.getElementById("previewWin" + r + "Team").textContent = document.getElementById("win" + r + "Team").value || "";
+            });
+        }
+
+        async function downloadResultPoster(elementId, resNo) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
             const canvas = await html2canvas(el, { scale: 3, useCORS: true });
             const link = document.createElement("a");
-            link.download = `EID-E-IRSHAD-Result-${document.getElementById("resNoInput").value}.png`;
+            link.download = `EID-E-IRSHAD-Result-${resNo || '01'}.png`;
             link.href = canvas.toDataURL("image/png");
             link.click();
         }
 
         function publishResultToSite() {
+            if (!isAdmin) return;
             let results = JSON.parse(localStorage.getItem("eid_results_list") || "[]");
+            const catNames = { senior: "Senior", junior: "Junior", subjunior: "Sub Junior", general: "General" };
+
             results.unshift({
-                resNo: document.getElementById("resNoInput").value || "47",
-                category: document.getElementById("resCatSelect").value,
+                resNo: document.getElementById("resNoInput").value || "01",
+                category: catNames[document.getElementById("resCatSelect").value] || "Senior",
                 program: document.getElementById("resProgCustom").value || "-",
                 win1Name: document.getElementById("win1Name").value || "-",
                 win1Team: document.getElementById("win1Team").value || "",
                 win2Name: document.getElementById("win2Name").value || "-",
                 win2Team: document.getElementById("win2Team").value || "",
                 win3Name: document.getElementById("win3Name").value || "-",
-                win3Team: document.getElementById("win3Team").value || ""
+                win3Team: document.getElementById("win3Team").value || "",
+                artImg: currentArtDataUrl
             });
+
             localStorage.setItem("eid_results_list", JSON.stringify(results));
+            initPosterBuilder();
             renderPublishedResults();
-            alert("മത്സരഫലം സൈറ്റിൽ സേവ് ചെയ്തു!");
+            alert("മത്സരഫലം വിജയകരമായി സൈറ്റിൽ പബ്ലിഷ് ചെയ്തു!");
         }
 
         function renderPublishedResults() {
             const container = document.getElementById("publishedResultsContainer");
             let results = JSON.parse(localStorage.getItem("eid_results_list") || "[]");
+
             if (results.length === 0) {
-                container.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:15px; color:#64748b;">മത്സര ഫലങ്ങൾ ഒന്നും തന്നെ പ്രസിദ്ധീകരിച്ചിട്ടില്ല.</p>`;
+                container.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:20px; color:#64748b;">മത്സര ഫലങ്ങൾ ഒന്നും തന്നെ പ്രസിദ്ധീകരിച്ചിട്ടില്ല.</p>`;
                 return;
             }
+
             container.innerHTML = results.map((r, i) => `
-                <div class="ref1-poster" style="width:100%; min-height:360px; padding:16px;">
-                    <div class="ref1-top-bar"><span>🌐 eideirshad2k26</span></div>
-                    <div class="ref1-body-grid">
-                        <div class="ref1-left-content">
-                            <div class="ref1-prog-header">
-                                <div class="ref1-prog-no">${r.resNo}</div>
-                                <div class="ref1-prog-meta">
-                                    <div class="ref1-prog-name">${r.program}</div>
-                                    <div class="ref1-prog-cat">${r.category}</div>
+                <div class="published-card-wrapper">
+                    <div id="pubPoster-${i}" class="ref1-poster" style="width:100%;">
+                        <div class="ref1-top-bar">
+                            <span class="ref1-fb-badge"><span class="ref1-fb-icon">f</span> eideirshad2k26</span>
+                        </div>
+                        <div class="ref1-body-grid">
+                            <div class="ref1-left-content">
+                                <div class="ref1-prog-header">
+                                    <div class="ref1-prog-no">${r.resNo}</div>
+                                    <div class="ref1-prog-meta">
+                                        <div class="ref1-prog-name">${r.program}</div>
+                                        <div class="ref1-prog-cat">${r.category}</div>
+                                    </div>
+                                </div>
+                                <div class="ref1-winners-list">
+                                    <div class="ref1-winner-item">
+                                        <div class="ref1-w-title">1. <span>${r.win1Name}</span></div>
+                                        <div class="ref1-w-sub">${r.win1Team}</div>
+                                    </div>
+                                    <div class="ref1-winner-item">
+                                        <div class="ref1-w-title">2. <span>${r.win2Name}</span></div>
+                                        <div class="ref1-w-sub">${r.win2Team}</div>
+                                    </div>
+                                    <div class="ref1-winner-item">
+                                        <div class="ref1-w-title">3. <span>${r.win3Name}</span></div>
+                                        <div class="ref1-w-sub">${r.win3Team}</div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="ref1-winners-list">
-                                <div class="ref1-winner-item"><div class="ref1-w-title">1. <span>${r.win1Name}</span></div><div class="ref1-w-sub">${r.win1Team}</div></div>
-                                <div class="ref1-winner-item"><div class="ref1-w-title">2. <span>${r.win2Name}</span></div><div class="ref1-w-sub">${r.win2Team}</div></div>
-                                <div class="ref1-winner-item"><div class="ref1-w-title">3. <span>${r.win3Name}</span></div><div class="ref1-w-sub">${r.win3Team}</div></div>
+                            <div class="ref1-right-art">
+                                <div class="ref1-art-box">
+                                    <img src="${r.artImg || 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=500&q=80'}" alt="Art" crossorigin="anonymous">
+                                </div>
                             </div>
                         </div>
-                        <div class="ref1-right-art">
-                            <div class="ref1-art-box" style="height:140px;"><img src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=400&q=80" alt="Art"></div>
+                        <div class="ref1-footer">
+                            <div class="ref1-org-side">
+                                <div class="ref1-org-title">ISS</div>
+                                <div class="ref1-org-sub">ഇർഷാദുന്നാസിഹീൻ<br>സാഹിത്യ സമാജം</div>
+                            </div>
+                            <div class="ref1-center-calligraphy">
+                                <img src="calligraphy.png" alt="Calligraphy" class="ref1-callig-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <div class="ref1-fallback-callig" style="display:none;">
+                                    <small>കാമ്പസ് ഫിയെസ്ത</small>
+                                    ഈദ്-ഇ ഇർഷാദ്
+                                </div>
+                            </div>
+                            <div class="ref1-date-side">
+                                <div>2026</div>
+                                <div>നവംബർ 27, 28, 29</div>
+                                <div>റഹ്മാനിയ്യ അറബിക് കോളേജ്</div>
+                                <div>അട്ടശ്ശേരി</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="ref1-footer">
-                        <div class="ref1-org-side"><div class="ref1-org-title">RAC</div><div class="ref1-org-sub">റെയ്ഞ്ച്</div></div>
-                        <div class="ref1-center-calligraphy"><div class="ref1-fallback-callig">ഈദ്-ഇ ഇർഷാദ്</div></div>
-                        <div class="ref1-date-side"><div class="year">2026</div><div>നവംബർ 27, 28, 29</div></div>
+                    <div class="published-card-actions">
+                        <button class="btn-card-dl" onclick="downloadResultPoster('pubPoster-${i}', '${r.resNo}')">📥 പോസ്റ്റർ ഡൗൺലോഡ്</button>
+                        ${isAdmin ? `<button class="btn-card-del" onclick="deleteResult(${i})">🗑️ ഒഴിവാക്കുക</button>` : ""}
                     </div>
-                    <button class="btn-delete" style="margin-top:10px; background:#dc2626; color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;" onclick="deleteResult(${i})">🗑️ ഒഴിവാക്കുക</button>
                 </div>
             `).join("");
         }
 
         function deleteResult(idx) {
+            if (!isAdmin) return;
             if (confirm("ഈ റിസൾട്ട് ഒഴിവാക്കണോ?")) {
                 let results = JSON.parse(localStorage.getItem("eid_results_list") || "[]");
                 results.splice(idx, 1);
                 localStorage.setItem("eid_results_list", JSON.stringify(results));
+                initPosterBuilder();
                 renderPublishedResults();
             }
         }
 
-        renderPublishedResults();
+        /* ADMIN AUTH */
+        function openAdminModal() {
+            document.getElementById("loginError").textContent = "";
+            document.getElementById("adminPassword").value = "";
+            document.getElementById("loginModal").style.display = "flex";
+        }
+
+        function closeAdminModal() {
+            document.getElementById("loginModal").style.display = "none";
+        }
+
+        function loginAdmin() {
+            const email = document.getElementById("adminEmail").value.trim().toLowerCase();
+            const pass = document.getElementById("adminPassword").value.trim();
+            if (email === "admin@irshad.com" && pass === "irshad2k26") {
+                isAdmin = true;
+                localStorage.setItem("eid_irshad_admin_logged", "true");
+                closeAdminModal();
+                updateAdminUI();
+            } else {
+                document.getElementById("loginError").textContent = "തെറ്റായ ഐഡിയോ പാസ്‌വേഡോ ആണ്!";
+            }
+        }
+
+        function logoutAdmin() {
+            isAdmin = false;
+            localStorage.removeItem("eid_irshad_admin_logged");
+            updateAdminUI();
+        }
+
+        initPosterBuilder();
+        updateAdminUI();
     </script>
 </body>
 </html>
