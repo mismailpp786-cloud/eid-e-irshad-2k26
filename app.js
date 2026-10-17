@@ -465,4 +465,194 @@ function updateLiveScoreboard() {
             };
 
             processWin(r.win1Team, 1);
-            processWin
+            processWin(r.win2Team, 2);
+            processWin(r.win3Team, 3);
+        });
+    }
+
+    const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    
+    setEl("barScoreA", totals.A);
+    setEl("barScoreB", totals.B);
+
+    setEl("srPtsA", cats.senior.A);
+    setEl("srPtsB", cats.senior.B);
+
+    setEl("jrPtsA", cats.junior.A);
+    setEl("jrPtsB", cats.junior.B);
+
+    setEl("subPtsA", cats.subjunior.A);
+    setEl("subPtsB", cats.subjunior.B);
+
+    setEl("genPtsA", cats.general.A);
+    setEl("genPtsB", cats.general.B);
+
+    const barA = document.getElementById("verticalBarA");
+    const barB = document.getElementById("verticalBarB");
+    
+    if (barA && barB) {
+        let maxVal = Math.max(totals.A, totals.B, 10);
+        let heightA = Math.max(15, Math.round((totals.A / maxVal) * 100));
+        let heightB = Math.max(15, Math.round((totals.B / maxVal) * 100));
+
+        barA.style.height = heightA + "%";
+        barB.style.height = heightB + "%";
+    }
+}
+
+window.downloadResultPoster = async function() {
+    const posterEl = document.getElementById("posterCanvas");
+    if (!posterEl || typeof html2canvas === "undefined") {
+        alert("ഡൗൺലോഡ് തയ്യാറാകുന്നുണ്ട്, ദയവായി കാത്തിരിക്കുക.");
+        return;
+    }
+    try {
+        const canvas = await html2canvas(posterEl, { scale: 3, useCORS: true, backgroundColor: null });
+        const link = document.createElement("a");
+        const resNo = document.getElementById("resNoInput")?.value || "01";
+        link.download = `EID-E-IRSHAD-Result-${resNo}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    } catch (err) {
+        alert("ഡൗൺലോഡ് ചെയ്യുന്നതിൽ പിശക്: " + err.message);
+    }
+};
+
+window.publishResultToSite = async function() {
+    const themeSelect = document.getElementById("themeStyleSelect");
+    const resObj = {
+        resNo: document.getElementById("resNoInput")?.value || "01",
+        category: document.getElementById("previewCat")?.textContent || "SENIOR",
+        program: document.getElementById("resProgCustom")?.value || "",
+        win1Name: document.getElementById("win1Name")?.value || "-",
+        win1Team: document.getElementById("win1Team")?.value || "",
+        win2Name: document.getElementById("win2Name")?.value || "-",
+        win2Team: document.getElementById("win2Team")?.value || "",
+        win3Name: document.getElementById("win3Name")?.value || "-",
+        win3Team: document.getElementById("win3Team")?.value || "",
+        themeClass: themeSelect ? themeSelect.value : "theme-alif"
+    };
+
+    if (!appData.results) appData.results = [];
+    appData.results.unshift(resObj);
+    await saveAppData();
+    initPosterBuilder();
+    alert("മത്സരഫലം വിജയകരമായി വെബ്സൈറ്റിൽ സേവ് ചെയ്തു!");
+};
+
+function renderPublishedResults() {
+    const container = document.getElementById("publishedResultsContainer");
+    if (!container) return;
+
+    const list = appData.results || [];
+    if (list.length === 0) {
+        container.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#64748b; padding:15px;">മത്സര ഫലങ്ങൾ ഒന്നും തന്നെ പ്രസിദ്ധീകരിച്ചിട്ടില്ല.</p>`;
+        return;
+    }
+
+    container.innerHTML = "";
+    list.forEach((r, idx) => {
+        const card = document.createElement("div");
+        card.className = `published-res-card ${r.themeClass || 'theme-alif'}`;
+        const delBtn = isAdmin
+            ? `<button class="edit-row-btn" style="background:#dc2626; margin-top:10px;" onclick="deletePublishedResult(${idx})">🗑️ ഒഴിവാക്കുക</button>`
+            : "";
+
+        card.innerHTML = `
+            <span class="pub-res-badge">#${r.resNo}</span>
+            <div class="ref-cat-label">${r.category}</div>
+            <div class="ref-prog-label" style="margin-bottom:10px;">${r.program}</div>
+            <div class="ref-winner-row"><div class="rank-num rank-1">01<sup>st</sup></div><div class="rank-dot">•</div><div class="rank-details"><div class="rank-name">${r.win1Name}</div><div class="rank-place">${r.win1Team}</div></div></div>
+            <div class="ref-winner-row"><div class="rank-num rank-2">02<sup>nd</sup></div><div class="rank-dot">•</div><div class="rank-details"><div class="rank-name">${r.win2Name}</div><div class="rank-place">${r.win2Team}</div></div></div>
+            <div class="ref-winner-row"><div class="rank-num rank-3">03<sup>rd</sup></div><div class="rank-dot">•</div><div class="rank-details"><div class="rank-name">${r.win3Name}</div><div class="rank-place">${r.win3Team}</div></div></div>
+            ${delBtn}
+        `;
+        container.appendChild(card);
+    });
+}
+
+window.deletePublishedResult = async function(idx) {
+    if (!confirm("ഈ റിസൾട്ട് ഒഴിവാക്കണോ?")) return;
+    appData.results.splice(idx, 1);
+    await saveAppData();
+};
+
+// ============================================================================
+// 6. ADMIN AUTHENTICATION & LOGIN
+// ============================================================================
+window.openAdminModal = function() {
+    const errEl = document.getElementById("loginError");
+    const modal = document.getElementById("loginModal");
+    if (errEl) errEl.textContent = "";
+    if (modal) modal.style.display = "flex";
+};
+
+window.closeAdminModal = function() {
+    const modal = document.getElementById("loginModal");
+    if (modal) modal.style.display = "none";
+};
+
+window.loginAdmin = async function() {
+    const emailField = document.getElementById("adminEmail");
+    const passField = document.getElementById("adminPassword");
+    const errEl = document.getElementById("loginError");
+
+    if (!emailField || !passField) return;
+    const email = emailField.value.trim().toLowerCase();
+    const pass = passField.value.trim();
+
+    // Direct local check for instant login
+    if (email === "admin@irshad.com" && pass === "irshad2k26") {
+        isAdmin = true;
+        localStorage.setItem("eid_irshad_admin_logged", "true");
+        closeAdminModal();
+        renderAll();
+        return;
+    }
+
+    if (isFirebaseConfigured && auth) {
+        try {
+            await auth.signInWithEmailAndPassword(email, pass);
+            isAdmin = true;
+            localStorage.setItem("eid_irshad_admin_logged", "true");
+            closeAdminModal();
+            renderAll();
+        } catch (err) {
+            if (email === "admin@irshad.com" && pass === "irshad2k26") {
+                isAdmin = true;
+                localStorage.setItem("eid_irshad_admin_logged", "true");
+                closeAdminModal();
+                renderAll();
+            } else {
+                if (errEl) errEl.textContent = "ലോഗിൻ പരാജയപ്പെട്ടു! ദയവായി ശരിയായ ഐഡിയും പാസ്‌വേഡും നൽകുക.";
+            }
+        }
+    } else {
+        if (email === "admin@irshad.com" && pass === "irshad2k26") {
+            isAdmin = true;
+            localStorage.setItem("eid_irshad_admin_logged", "true");
+            closeAdminModal();
+            renderAll();
+        } else {
+            if (errEl) errEl.textContent = "ലോഗിൻ പരാജയപ്പെട്ടു! ദയവായി ശരിയായ ഐഡിയും പാസ്‌വേഡും നൽകുക.";
+        }
+    }
+};
+
+window.logoutAdmin = async function() {
+    isAdmin = false;
+    localStorage.removeItem("eid_irshad_admin_logged");
+    if (isFirebaseConfigured && auth) {
+        try { await auth.signOut(); } catch (e) {}
+    }
+    renderAll();
+};
+
+window.resetToDefaultData = async function() {
+    if (!confirm("ശ്രദ്ധിക്കുക: നിങ്ങൾ വരുത്തിയ മാറ്റങ്ങൾ മാഞ്ഞ് ആദ്യത്തെ ലിസ്റ്റിലേക്ക് തിരിച്ചുപോകും. തുടരണോ?")) return;
+    appData = JSON.parse(JSON.stringify(defaultData));
+    await saveAppData();
+};
+
+// Start App
+loadAppData();
