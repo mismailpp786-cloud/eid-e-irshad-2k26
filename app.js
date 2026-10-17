@@ -350,3 +350,4 @@ function renderTeams() {
             const heading = document.createElement("div");
             heading.className = "team-cat-title";
             heading.textContent = cat.label;
+            
