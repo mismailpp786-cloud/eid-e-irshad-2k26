@@ -1,3 +1,6 @@
+// ============================================================================
+// 1. FIREBASE CONFIGURATION
+// ============================================================================
 const firebaseConfig = {
     apiKey: "AIzaSyAJ7gwJjRcvYIft6vA-4nxhE1AVPrpTDmv",
     authDomain: "eid-e-irshad-2k26.firebaseapp.com",
@@ -7,22 +10,13 @@ const firebaseConfig = {
     appId: "1:926291213815:web:50729ca345f6d6b0d002f2"
 };
 
-let auth = null;
-let db = null;
-let isFirebaseConfigured = firebaseConfig.apiKey !== "YOUR_API_KEY";
-
-if (isFirebaseConfigured && typeof firebase !== "undefined") {
-    try {
-        firebase.initializeApp(firebaseConfig);
-        auth = firebase.auth();
-        db = firebase.firestore();
-    } catch (e) {
-        console.error("Firebase Init Error:", e);
-    }
-}
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const isFirebaseConfigured = true;
 
 // ============================================================================
-// 2. DEFAULT SOURCE DATA (നിങ്ങൾ നൽകിയ ഫയലുകളിലെ യഥാർത്ഥ വിവരങ്ങൾ)
+// 2. DEFAULT SOURCE DATA (യഥാർത്ഥ പ്രോഗ്രാമുകളും ടീം ലിസ്റ്റുകളും)
 // ============================================================================
 const defaultData = {
     programs: {
@@ -275,10 +269,10 @@ function renderPrograms() {
     const offstageBtn = document.querySelector('.type-btn[data-type="offstage"]');
 
     if (currentCategory === "general") {
-        offstageBtn.style.display = "none";
+        if (offstageBtn) offstageBtn.style.display = "none";
         if (currentType === "offstage") currentType = "onstage";
     } else {
-        offstageBtn.style.display = "inline-block";
+        if (offstageBtn) offstageBtn.style.display = "inline-block";
     }
 
     const catNames = { senior: "SENIOR", junior: "JUNIOR", subjunior: "SUB JUNIOR", general: "GENERAL" };
@@ -288,9 +282,10 @@ function renderPrograms() {
         sports: "SPORTS"
     };
 
-    titleEl.textContent = `${catNames[currentCategory]} — ${typeNames[currentType]}`;
+    if (titleEl) titleEl.textContent = `${catNames[currentCategory]} — ${typeNames[currentType]}`;
 
     const list = appData.programs[currentCategory][currentType] || [];
+    if (!tbody) return;
     tbody.innerHTML = "";
 
     if (list.length === 0) {
@@ -317,6 +312,7 @@ function renderPrograms() {
 function renderTeams() {
     const renderTeamColumn = (teamKey, containerId) => {
         const container = document.getElementById(containerId);
+        if (!container) return;
         container.innerHTML = "";
         const categories = [
             { key: "senior", label: "Senior" },
@@ -356,12 +352,12 @@ function updateAdminUI() {
     const adminOnlyBtns = document.querySelectorAll(".admin-only-btn");
 
     if (isAdmin) {
-        adminBar.style.display = "flex";
-        adminBtn.style.display = "none";
+        if (adminBar) adminBar.style.display = "flex";
+        if (adminBtn) adminBtn.style.display = "none";
         adminOnlyBtns.forEach(btn => btn.style.display = "inline-block");
     } else {
-        adminBar.style.display = "none";
-        adminBtn.style.display = "inline-block";
+        if (adminBar) adminBar.style.display = "none";
+        if (adminBtn) adminBtn.style.display = "inline-block";
         adminOnlyBtns.forEach(btn => btn.style.display = "none");
     }
 }
@@ -369,70 +365,70 @@ function updateAdminUI() {
 // ============================================================================
 // 5. NAVIGATION & FILTER HANDLERS
 // ============================================================================
-function switchTab(tabName, btnEl) {
+window.switchTab = function(tabName, btnEl) {
     document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
     document.querySelectorAll(".main-nav .nav-btn").forEach(el => el.classList.remove("active"));
 
-    document.getElementById(`tab-${tabName}`).classList.add("active");
+    const targetTab = document.getElementById(`tab-${tabName}`);
+    if (targetTab) targetTab.classList.add("active");
     if (btnEl) btnEl.classList.add("active");
-}
+};
 
-function selectCategory(cat, btnEl) {
+window.selectCategory = function(cat, btnEl) {
     currentCategory = cat;
     document.querySelectorAll(".cat-btn").forEach(btn => btn.classList.remove("active"));
     if (btnEl) btnEl.classList.add("active");
     renderPrograms();
-}
+};
 
-function selectType(type, btnEl) {
+window.selectType = function(type, btnEl) {
     currentType = type;
     document.querySelectorAll(".type-btn").forEach(btn => btn.classList.remove("active"));
     if (btnEl) btnEl.classList.add("active");
     renderPrograms();
-}
+};
 
 // ============================================================================
 // 6. ADMIN AUTHENTICATION & EDITING FUNCTIONS
 // ============================================================================
-function openAdminModal() {
-    document.getElementById("loginError").textContent = "";
-    document.getElementById("loginModal").style.display = "flex";
-}
-
-function closeAdminModal() {
-    document.getElementById("loginModal").style.display = "none";
-}
-
-async function loginAdmin() {
-    const email = document.getElementById("adminEmail").value.trim();
-    const pass = document.getElementById("adminPassword").value.trim();
+window.openAdminModal = function() {
     const errEl = document.getElementById("loginError");
+    const modal = document.getElementById("loginModal");
+    if (errEl) errEl.textContent = "";
+    if (modal) modal.style.display = "flex";
+};
+
+window.closeAdminModal = function() {
+    const modal = document.getElementById("loginModal");
+    if (modal) modal.style.display = "none";
+};
+
+window.loginAdmin = async function() {
+    const emailField = document.getElementById("adminEmail");
+    const passField = document.getElementById("adminPassword");
+    const errEl = document.getElementById("loginError");
+
+    if (!emailField || !passField) return;
+    const email = emailField.value.trim();
+    const pass = passField.value.trim();
 
     if (isFirebaseConfigured && auth) {
         try {
             await auth.signInWithEmailAndPassword(email, pass);
             closeAdminModal();
         } catch (err) {
-            errEl.textContent = "ലോഗിൻ പരാജയപ്പെട്ടു! ഇമെയിൽ അല്ലെങ്കിൽ പാസ്‌വേഡ് പരിശോധിക്കുക.";
-        }
-    } else {
-        if (email === "admin@irshad.com" && pass === "irshad2k26") {
-            isAdmin = true;
-            closeAdminModal();
-            renderAll();
-        } else {
-            errEl.textContent = "ടെസ്റ്റ് ചെയ്യാൻ Email: admin@irshad.com, Pass: irshad2k26 എന്ന് നൽകുക.";
+            if (errEl) errEl.textContent = "ലോഗിൻ പരാജയപ്പെട്ടു! ഇമെയിൽ അല്ലെങ്കിൽ പാസ്‌വേഡ് പരിശോധിക്കുക.";
         }
     }
-}
+};
 
-async function logoutAdmin() {
+window.logoutAdmin = async function() {
     if (isFirebaseConfigured && auth) {
         await auth.signOut();
     }
     isAdmin = false;
     renderAll();
-}
+};
 
 if (isFirebaseConfigured && auth) {
     auth.onAuthStateChanged((user) => {
@@ -441,26 +437,29 @@ if (isFirebaseConfigured && auth) {
     });
 }
 
-function openEditProgramModal(index) {
+window.openEditProgramModal = function(index) {
     editingIndex = index;
     const item = appData.programs[currentCategory][currentType][index];
 
-    document.getElementById("editProgName").value = item.name;
-    document.getElementById("editTeamAInput").value = item.teamA;
-    document.getElementById("editTeamBInput").value = item.teamB;
+    const nameField = document.getElementById("editProgName");
+    const inputA = document.getElementById("editTeamAInput");
+    const inputB = document.getElementById("editTeamBInput");
+    const modal = document.getElementById("editModal");
+
+    if (nameField) nameField.value = item.name;
+    if (inputA) inputA.value = item.teamA;
+    if (inputB) inputB.value = item.teamB;
 
     populateStudentDropdowns();
-    document.getElementById("editModal").style.display = "flex";
-}
+    if (modal) modal.style.display = "flex";
+};
 
 function populateStudentDropdowns() {
     const selA = document.getElementById("selectTeamA");
     const selB = document.getElementById("selectTeamB");
+    if (!selA || !selB) return;
+
     selA.innerHTML = '<option value="">-- Team A ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുക --</option>';
     selB.innerHTML = '<option value="">-- Team B ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുക --</option>';
 
-    const getStudentsForCat = (teamKey) => {
-        if (currentCategory === "general") {
-            return [
-                ...appData.teams[teamKey].senior,
-                ...appData.teams[teamKey].junio
+    const getStud
