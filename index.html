@@ -108,16 +108,16 @@
         </main>
     </div>
 
-    <!-- Admin Login Modal -->
+    <!-- Admin Login Modal (Empty fields) -->
     <div id="loginModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close-btn" onclick="closeAdminModal()">&times;</span>
             <h3>🔐 Admin Login</h3>
             <p style="font-size:0.85rem; color:#666; margin-bottom:12px;">അഡ്മിൻ പ്രവേശനത്തിനായി ലോഗിൻ ചെയ്യുക.</p>
             <label>Email ID:</label>
-            <input type="email" id="adminEmail" value="admin@irshad.com" placeholder="admin@irshad.com">
+            <input type="email" id="adminEmail" value="" placeholder="">
             <label>Password:</label>
-            <input type="password" id="adminPassword" placeholder="irshad2k26">
+            <input type="password" id="adminPassword" value="" placeholder="">
             <div id="loginError" class="error-msg"></div>
             <button class="btn-submit" onclick="loginAdmin()">Login</button>
         </div>
