@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EID-E IRSHAD — CAMPUS FEST 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Confetti Library for Celebration Effects -->
+    <!-- Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <style>
@@ -140,6 +140,31 @@
         }
         .progress-zellij { background: #b91c1c; height: 100%; transition: width 0.6s ease; }
         .progress-iznik { background: #1d4ed8; height: 100%; transition: width 0.6s ease; }
+
+        /* AUDIENCE CHOICE POLL WIDGET */
+        .poll-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .poll-title { font-weight: 800; font-size: 1.05rem; margin-bottom: 12px; color: #f59e0b; display: flex; align-items: center; gap: 8px; }
+        .poll-option {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.2s;
+        }
+        .poll-option:hover { border-color: #f59e0b; background: rgba(245, 158, 11, 0.05); }
 
         /* CARDS & THEME OVERRIDES */
         .card { background: var(--card-bg) !important; border-color: var(--border-color) !important; color: var(--text-color) !important; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-radius: 12px; margin-bottom: 20px; }
@@ -279,6 +304,20 @@
                 </div>
             </div>
 
+            <!-- AUDIENCE CHOICE POLL WIDGET -->
+            <div class="poll-card">
+                <div class="poll-title">🗳️ Audience Choice Poll: ഏത് ടീമാണ് ഇന്ന് കൂടുതൽ തിളങ്ങിയത്?</div>
+                <div class="poll-option" onclick="votePoll('zellij')">
+                    <span>🔴 Team ZELLIJ</span>
+                    <span id="voteZellijCount">0 votes</span>
+                </div>
+                <div class="poll-option" onclick="votePoll('iznik')">
+                    <span>🔵 Team IZNIK</span>
+                    <span id="voteIznikCount">0 votes</span>
+                </div>
+                <div id="pollMsg" style="font-size: 0.8rem; color: #10b981; font-weight: 700; margin-top: 6px; text-align: center;"></div>
+            </div>
+
             <div class="card home-rules-card">
                 <div class="card-header">
                     <h3>📜 ഫെസ്റ്റിന്റെ പൊതുനിയമങ്ങളും വിവരങ്ങളും</h3>
@@ -393,7 +432,6 @@
             }
         }
 
-        // LOAD LIVE TEAM POINTS FOR PROGRESS BAR
         function loadTeamPointsProgress() {
             let ptsA = parseInt(localStorage.getItem("eid_pts_zellij") || "0");
             let ptsB = parseInt(localStorage.getItem("eid_pts_iznik") || "0");
@@ -406,6 +444,36 @@
 
             document.getElementById("barA").style.width = pctA + "%";
             document.getElementById("barB").style.width = pctB + "%";
+        }
+
+        // AUDIENCE POLL LOGIC
+        function votePoll(team) {
+            let vZellij = parseInt(localStorage.getItem("eid_poll_zellij") || "12");
+            let vIznik = parseInt(localStorage.getItem("eid_poll_iznik") || "15");
+
+            if(localStorage.getItem("eid_has_voted")) {
+                document.getElementById("pollMsg").textContent = "നിങ്ങൾ ഇതിനകം വോട്ട് രേഖപ്പെടുത്തിയിട്ടുണ്ട്!";
+                return;
+            }
+
+            if(team === 'zellij') vZellij++;
+            if(team === 'iznik') vIznik++;
+
+            localStorage.setItem("eid_poll_zellij", vZellij);
+            localStorage.setItem("eid_poll_iznik", vIznik);
+            localStorage.setItem("eid_has_voted", "true");
+
+            updatePollUI(vZellij, vIznik);
+            document.getElementById("pollMsg").textContent = "നന്ദി! നിങ്ങളുടെ വോട്ട് വിജയകരമായി രേഖപ്പെടുത്തി.";
+            confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+        }
+
+        function updatePollUI(z, i) {
+            const total = z + i;
+            const pctZ = total > 0 ? Math.round((z / total) * 100) : 50;
+            const pctI = total > 0 ? Math.round((i / total) * 100) : 50;
+            document.getElementById("voteZellijCount").textContent = z + ` votes (${pctZ}%)`;
+            document.getElementById("voteIznikCount").textContent = i + ` votes (${pctI}%)`;
         }
 
         function handleGlobalSearch(query) {
@@ -422,6 +490,10 @@
             updateCountdown();
             setInterval(updateCountdown, 1000);
             loadTeamPointsProgress();
+
+            let vZellij = parseInt(localStorage.getItem("eid_poll_zellij") || "12");
+            let vIznik = parseInt(localStorage.getItem("eid_poll_iznik") || "15");
+            updatePollUI(vZellij, vIznik);
 
             const today = new Date();
             const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
@@ -441,7 +513,6 @@
                 splash.classList.add('fade-out');
                 setTimeout(() => { splash.style.display = 'none'; }, 500);
             }
-            // Trigger Confetti Celebration on Entry!
             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         }
 
