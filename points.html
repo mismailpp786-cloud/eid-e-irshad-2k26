@@ -3,94 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ലൈവ് പോയിന്റ് സ്കോർബോർഡ് — EID-E IRSHAD 2K26</title>
+    <title>ലൈവ് സ്കോർബോർഡ് — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .vertical-chart-container { display: flex; justify-content: center; align-items: flex-end; height: 300px; gap: 45px; padding: 20px 0 10px; border-bottom: 3px solid #334155; }
+        .chart-column { display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; flex: 1; max-width: 130px; }
+        .chart-score-label { font-size: 1.8rem; font-weight: 900; color: #fbbf24; margin-bottom: 8px; font-family: 'Montserrat', sans-serif; }
+        .chart-bar-track { width: 68px; height: 210px; background: #0f172a; border-radius: 12px 12px 0 0; overflow: hidden; border: 2px solid #334155; display: flex; align-items: flex-end; }
+        .chart-bar-fill { width: 100%; border-radius: 10px 10px 0 0; transition: height 0.6s ease; }
+        .fill-team-a { background: linear-gradient(180deg, #ef4444 0%, #991b1b 100%); }
+        .fill-team-b { background: linear-gradient(180deg, #3b82f6 0%, #1e40af 100%); }
+        .chart-team-name { margin-top: 10px; font-size: 1.1rem; font-weight: 900; color: #fff; }
+        .chart-vs { font-size: 1.6rem; font-weight: 900; color: #64748b; margin-bottom: 45px; }
+        .cat-progress-row { margin-bottom: 12px; background: #0f172a; padding: 14px; border-radius: 10px; border: 1px solid #334155; color: #fff; display: flex; justify-content: space-between; font-weight: 800; }
+        .subpage-header { background: #0f172a; color: #fff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #fbbf24; }
+        .back-home-btn { background: #fbbf24; color: #0f172a; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+    </style>
 </head>
-<body style="background: #0f172a; color: #fff;">
+<body style="background:#0f172a; min-height:100vh;">
 
     <div class="subpage-header" style="background: #020617;">
         <button class="back-home-btn" onclick="location.href='index.html'">⬅️ ഹോം പേജിലേക്ക്</button>
-        <h2>📊 EID-E IRSHAD 2K26 — LIVE SCOREBOARD</h2>
-        <div style="font-size: 0.85rem; color: #fbbf24; font-weight: 700;">⚡ വെർട്ടിക്കൽ ചാർട്ട് ഓട്ടോ അപ്ഡേറ്റ് സജീവമാണ്</div>
+        <h2 style="color:#fbbf24;">📊 LIVE SCOREBOARD</h2>
     </div>
 
-    <main class="container" style="max-width: 900px;">
-        <!-- VERTICAL BAR CHART SECTION -->
-        <div class="card" style="background: #1e293b; border: 1px solid #334155; margin-top: 20px; padding: 25px;">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <h3 style="color: #fbbf24; font-size: 1.5rem; font-weight: 900;">🏆 TEAM POINTS COMPARISON CHART</h3>
-            </div>
-
+    <main class="container" style="max-width: 850px;">
+        <div class="card" style="background: #1e293b; border: 1px solid #334155; padding: 22px;">
+            <h3 style="text-align:center; color:#fbbf24; margin-bottom:15px;">🏆 TEAM POINTS COMPARISON</h3>
             <div class="vertical-chart-container">
-                <!-- Team A Bar -->
                 <div class="chart-column">
                     <div class="chart-score-label" id="barScoreA">0</div>
-                    <div class="chart-bar-track">
-                        <div id="verticalBarA" class="chart-bar-fill fill-team-a" style="height: 15%;"></div>
-                    </div>
-                    <div class="chart-team-name" id="labelTeamA">TEAM A</div>
+                    <div class="chart-bar-track"><div id="verticalBarA" class="chart-bar-fill fill-team-a" style="height: 15%;"></div></div>
+                    <div class="chart-team-name">ZELLIJ</div>
                 </div>
-
-                <!-- VS Divider -->
                 <div class="chart-vs">VS</div>
-
-                <!-- Team B Bar -->
                 <div class="chart-column">
                     <div class="chart-score-label" id="barScoreB">0</div>
-                    <div class="chart-bar-track">
-                        <div id="verticalBarB" class="chart-bar-fill fill-team-b" style="height: 15%;"></div>
-                    </div>
-                    <div class="chart-team-name" id="labelTeamB">TEAM B</div>
+                    <div class="chart-bar-track"><div id="verticalBarB" class="chart-bar-fill fill-team-b" style="height: 15%;"></div></div>
+                    <div class="chart-team-name">IZNIK</div>
                 </div>
             </div>
         </div>
 
-        <!-- CATEGORY WISE BREAKDOWN -->
-        <div class="card" style="background: #1e293b; border: 1px solid #334155; margin-top: 25px;">
-            <div class="card-header" style="background: #020617; color: #fbbf24;">
-                <h3>📋 കാറ്റഗറി തിരിച്ചുള്ള പോയിന്റ് നില</h3>
-            </div>
-            <div style="padding: 20px;" id="categoryBreakdownContainer">
-                <div class="cat-progress-row">
-                    <div class="cat-progress-info">
-                        <span>Senior Category</span>
-                        <span>Team A: <strong id="srPtsA">0</strong> | Team B: <strong id="srPtsB">0</strong></span>
-                    </div>
-                </div>
-                <div class="cat-progress-row">
-                    <div class="cat-progress-info">
-                        <span>Junior Category</span>
-                        <span>Team A: <strong id="jrPtsA">0</strong> | Team B: <strong id="jrPtsB">0</strong></span>
-                    </div>
-                </div>
-                <div class="cat-progress-row">
-                    <div class="cat-progress-info">
-                        <span>Sub Junior Category</span>
-                        <span>Team A: <strong id="subPtsA">0</strong> | Team B: <strong id="subPtsB">0</strong></span>
-                    </div>
-                </div>
-                <div class="cat-progress-row">
-                    <div class="cat-progress-info">
-                        <span>Sports & General</span>
-                        <span>Team A: <strong id="genPtsA">0</strong> | Team B: <strong id="genPtsB">0</strong></span>
-                    </div>
-                </div>
+        <div class="card" style="background: #1e293b; border: 1px solid #334155;">
+            <div class="card-header" style="background: #020617; color:#fbbf24;"><h3>📋 കാറ്റഗറി തിരിച്ചുള്ള പോയിന്റ് നില</h3></div>
+            <div style="padding: 18px;">
+                <div class="cat-progress-row"><span>Senior Category</span><span>ZELLIJ: <strong id="srPtsA">0</strong> | IZNIK: <strong id="srPtsB">0</strong></span></div>
+                <div class="cat-progress-row"><span>Junior Category</span><span>ZELLIJ: <strong id="jrPtsA">0</strong> | IZNIK: <strong id="jrPtsB">0</strong></span></div>
+                <div class="cat-progress-row"><span>Sub Junior Category</span><span>ZELLIJ: <strong id="subPtsA">0</strong> | IZNIK: <strong id="subPtsB">0</strong></span></div>
+                <div class="cat-progress-row"><span>General & Sports</span><span>ZELLIJ: <strong id="genPtsA">0</strong> | IZNIK: <strong id="genPtsB">0</strong></span></div>
             </div>
         </div>
     </main>
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="app.js"></script>
+    <footer style="color:#94a3b8; border-top-color:#1e293b;">
+        &copy; 2026 EID-E IRSHAD — IRSHADUNNASIHEEN SAHITHYA SAMAJAM
+    </footer>
+
     <script>
-        setInterval(() => {
-            if (typeof loadAppData === "function") {
-                loadAppData();
-            }
-        }, 10000);
+        function calculateScores() {
+            let totals = { A: 0, B: 0 };
+            let cats = { senior: { A: 0, B: 0 }, junior: { A: 0, B: 0 }, subjunior: { A: 0, B: 0 }, general: { A: 0, B: 0 } };
+            
+            let results = JSON.parse(localStorage.getItem("eid_results_list") || "[]");
+            
+            results.forEach(r => {
+                let cKey = "senior";
+                let cText = (r.category || "").toUpperCase();
+                if (cText.includes("JUNIOR") && !cText.includes("SUB")) cKey = "junior";
+                else if (cText.includes("SUB")) cKey = "subjunior";
+                else if (cText.includes("GENERAL")) cKey = "general";
+
+                const addPts = (tStr, pts) => {
+                    if (!tStr) return;
+                    let t = tStr.toUpperCase();
+                    if (t.includes("ZELLIJ") || t.includes("TEAM A")) { totals.A += pts; cats[cKey].A += pts; }
+                    else if (t.includes("IZNIK") || t.includes("TEAM B")) { totals.B += pts; cats[cKey].B += pts; }
+                };
+                
+                addPts(r.win1Team, 5);
+                addPts(r.win2Team, 3);
+                addPts(r.win3Team, 1);
+            });
+
+            document.getElementById("barScoreA").textContent = totals.A;
+            document.getElementById("barScoreB").textContent = totals.B;
+            document.getElementById("srPtsA").textContent = cats.senior.A;
+            document.getElementById("srPtsB").textContent = cats.senior.B;
+            document.getElementById("jrPtsA").textContent = cats.junior.A;
+            document.getElementById("jrPtsB").textContent = cats.junior.B;
+            document.getElementById("subPtsA").textContent = cats.subjunior.A;
+            document.getElementById("subPtsB").textContent = cats.subjunior.B;
+            document.getElementById("genPtsA").textContent = cats.general.A;
+            document.getElementById("genPtsB").textContent = cats.general.B;
+
+            let maxVal = Math.max(totals.A, totals.B, 10);
+            document.getElementById("verticalBarA").style.height = Math.max(15, Math.round((totals.A / maxVal) * 100)) + "%";
+            document.getElementById("verticalBarB").style.height = Math.max(15, Math.round((totals.B / maxVal) * 100)) + "%";
+        }
+
+        calculateScores();
     </script>
 </body>
 </html>
