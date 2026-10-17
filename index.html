@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EID-E IRSHAD — CAMPUS FEST 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Confetti Library for Celebration Effects -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <style>
         :root {
@@ -31,10 +33,22 @@
             font-family: 'Anek Malayalam', 'Montserrat', sans-serif;
         }
 
-        /* CUSTOM SCROLLBAR TRICK */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-color); }
         ::-webkit-scrollbar-thumb { background: #f59e0b; border-radius: 4px; }
+
+        /* LIVE TICKER NOTICE */
+        .live-ticker {
+            background: #b91c1c;
+            color: #fff;
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .live-ticker marquee { font-family: 'Anek Malayalam', sans-serif; }
 
         /* LIVE COUNTDOWN SPLASH SCREEN */
         #introSplash {
@@ -48,44 +62,27 @@
         .intro-top-brand { display: flex; justify-content: space-between; width: 100%; max-width: 650px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; color: #cbd5e1; text-transform: uppercase; font-family: 'Montserrat', sans-serif; }
         .intro-center-box { display: flex; flex-direction: column; align-items: center; max-width: 650px; width: 100%; }
         
-        /* COUNTDOWN GRID BOXES */
         .countdown-container {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-bottom: 20px;
+            display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;
         }
         .countdown-box {
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.4);
             border: 1.5px solid rgba(255, 255, 255, 0.25);
-            border-radius: 12px;
-            padding: 12px 10px;
-            min-width: 65px;
+            border-radius: 12px; padding: 10px 8px; min-width: 60px;
             backdrop-filter: blur(5px);
         }
         .countdown-box span.num {
-            display: block;
-            font-size: 1.8rem;
-            font-weight: 900;
-            font-family: 'Montserrat', sans-serif;
-            color: #fbbf24;
-            line-height: 1;
+            display: block; font-size: 1.7rem; font-weight: 900;
+            font-family: 'Montserrat', sans-serif; color: #fbbf24; line-height: 1;
         }
         .countdown-box span.label {
-            display: block;
-            font-size: 0.65rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #e2e8f0;
-            margin-top: 4px;
-            font-family: 'Montserrat', sans-serif;
+            display: block; font-size: 0.6rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px; color: #e2e8f0; margin-top: 4px;
         }
 
         .intro-title { font-size: 2.2rem; font-weight: 900; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 2px 2px 6px rgba(0,0,0,0.4); font-family: 'Montserrat', sans-serif; }
         .intro-subtitle { font-size: 1rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 15px; font-family: 'Montserrat', sans-serif; }
         
-        /* CALLIGRAPHY PNG TRICK */
         .intro-calligraphy-box { margin-bottom: 15px; }
         .intro-calligraphy-img { max-height: 52px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
 
@@ -95,7 +92,7 @@
         .intro-footer { font-size: 0.7rem; color: #94a3b8; letter-spacing: 1px; font-family: 'Montserrat', sans-serif; }
 
         /* HERO & GLASSMORPHISM TOP BAR */
-        .hero { background: var(--header-bg); color: #ffffff; text-align: center; padding: 30px 15px 45px; border-bottom: 5px solid #f59e0b; box-shadow: 0 4px 20px rgba(0,0,0,0.25); position: relative; }
+        .hero { background: var(--header-bg); color: #ffffff; text-align: center; padding: 25px 15px 40px; border-bottom: 5px solid #f59e0b; box-shadow: 0 4px 20px rgba(0,0,0,0.25); position: relative; }
         .hero-top-bar { display: flex; justify-content: space-between; align-items: center; max-width: 980px; margin: 0 auto 15px; padding: 8px 14px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.1); flex-wrap: wrap; gap: 10px; }
         .top-controls { display: flex; gap: 8px; align-items: center; }
         
@@ -105,9 +102,44 @@
         .theme-toggle-btn { background: rgba(255, 255, 255, 0.15); color: #fff; border: 1.5px solid rgba(255,255,255,0.3); padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.82rem; cursor: pointer; transition: 0.2s; }
         .theme-toggle-btn:hover { background: rgba(255, 255, 255, 0.3); }
 
-        /* CALLIGRAPHY IN HERO */
         .calligraphy-box { margin-bottom: 12px; display: flex; justify-content: center; }
         .hero-calligraphy-img { max-height: 65px; width: auto; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3)); }
+
+        /* GLOBAL SEARCH BAR */
+        .global-search-box {
+            max-width: 650px;
+            margin: 20px auto 10px;
+            padding: 0 15px;
+        }
+        .global-search-input {
+            width: 100%;
+            padding: 12px 18px;
+            border-radius: 30px;
+            border: 2px solid #f59e0b;
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-size: 0.95rem;
+            font-family: 'Anek Malayalam', sans-serif;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            outline: none;
+        }
+
+        /* TEAM PROGRESS BAR SECTION */
+        .team-progress-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .progress-header { display: flex; justify-content: space-between; font-weight: 800; font-size: 0.9rem; margin-bottom: 8px; }
+        .progress-bar-container {
+            height: 14px; background: #e2e8f0; border-radius: 7px; overflow: hidden; display: flex;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .progress-zellij { background: #b91c1c; height: 100%; transition: width 0.6s ease; }
+        .progress-iznik { background: #1d4ed8; height: 100%; transition: width 0.6s ease; }
 
         /* CARDS & THEME OVERRIDES */
         .card { background: var(--card-bg) !important; border-color: var(--border-color) !important; color: var(--text-color) !important; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-radius: 12px; margin-bottom: 20px; }
@@ -138,6 +170,11 @@
 </head>
 <body>
 
+    <!-- LIVE NOTIFICATIONS TICKER -->
+    <div class="live-ticker">
+        <marquee scrollamount="5">📢 സ്വാഗതം! EID-E IRSHAD CAMPUS FEST 2K26 നവംബർ 27, 28, 29 തീയതികളിൽ റഹ്മാനിയ്യ അറബിക് കോളേജിൽ വെച്ച് നടക്കുന്നു! മത്സര ഫലങ്ങളും പ്രോഗ്രാം ലിസ്റ്റുകളും തത്സമയം പരിശോധിക്കുക.</marquee>
+    </div>
+
     <!-- LIVE COUNTDOWN SPLASH SCREEN -->
     <div id="introSplash">
         <div class="intro-top-brand">
@@ -146,7 +183,6 @@
         </div>
         <div class="intro-center-box">
             
-            <!-- COUNTDOWN TIMER (DAYS, HOURS, MINUTES, SECONDS) -->
             <div class="countdown-container">
                 <div class="countdown-box">
                     <span class="num" id="cdDays">00</span>
@@ -169,7 +205,6 @@
             <h1 class="intro-title" id="splashTitle">EID-E IRSHAD</h1>
             <div class="intro-subtitle" id="splashSubtitle">CAMPUS FEST 2K26</div>
             
-            <!-- CALLIGRAPHY PNG -->
             <div class="intro-calligraphy-box">
                 <img src="calligraphy.png" alt="Calligraphy" class="intro-calligraphy-img" onerror="this.style.display='none';">
             </div>
@@ -202,7 +237,6 @@
                 </div>
             </div>
             <div class="hero-content">
-                <!-- CALLIGRAPHY PNG IN HERO -->
                 <div class="calligraphy-box">
                     <img src="calligraphy.png" alt="Calligraphy" class="hero-calligraphy-img" onerror="this.style.display='none';">
                 </div>
@@ -225,7 +259,26 @@
             </div>
         </header>
 
-        <main class="container" style="max-width: 900px; margin: 25px auto; padding: 0 15px;">
+        <!-- GLOBAL SEARCH BAR -->
+        <div class="global-search-box">
+            <input type="text" class="global-search-input" placeholder="🔍 പ്രോഗ്രാമോ വിദ്യാർത്ഥിയെയോ ഇവിടെ തിരയുക..." onkeyup="handleGlobalSearch(this.value)">
+        </div>
+
+        <main class="container" style="max-width: 900px; margin: 15px auto; padding: 0 15px;">
+            
+            <!-- TEAM WIN PROGRESS BAR -->
+            <div class="team-progress-card">
+                <div class="progress-header">
+                    <span style="color: #b91c1c;">🔴 ZELLIJ: <span id="ptsA">0</span> Pts</span>
+                    <span style="color: #64748b;">LIVE LEADERBOARD</span>
+                    <span style="color: #1d4ed8;"><span id="ptsB">0</span> Pts :IZNIK 🔵</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div id="barA" class="progress-zellij" style="width: 50%;"></div>
+                    <div id="barB" class="progress-iznik" style="width: 50%;"></div>
+                </div>
+            </div>
+
             <div class="card home-rules-card">
                 <div class="card-header">
                     <h3>📜 ഫെസ്റ്റിന്റെ പൊതുനിയമങ്ങളും വിവരങ്ങളും</h3>
@@ -322,7 +375,6 @@
             document.getElementById("themeToggleBtn").textContent = newTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
         }
 
-        // LIVE COUNTDOWN TIMER (DAYS, HOURS, MINUTES, SECONDS)
         function updateCountdown() {
             const eventDate = new Date("2026-11-27T00:00:00").getTime();
             const now = new Date().getTime();
@@ -338,11 +390,27 @@
                 document.getElementById('cdHours').textContent = String(hours).padStart(2, '0');
                 document.getElementById('cdMins').textContent = String(mins).padStart(2, '0');
                 document.getElementById('cdSecs').textContent = String(secs).padStart(2, '0');
-            } else {
-                document.getElementById('cdDays').textContent = "00";
-                document.getElementById('cdHours').textContent = "00";
-                document.getElementById('cdMins').textContent = "00";
-                document.getElementById('cdSecs').textContent = "00";
+            }
+        }
+
+        // LOAD LIVE TEAM POINTS FOR PROGRESS BAR
+        function loadTeamPointsProgress() {
+            let ptsA = parseInt(localStorage.getItem("eid_pts_zellij") || "0");
+            let ptsB = parseInt(localStorage.getItem("eid_pts_iznik") || "0");
+            document.getElementById("ptsA").textContent = ptsA;
+            document.getElementById("ptsB").textContent = ptsB;
+
+            const total = ptsA + ptsB;
+            let pctA = total > 0 ? (ptsA / total) * 100 : 50;
+            let pctB = total > 0 ? (ptsB / total) * 100 : 50;
+
+            document.getElementById("barA").style.width = pctA + "%";
+            document.getElementById("barB").style.width = pctB + "%";
+        }
+
+        function handleGlobalSearch(query) {
+            if (query.trim().length > 1 && event.key === 'Enter') {
+                location.href = `programs.html?search=${encodeURIComponent(query.trim())}`;
             }
         }
 
@@ -353,18 +421,16 @@
 
             updateCountdown();
             setInterval(updateCountdown, 1000);
+            loadTeamPointsProgress();
 
-            // Daily changing theme for splash background
             const today = new Date();
             const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
-            
             const themes = [
                 "linear-gradient(135deg, #450a0a 0%, #7f1d1d 50%, #1e1b4b 100%)",
                 "linear-gradient(135deg, #064e3b 0%, #022c22 50%, #0f172a 100%)",
                 "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #0f172a 100%)",
                 "linear-gradient(135deg, #701a75 0%, #4a044e 50%, #1e1b4b 100%)"
             ];
-
             const splash = document.getElementById('introSplash');
             if (splash) splash.style.background = themes[dayOfYear % themes.length];
         });
@@ -375,6 +441,8 @@
                 splash.classList.add('fade-out');
                 setTimeout(() => { splash.style.display = 'none'; }, 500);
             }
+            // Trigger Confetti Celebration on Entry!
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         }
 
         let isAdmin = localStorage.getItem("eid_irshad_admin_logged") === "true";
