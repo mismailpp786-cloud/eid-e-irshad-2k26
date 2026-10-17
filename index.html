@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ml">
+<html lang="ml" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,121 +7,75 @@
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* DYNAMIC DAILY CHANGING SPLASH SCREEN STYLES */
+        /* PRO THEME VARIABLES */
+        :root {
+            --bg-color: #f7f9fb;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --header-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #312e81 100%);
+        }
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --header-bg: linear-gradient(135deg, #020617 0%, #0f172a 50%, #172554 100%);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* DYNAMIC COUNTDOWN SPLASH SCREEN */
         #introSplash {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 30px 20px;
-            z-index: 9999;
-            text-align: center;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            color: #ffffff; display: flex; flex-direction: column;
+            justify-content: space-between; align-items: center;
+            padding: 30px 20px; z-index: 9999; text-align: center;
             font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
-        #introSplash.fade-out {
-            opacity: 0;
-            visibility: hidden;
-        }
-        .intro-top-brand {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 600px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: #cbd5e1;
-            text-transform: uppercase;
-        }
-        .intro-center-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 600px;
-        }
-        .intro-sun-circle {
-            width: 170px;
-            height: 170px;
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 50px rgba(0,0,0,0.3);
-            margin-bottom: 20px;
-        }
-        .intro-sun-circle h2 {
-            font-size: 2.8rem;
-            font-weight: 900;
-            line-height: 1;
-        }
-        .intro-sun-circle span {
-            font-size: 0.7rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .intro-title {
-            font-size: 2.2rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            margin-bottom: 5px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
-        }
-        .intro-subtitle {
-            font-size: 1rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            margin-bottom: 12px;
-        }
-        .intro-calligraphy-text {
-            font-family: 'Anek Malayalam', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 800;
-            background: rgba(0,0,0,0.3);
-            padding: 6px 20px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            margin-bottom: 15px;
-        }
-        .intro-details {
-            font-size: 0.85rem;
-            color: #e2e8f0;
-            line-height: 1.4;
-            margin-bottom: 20px;
-        }
-        .btn-enter-site {
-            border: none;
-            padding: 12px 32px;
-            border-radius: 30px;
-            font-weight: 900;
-            font-size: 1rem;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-            transition: 0.2s;
-        }
-        .btn-enter-site:hover {
-            transform: translateY(-2px);
-        }
-        .intro-footer {
-            font-size: 0.7rem;
-            color: #94a3b8;
-            letter-spacing: 1px;
-        }
+        #introSplash.fade-out { opacity: 0; visibility: hidden; }
+        .intro-top-brand { display: flex; justify-content: space-between; width: 100%; max-width: 600px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; color: #cbd5e1; text-transform: uppercase; }
+        .intro-center-box { display: flex; flex-direction: column; align-items: center; max-width: 600px; }
+        .intro-sun-circle { width: 170px; height: 170px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 0 40px rgba(0,0,0,0.25); margin-bottom: 20px; }
+        .intro-sun-circle h2 { font-size: 2.8rem; font-weight: 900; line-height: 1; }
+        .intro-sun-circle span { font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+        .intro-title { font-size: 2.2rem; font-weight: 900; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .intro-subtitle { font-size: 1rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 12px; }
+        .intro-calligraphy-text { font-family: 'Anek Malayalam', sans-serif; font-size: 1.25rem; font-weight: 800; background: rgba(0,0,0,0.25); padding: 6px 20px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.25); margin-bottom: 15px; }
+        .intro-details { font-size: 0.85rem; color: #e2e8f0; line-height: 1.4; margin-bottom: 20px; }
+        .btn-enter-site { border: none; padding: 12px 32px; border-radius: 30px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s ease; }
+        .btn-enter-site:hover { transform: translateY(-2px); }
+        .intro-footer { font-size: 0.7rem; color: #94a3b8; letter-spacing: 1px; }
+
+        /* HERO & TOP UTILITIES */
+        .hero { background: var(--header-bg); color: #ffffff; text-align: center; padding: 30px 15px 40px; border-bottom: 5px solid #f59e0b; box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
+        .hero-top-bar { display: flex; justify-content: space-between; align-items: center; max-width: 980px; margin: 0 auto 12px; padding: 0 10px; flex-wrap: wrap; gap: 10px; }
+        .top-controls { display: flex; gap: 8px; align-items: center; }
+        .admin-top-btn { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1.5px solid #fbbf24; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.82rem; cursor: pointer; }
+        .theme-toggle-btn { background: rgba(255, 255, 255, 0.15); color: #fff; border: 1.5px solid rgba(255,255,255,0.3); padding: 6px 12px; border-radius: 20px; font-weight: 800; font-size: 0.82rem; cursor: pointer; }
+
+        /* CARDS & OVERRIDES */
+        .card { background: var(--card-bg) !important; border-color: var(--border-color) !important; color: var(--text-color) !important; }
+        .card-header { background: #1e293b; color: #fbbf24; }
+        .points-box { background: var(--bg-color) !important; border-color: var(--border-color) !important; }
+        .point-item { background: var(--card-bg) !important; color: var(--text-color) !important; }
+        .nav-card { background: var(--card-bg) !important; border-color: var(--border-color) !important; color: var(--text-color) !important; }
+        .nav-card-info h3 { color: var(--text-color) !important; }
+        .nav-card-info p { color: var(--text-muted) !important; }
+        footer { color: var(--text-muted) !important; border-color: var(--border-color) !important; }
 
         /* ADMIN BAR & MODAL */
         .admin-bar { background: #059669; color: #fff; padding: 10px 15px; display: none; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 0.9rem; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
         .admin-actions button { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; margin-left: 5px; }
         .btn-logout { background: #dc2626; color: #fff; }
-        .hero-top-bar { display: flex; justify-content: space-between; align-items: center; max-width: 980px; margin: 0 auto 12px; padding: 0 10px; }
-        .admin-top-btn { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1.5px solid #fbbf24; padding: 6px 16px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; cursor: pointer; }
         .modal { display: none; position: fixed; z-index: 500; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); align-items: center; justify-content: center; padding: 15px; }
         .modal-content { background: #fff; width: 100%; max-width: 380px; padding: 24px; border-radius: 14px; position: relative; color: #1e293b; text-align: left; }
         .close-btn { position: absolute; right: 16px; top: 12px; font-size: 1.6rem; cursor: pointer; color: #64748b; }
@@ -169,7 +123,10 @@
         <header class="hero">
             <div class="hero-top-bar">
                 <span style="font-size: 0.85rem; color: #cbd5e1; font-weight: 700;">✨ EID-E IRSHAD 2K26</span>
-                <button class="admin-top-btn" id="adminBtn" onclick="openAdminModal()">🔐 Admin Login</button>
+                <div class="top-controls">
+                    <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark Mode</button>
+                    <button class="admin-top-btn" id="adminBtn" onclick="openAdminModal()">🔐 Admin Login</button>
+                </div>
             </div>
             <div class="hero-content">
                 <div class="calligraphy-box">
@@ -281,8 +238,21 @@
     </footer>
 
     <script>
-        // DYNAMIC DAILY THEMES & COUNTDOWN
+        // THEME TOGGLE LOGIC
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute("data-theme");
+            const newTheme = currentTheme === "dark" ? "light" : "dark";
+            html.setAttribute("data-theme", newTheme);
+            localStorage.setItem("eid_theme", newTheme);
+            document.getElementById("themeToggleBtn").textContent = newTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem("eid_theme") || "light";
+            document.documentElement.setAttribute("data-theme", savedTheme);
+            document.getElementById("themeToggleBtn").textContent = savedTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
+
             // Countdown calculation
             const eventDate = new Date("2026-11-27T00:00:00").getTime();
             const now = new Date().getTime();
@@ -294,46 +264,30 @@
                 numEl.textContent = daysLeft > 0 ? daysLeft : 0;
             }
 
-            // Daily changing color themes & patterns (Cycles based on day of the year)
+            // Daily changing theme
             const today = new Date();
             const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
             
             const themes = [
                 {
-                    bg: "linear-gradient(135deg, #450a0a 0%, #7f1d1d 50%, #1e1b4b 100%)", // Maroon & Indigo
+                    bg: "linear-gradient(135deg, #450a0a 0%, #7f1d1d 50%, #1e1b4b 100%)",
                     circle: "radial-gradient(circle, #fbbf24 0%, #d97706 100%)",
-                    circleText: "#0f172a",
-                    circleSub: "#450a0a",
-                    title: "#fbbf24",
-                    btnBg: "#fbbf24",
-                    btnText: "#0f172a"
+                    circleText: "#0f172a", circleSub: "#450a0a", title: "#fbbf24", btnBg: "#fbbf24", btnText: "#0f172a"
                 },
                 {
-                    bg: "linear-gradient(135deg, #064e3b 0%, #022c22 50%, #0f172a 100%)", // Emerald & Dark
+                    bg: "linear-gradient(135deg, #064e3b 0%, #022c22 50%, #0f172a 100%)",
                     circle: "radial-gradient(circle, #34d399 0%, #059669 100%)",
-                    circleText: "#ffffff",
-                    circleSub: "#022c22",
-                    title: "#34d399",
-                    btnBg: "#34d399",
-                    btnText: "#022c22"
+                    circleText: "#ffffff", circleSub: "#022c22", title: "#34d399", btnBg: "#34d399", btnText: "#022c22"
                 },
                 {
-                    bg: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #0f172a 100%)", // Royal Blue & Purple
+                    bg: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #0f172a 100%)",
                     circle: "radial-gradient(circle, #38bdf8 0%, #0284c7 100%)",
-                    circleText: "#ffffff",
-                    circleSub: "#0f172a",
-                    title: "#38bdf8",
-                    btnBg: "#38bdf8",
-                    btnText: "#0f172a"
+                    circleText: "#ffffff", circleSub: "#0f172a", title: "#38bdf8", btnBg: "#38bdf8", btnText: "#0f172a"
                 },
                 {
-                    bg: "linear-gradient(135deg, #701a75 0%, #4a044e 50%, #1e1b4b 100%)", // Fuchsia & Violet
+                    bg: "linear-gradient(135deg, #701a75 0%, #4a044e 50%, #1e1b4b 100%)",
                     circle: "radial-gradient(circle, #f472b6 0%, #db2777 100%)",
-                    circleText: "#ffffff",
-                    circleSub: "#4a044e",
-                    title: "#f472b6",
-                    btnBg: "#f472b6",
-                    btnText: "#4a044e"
+                    circleText: "#ffffff", circleSub: "#4a044e", title: "#f472b6", btnBg: "#f472b6", btnText: "#4a044e"
                 }
             ];
 
@@ -342,27 +296,20 @@
             const circle = document.getElementById('splashCircle');
             const circleSub = document.getElementById('splashCircleSub');
             const title = document.getElementById('splashTitle');
-            const subtitle = document.getElementById('splashSubtitle');
             const btn = document.getElementById('splashBtn');
 
             if (splash) splash.style.background = activeTheme.bg;
-            if (circle) {
-                circle.style.background = activeTheme.circle;
-                circle.style.color = activeTheme.circleText;
-            }
+            if (circle) { circle.style.background = activeTheme.circle; circle.style.color = activeTheme.circleText; }
             if (circleSub) circleSub.style.color = activeTheme.circleSub;
             if (title) title.style.color = activeTheme.title;
-            if (btn) {
-                btn.style.background = activeTheme.btnBg;
-                btn.style.color = activeTheme.btnText;
-            }
+            if (btn) { btn.style.background = activeTheme.btnBg; btn.style.color = activeTheme.btnText; }
         });
 
         function closeIntroSplash() {
             const splash = document.getElementById('introSplash');
             if (splash) {
                 splash.classList.add('fade-out');
-                setTimeout(() => { splash.style.display = 'none'; }, 600);
+                setTimeout(() => { splash.style.display = 'none'; }, 500);
             }
         }
 
