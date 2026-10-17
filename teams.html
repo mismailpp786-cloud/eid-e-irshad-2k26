@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>മത്സര ഫലങ്ങൾ — EID-E IRSHAD 2K26</title>
+    <title>ടീം ലിസ്റ്റ് — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <!-- html2canvas for Poster Download -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -20,216 +18,29 @@
         </div>
     </div>
 
-    <!-- RESULTS PAGE VIEW -->
     <div class="subpage-header">
         <button class="back-home-btn" onclick="location.href='index.html'">⬅️ ഹോം പേജിലേക്ക് മടങ്ങുക</button>
-        <h2>🏆 മത്സര ഫലങ്ങൾ & പോസ്റ്റർ മേക്കർ</h2>
+        <h2>👥 ടീം ലിസ്റ്റ് (Team A & Team B)</h2>
         <button class="admin-top-btn" id="adminBtn" onclick="openAdminModal()">🔐 Admin Login</button>
     </div>
 
     <main class="container">
-        <!-- Poster Creator Builder -->
-        <div class="card poster-builder-card">
-            <div class="card-header" style="background: #1c4e9c;">
-                <h3>🎨 റിസൾട്ട് പോസ്റ്റർ തയ്യാറാക്കുക (Result Poster Maker)</h3>
-            </div>
-            <div class="builder-body">
-                <div class="builder-grid">
-                    <div class="builder-form">
-                        <div class="form-row-2">
-                            <div>
-                                <label>Result No:</label>
-                                <input type="text" id="resNoInput" value="01" oninput="updatePosterPreview()">
-                            </div>
-                            <div>
-                                <label>കാറ്റഗറി (Category):</label>
-                                <select id="resCatSelect" onchange="onPosterCategoryChange()">
-                                    <option value="subjunior">SUB JUNIOR</option>
-                                    <option value="junior">JUNIOR</option>
-                                    <option value="senior" selected>SENIOR</option>
-                                    <option value="general">GENERAL</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-row-2">
-                            <div>
-                                <label>വിഭാഗം (Type):</label>
-                                <select id="resTypeSelect" onchange="onPosterCategoryChange()">
-                                    <option value="onstage">On Stage</option>
-                                    <option value="offstage">Off Stage</option>
-                                    <option value="sports">Sports</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label>പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക:</label>
-                                <select id="resProgSelect" onchange="onPosterProgramSelect()"></select>
-                            </div>
-                        </div>
-
-                        <label>പ്രോഗ്രാമിന്റെ പേര് (വേണമെങ്കിൽ തിരുത്താം):</label>
-                        <input type="text" id="resProgCustom" oninput="updatePosterPreview()">
-
-                        <hr class="form-divider">
-
-                        <!-- 1st Place -->
-                        <div class="winner-select-box">
-                            <label class="badge-1st">🥇 First Place (01st):</label>
-                            <select id="selWinner1" onchange="onWinnerSelect(1)">
-                                <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
-                            </select>
-                            <div class="form-row-2" style="margin-top:6px;">
-                                <input type="text" id="win1Name" placeholder="പേരും നമ്പറും" oninput="updatePosterPreview()">
-                                <input type="text" id="win1Team" placeholder="ടീം" oninput="updatePosterPreview()">
-                            </div>
-                        </div>
-
-                        <!-- 2nd Place -->
-                        <div class="winner-select-box">
-                            <label class="badge-2nd">🥈 Second Place (02nd):</label>
-                            <select id="selWinner2" onchange="onWinnerSelect(2)">
-                                <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
-                            </select>
-                            <div class="form-row-2" style="margin-top:6px;">
-                                <input type="text" id="win2Name" placeholder="പേരും നമ്പറും" oninput="updatePosterPreview()">
-                                <input type="text" id="win2Team" placeholder="ടീം" oninput="updatePosterPreview()">
-                            </div>
-                        </div>
-
-                        <!-- 3rd Place -->
-                        <div class="winner-select-box">
-                            <label class="badge-3rd">🥉 Third Place (03rd):</label>
-                            <select id="selWinner3" onchange="onWinnerSelect(3)">
-                                <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
-                            </select>
-                            <div class="form-row-2" style="margin-top:6px;">
-                                <input type="text" id="win3Name" placeholder="പേരും നമ്പറും" oninput="updatePosterPreview()">
-                                <input type="text" id="win3Team" placeholder="ടീം" oninput="updatePosterPreview()">
-                            </div>
-                        </div>
-
-                        <div class="poster-action-btns">
-                            <button class="btn-download-poster" onclick="downloadResultPoster()">📥 പോസ്റ്റർ ഡൗൺലോഡ് ചെയ്യുക</button>
-                            <button class="btn-publish-result admin-only-btn" style="display:none;" onclick="publishResultToSite()">💾 സൈറ്റിൽ സേവ് ചെയ്യുക</button>
-                        </div>
-                    </div>
-
-                    <!-- LIVE REFERENCE STYLE POSTER PREVIEW -->
-                    <div class="poster-preview-wrapper">
-                        <div id="posterCanvas" class="ref-poster">
-                            <div class="ref-poster-top">
-                                <div class="ref-social">
-                                    <span class="social-icons">f 𝕏 ◎ ▶</span>
-                                    <span class="social-handle">eideirshad2k26</span>
-                                </div>
-                                <div class="ref-result-badge">
-                                    <svg viewBox="0 0 100 100" class="badge-spin-svg">
-                                        <defs>
-                                            <path id="circlePath" d="M 50, 50 m -36, 0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0"/>
-                                        </defs>
-                                        <text font-size="8.2" font-weight="700" fill="#bdbdbd" letter-spacing="1.2">
-                                            <textPath href="#circlePath">Result • Result • Result • Result • </textPath>
-                                        </text>
-                                    </svg>
-                                    <div class="badge-num" id="previewResNo">01</div>
-                                </div>
-                            </div>
-
-                            <div class="ref-theme-box">
-                                <div class="theme-arch"></div>
-                                <div class="theme-malayalam">സർഗാത്മകത<br><span>പൂക്കുന്നു</span></div>
-                                <div class="theme-line">─── ❖ ───</div>
-                            </div>
-
-                            <div class="ref-poster-middle">
-                                <div class="ref-winners-card">
-                                    <div class="ref-cat-label" id="previewCat">SENIOR</div>
-                                    <div class="ref-prog-label" id="previewProg">ഖിറാഅത്ത്</div>
-
-                                    <div class="ref-winner-row">
-                                        <div class="rank-num rank-1">01<sup>st</sup></div>
-                                        <div class="rank-dot">•</div>
-                                        <div class="rank-details">
-                                            <div class="rank-name" id="previewWin1Name">-</div>
-                                            <div class="rank-place" id="previewWin1Team"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="ref-winner-row">
-                                        <div class="rank-num rank-2">02<sup>nd</sup></div>
-                                        <div class="rank-dot">•</div>
-                                        <div class="rank-details">
-                                            <div class="rank-name" id="previewWin2Name">-</div>
-                                            <div class="rank-place" id="previewWin2Team"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="ref-winner-row">
-                                        <div class="rank-num rank-3">03<sup>rd</sup></div>
-                                        <div class="rank-dot">•</div>
-                                        <div class="rank-details">
-                                            <div class="rank-name" id="previewWin3Name">-</div>
-                                            <div class="rank-place" id="previewWin3Team"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="ref-tree-art">
-                                    <svg viewBox="0 0 260 300" xmlns="http://www.w3.org/2000/svg" class="tree-svg">
-                                        <g fill="#7d9c3a" opacity="0.85">
-                                            <circle cx="140" cy="80" r="45"/>
-                                            <circle cx="90" cy="95" r="38"/>
-                                            <circle cx="185" cy="95" r="40"/>
-                                            <circle cx="65" cy="130" r="30"/>
-                                            <circle cx="205" cy="130" r="32"/>
-                                            <circle cx="135" cy="55" r="35"/>
-                                        </g>
-                                        <g fill="#a3c255" opacity="0.7">
-                                            <circle cx="115" cy="75" r="30"/>
-                                            <circle cx="165" cy="80" r="32"/>
-                                            <circle cx="85" cy="115" r="25"/>
-                                            <circle cx="185" cy="115" r="28"/>
-                                        </g>
-                                        <path d="M125,260 C128,220 115,190 130,150 C110,130 85,115 65,120 M130,150 C135,120 125,95 105,75 M130,150 C150,125 175,110 200,115 M135,135 C150,105 160,85 175,70" stroke="#4a3525" stroke-width="10" stroke-linecap="round" fill="none"/>
-                                        <path d="M115,265 C120,220 125,180 130,145 L145,148 C142,185 152,225 160,265 Z" fill="#4a3525"/>
-                                        <rect x="85" y="250" width="95" height="18" rx="4" fill="#d9822b"/>
-                                        <polygon points="105,250 112,210 119,250" fill="#f39c12"/>
-                                        <polygon points="112,202 109,212 115,212" fill="#2c3e50"/>
-                                        <circle cx="155" cy="245" r="18" fill="#27ae60"/>
-                                        <path d="M75,265 Q130,245 195,265 Z" fill="#1c4e9c"/>
-                                    </svg>
-                                </div>
-                            </div>
-
-                            <div class="ref-poster-footer">
-                                <div class="footer-left">
-                                    <div class="f-org-main">IRSHADUNNASIHEEN</div>
-                                    <div class="f-org-sub">SAHITHYA SAMAJAM</div>
-                                    <div class="f-org-mail">CAMPUS FIESTA 2K26</div>
-                                </div>
-                                <div class="footer-center">
-                                    <div class="f-logo-badge">EID-E IRSHAD</div>
-                                </div>
-                                <div class="footer-right">
-                                    <div class="f-date-text">2026 ഫെബ്രുവരി</div>
-                                    <div class="f-date-boxes">
-                                        <span>20</span><span>21</span><span>22</span>
-                                    </div>
-                                    <div class="f-venue">ക്യാമ്പസ് ഫിയെസ്ത</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="teams-grid">
+            <div class="card">
+                <div class="card-header team-a-header">
+                    <h3>🔴 TEAM A</h3>
+                    <button class="admin-only-btn" style="display:none;" onclick="addNewStudent('teamA')">+ ആളെ ചേർക്കുക</button>
                 </div>
+                <div class="team-list-body" id="teamAContainer"></div>
             </div>
-        </div>
 
-        <!-- Published Results Gallery -->
-        <div class="card">
-            <div class="card-header">
-                <h3>📢 പ്രസിദ്ധീകരിച്ച മത്സര ഫലങ്ങൾ (Published Results)</h3>
+            <div class="card">
+                <div class="card-header team-b-header">
+                    <h3>🔵 TEAM B</h3>
+                    <button class="admin-only-btn" style="display:none;" onclick="addNewStudent('teamB')">+ ആളെ ചേർക്കുക</button>
+                </div>
+                <div class="team-list-body" id="teamBContainer"></div>
             </div>
-            <div id="publishedResultsContainer" class="results-gallery"></div>
         </div>
     </main>
 
@@ -239,9 +50,9 @@
             <span class="close-btn" onclick="closeAdminModal()">&times;</span>
             <h3>🔐 Admin Login</h3>
             <label>Email ID:</label>
-            <input type="email" id="adminEmail" value="admin@irshad.com" placeholder="admin@irshad.com">
+            <input type="email" id="adminEmail" value="" placeholder="">
             <label>Password:</label>
-            <input type="password" id="adminPassword" placeholder="irshad2k26">
+            <input type="password" id="adminPassword" value="" placeholder="">
             <div id="loginError" class="error-msg"></div>
             <button class="btn-submit" onclick="loginAdmin()">Login</button>
         </div>
@@ -251,7 +62,6 @@
         &copy; 2026 EID-E IRSHAD — IRSHADUNNASIHEEN SAHITHYA SAMAJAM
     </footer>
 
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
