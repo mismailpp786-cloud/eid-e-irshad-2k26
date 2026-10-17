@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>പ്രോഗ്രാം ലിസ്റ്റ് — EID-E IRSHAD 2K26</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- TOP ADMIN BAR -->
+    <div id="adminBar" class="admin-bar" style="display: none;">
+        <span>⚙️ അഡ്മിൻ മോഡ് സജീവമാണ്</span>
+        <div class="admin-actions">
+            <button class="btn-reset" onclick="resetToDefaultData()">🔄 Reset</button>
+            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
+        </div>
+    </div>
+
+    <!-- PROGRAMS PAGE VIEW -->
+    <div class="subpage-header">
+        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ ഹോം പേജിലേക്ക് മടങ്ങുക</button>
+        <h2>📋 പ്രോഗ്രാം ലിസ്റ്റ്</h2>
+        <button class="admin-top-btn" id="adminBtn" onclick="openAdminModal()">🔐 Admin Login</button>
+    </div>
+
+    <main class="container">
+        <div class="filter-group">
+            <button class="cat-btn active" onclick="selectCategory('senior', this)">Senior</button>
+            <button class="cat-btn" onclick="selectCategory('junior', this)">Junior</button>
+            <button class="cat-btn" onclick="selectCategory('subjunior', this)">Sub Junior</button>
+            <button class="cat-btn" onclick="selectCategory('general', this)">General</button>
+        </div>
+
+        <div class="sub-filter-group">
+            <button class="type-btn active" data-type="onstage" onclick="selectType('onstage', this)">🎤 On Stage</button>
+            <button class="type-btn" data-type="offstage" onclick="selectType('offstage', this)">✍️ Off Stage</button>
+            <button class="type-btn" data-type="sports" onclick="selectType('sports', this)">⚽ Sports</button>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 id="programTableTitle">SENIOR — ON STAGE</h3>
+                <button class="admin-only-btn" style="display:none;" onclick="addNewProgram()">+ പുതിയ പ്രോഗ്രാം ചേർക്കുക</button>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 12%;">No</th>
+                            <th style="width: 44%;">Program Name</th>
+                            <th style="width: 22%;">Team A</th>
+                            <th style="width: 22%;">Team B</th>
+                        </tr>
+                    </thead>
+                    <tbody id="programListBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Admin Login Modal -->
+    <div id="loginModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAdminModal()">&times;</span>
+            <h3>🔐 Admin Login</h3>
+            <label>Email ID:</label>
+            <input type="email" id="adminEmail" value="admin@irshad.com" placeholder="admin@irshad.com">
+            <label>Password:</label>
+            <input type="password" id="adminPassword" placeholder="irshad2k26">
+            <div id="loginError" class="error-msg"></div>
+            <button class="btn-submit" onclick="loginAdmin()">Login</button>
+        </div>
+    </div>
+
+    <!-- Edit Program Modal -->
+    <div id="editModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeEditModal()">&times;</span>
+            <h3>പ്രോഗ്രാം എഡിറ്റ് ചെയ്യുക</h3>
+            
+            <label>പ്രോഗ്രാമിന്റെ പേര്:</label>
+            <input type="text" id="editProgName">
+            
+            <label>Team A മത്സരാർത്ഥികൾ:</label>
+            <input type="text" id="editTeamAInput" placeholder="ഉദാ: 300. Safwan (C)">
+            <select id="selectTeamA" onchange="appendStudent('A')" style="margin-top:5px; margin-bottom:10px;">
+                <option value="">-- Team A ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുക --</option>
+            </select>
+
+            <label>Team B മത്സരാർത്ഥികൾ:</label>
+            <input type="text" id="editTeamBInput" placeholder="ഉദാ: 100. Shibili (C)">
+            <select id="selectTeamB" onchange="appendStudent('B')" style="margin-top:5px;">
+                <option value="">-- Team B ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുക --</option>
+            </select>
+
+            <div class="modal-buttons">
+                <button class="btn-submit" onclick="saveProgramChanges()">💾 Save</button>
+                <button class="btn-delete" onclick="deleteCurrentProgram()">🗑️ Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 EID-E IRSHAD — IRSHADUNNASIHEEN SAHITHYA SAMAJAM
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
