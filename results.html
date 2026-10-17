@@ -3,188 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>മത്സര ഫലങ്ങൾ — EID-E IRSHAD 2K26</title>
+    <title>മത്സര ഫലങ്ങൾ & പോസ്റ്ററുകൾ — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .builder-body { padding: 18px; }
+        .builder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
+        .builder-form label { display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 4px; color: #334155; }
+        .builder-form input, .builder-form select { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: 'Anek Malayalam', sans-serif; font-size: 0.9rem; margin-bottom: 10px; }
+        .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .winner-select-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
+        .poster-action-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+        .btn-download-poster { flex: 1; background: #2563eb; color: #fff; border: none; padding: 11px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.9rem; }
+        .btn-publish-result { flex: 1; background: #059669; color: #fff; border: none; padding: 11px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.9rem; }
+        .poster-preview-wrapper { display: flex; justify-content: center; overflow-x: auto; }
+
+        /* REF-1 EXACT REPLICA CANVAS */
+        .ref1-poster {
+            width: 420px;
+            min-height: 440px;
+            background-color: #f6f3eb;
+            background-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.02) 0, rgba(0,0,0,0.02) 1px, transparent 1px);
+            background-size: 16px 16px;
+            color: #1e293b;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
+            border: 2px solid #e5e0d1;
+        }
+        .ref1-top-bar { display: flex; justify-content: flex-end; align-items: center; font-size: 0.75rem; font-weight: 700; color: #0f172a; margin-bottom: 10px; }
+        .ref1-top-bar span { display: flex; align-items: center; gap: 4px; }
+        .ref1-body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; align-items: center; }
+        .ref1-left-content { display: flex; flex-direction: column; }
+        .ref1-prog-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 15px; }
+        .ref1-prog-no { font-size: 2.6rem; font-weight: 900; color: #0f172a; line-height: 1; font-family: 'Montserrat', sans-serif; }
+        .ref1-prog-meta { display: flex; flex-direction: column; }
+        .ref1-prog-name { font-size: 1.15rem; font-weight: 900; color: #0f172a; line-height: 1.2; }
+        .ref1-prog-cat { font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; }
+
+        .ref1-winners-list { display: flex; flex-direction: column; gap: 10px; }
+        .ref1-winner-item { display: flex; flex-direction: column; }
+        .ref1-w-title { font-size: 0.95rem; font-weight: 900; color: #0f172a; display: flex; align-items: center; gap: 6px; }
+        .ref1-w-sub { font-size: 0.75rem; font-weight: 700; color: #64748b; padding-left: 18px; }
+
+        .ref1-right-art { display: flex; justify-content: center; align-items: center; }
+        .ref1-art-box { width: 100%; height: 175px; background: #e2dccb; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; border: 1.5px dashed #cbd5e1; }
+        .ref1-art-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        .ref1-footer { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1.5px solid #e2e8f0; padding-top: 12px; margin-top: 15px; }
+        .ref1-org-side { display: flex; flex-direction: column; }
+        .ref1-org-title { font-size: 1rem; font-weight: 900; color: #0f172a; letter-spacing: 0.5px; }
+        .ref1-org-sub { font-size: 0.75rem; font-weight: 800; color: #475569; }
+
+        .ref1-center-calligraphy { text-align: center; }
+        .ref1-fallback-callig { font-size: 1.05rem; font-weight: 900; color: #991b1b; }
+
+        .ref1-date-side { text-align: right; font-size: 0.68rem; font-weight: 700; color: #334155; line-height: 1.25; }
+        .ref1-date-side .year { font-weight: 900; }
+
+        .results-gallery { padding: 18px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
+        .subpage-header { background: #0f172a; color: #fff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #fbbf24; }
+        .back-home-btn { background: #fbbf24; color: #0f172a; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+        @media (max-width: 768px) { .builder-grid { grid-template-columns: 1fr; } .ref1-poster { width: 100%; max-width: 380px; } }
+    </style>
 </head>
 <body>
 
-    <!-- TOP ADMIN BAR -->
-    <div id="adminBar" class="admin-bar" style="display: none;">
-        <span>⚙️ അഡ്മിൻ മോഡ് സജീവമാണ്</span>
-        <div class="admin-actions">
-            <button class="btn-reset" onclick="resetToDefaultData()">🔄 Reset</button>
-            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
-        </div>
-    </div>
-
     <div class="subpage-header">
-        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ ഹോം പേജിലേക്ക് മടങ്ങുക</button>
+        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ ഹോം പേജിലേക്ക്</button>
         <h2>🏆 മത്സര ഫലങ്ങൾ & പോസ്റ്ററുകൾ</h2>
-        <button class="admin-top-btn" id="adminBtn" onclick="openAdminModal()">🔐 Admin Login</button>
     </div>
 
     <main class="container">
-        <!-- Poster Creator Builder (Admin Only) -->
-        <div class="card poster-builder-card admin-only-section" id="posterBuilderCard" style="display: none;">
-            <div class="card-header" style="background: #1c4e9c;">
-                <h3>🎨 റിസൾട്ട് പോസ്റ്റർ തയ്യാറാക്കുക (Result Poster Maker - Admin Only)</h3>
-            </div>
+        <!-- Poster Builder Form -->
+        <div class="card">
+            <div class="card-header" style="background: #1c4e9c;"><h3>🎨 റിസൾട്ട് പോസ്റ്റർ നിർമ്മാണം (Ref-1 Style)</h3></div>
             <div class="builder-body">
                 <div class="builder-grid">
                     <div class="builder-form">
                         <div class="form-row-2">
                             <div>
-                                <label>Result No:</label>
-                                <input type="text" id="resNoInput" value="01" oninput="updatePosterPreview()">
+                                <label>പ്രോഗ്രാം നമ്പർ (No):</label>
+                                <input type="text" id="resNoInput" value="47" oninput="updatePosterPreview()">
                             </div>
                             <div>
                                 <label>കാറ്റഗറി (Category):</label>
-                                <select id="resCatSelect" onchange="onPosterCategoryChange()">
-                                    <option value="subjunior">SUB JUNIOR</option>
-                                    <option value="junior">JUNIOR</option>
-                                    <option value="senior" selected>SENIOR</option>
-                                    <option value="general">GENERAL</option>
+                                <select id="resCatSelect" onchange="updatePosterPreview()">
+                                    <option value="SENIOR" selected>SENIOR</option>
+                                    <option value="JUNIOR">JUNIOR</option>
+                                    <option value="SUB JUNIOR">SUB JUNIOR</option>
+                                    <option value="GENERAL">GENERAL</option>
                                 </select>
                             </div>
                         </div>
-
-                        <div class="form-row-2">
-                            <div>
-                                <label>വിഭാഗം (Type):</label>
-                                <select id="resTypeSelect" onchange="onPosterCategoryChange()">
-                                    <option value="onstage">On Stage</option>
-                                    <option value="offstage">Off Stage</option>
-                                    <option value="sports">Sports</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label>പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക:</label>
-                                <select id="resProgSelect" onchange="onPosterProgramSelect()"></select>
-                            </div>
-                        </div>
-
                         <label>പ്രോഗ്രാമിന്റെ പേര്:</label>
-                        <input type="text" id="resProgCustom" oninput="updatePosterPreview()">
+                        <input type="text" id="resProgCustom" value="Qawali" oninput="updatePosterPreview()">
 
-                        <hr class="form-divider">
-
-                        <!-- 1st Place -->
                         <div class="winner-select-box">
-                            <label class="badge-1st">🥇 First Place (01st):</label>
-                            <select id="selWinner1" onchange="onWinnerSelect(1)">
-                                <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
-                            </select>
-                            <div class="form-row-2" style="margin-top:6px;">
-                                <input type="text" id="win1Name" placeholder="പേരും നമ്പറും" oninput="updatePosterPreview()">
-                                <input type="text" id="win1Team" placeholder="ടീം" oninput="updatePosterPreview()">
+                            <label style="color:#16a34a;">🥇 First Place:</label>
+                            <div class="form-row-2">
+                                <input type="text" id="win1Name" value="Ijjlan ek" placeholder="പേര്" oninput="updatePosterPreview()">
+                                <input type="text" id="win1Team" value="ZELLIJ" placeholder="ടീം" oninput="updatePosterPreview()">
                             </div>
                         </div>
 
-                        <!-- 2nd Place -->
                         <div class="winner-select-box">
-                            <label class="badge-2nd">🥈 Second Place (02nd):</label>
-                            <select id="selWinner2" onchange="onWinnerSelect(2)">
-                                <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
-                            </select>
-                            <div class="form-row-2" style="margin-top:6px;">
-                                <input type="text" id="win2Name" placeholder="പേരും നമ്പറും" oninput="updatePosterPreview()">
-                                <input type="text" id="win2Team" placeholder="ടീം" oninput="updatePosterPreview()">
+                            <label style="color:#d97706;">🥈 Second Place:</label>
+                            <div class="form-row-2">
+                                <input type="text" id="win2Name" value="Riswinjas" placeholder="പേര്" oninput="updatePosterPreview()">
+                                <input type="text" id="win2Team" value="IZNIK" placeholder="ടീം" oninput="updatePosterPreview()">
                             </div>
                         </div>
 
-                        <!-- 3rd Place -->
                         <div class="winner-select-box">
-                            <label class="badge-3rd">🥉 Third Place (03rd):</label>
-                            <select id="selWinner3" onchange="onWinnerSelect(3)">
-                                <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
-                            </select>
-                            <div class="form-row-2" style="margin-top:6px;">
-                                <input type="text" id="win3Name" placeholder="പേരും നമ്പറും" oninput="updatePosterPreview()">
-                                <input type="text" id="win3Team" placeholder="ടീം" oninput="updatePosterPreview()">
+                            <label style="color:#dc2626;">🥉 Third Place:</label>
+                            <div class="form-row-2">
+                                <input type="text" id="win3Name" value="Abdul Hadi k" placeholder="പേര്" oninput="updatePosterPreview()">
+                                <input type="text" id="win3Team" value="ZELLIJ" placeholder="ടീം" oninput="updatePosterPreview()">
                             </div>
                         </div>
 
-                        <!-- Change Theme Switcher -->
-                        <div style="margin-top: 15px; background: #eef2f7; padding: 12px; border-radius: 8px;">
-                            <label style="color: #1c4e9c; font-weight: 800;">🎨 Change Theme:</label>
-                            <select id="themeStyleSelect" onchange="changePosterTheme()" style="margin-top: 5px;">
-                                <option value="theme-milad">Theme Option 1 (Maroon)</option>
-                                <option value="theme-sahityotsav">Theme Option 2 (Floral Light)</option>
-                                <option value="theme-alif" selected>Theme Option 3 (Vibrant Dark)</option>
-                            </select>
-                        </div>
-
-                        <div class="poster-action-btns" style="margin-top: 15px;">
-                            <button class="btn-download-poster" onclick="downloadResultPoster()">📥 പോസ്റ്റർ ഡൗൺലോഡ് ചെയ്യുക</button>
+                        <div class="poster-action-btns">
+                            <button class="btn-download-poster" onclick="downloadResultPoster()">📥 പോസ്റ്റർ ഡൗൺലോഡ്</button>
                             <button class="btn-publish-result" onclick="publishResultToSite()">💾 സൈറ്റിൽ സേവ് ചെയ്യുക</button>
                         </div>
                     </div>
 
-                    <!-- PREVIEW -->
+                    <!-- PREVIEW CANVAS (REF-1 EXACT) -->
                     <div class="poster-preview-wrapper">
-                        <div id="posterCanvas" class="ref-poster theme-alif">
-                            <div class="ref-poster-top">
-                                <div class="ref-social">
-                                    <span class="social-icons">f 𝕏 ◎ ▶</span>
-                                    <span class="social-handle">eideirshad2k26</span>
-                                </div>
-                                <div class="ref-result-badge">
-                                    <div class="badge-num" id="previewResNo">01</div>
-                                </div>
+                        <div id="posterCanvas" class="ref1-poster">
+                            <div class="ref1-top-bar">
+                                <span>🌐 eideirshad2k26</span>
                             </div>
 
-                            <div class="ref-theme-box">
-                                <img src="calligraphy.png" alt="Calligraphy" style="max-height: 45px; width: auto;" onerror="this.style.display='none'; document.getElementById('prev-callig-text').style.display='block';">
-                                <div id="prev-callig-text" style="display:none; font-size: 1rem; font-weight:800;">സർഗാത്മകത പൂക്കുന്നു</div>
-                            </div>
-
-                            <div class="ref-poster-middle">
-                                <div class="ref-winners-card">
-                                    <div class="ref-cat-label" id="previewCat">SENIOR</div>
-                                    <div class="ref-prog-label" id="previewProg">ഖിറാഅത്ത്</div>
-
-                                    <div class="ref-winner-row">
-                                        <div class="rank-num rank-1">01<sup>st</sup></div>
-                                        <div class="rank-dot">•</div>
-                                        <div class="rank-details">
-                                            <div class="rank-name" id="previewWin1Name">-</div>
-                                            <div class="rank-place" id="previewWin1Team"></div>
+                            <div class="ref1-body-grid">
+                                <!-- Left Content -->
+                                <div class="ref1-left-content">
+                                    <div class="ref1-prog-header">
+                                        <div class="ref1-prog-no" id="previewResNo">47</div>
+                                        <div class="ref1-prog-meta">
+                                            <div class="ref1-prog-name" id="previewProg">Qawali</div>
+                                            <div class="ref1-prog-cat" id="previewCat">SENIOR</div>
                                         </div>
                                     </div>
 
-                                    <div class="ref-winner-row">
-                                        <div class="rank-num rank-2">02<sup>nd</sup></div>
-                                        <div class="rank-dot">•</div>
-                                        <div class="rank-details">
-                                            <div class="rank-name" id="previewWin2Name">-</div>
-                                            <div class="rank-place" id="previewWin2Team"></div>
+                                    <div class="ref1-winners-list">
+                                        <div class="ref1-winner-item">
+                                            <div class="ref1-w-title">1. <span id="previewWin1Name">Ijjlan ek</span></div>
+                                            <div class="ref1-w-sub" id="previewWin1Team">ZELLIJ</div>
+                                        </div>
+                                        <div class="ref1-winner-item">
+                                            <div class="ref1-w-title">2. <span id="previewWin2Name">Riswinjas</span></div>
+                                            <div class="ref1-w-sub" id="previewWin2Team">IZNIK</div>
+                                        </div>
+                                        <div class="ref1-winner-item">
+                                            <div class="ref1-w-title">3. <span id="previewWin3Name">Abdul Hadi k</span></div>
+                                            <div class="ref1-w-sub" id="previewWin3Team">ZELLIJ</div>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div class="ref-winner-row">
-                                        <div class="rank-num rank-3">03<sup>rd</sup></div>
-                                        <div class="rank-dot">•</div>
-                                        <div class="rank-details">
-                                            <div class="rank-name" id="previewWin3Name">-</div>
-                                            <div class="rank-place" id="previewWin3Team"></div>
-                                        </div>
+                                <!-- Right Illustration Box -->
+                                <div class="ref1-right-art">
+                                    <div class="ref1-art-box">
+                                        <img src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=400&q=80" alt="Art">
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="ref-poster-footer">
-                                <div class="footer-left">
-                                    <div class="f-org-main">IRSHADUNNASIHEEN</div>
-                                    <div class="f-org-sub">SAHITHYA SAMAJAM</div>
+                            <div class="ref1-footer">
+                                <div class="ref1-org-side">
+                                    <div class="ref1-org-title">RAC</div>
+                                    <div class="ref1-org-sub">റെയ്ഞ്ച്</div>
                                 </div>
-                                <div class="footer-center">
-                                    <div class="f-logo-badge">EID-E IRSHAD</div>
+
+                                <div class="ref1-center-calligraphy">
+                                    <div class="ref1-fallback-callig">ഈദ്-ഇ ഇർഷാദ്</div>
                                 </div>
-                                <div class="footer-right">
-                                    <div class="f-date-text">2026 നവംബർ 27, 28, 29</div>
-                                    <div class="f-venue">ക്യാമ്പസ് ഫിയെസ്ത</div>
+
+                                <div class="ref1-date-side">
+                                    <div class="year">2026</div>
+                                    <div>നവംബർ 27, 28, 29</div>
                                 </div>
                             </div>
                         </div>
@@ -195,9 +200,7 @@
 
         <!-- Published Results Gallery -->
         <div class="card">
-            <div class="card-header">
-                <h3>📢 പ്രസിദ്ധീകരിച്ച മത്സര ഫലങ്ങൾ (Published Results & Status Posters)</h3>
-            </div>
+            <div class="card-header"><h3>📢 പ്രസിദ്ധീകരിച്ച മത്സര ഫലങ്ങൾ (Published Results)</h3></div>
             <div id="publishedResultsContainer" class="results-gallery"></div>
         </div>
     </main>
@@ -206,9 +209,98 @@
         &copy; 2026 EID-E IRSHAD — IRSHADUNNASIHEEN SAHITHYA SAMAJAM
     </footer>
 
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="app.js"></script>
+    <script>
+        function updatePosterPreview() {
+            document.getElementById("previewResNo").textContent = document.getElementById("resNoInput").value || "47";
+            document.getElementById("previewCat").textContent = document.getElementById("resCatSelect").value;
+            document.getElementById("previewProg").textContent = document.getElementById("resProgCustom").value || "Qawali";
+
+            document.getElementById("previewWin1Name").textContent = document.getElementById("win1Name").value || "-";
+            document.getElementById("previewWin1Team").textContent = document.getElementById("win1Team").value || "";
+
+            document.getElementById("previewWin2Name").textContent = document.getElementById("win2Name").value || "-";
+            document.getElementById("previewWin2Team").textContent = document.getElementById("win2Team").value || "";
+
+            document.getElementById("previewWin3Name").textContent = document.getElementById("win3Name").value || "-";
+            document.getElementById("previewWin3Team").textContent = document.getElementById("win3Team").value || "";
+        }
+
+        async function downloadResultPoster() {
+            const el = document.getElementById("posterCanvas");
+            const canvas = await html2canvas(el, { scale: 3, useCORS: true });
+            const link = document.createElement("a");
+            link.download = `EID-E-IRSHAD-Result-${document.getElementById("resNoInput").value}.png`;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        }
+
+        function publishResultToSite() {
+            let results = JSON.parse(localStorage.getItem("eid_results_list") || "[]");
+            results.unshift({
+                resNo: document.getElementById("resNoInput").value || "47",
+                category: document.getElementById("resCatSelect").value,
+                program: document.getElementById("resProgCustom").value || "-",
+                win1Name: document.getElementById("win1Name").value || "-",
+                win1Team: document.getElementById("win1Team").value || "",
+                win2Name: document.getElementById("win2Name").value || "-",
+                win2Team: document.getElementById("win2Team").value || "",
+                win3Name: document.getElementById("win3Name").value || "-",
+                win3Team: document.getElementById("win3Team").value || ""
+            });
+            localStorage.setItem("eid_results_list", JSON.stringify(results));
+            renderPublishedResults();
+            alert("മത്സരഫലം സൈറ്റിൽ സേവ് ചെയ്തു!");
+        }
+
+        function renderPublishedResults() {
+            const container = document.getElementById("publishedResultsContainer");
+            let results = JSON.parse(localStorage.getItem("eid_results_list") || "[]");
+            if (results.length === 0) {
+                container.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:15px; color:#64748b;">മത്സര ഫലങ്ങൾ ഒന്നും തന്നെ പ്രസിദ്ധീകരിച്ചിട്ടില്ല.</p>`;
+                return;
+            }
+            container.innerHTML = results.map((r, i) => `
+                <div class="ref1-poster" style="width:100%; min-height:360px; padding:16px;">
+                    <div class="ref1-top-bar"><span>🌐 eideirshad2k26</span></div>
+                    <div class="ref1-body-grid">
+                        <div class="ref1-left-content">
+                            <div class="ref1-prog-header">
+                                <div class="ref1-prog-no">${r.resNo}</div>
+                                <div class="ref1-prog-meta">
+                                    <div class="ref1-prog-name">${r.program}</div>
+                                    <div class="ref1-prog-cat">${r.category}</div>
+                                </div>
+                            </div>
+                            <div class="ref1-winners-list">
+                                <div class="ref1-winner-item"><div class="ref1-w-title">1. <span>${r.win1Name}</span></div><div class="ref1-w-sub">${r.win1Team}</div></div>
+                                <div class="ref1-winner-item"><div class="ref1-w-title">2. <span>${r.win2Name}</span></div><div class="ref1-w-sub">${r.win2Team}</div></div>
+                                <div class="ref1-winner-item"><div class="ref1-w-title">3. <span>${r.win3Name}</span></div><div class="ref1-w-sub">${r.win3Team}</div></div>
+                            </div>
+                        </div>
+                        <div class="ref1-right-art">
+                            <div class="ref1-art-box" style="height:140px;"><img src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=400&q=80" alt="Art"></div>
+                        </div>
+                    </div>
+                    <div class="ref1-footer">
+                        <div class="ref1-org-side"><div class="ref1-org-title">RAC</div><div class="ref1-org-sub">റെയ്ഞ്ച്</div></div>
+                        <div class="ref1-center-calligraphy"><div class="ref1-fallback-callig">ഈദ്-ഇ ഇർഷാദ്</div></div>
+                        <div class="ref1-date-side"><div class="year">2026</div><div>നവംബർ 27, 28, 29</div></div>
+                    </div>
+                    <button class="btn-delete" style="margin-top:10px; background:#dc2626; color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;" onclick="deleteResult(${i})">🗑️ ഒഴിവാക്കുക</button>
+                </div>
+            `).join("");
+        }
+
+        function deleteResult(idx) {
+            if (confirm("ഈ റിസൾട്ട് ഒഴിവാക്കണോ?")) {
+                let results = JSON.parse(localStorage.getItem("eid_results_list") || "[]");
+                results.splice(idx, 1);
+                localStorage.setItem("eid_results_list", JSON.stringify(results));
+                renderPublishedResults();
+            }
+        }
+
+        renderPublishedResults();
+    </script>
 </body>
 </html>
