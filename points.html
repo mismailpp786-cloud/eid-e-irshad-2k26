@@ -12,29 +12,44 @@
     <div class="subpage-header" style="background: #020617;">
         <button class="back-home-btn" onclick="location.href='index.html'">⬅️ ഹോം പേജിലേക്ക്</button>
         <h2>📊 EID-E IRSHAD 2K26 — LIVE SCOREBOARD</h2>
-        <div style="font-size: 0.85rem; color: #fbbf24; font-weight: 700;">⚡ ഓട്ടോമാറ്റിക് അപ്ഡേറ്റ് സജീവമാണ്</div>
+        <div style="font-size: 0.85rem; color: #fbbf24; font-weight: 700;">⚡ വെർട്ടിക്കൽ ചാർട്ട് ഓട്ടോ അപ്ഡേറ്റ് സജീവമാണ്</div>
     </div>
 
-    <main class="container" style="max-width: 1100px;">
-        <!-- OVERALL TOTAL SCORE CARDS -->
-        <div class="live-score-grid">
-            <div class="live-team-card team-a-box">
-                <h3 id="labelTeamA">TEAM A</h3>
-                <div class="live-score-num" id="totalPointsA">0</div>
-                <p>Total Points</p>
+    <main class="container" style="max-width: 900px;">
+        <!-- VERTICAL BAR CHART SECTION -->
+        <div class="card" style="background: #1e293b; border: 1px solid #334155; margin-top: 20px; padding: 25px;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h3 style="color: #fbbf24; font-size: 1.5rem; font-weight: 900;">🏆 TEAM POINTS COMPARISON CHART</h3>
             </div>
-            <div class="live-vs">VS</div>
-            <div class="live-team-card team-b-box">
-                <h3 id="labelTeamB">TEAM B</h3>
-                <div class="live-score-num" id="totalPointsB">0</div>
-                <p>Total Points</p>
+
+            <div class="vertical-chart-container">
+                <!-- Team A Bar -->
+                <div class="chart-column">
+                    <div class="chart-score-label" id="barScoreA">0</div>
+                    <div class="chart-bar-track">
+                        <div id="verticalBarA" class="chart-bar-fill fill-team-a" style="height: 15%;"></div>
+                    </div>
+                    <div class="chart-team-name" id="labelTeamA">TEAM A</div>
+                </div>
+
+                <!-- VS Divider -->
+                <div class="chart-vs">VS</div>
+
+                <!-- Team B Bar -->
+                <div class="chart-column">
+                    <div class="chart-score-label" id="barScoreB">0</div>
+                    <div class="chart-bar-track">
+                        <div id="verticalBarB" class="chart-bar-fill fill-team-b" style="height: 15%;"></div>
+                    </div>
+                    <div class="chart-team-name" id="labelTeamB">TEAM B</div>
+                </div>
             </div>
         </div>
 
         <!-- CATEGORY WISE BREAKDOWN -->
-        <div class="card" style="background: #1e293b; border: 1px solid #334155; margin-top: 30px;">
+        <div class="card" style="background: #1e293b; border: 1px solid #334155; margin-top: 25px;">
             <div class="card-header" style="background: #020617; color: #fbbf24;">
-                <h3>🏆 കാറ്റഗറി തിരിച്ചുള്ള പോയിന്റ് നില (Category Wise Points)</h3>
+                <h3>📋 കാറ്റഗറി തിരിച്ചുള്ള പോയിന്റ് നില</h3>
             </div>
             <div style="padding: 20px;" id="categoryBreakdownContainer">
                 <div class="cat-progress-row">
@@ -71,7 +86,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="app.js"></script>
     <script>
-        // Auto refresh data every 10 seconds for the screen display
+        // Auto refresh data every 10 seconds
         setInterval(() => {
             if (typeof loadAppData === "function") {
                 loadAppData();
