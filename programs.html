@@ -6,45 +6,43 @@
     <title>പ്രോഗ്രാം ലിസ്റ്റ് — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .filter-group, .sub-filter-group { display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+        .cat-btn { padding: 8px 18px; border: 2px solid #3b82f6; background: #fff; color: #3b82f6; font-weight: 800; border-radius: 25px; cursor: pointer; font-size: 0.9rem; }
+        .cat-btn.active { background: #3b82f6; color: #fff; }
+        .type-btn { padding: 7px 15px; border: 1px solid #cbd5e1; background: #f1f5f9; color: #475569; font-weight: 700; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
+        .type-btn.active { background: #ef4444; color: #fff; border-color: #ef4444; }
+        .table-responsive { width: 100%; overflow-x: auto; }
+        .data-table { width: 100%; border-collapse: collapse; text-align: left; background: #fff; }
+        .data-table th, .data-table td { padding: 11px 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.92rem; }
+        .data-table th { background: #f8fafc; color: #1e293b; font-weight: 800; }
+        .subpage-header { background: #0f172a; color: #fff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #fbbf24; }
+        .back-home-btn { background: #fbbf24; color: #0f172a; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+    </style>
 </head>
 <body>
 
-    <!-- TOP ADMIN BAR -->
-    <div id="adminBar" class="admin-bar" style="display: none;">
-        <span>⚙️ അഡ്മിൻ മോഡ് സജീവമാണ്</span>
-        <div class="admin-actions">
-            <button class="btn-reset" onclick="resetToDefaultData()">🔄 Reset</button>
-            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
-        </div>
-    </div>
-
     <div class="subpage-header">
-        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ ഹോം പേജിലേക്ക് മടങ്ങുക</button>
+        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ ഹോം പേജിലേക്ക്</button>
         <h2>📋 പ്രോഗ്രാം ലിസ്റ്റ്</h2>
-        <button class="admin-top-btn" id="adminBtn" onclick="openAdminModal()">🔐 Admin Login</button>
     </div>
 
     <main class="container">
-        <!-- Category Filter Buttons -->
         <div class="filter-group">
-            <button class="cat-btn active" onclick="selectCategory('senior', this)">Senior</button>
-            <button class="cat-btn" onclick="selectCategory('junior', this)">Junior</button>
-            <button class="cat-btn" onclick="selectCategory('subjunior', this)">Sub Junior</button>
-            <button class="cat-btn" onclick="selectCategory('general', this)">General</button>
+            <button class="cat-btn active" onclick="filterCategory('senior', this)">Senior</button>
+            <button class="cat-btn" onclick="filterCategory('junior', this)">Junior</button>
+            <button class="cat-btn" onclick="filterCategory('subjunior', this)">Sub Junior</button>
+            <button class="cat-btn" onclick="filterCategory('general', this)">General</button>
         </div>
-
-        <!-- Sub-category Type Filter Buttons -->
         <div class="sub-filter-group">
-            <button class="type-btn active" data-type="onstage" onclick="selectType('onstage', this)">🎤 On Stage</button>
-            <button class="type-btn" data-type="offstage" onclick="selectType('offstage', this)">✍️ Off Stage</button>
-            <button class="type-btn" data-type="sports" onclick="selectType('sports', this)">⚽ Sports</button>
+            <button class="type-btn active" onclick="filterType('onstage', this)">🎤 On Stage</button>
+            <button class="type-btn" onclick="filterType('offstage', this)">✍️ Off Stage</button>
+            <button class="type-btn" onclick="filterType('sports', this)">⚽ Sports</button>
         </div>
 
-        <!-- Programs Table Card -->
         <div class="card">
             <div class="card-header">
-                <h3 id="programTableTitle">SENIOR — ON STAGE</h3>
-                <button class="admin-only-btn" style="display:none;" onclick="addNewProgram()">+ പുതിയ പ്രോഗ്രാം ചേർക്കുക</button>
+                <h3 id="tableTitle">SENIOR — ON STAGE</h3>
             </div>
             <div class="table-responsive">
                 <table class="data-table">
@@ -52,51 +50,137 @@
                         <tr>
                             <th style="width: 12%;">No</th>
                             <th style="width: 44%;">Program Name</th>
-                            <th style="width: 22%;">Team A</th>
-                            <th style="width: 22%;">Team B</th>
+                            <th style="width: 22%;">ZELLIJ</th>
+                            <th style="width: 22%;">IZNIK</th>
                         </tr>
                     </thead>
-                    <tbody id="programListBody"></tbody>
+                    <tbody id="programTableBody">
+                        <!-- Programs will load here -->
+                    </tbody>
                 </table>
             </div>
         </div>
     </main>
 
-    <!-- Edit Program Modal -->
-    <div id="editModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeEditModal()">&times;</span>
-            <h3>പ്രോഗ്രാം എഡിറ്റ് ചെയ്യുക</h3>
-            
-            <label>പ്രോഗ്രാമിന്റെ പേര്:</label>
-            <input type="text" id="editProgName">
-            
-            <label>Team A മത്സരാർത്ഥികൾ:</label>
-            <input type="text" id="editTeamAInput" placeholder="ഉദാ: 300. Safwan (C)">
-            <select id="selectTeamA" onchange="appendStudent('A')" style="margin-top:5px; margin-bottom:10px;">
-                <option value="">-- Team A ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുക --</option>
-            </select>
-
-            <label>Team B മത്സരാർത്ഥികൾ:</label>
-            <input type="text" id="editTeamBInput" placeholder="ഉദാ: 100. Shibili (C)">
-            <select id="selectTeamB" onchange="appendStudent('B')" style="margin-top:5px;">
-                <option value="">-- Team B ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുക --</option>
-            </select>
-
-            <div class="modal-buttons">
-                <button class="btn-submit" onclick="saveProgramChanges()">💾 Save</button>
-                <button class="btn-delete" onclick="deleteCurrentProgram()">🗑️ Delete</button>
-            </div>
-        </div>
-    </div>
-
     <footer>
         &copy; 2026 EID-E IRSHAD — IRSHADUNNASIHEEN SAHITHYA SAMAJAM
     </footer>
 
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="app.js"></script>
+    <script>
+        const programsData = {
+            senior: {
+                onstage: [
+                    { no: "01", name: "ഖിറാഅത്ത്", teamA: "", teamB: "" },
+                    { no: "02", name: "മലയാള പ്രസംഗം", teamA: "", teamB: "" },
+                    { no: "03", name: "അറബിക് പ്രസംഗം", teamA: "", teamB: "" },
+                    { no: "04", name: "മധുരമലയാളം", teamA: "", teamB: "" },
+                    { no: "05", name: "ഖുർആൻ പ്രഭാഷണം", teamA: "", teamB: "" },
+                    { no: "06", name: "അനൗൺസ്മെന്റ്", teamA: "", teamB: "" },
+                    { no: "07", name: "മലയാള ഗാനം", teamA: "", teamB: "" },
+                    { no: "08", name: "അറബി ഗാനം", teamA: "", teamB: "" },
+                    { no: "09", name: "നിമിഷ പ്രസംഗം", teamA: "", teamB: "" },
+                    { no: "10", name: "സംഘഗാനം", teamA: "", teamB: "" }
+                ],
+                offstage: [
+                    { no: "01", name: "മലയാള പ്രബന്ധം", teamA: "", teamB: "" },
+                    { no: "02", name: "ഇംഗ്ലീഷ് പ്രബന്ധം", teamA: "", teamB: "" },
+                    { no: "03", name: "അറബിക് പ്രബന്ധം", teamA: "", teamB: "" },
+                    { no: "04", name: "മലയാളം കയ്യെഴുത്ത്", teamA: "", teamB: "" },
+                    { no: "05", name: "ഇംഗ്ലീഷ് കയ്യെഴുത്ത്", teamA: "", teamB: "" },
+                    { no: "06", name: "അറബിക് കയ്യെഴുത്ത്", teamA: "", teamB: "" },
+                    { no: "07", name: "ചിത്ര രചന", teamA: "", teamB: "" },
+                    { no: "08", name: "പോസ്റ്റർ ഡിസൈൻ", teamA: "", teamB: "" },
+                    { no: "09", name: "അറബി വായന", teamA: "", teamB: "" },
+                    { no: "10", name: "കഥാരചന", teamA: "", teamB: "" }
+                ],
+                sports: [
+                    { no: "01", name: "100m Race", teamA: "", teamB: "" },
+                    { no: "02", name: "Long Jump", teamA: "", teamB: "" },
+                    { no: "03", name: "Shot Put", teamA: "", teamB: "" }
+                ]
+            },
+            junior: {
+                onstage: [
+                    { no: "01", name: "ഖിറാഅത്ത്", teamA: "", teamB: "" },
+                    { no: "02", name: "മലയാള പ്രസംഗം", teamA: "", teamB: "" },
+                    { no: "03", name: "ഇംഗ്ലീഷ് പ്രസംഗം", teamA: "", teamB: "" }
+                ],
+                offstage: [
+                    { no: "01", name: "മലയാള പ്രബന്ധം", teamA: "", teamB: "" },
+                    { no: "02", name: "ചിത്ര രചന", teamA: "", teamB: "" }
+                ],
+                sports: [
+                    { no: "01", name: "100m Race", teamA: "", teamB: "" }
+                ]
+            },
+            subjunior: {
+                onstage: [
+                    { no: "01", name: "ഖിറാഅത്ത്", teamA: "", teamB: "" },
+                    { no: "02", name: "മലയാള പ്രസംഗം", teamA: "", teamB: "" }
+                ],
+                offstage: [
+                    { no: "01", name: "പെൻസിൽ ഡ്രോയിംഗ്", teamA: "", teamB: "" }
+                ],
+                sports: [
+                    { no: "01", name: "50m Race", teamA: "", teamB: "" }
+                ]
+            },
+            general: {
+                onstage: [
+                    { no: "01", name: "മോട്ടിവേഷൻ സ്പീച്ച്", teamA: "", teamB: "" },
+                    { no: "02", name: "ബുർദ", teamA: "", teamB: "" }
+                ],
+                offstage: [],
+                sports: [
+                    { no: "01", name: "Tug of War", teamA: "", teamB: "" }
+                ]
+            }
+        };
+
+        let currentCat = 'senior';
+        let currentTp = 'onstage';
+
+        function renderTable() {
+            const tbody = document.getElementById('programTableBody');
+            const title = document.getElementById('tableTitle');
+            
+            const catNames = { senior: "SENIOR", junior: "JUNIOR", subjunior: "SUB JUNIOR", general: "GENERAL" };
+            const typeNames = { onstage: "ON STAGE", offstage: "OFF STAGE", sports: "SPORTS" };
+            
+            title.textContent = `${catNames[currentCat]} — ${typeNames[currentTp]}`;
+            
+            const list = (programsData[currentCat] && programsData[currentCat][currentTp]) || [];
+            
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px;">പ്രോഗ്രാമുകൾ ലഭ്യമല്ല.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = list.map(item => `
+                <tr>
+                    <td><strong>${item.no}</strong></td>
+                    <td><strong>${item.name}</strong></td>
+                    <td>${item.teamA || '<span style="color:#aaa;">-</span>'}</td>
+                    <td>${item.teamB || '<span style="color:#aaa;">-</span>'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function filterCategory(cat, btn) {
+            currentCat = cat;
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderTable();
+        }
+
+        function filterType(tp, btn) {
+            currentTp = tp;
+            document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderTable();
+        }
+
+        renderTable();
+    </script>
 </body>
 </html>
