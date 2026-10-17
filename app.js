@@ -1,13 +1,10 @@
-// ============================================================================
-// 1. FIREBASE CONFIGURATION (അടുത്ത സ്റ്റെപ്പിൽ ലഭിക്കുന്ന വിവരങ്ങൾ ഇവിടെ ചേർക്കാം)
-// ============================================================================
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyAJ7gwJjRcvYIft6vA-4nxhE1AVPrpTDmv",
+    authDomain: "eid-e-irshad-2k26.firebaseapp.com",
+    projectId: "eid-e-irshad-2k26",
+    storageBucket: "eid-e-irshad-2k26.appspot.com",
+    messagingSenderId: "926291213815",
+    appId: "1:926291213815:web:50729ca345f6d6b0d002f2"
 };
 
 let auth = null;
