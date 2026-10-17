@@ -281,9 +281,95 @@ async function saveAppData() {
 // 4. UI RENDERING FUNCTIONS
 // ============================================================================
 function renderAll() {
+    renderPrograms();
+    renderTeams();
     renderPublishedResults();
     updateLiveScoreboard();
     updateAdminUI();
+}
+
+function renderPrograms() {
+    const tbody = document.getElementById("programListBody");
+    if (!tbody) return;
+
+    const titleEl = document.getElementById("programTableTitle");
+    const offstageBtn = document.querySelector('.type-btn[data-type="offstage"]');
+
+    if (currentCategory === "general") {
+        if (offstageBtn) offstageBtn.style.display = "none";
+        if (currentType === "offstage") currentType = "onstage";
+    } else {
+        if (offstageBtn) offstageBtn.style.display = "inline-block";
+    }
+
+    const catNames = { senior: "SENIOR", junior: "JUNIOR", subjunior: "SUB JUNIOR", general: "GENERAL" };
+    const typeNames = {
+        onstage: currentCategory === "general" ? "GENERAL PROGRAMS" : "ON STAGE",
+        offstage: "OFF STAGE",
+        sports: "SPORTS"
+    };
+
+    if (titleEl) titleEl.textContent = `${catNames[currentCategory]} — ${typeNames[currentType]}`;
+
+    const list = (appData.programs[currentCategory] && appData.programs[currentCategory][currentType]) || [];
+    tbody.innerHTML = "";
+
+    if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px;">പ്രോഗ്രാമുകൾ ചേർത്തിട്ടില്ല.</td></tr>`;
+        return;
+    }
+
+    list.forEach((item, index) => {
+        const tr = document.createElement("tr");
+        const editButtonHTML = isAdmin
+            ? `<button class="edit-row-btn" onclick="openEditProgramModal(${index})">✏️ Edit</button>`
+            : "";
+
+        tr.innerHTML = `
+            <td><strong>${item.no}</strong></td>
+            <td><strong>${item.name}</strong> ${editButtonHTML}</td>
+            <td>${item.teamA || '<span style="color:#aaa;">-</span>'}</td>
+            <td>${item.teamB || '<span style="color:#aaa;">-</span>'}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function renderTeams() {
+    const renderTeamColumn = (teamKey, containerId) => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = "";
+        const categories = [
+            { key: "senior", label: "Senior" },
+            { key: "junior", label: "Junior" },
+            { key: "subjunior", label: "Sub Junior" }
+        ];
+
+        categories.forEach(cat => {
+            const heading = document.createElement("div");
+            heading.className = "team-cat-title";
+            heading.textContent = cat.label;
+            container.appendChild(heading);
+
+            const students = (appData.teams[teamKey] && appData.teams[teamKey][cat.key]) || [];
+            students.forEach((student, idx) => {
+                const div = document.createElement("div");
+                div.className = "student-item";
+                const adminBtns = isAdmin
+                    ? `<div>
+                        <button class="edit-row-btn" onclick="editStudent('${teamKey}', '${cat.key}', ${idx})">✏️</button>
+                        <button class="edit-row-btn" style="background:#dc2626;" onclick="deleteStudent('${teamKey}', '${cat.key}', ${idx})">🗑️</button>
+                       </div>`
+                    : "";
+                div.innerHTML = `<span>${student}</span> ${adminBtns}`;
+                container.appendChild(div);
+            });
+        });
+    };
+
+    renderTeamColumn("teamA", "teamAContainer");
+    renderTeamColumn("teamB", "teamBContainer");
 }
 
 function updateAdminUI() {
@@ -379,280 +465,4 @@ window.onPosterProgramSelect = function() {
     updatePosterPreview();
 };
 
-window.onWinnerSelect = function(rank) {
-    const sel = document.getElementById(`selWinner${rank}`);
-    const nameInput = document.getElementById(`win${rank}Name`);
-    const teamInput = document.getElementById(`win${rank}Team`);
-    if (!sel || !sel.value) return;
-
-    const [name, team] = sel.value.split("|");
-    if (nameInput) nameInput.value = name.toUpperCase();
-    if (teamInput) teamInput.value = team.toUpperCase();
-    updatePosterPreview();
-};
-
-window.updatePosterPreview = function() {
-    const resNo = document.getElementById("resNoInput")?.value || "01";
-    const catVal = document.getElementById("resCatSelect")?.value || "senior";
-    const progName = document.getElementById("resProgCustom")?.value || "പ്രോഗ്രാം";
-
-    const catLabels = {
-        subjunior: "SUB JUNIOR",
-        junior: "JUNIOR",
-        senior: "SENIOR",
-        general: "GENERAL"
-    };
-
-    const setElText = (id, val) => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = val;
-    };
-
-    setElText("previewResNo", resNo);
-    setElText("previewCat", catLabels[catVal] || "SENIOR");
-    setElText("previewProg", progName);
-
-    setElText("previewWin1Name", document.getElementById("win1Name")?.value || "-");
-    setElText("previewWin1Team", document.getElementById("win1Team")?.value || "");
-
-    setElText("previewWin2Name", document.getElementById("win2Name")?.value || "-");
-    setElText("previewWin2Team", document.getElementById("win2Team")?.value || "");
-
-    setElText("previewWin3Name", document.getElementById("win3Name")?.value || "-");
-    setElText("previewWin3Team", document.getElementById("win3Team")?.value || "");
-};
-
-window.changePosterTheme = function() {
-    const themeSelect = document.getElementById("themeStyleSelect");
-    const posterCanvas = document.getElementById("posterCanvas");
-    if (!themeSelect || !posterCanvas) return;
-
-    posterCanvas.classList.remove("theme-milad", "theme-sahityotsav", "theme-alif");
-    posterCanvas.classList.add(themeSelect.value);
-};
-
-// Calculate Category-wise and Total Points for Live Scoreboard
-function updateLiveScoreboard() {
-    let totals = { A: 0, B: 0 };
-    let cats = {
-        senior: { A: 0, B: 0 },
-        junior: { A: 0, B: 0 },
-        subjunior: { A: 0, B: 0 },
-        general: { A: 0, B: 0 }
-    };
-
-    if (appData.results && appData.results.length > 0) {
-        appData.results.forEach(r => {
-            const getPts = (rank) => (rank === 1 ? 5 : rank === 2 ? 3 : 1);
-            
-            let cKey = "senior";
-            let cText = (r.category || "").toUpperCase();
-            if (cText.includes("JUNIOR") && !cText.includes("SUB")) cKey = "junior";
-            else if (cText.includes("SUB")) cKey = "subjunior";
-            else if (cText.includes("GENERAL") || cText.includes("SPORTS")) cKey = "general";
-
-            const processWin = (teamStr, rank) => {
-                if (!teamStr) return;
-                let pts = getPts(rank);
-                let t = teamStr.toUpperCase();
-                if (t.includes("TEAM A") || t.includes("A")) {
-                    totals.A += pts;
-                    if (cats[cKey]) cats[cKey].A += pts;
-                } else if (t.includes("TEAM B") || t.includes("B")) {
-                    totals.B += pts;
-                    if (cats[cKey]) cats[cKey].B += pts;
-                }
-            };
-
-            processWin(r.win1Team, 1);
-            processWin(r.win2Team, 2);
-            processWin(r.win3Team, 3);
-        });
-    }
-
-    const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-    
-    setEl("barScoreA", totals.A);
-    setEl("barScoreB", totals.B);
-
-    setEl("srPtsA", cats.senior.A);
-    setEl("srPtsB", cats.senior.B);
-
-    setEl("jrPtsA", cats.junior.A);
-    setEl("jrPtsB", cats.junior.B);
-
-    setEl("subPtsA", cats.subjunior.A);
-    setEl("subPtsB", cats.subjunior.B);
-
-    setEl("genPtsA", cats.general.A);
-    setEl("genPtsB", cats.general.B);
-
-    const barA = document.getElementById("verticalBarA");
-    const barB = document.getElementById("verticalBarB");
-    
-    if (barA && barB) {
-        let maxVal = Math.max(totals.A, totals.B, 10);
-        let heightA = Math.max(15, Math.round((totals.A / maxVal) * 100));
-        let heightB = Math.max(15, Math.round((totals.B / maxVal) * 100));
-
-        barA.style.height = heightA + "%";
-        barB.style.height = heightB + "%";
-    }
-}
-
-window.downloadResultPoster = async function() {
-    const posterEl = document.getElementById("posterCanvas");
-    if (!posterEl || typeof html2canvas === "undefined") {
-        alert("ഡൗൺലോഡ് തയ്യാറാകുന്നുണ്ട്, ദയവായി കാത്തിരിക്കുക.");
-        return;
-    }
-    try {
-        const canvas = await html2canvas(posterEl, { scale: 3, useCORS: true, backgroundColor: null });
-        const link = document.createElement("a");
-        const resNo = document.getElementById("resNoInput")?.value || "01";
-        link.download = `EID-E-IRSHAD-Result-${resNo}.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-    } catch (err) {
-        alert("ഡൗൺലോഡ് ചെയ്യുന്നതിൽ പിശക്: " + err.message);
-    }
-};
-
-window.publishResultToSite = async function() {
-    const themeSelect = document.getElementById("themeStyleSelect");
-    const resObj = {
-        resNo: document.getElementById("resNoInput")?.value || "01",
-        category: document.getElementById("previewCat")?.textContent || "SENIOR",
-        program: document.getElementById("resProgCustom")?.value || "",
-        win1Name: document.getElementById("win1Name")?.value || "-",
-        win1Team: document.getElementById("win1Team")?.value || "",
-        win2Name: document.getElementById("win2Name")?.value || "-",
-        win2Team: document.getElementById("win2Team")?.value || "",
-        win3Name: document.getElementById("win3Name")?.value || "-",
-        win3Team: document.getElementById("win3Team")?.value || "",
-        themeClass: themeSelect ? themeSelect.value : "theme-alif"
-    };
-
-    if (!appData.results) appData.results = [];
-    appData.results.unshift(resObj);
-    await saveAppData();
-    initPosterBuilder();
-    alert("മത്സരഫലം വിജയകരമായി വെബ്സൈറ്റിൽ സേവ് ചെയ്തു!");
-};
-
-function renderPublishedResults() {
-    const container = document.getElementById("publishedResultsContainer");
-    if (!container) return;
-
-    const list = appData.results || [];
-    if (list.length === 0) {
-        container.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#64748b; padding:15px;">മത്സര ഫലങ്ങൾ ഒന്നും തന്നെ പ്രസിദ്ധീകരിച്ചിട്ടില്ല.</p>`;
-        return;
-    }
-
-    container.innerHTML = "";
-    list.forEach((r, idx) => {
-        const card = document.createElement("div");
-        card.className = `published-res-card ${r.themeClass || 'theme-alif'}`;
-        const delBtn = isAdmin
-            ? `<button class="edit-row-btn" style="background:#dc2626; margin-top:10px;" onclick="deletePublishedResult(${idx})">🗑️ ഒഴിവാക്കുക</button>`
-            : "";
-
-        card.innerHTML = `
-            <span class="pub-res-badge">#${r.resNo}</span>
-            <div class="ref-cat-label">${r.category}</div>
-            <div class="ref-prog-label" style="margin-bottom:10px;">${r.program}</div>
-            <div class="ref-winner-row"><div class="rank-num rank-1">01<sup>st</sup></div><div class="rank-dot">•</div><div class="rank-details"><div class="rank-name">${r.win1Name}</div><div class="rank-place">${r.win1Team}</div></div></div>
-            <div class="ref-winner-row"><div class="rank-num rank-2">02<sup>nd</sup></div><div class="rank-dot">•</div><div class="rank-details"><div class="rank-name">${r.win2Name}</div><div class="rank-place">${r.win2Team}</div></div></div>
-            <div class="ref-winner-row"><div class="rank-num rank-3">03<sup>rd</sup></div><div class="rank-dot">•</div><div class="rank-details"><div class="rank-name">${r.win3Name}</div><div class="rank-place">${r.win3Team}</div></div></div>
-            ${delBtn}
-        `;
-        container.appendChild(card);
-    });
-}
-
-window.deletePublishedResult = async function(idx) {
-    if (!confirm("ഈ റിസൾട്ട് ഒഴിവാക്കണോ?")) return;
-    appData.results.splice(idx, 1);
-    await saveAppData();
-};
-
-// ============================================================================
-// 6. ADMIN AUTHENTICATION & LOGIN
-// ============================================================================
-window.openAdminModal = function() {
-    const errEl = document.getElementById("loginError");
-    const modal = document.getElementById("loginModal");
-    if (errEl) errEl.textContent = "";
-    if (modal) modal.style.display = "flex";
-};
-
-window.closeAdminModal = function() {
-    const modal = document.getElementById("loginModal");
-    if (modal) modal.style.display = "none";
-};
-
-window.loginAdmin = async function() {
-    const emailField = document.getElementById("adminEmail");
-    const passField = document.getElementById("adminPassword");
-    const errEl = document.getElementById("loginError");
-
-    if (!emailField || !passField) return;
-    const email = emailField.value.trim().toLowerCase();
-    const pass = passField.value.trim();
-
-    // Direct local check for instant login
-    if (email === "admin@irshad.com" && pass === "irshad2k26") {
-        isAdmin = true;
-        localStorage.setItem("eid_irshad_admin_logged", "true");
-        closeAdminModal();
-        renderAll();
-        return;
-    }
-
-    if (isFirebaseConfigured && auth) {
-        try {
-            await auth.signInWithEmailAndPassword(email, pass);
-            isAdmin = true;
-            localStorage.setItem("eid_irshad_admin_logged", "true");
-            closeAdminModal();
-            renderAll();
-        } catch (err) {
-            if (email === "admin@irshad.com" && pass === "irshad2k26") {
-                isAdmin = true;
-                localStorage.setItem("eid_irshad_admin_logged", "true");
-                closeAdminModal();
-                renderAll();
-            } else {
-                if (errEl) errEl.textContent = "ലോഗിൻ പരാജയപ്പെട്ടു! ദയവായി ശരിയായ ഐഡിയും പാസ്‌വേഡും നൽകുക.";
-            }
-        }
-    } else {
-        if (email === "admin@irshad.com" && pass === "irshad2k26") {
-            isAdmin = true;
-            localStorage.setItem("eid_irshad_admin_logged", "true");
-            closeAdminModal();
-            renderAll();
-        } else {
-            if (errEl) errEl.textContent = "ലോഗിൻ പരാജയപ്പെട്ടു! ദയവായി ശരിയായ ഐഡിയും പാസ്‌വേഡും നൽകുക.";
-        }
-    }
-};
-
-window.logoutAdmin = async function() {
-    isAdmin = false;
-    localStorage.removeItem("eid_irshad_admin_logged");
-    if (isFirebaseConfigured && auth) {
-        try { await auth.signOut(); } catch (e) {}
-    }
-    renderAll();
-};
-
-window.resetToDefaultData = async function() {
-    if (!confirm("ശ്രദ്ധിക്കുക: നിങ്ങൾ വരുത്തിയ മാറ്റങ്ങൾ മാഞ്ഞ് ആദ്യത്തെ ലിസ്റ്റിലേക്ക് തിരിച്ചുപോകും. തുടരണോ?")) return;
-    appData = JSON.parse(JSON.stringify(defaultData));
-    await saveAppData();
-};
-
-// Start App
-loadAppData();
+window.onWinnerSelect = function(r
