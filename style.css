@@ -1,359 +1,470 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EID-E IRSHAD — CAMPUS FIESTA 2K26</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <!-- html2canvas for Poster Download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
 
-body {
-    font-family: 'Anek Malayalam', sans-serif;
-    background-color: #f4f1ea;
-    color: #222;
-    line-height: 1.6;
-}
+    <!-- TOP ADMIN BAR (Shows when Admin is logged in) -->
+    <div id="adminBar" class="admin-bar" style="display: none;">
+        <span>⚙️ അഡ്മിൻ മോഡ് സജീവമാണ് (Admin Active)</span>
+        <div class="admin-actions">
+            <button class="btn-reset" onclick="resetToDefaultData()">🔄 Reset Data</button>
+            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
+        </div>
+    </div>
 
-.hero {
-    background: radial-gradient(circle at center, #6e1309 0%, #3a0703 70%, #1c0200 100%);
-    color: #ffffff;
-    text-align: center;
-    padding: 35px 15px 30px;
-    border-bottom: 5px solid #ffd000;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-}
+    <!-- ================================================================= -->
+    <!-- PAGE 1: HOME PAGE (Hero Details + Rules + Navigation to Next Pages) -->
+    <!-- ================================================================= -->
+    <div id="page-home" class="page-view active">
+        <header class="hero">
+            <div class="hero-top-bar">
+                <button class="admin-top-btn" id="adminBtn" onclick="openAdminModal()">🔐 Admin Login</button>
+            </div>
+            <div class="hero-content">
+                <div class="calligraphy-box">
+                    <img src="calligraphy.png" alt="Calligraphy" class="calligraphy-img" onerror="this.style.display='none'; document.getElementById('fallback-text').style.display='block';">
+                    <div id="fallback-text" class="fallback-calligraphy" style="display:none;">സർഗാത്മകത പൂക്കുന്നു</div>
+                </div>
+                <h1 class="main-title">EID-E IRSHAD</h1>
+                <div class="sub-title">CAMPUS FIESTA 2K26</div>
+                <div class="ribbon">ART • LITERATURE • SPORTS</div>
+                
+                <div class="date-container">
+                    <div class="month-year"><span>2026</span><br>FEB</div>
+                    <div class="date-box d-fri"><span class="num">20</span><span class="day">FRI</span></div>
+                    <div class="date-box d-sat"><span class="num">21</span><span class="day">SAT</span></div>
+                    <div class="date-box d-sun"><span class="num">22</span><span class="day">SUN</span></div>
+                </div>
+                
+                <div class="org-info">
+                    IRSHADUNNASIHEEN SAHITHYA SAMAJAM
+                </div>
+            </div>
+        </header>
 
-.hero-content {
-    max-width: 750px;
-    margin: 0 auto;
-}
+        <main class="container">
+            <!-- Rules & Event Details on Home Page -->
+            <div class="card home-rules-card">
+                <div class="card-header">
+                    <h3>📜 മേളയുടെ പൊതുനിയമങ്ങളും വിവരങ്ങളും</h3>
+                </div>
+                <div class="rules-body">
+                    <ol class="rules-list">
+                        <li>മത്സരങ്ങളിൽ പങ്കെടുക്കുന്ന മുഴുവൻ വിദ്യാർത്ഥികളും കൃത്യസമയത്ത് സ്റ്റേജിൽ/വേദിയിൽ ഹാജരാകേണ്ടതാണ്.</li>
+                        <li>വിധികർത്താക്കളുടെ തീരുമാനം അന്തിമമായിരിക്കും. അതിൽ തർക്കങ്ങൾ അനുവദനീയമല്ല.</li>
+                        <li>ഓരോ മത്സരത്തിലും പങ്കെടുക്കുന്നവരുടെ എണ്ണം അതത് കാറ്റഗറി കോർഡിനേറ്റർമാർ മുൻകൂട്ടി ഉറപ്പുവരുത്തണം.</li>
+                        <li>സ്റ്റേജ്, ഓഫ്-സ്റ്റേജ്, സ്പോർട്സ് ഇനങ്ങളിൽ സമയപരിധി കർശനമായി പാലിക്കേണ്ടതാണ്.</li>
+                        <li>ആശയക്കുഴപ്പങ്ങൾ ഉണ്ടായാൽ ജനറൽ കൺവീനറുടെ തീരുമാനം അന്തിമമായിരിക്കും.</li>
+                    </ol>
 
-.calligraphy-box {
-    margin-bottom: 12px;
-}
+                    <div class="points-box">
+                        <h4>📊 പോയിന്റ് നിലവാരം (Points System)</h4>
+                        <div class="points-grid">
+                            <div class="point-item"><strong>വ്യക്തിഗത ഇനങ്ങൾ (Individual):</strong><br>🥇 First: 5 Pts | 🥈 Second: 3 Pts | 🥉 Third: 1 Pt</div>
+                            <div class="point-item"><strong>ഗ്രൂപ്പ് ഇനങ്ങൾ (Group):</strong><br>🥇 First: 10 Pts | 🥈 Second: 6 Pts | 🥉 Third: 3 Pts</div>
+                        </div>
+                    </div>
 
-.calligraphy-img {
-    max-width: 240px;
-    width: 65%;
-    height: auto;
-    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6));
-}
+                    <div class="rules-footer">
+                        - കൺവീനർ, ഈദ്-ഇ ഇർഷാദ് കാമ്പസ് ഫിയെസ്ത 2K26
+                    </div>
+                </div>
+            </div>
 
-.fallback-calligraphy {
-    font-size: 1.7rem;
-    font-weight: 800;
-    color: #ffffff;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
-}
+            <!-- Navigation Section to Open Next Pages -->
+            <h2 class="section-heading">👇 കൂടുതൽ വിവരങ്ങൾക്കായി താഴെ ക്ലിക്ക് ചെയ്യുക</h2>
+            <div class="home-nav-grid">
+                <div class="nav-card" onclick="openPage('programs')">
+                    <div class="nav-card-icon">📋</div>
+                    <div class="nav-card-info">
+                        <h3>പ്രോഗ്രാം ലിസ്റ്റ്</h3>
+                        <p>Senior, Junior, Sub Junior, General മത്സരങ്ങളും മത്സരാർത്ഥികളും</p>
+                    </div>
+                    <div class="nav-card-arrow">➔</div>
+                </div>
 
-.main-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 3.2rem;
-    font-weight: 900;
-    color: #ffe600;
-    letter-spacing: 2px;
-    line-height: 1.05;
-    text-shadow: 3px 4px 0px #000000, 0 0 20px rgba(255, 230, 0, 0.3);
-    margin-bottom: 5px;
-}
+                <div class="nav-card highlight-card" onclick="openPage('results')">
+                    <div class="nav-card-icon">🏆</div>
+                    <div class="nav-card-info">
+                        <h3>മത്സര ഫലങ്ങൾ (Results & Posters)</h3>
+                        <p>വിജയികളുടെ വിവരങ്ങളും റിസൾട്ട് പോസ്റ്ററുകളും കാണാം</p>
+                    </div>
+                    <div class="nav-card-arrow">➔</div>
+                </div>
 
-.sub-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.35rem;
-    font-weight: 800;
-    color: #ffffff;
-    letter-spacing: 3px;
-    margin-bottom: 12px;
-}
+                <div class="nav-card" onclick="openPage('teams')">
+                    <div class="nav-card-icon">👥</div>
+                    <div class="nav-card-info">
+                        <h3>ടീം ലിസ്റ്റ് (Team A & Team B)</h3>
+                        <p>ഇരു ടീമുകളിലെയും മുഴുവൻ വിദ്യാർത്ഥികളുടെയും വിവരങ്ങൾ</p>
+                    </div>
+                    <div class="nav-card-arrow">➔</div>
+                </div>
+            </div>
+        </main>
+    </div>
 
-.ribbon {
-    display: inline-block;
-    background: linear-gradient(90deg, #b80c09, #e61919, #b80c09);
-    color: #fff;
-    padding: 6px 26px;
-    font-weight: 700;
-    font-size: 1rem;
-    border-radius: 4px;
-    transform: rotate(-2deg);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    margin-bottom: 22px;
-}
+    <!-- ================================================================= -->
+    <!-- PAGE 2: PROGRAMS PAGE                                             -->
+    <!-- ================================================================= -->
+    <div id="page-programs" class="page-view">
+        <div class="subpage-header">
+            <button class="back-home-btn" onclick="openPage('home')">⬅️ ഹോം പേജിലേക്ക് മടങ്ങുക</button>
+            <h2>📋 പ്രോഗ്രാം ലിസ്റ്റ്</h2>
+        </div>
 
-.date-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-}
+        <main class="container">
+            <div class="filter-group">
+                <button class="cat-btn active" onclick="selectCategory('senior', this)">Senior</button>
+                <button class="cat-btn" onclick="selectCategory('junior', this)">Junior</button>
+                <button class="cat-btn" onclick="selectCategory('subjunior', this)">Sub Junior</button>
+                <button class="cat-btn" onclick="selectCategory('general', this)">General</button>
+            </div>
 
-.month-year {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 800;
-    font-size: 1.15rem;
-    text-align: right;
-    line-height: 1.1;
-    margin-right: 6px;
-}
+            <div class="sub-filter-group">
+                <button class="type-btn active" data-type="onstage" onclick="selectType('onstage', this)">🎤 On Stage</button>
+                <button class="type-btn" data-type="offstage" onclick="selectType('offstage', this)">✍️ Off Stage</button>
+                <button class="type-btn" data-type="sports" onclick="selectType('sports', this)">⚽ Sports</button>
+            </div>
 
-.month-year span {
-    font-size: 1.55rem;
-    color: #ffe600;
-}
+            <div class="card">
+                <div class="card-header">
+                    <h3 id="programTableTitle">SENIOR — ON STAGE</h3>
+                    <button class="admin-only-btn" style="display:none;" onclick="addNewProgram()">+ പുതിയ പ്രോഗ്രാം ചേർക്കുക</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 12%;">No</th>
+                                <th style="width: 44%;">Program Name</th>
+                                <th style="width: 22%;">Team A</th>
+                                <th style="width: 22%;">Team B</th>
+                            </tr>
+                        </thead>
+                        <tbody id="programListBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
 
-.date-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 58px;
-    height: 58px;
-    border-radius: 8px;
-    font-family: 'Montserrat', sans-serif;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.4);
-}
+    <!-- ================================================================= -->
+    <!-- PAGE 3: RESULTS & POSTER GENERATOR PAGE                           -->
+    <!-- ================================================================= -->
+    <div id="page-results" class="page-view">
+        <div class="subpage-header">
+            <button class="back-home-btn" onclick="openPage('home')">⬅️ ഹോം പേജിലേക്ക് മടങ്ങുക</button>
+            <h2>🏆 മത്സര ഫലങ്ങൾ (Results)</h2>
+        </div>
 
-.date-box .num {
-    font-size: 1.35rem;
-    font-weight: 900;
-    line-height: 1.1;
-}
+        <main class="container">
+            <!-- Poster Creator Builder (Visible to Admin or anyone creating poster) -->
+            <div class="card poster-builder-card">
+                <div class="card-header" style="background: #1c4e9c;">
+                    <h3>🎨 റിസൾട്ട് പോസ്റ്റർ തയ്യാറാക്കുക (Result Poster Maker)</h3>
+                </div>
+                <div class="builder-body">
+                    <div class="builder-grid">
+                        <div class="builder-form">
+                            <div class="form-row-2">
+                                <div>
+                                    <label>Result No:</label>
+                                    <input type="text" id="resNoInput" value="01" oninput="updatePosterPreview()">
+                                </div>
+                                <div>
+                                    <label>കാറ്റഗറി (Category):</label>
+                                    <select id="resCatSelect" onchange="onPosterCategoryChange()">
+                                        <option value="subjunior">SUB JUNIOR</option>
+                                        <option value="junior">JUNIOR</option>
+                                        <option value="senior" selected>SENIOR</option>
+                                        <option value="general">GENERAL</option>
+                                    </select>
+                                </div>
+                            </div>
 
-.date-box .day {
-    font-size: 0.55rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    margin-top: 2px;
-}
+                            <div class="form-row-2">
+                                <div>
+                                    <label>വിഭാഗം (Type):</label>
+                                    <select id="resTypeSelect" onchange="onPosterCategoryChange()">
+                                        <option value="onstage">On Stage</option>
+                                        <option value="offstage">Off Stage</option>
+                                        <option value="sports">Sports</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക:</label>
+                                    <select id="resProgSelect" onchange="onPosterProgramSelect()"></select>
+                                </div>
+                            </div>
 
-.d-fri { background-color: #9e331e; }
-.d-sat { background-color: #1c4e9c; }
-.d-sun { background-color: #6b218f; }
+                            <label>പ്രോഗ്രാമിന്റെ പേര് (വേണമെങ്കിൽ തിരുത്താം):</label>
+                            <input type="text" id="resProgCustom" oninput="updatePosterPreview()">
 
-.org-info {
-    font-size: 0.85rem;
-    color: #e2d1cf;
-    border-top: 1px solid rgba(255,255,255,0.18);
-    padding-top: 12px;
-}
+                            <hr class="form-divider">
 
-.main-nav {
-    display: flex;
-    justify-content: center;
-    background: #240402;
-    padding: 10px;
-    gap: 8px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    flex-wrap: wrap;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-}
+                            <!-- 1st Place -->
+                            <div class="winner-select-box">
+                                <label class="badge-1st">🥇 First Place (01st):</label>
+                                <select id="selWinner1" onchange="onWinnerSelect(1)">
+                                    <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
+                                </select>
+                                <div class="form-row-2" style="margin-top:6px;">
+                                    <input type="text" id="win1Name" placeholder="പേരും നമ്പറും (ഉദാ: 300. SAFWAN)" oninput="updatePosterPreview()">
+                                    <input type="text" id="win1Team" placeholder="ടീം (ഉദാ: TEAM A)" oninput="updatePosterPreview()">
+                                </div>
+                            </div>
 
-.nav-btn {
-    background: #420c07;
-    color: #ffffff;
-    border: 1px solid #6e1c14;
-    padding: 8px 15px;
-    border-radius: 6px;
-    font-family: 'Anek Malayalam', sans-serif;
-    font-weight: 600;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: 0.2s;
-}
+                            <!-- 2nd Place -->
+                            <div class="winner-select-box">
+                                <label class="badge-2nd">🥈 Second Place (02nd):</label>
+                                <select id="selWinner2" onchange="onWinnerSelect(2)">
+                                    <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
+                                </select>
+                                <div class="form-row-2" style="margin-top:6px;">
+                                    <input type="text" id="win2Name" placeholder="പേരും നമ്പറും (ഉദാ: 100. SHIBILI)" oninput="updatePosterPreview()">
+                                    <input type="text" id="win2Team" placeholder="ടീം (ഉദാ: TEAM B)" oninput="updatePosterPreview()">
+                                </div>
+                            </div>
 
-.nav-btn.active, .nav-btn:hover {
-    background: #ffe600;
-    color: #1c0200;
-    border-color: #ffe600;
-    font-weight: 700;
-}
+                            <!-- 3rd Place -->
+                            <div class="winner-select-box">
+                                <label class="badge-3rd">🥉 Third Place (03rd):</label>
+                                <select id="selWinner3" onchange="onWinnerSelect(3)">
+                                    <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
+                                </select>
+                                <div class="form-row-2" style="margin-top:6px;">
+                                    <input type="text" id="win3Name" placeholder="പേരും നമ്പറും (ഉദാ: 304. ASAF)" oninput="updatePosterPreview()">
+                                    <input type="text" id="win3Team" placeholder="ടീം (ഉദാ: TEAM A)" oninput="updatePosterPreview()">
+                                </div>
+                            </div>
 
-.admin-nav-btn {
-    background: #1c4e9c;
-    border-color: #2b6cb0;
-}
+                            <div class="poster-action-btns">
+                                <button class="btn-download-poster" onclick="downloadResultPoster()">📥 പോസ്റ്റർ ഡൗൺലോഡ് ചെയ്യുക</button>
+                                <button class="btn-publish-result admin-only-btn" style="display:none;" onclick="publishResultToSite()">💾 സൈറ്റിൽ സേവ് ചെയ്യുക</button>
+                            </div>
+                        </div>
 
-.admin-bar {
-    background: #196f3d;
-    color: #fff;
-    padding: 10px 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    font-size: 0.9rem;
-}
+                        <!-- LIVE REFERENCE STYLE POSTER PREVIEW -->
+                        <div class="poster-preview-wrapper">
+                            <div id="posterCanvas" class="ref-poster">
+                                <!-- Top Row: Social Handle + Circular Result Badge -->
+                                <div class="ref-poster-top">
+                                    <div class="ref-social">
+                                        <span class="social-icons">f 𝕏 ◎ ▶</span>
+                                        <span class="social-handle">eideirshad2k26</span>
+                                    </div>
 
-.admin-actions button {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 700;
-    margin-left: 5px;
-}
+                                    <div class="ref-result-badge">
+                                        <svg viewBox="0 0 100 100" class="badge-spin-svg">
+                                            <defs>
+                                                <path id="circlePath" d="M 50, 50 m -36, 0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0"/>
+                                            </defs>
+                                            <text font-size="8.2" font-weight="700" fill="#bdbdbd" letter-spacing="1.2">
+                                                <textPath href="#circlePath">Result • Result • Result • Result • </textPath>
+                                            </text>
+                                        </svg>
+                                        <div class="badge-num" id="previewResNo">01</div>
+                                    </div>
+                                </div>
 
-.btn-reset { background: #f39c12; color: #fff; }
-.btn-logout { background: #c0392b; color: #fff; }
+                                <!-- Theme Calligraphy Center-Right -->
+                                <div class="ref-theme-box">
+                                    <div class="theme-arch"></div>
+                                    <div class="theme-malayalam">സർഗാത്മകത<br><span>പൂക്കുന്നു</span></div>
+                                    <div class="theme-line">─── ❖ ───</div>
+                                </div>
 
-.container {
-    max-width: 980px;
-    margin: 20px auto;
-    padding: 0 12px;
-}
+                                <!-- Middle Section: Left Result Box & Right Tree Artwork -->
+                                <div class="ref-poster-middle">
+                                    <div class="ref-winners-card">
+                                        <div class="ref-cat-label" id="previewCat">SENIOR</div>
+                                        <div class="ref-prog-label" id="previewProg">ഖിറാഅത്ത്</div>
 
-.tab-content {
-    display: none;
-}
+                                        <div class="ref-winner-row">
+                                            <div class="rank-num rank-1">01<sup>st</sup></div>
+                                            <div class="rank-dot">•</div>
+                                            <div class="rank-details">
+                                                <div class="rank-name" id="previewWin1Name">300. SAFWAN</div>
+                                                <div class="rank-place" id="previewWin1Team">TEAM A</div>
+                                            </div>
+                                        </div>
 
-.tab-content.active {
-    display: block;
-}
+                                        <div class="ref-winner-row">
+                                            <div class="rank-num rank-2">02<sup>nd</sup></div>
+                                            <div class="rank-dot">•</div>
+                                            <div class="rank-details">
+                                                <div class="rank-name" id="previewWin2Name">100. SHIBILI</div>
+                                                <div class="rank-place" id="previewWin2Team">TEAM B</div>
+                                            </div>
+                                        </div>
 
-.filter-group, .sub-filter-group {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 14px;
-    flex-wrap: wrap;
-}
+                                        <div class="ref-winner-row">
+                                            <div class="rank-num rank-3">03<sup>rd</sup></div>
+                                            <div class="rank-dot">•</div>
+                                            <div class="rank-details">
+                                                <div class="rank-name" id="previewWin3Name">304. ASAF</div>
+                                                <div class="rank-place" id="previewWin3Team">TEAM A</div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-.cat-btn {
-    padding: 9px 18px;
-    border: 2px solid #5a0b05;
-    background: #fff;
-    color: #5a0b05;
-    font-weight: 800;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: 0.2s;
-}
+                                    <!-- Tree & Art Illustration SVG (Matches Reference Poster) -->
+                                    <div class="ref-tree-art">
+                                        <svg viewBox="0 0 260 300" xmlns="http://www.w3.org/2000/svg" class="tree-svg">
+                                            <!-- Foliage / Leaves clusters -->
+                                            <g fill="#7d9c3a" opacity="0.85">
+                                                <circle cx="140" cy="80" r="45"/>
+                                                <circle cx="90" cy="95" r="38"/>
+                                                <circle cx="185" cy="95" r="40"/>
+                                                <circle cx="65" cy="130" r="30"/>
+                                                <circle cx="205" cy="130" r="32"/>
+                                                <circle cx="135" cy="55" r="35"/>
+                                            </g>
+                                            <g fill="#a3c255" opacity="0.7">
+                                                <circle cx="115" cy="75" r="30"/>
+                                                <circle cx="165" cy="80" r="32"/>
+                                                <circle cx="85" cy="115" r="25"/>
+                                                <circle cx="185" cy="115" r="28"/>
+                                            </g>
+                                            <!-- Tree Trunk & Branches -->
+                                            <path d="M125,260 C128,220 115,190 130,150 C110,130 85,115 65,120 M130,150 C135,120 125,95 105,75 M130,150 C150,125 175,110 200,115 M135,135 C150,105 160,85 175,70" stroke="#4a3525" stroke-width="10" stroke-linecap="round" fill="none"/>
+                                            <path d="M115,265 C120,220 125,180 130,145 L145,148 C142,185 152,225 160,265 Z" fill="#4a3525"/>
+                                            <!-- Base Art Elements (Pencil, Brush, Book, Globe) -->
+                                            <rect x="85" y="250" width="95" height="18" rx="4" fill="#d9822b"/>
+                                            <polygon points="105,250 112,210 119,250" fill="#f39c12"/>
+                                            <polygon points="112,202 109,212 115,212" fill="#2c3e50"/>
+                                            <circle cx="155" cy="245" r="18" fill="#27ae60"/>
+                                            <path d="M75,265 Q130,245 195,265 Z" fill="#1c4e9c"/>
+                                        </svg>
+                                    </div>
+                                </div>
 
-.cat-btn.active {
-    background: #5a0b05;
-    color: #ffe600;
-}
+                                <!-- Bottom Footer Bar -->
+                                <div class="ref-poster-footer">
+                                    <div class="footer-left">
+                                        <div class="f-org-main">IRSHADUNNASIHEEN</div>
+                                        <div class="f-org-sub">SAHITHYA SAMAJAM</div>
+                                        <div class="f-org-mail">CAMPUS FIESTA 2K26</div>
+                                    </div>
+                                    <div class="footer-center">
+                                        <div class="f-logo-badge">EID-E IRSHAD</div>
+                                    </div>
+                                    <div class="footer-right">
+                                        <div class="f-date-text">2026 ഫെബ്രുവരി</div>
+                                        <div class="f-date-boxes">
+                                            <span>20</span><span>21</span><span>22</span>
+                                        </div>
+                                        <div class="f-venue">ക്യാമ്പസ് ഫിയെസ്ത</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-.type-btn {
-    padding: 7px 16px;
-    border: 1px solid #ccc;
-    background: #e6e2d8;
-    color: #333;
-    font-weight: 700;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.9rem;
-}
+            <!-- Published Results Gallery -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>📢 പ്രസിദ്ധീകരിച്ച മത്സര ഫലങ്ങൾ (Published Results)</h3>
+                </div>
+                <div id="publishedResultsContainer" class="results-gallery"></div>
+            </div>
+        </main>
+    </div>
 
-.type-btn.active {
-    background: #d32f2f;
-    color: #fff;
-    border-color: #d32f2f;
-}
+    <!-- ================================================================= -->
+    <!-- PAGE 4: TEAMS PAGE                                                -->
+    <!-- ================================================================= -->
+    <div id="page-teams" class="page-view">
+        <div class="subpage-header">
+            <button class="back-home-btn" onclick="openPage('home')">⬅️ ഹോം പേജിലേക്ക് മടങ്ങുക</button>
+            <h2>👥 ടീം ലിസ്റ്റ് (Team A & Team B)</h2>
+        </div>
 
-.card {
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-    overflow: hidden;
-    margin-bottom: 20px;
-}
+        <main class="container">
+            <div class="teams-grid">
+                <div class="card">
+                    <div class="card-header team-a-header">
+                        <h3>🔴 TEAM A</h3>
+                        <button class="admin-only-btn" style="display:none;" onclick="addNewStudent('teamA')">+ ആളെ ചേർക്കുക</button>
+                    </div>
+                    <div class="team-list-body" id="teamAContainer"></div>
+                </div>
 
-.card-header {
-    background: #4a0a05;
-    color: #ffe600;
-    padding: 12px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-}
+                <div class="card">
+                    <div class="card-header team-b-header">
+                        <h3>🔵 TEAM B</h3>
+                        <button class="admin-only-btn" style="display:none;" onclick="addNewStudent('teamB')">+ ആളെ ചേർക്കുക</button>
+                    </div>
+                    <div class="team-list-body" id="teamBContainer"></div>
+                </div>
+            </div>
+        </main>
+    </div>
 
-.card-header h3 {
-    font-size: 1.1rem;
-    font-weight: 800;
-}
+    <!-- ================================================================= -->
+    <!-- MODALS (Login & Edit Program)                                     -->
+    <!-- ================================================================= -->
+    <div id="loginModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAdminModal()">&times;</span>
+            <h3>🔐 Admin Login</h3>
+            <p style="font-size:0.85rem; color:#666; margin-bottom:12px;">പ്രോഗ്രാമുകളും റിസൾട്ടുകളും എഡിറ്റ് ചെയ്യാൻ ലോഗിൻ ചെയ്യുക.</p>
+            <label>Email ID:</label>
+            <input type="email" id="adminEmail" value="admin@irshad.com" placeholder="admin@irshad.com">
+            <label>Password:</label>
+            <input type="password" id="adminPassword" placeholder="irshad2k26">
+            <div id="loginError" class="error-msg"></div>
+            <button class="btn-submit" onclick="loginAdmin()">Login</button>
+        </div>
+    </div>
 
-.admin-only-btn {
-    background: #27ae60;
-    color: #fff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 5px;
-    font-weight: 700;
-    cursor: pointer;
-    font-size: 0.85rem;
-}
+    <div id="editModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeEditModal()">&times;</span>
+            <h3>പ്രോഗ്രാം എഡിറ്റ് ചെയ്യുക</h3>
+            
+            <label>പ്രോഗ്രാമിന്റെ പേര്:</label>
+            <input type="text" id="editProgName">
+            
+            <label>Team A മത്സരാർത്ഥികൾ:</label>
+            <input type="text" id="editTeamAInput" placeholder="ഉദാ: 300. Safwan (C)">
+            <select id="selectTeamA" onchange="appendStudent('A')" style="margin-top:5px; margin-bottom:10px;">
+                <option value="">-- Team A ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുക --</option>
+            </select>
 
-.table-responsive {
-    width: 100%;
-    overflow-x: auto;
-}
+            <label>Team B മത്സരാർത്ഥികൾ:</label>
+            <input type="text" id="editTeamBInput" placeholder="ഉദാ: 100. Shibili (C)">
+            <select id="selectTeamB" onchange="appendStudent('B')" style="margin-top:5px;">
+                <option value="">-- Team B ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുക --</option>
+            </select>
 
-.data-table, .rules-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-}
+            <div class="modal-buttons">
+                <button class="btn-submit" onclick="saveProgramChanges()">💾 Save Changes</button>
+                <button class="btn-delete" onclick="deleteCurrentProgram()">🗑️ Delete</button>
+            </div>
+        </div>
+    </div>
 
-.data-table th, .data-table td, .rules-table th, .rules-table td {
-    padding: 11px 12px;
-    border-bottom: 1px solid #eaeaea;
-    font-size: 0.95rem;
-}
+    <footer>
+        &copy; 2026 EID-E IRSHAD — IRSHADUNNASIHEEN SAHITHYA SAMAJAM
+    </footer>
 
-.data-table th, .rules-table th {
-    background: #f8f5f0;
-    color: #4a0a05;
-    font-weight: 800;
-}
-
-.data-table tr:hover {
-    background-color: #fcfaf7;
-}
-
-.edit-row-btn {
-    background: #2980b9;
-    color: #fff;
-    border: none;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    cursor: pointer;
-    margin-left: 6px;
-}
-
-.teams-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-}
-
-.team-a-header { background: #8e1b10; }
-.team-b-header { background: #164082; }
-
-.team-list-body {
-    padding: 15px;
-}
-
-.team-cat-title {
-    font-size: 1.05rem;
-    font-weight: 800;
-    color: #4a0a05;
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 4px;
-    margin: 14px 0 8px;
-}
-
-.team-cat-title:first-child {
-    margin-top: 0;
-}
-
-.student-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px 8
+    <script src="app.js"></script>
+</body>
+</html>
