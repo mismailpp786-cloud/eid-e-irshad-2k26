@@ -1,462 +1,221 @@
 <!DOCTYPE html>
-<html lang="ml">
+<html lang="ml" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>പ്രോഗ്രാം ലിസ്റ്റ് — EID-E IRSHAD 2K26</title>
+    <title>Programs List — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* ADMIN BAR & CONTROLS */
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --header-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #172554 100%);
+        }
+        [data-theme="dark"] {
+            --bg-color: #090d16;
+            --card-bg: #131c31;
+            --text-color: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #1e293b;
+            --header-bg: linear-gradient(135deg, #020617 0%, #090d16 50%, #0f172a 100%);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Anek Malayalam', 'Montserrat', sans-serif;
+            margin: 0; padding: 0;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
         .admin-bar { background: #059669; color: #fff; padding: 10px 15px; display: none; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 0.9rem; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
         .admin-actions button { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; margin-left: 5px; }
-        .btn-reset { background: #d97706; color: #fff; }
         .btn-logout { background: #dc2626; color: #fff; }
-        .admin-top-btn { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1.5px solid #fbbf24; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.82rem; cursor: pointer; }
-        .admin-only-btn { background: #059669; color: #fff; border: none; padding: 7px 14px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.85rem; display: none; }
-        .edit-row-btn { background: #3b82f6; color: #fff; border: none; padding: 4px 9px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; margin-left: 6px; }
 
-        /* SUBPAGE HEADER & FILTERS */
-        .subpage-header { background: #0f172a; color: #fff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; border-bottom: 3px solid #fbbf24; }
-        .subpage-header h2 { font-size: 1.15rem; color: #fbbf24; font-weight: 800; }
-        .back-home-btn { background: #fbbf24; color: #0f172a; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; cursor: pointer; }
-        
-        .filter-group, .sub-filter-group { display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
-        .cat-btn { padding: 8px 18px; border: 2px solid #3b82f6; background: #fff; color: #3b82f6; font-weight: 800; border-radius: 25px; cursor: pointer; font-size: 0.9rem; }
-        .cat-btn.active { background: #3b82f6; color: #fff; }
-        .type-btn { padding: 7px 15px; border: 1px solid #cbd5e1; background: #f1f5f9; color: #475569; font-weight: 700; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
-        .type-btn.active { background: #ef4444; color: #fff; border-color: #ef4444; }
-        
-        /* TABLE */
-        .card-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .table-responsive { width: 100%; overflow-x: auto; }
-        .data-table { width: 100%; border-collapse: collapse; text-align: left; background: #fff; }
-        .data-table th, .data-table td { padding: 11px 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.92rem; }
-        .data-table th { background: #f8fafc; color: #1e293b; font-weight: 800; }
+        .top-nav-bar {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .back-home-btn {
+            background: #fbbf24;
+            color: #0f172a;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
 
-        /* MODALS */
-        .modal { display: none; position: fixed; z-index: 500; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); align-items: center; justify-content: center; padding: 15px; }
-        .modal-content { background: #fff; width: 100%; max-width: 420px; padding: 24px; border-radius: 14px; position: relative; color: #1e293b; }
-        .close-btn { position: absolute; right: 16px; top: 12px; font-size: 1.6rem; cursor: pointer; color: #64748b; }
-        .modal-content label { display: block; font-weight: 700; font-size: 0.85rem; margin-top: 10px; margin-bottom: 4px; }
-        .modal-content input, .modal-content select { width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.92rem; margin-bottom: 6px; font-family: 'Anek Malayalam', sans-serif; }
-        .modal-buttons { display: flex; gap: 10px; margin-top: 16px; }
-        .btn-submit { flex: 1; background: #1e293b; color: #fbbf24; border: none; padding: 11px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; }
-        .btn-delete { background: #dc2626; color: #fff; border: none; padding: 11px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; }
-        #loginError { color: #dc2626; font-size: 0.85rem; font-weight: 700; margin-top: 8px; text-align: center; }
+        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; box-sizing: border-box; }
+        
+        .page-title {
+            text-align: center;
+            font-weight: 900;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #f59e0b;
+        }
+
+        /* CATEGORY TABS */
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .cat-tab {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 1.5px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+        .cat-tab.active, .cat-tab:hover {
+            background: #2563eb;
+            color: #fff;
+            border-color: #2563eb;
+        }
+
+        /* TYPE TABS (On Stage / Off Stage / Sports) */
+        .type-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .type-tab {
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+        .type-tab.active {
+            background: #dc2626;
+            color: #fff;
+            border-color: #dc2626;
+        }
+
+        .program-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .prog-info h3 { margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 800; }
+        .prog-info p { margin: 0; font-size: 0.82rem; color: var(--text-muted); }
+
+        footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.85rem; margin-top: 30px; border-top: 1px solid var(--border-color); }
     </style>
 </head>
 <body>
 
-    <!-- ADMIN BAR (VISIBLE ONLY WHEN LOGGED IN) -->
+    <!-- ADMIN BAR -->
     <div id="adminBar" class="admin-bar">
-        <span>⚙️ അഡ്മിൻ മോഡ് സജീവമാണ് (പ്രോഗ്രാമുകൾ എഡിറ്റ് ചെയ്യാം)</span>
+        <span>⚙️ Admin mode is active (Programs can be edited)</span>
         <div class="admin-actions">
-            <button class="btn-reset" onclick="resetProgramsData()">🔄 Reset List</button>
             <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
         </div>
     </div>
 
-    <div class="subpage-header">
-        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ ഹോം പേജിലേക്ക്</button>
-        <h2>📋 പ്രോഗ്രാം ലിസ്റ്റ്</h2>
-        <button class="admin-top-btn" id="adminBtn" onclick="openAdminModal()">🔐 Admin Login</button>
+    <div class="top-nav-bar">
+        <!-- FIXED: "Back to Home" instead of മലയാളം -->
+        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home[span_1](start_span)[span_1](end_span)</button>
+        <span style="font-weight: 800; font-size: 0.9rem;">📋 PROGRAMS LIST</span>
     </div>
 
-    <main class="container">
-        <div class="filter-group">
-            <button class="cat-btn active" onclick="filterCategory('senior', this)">Senior</button>
-            <button class="cat-btn" onclick="filterCategory('junior', this)">Junior</button>
-            <button class="cat-btn" onclick="filterCategory('subjunior', this)">Sub Junior</button>
-            <button class="cat-btn" onclick="filterCategory('general', this)">General</button>
-        </div>
-        <div class="sub-filter-group">
-            <button class="type-btn active" data-type="onstage" onclick="filterType('onstage', this)">🎤 On Stage</button>
-            <button class="type-btn" id="offstageBtn" data-type="offstage" onclick="filterType('offstage', this)">✍️ Off Stage</button>
-            <button class="type-btn" data-type="sports" onclick="filterType('sports', this)">⚽ Sports</button>
+    <div class="container">
+        <h1 class="page-title">Fest Programs & Schedule</h1>
+
+        <!-- CATEGORY TABS -->
+        <div class="category-tabs">
+            <button class="cat-tab active" onclick="filterCategory('senior')">Senior</button>
+            <button class="cat-tab" onclick="filterCategory('junior')">Junior</button>
+            <button class="cat-tab" onclick="filterCategory('sub-junior')">Sub Junior</button>
+            <button class="cat-tab" onclick="filterCategory('general')">General</button>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h3 id="tableTitle">SENIOR — ON STAGE</h3>
-                <button class="admin-only-btn" id="addProgBtn" onclick="addNewProgram()">+ പുതിയ പ്രോഗ്രാം ചേർക്കുക</button>
+        <!-- TYPE TABS -->
+        <div class="type-tabs">
+            <button class="type-tab active" onclick="filterType('on-stage')">🎙️ On Stage</button>
+            <button class="type-tab" onclick="filterType('off-stage')">✍️ Off Stage</button>
+            <button class="type-tab" onclick="filterType('sports')">⚽ Sports</button>
+        </div>
+
+        <div id="programListContainer">
+            <!-- Dynamic Programs will load here -->
+            <div class="program-card">
+                <div class="prog-info">
+                    <h3>പ്രസംഗ മത്സരം (Speech)</h3>
+                    <p>Category: Senior | Type: On Stage | Venue: Stage 1</p>
+                </div>
             </div>
-            <div class="table-responsive">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 10%;">No</th>
-                            <th style="width: 44%;">Program Name</th>
-                            <th style="width: 23%;">🔴 ZELLIJ</th>
-                            <th style="width: 23%;">🔵 IZNIK</th>
-                        </tr>
-                    </thead>
-                    <tbody id="programTableBody"></tbody>
-                </table>
-            </div>
-        </div>
-    </main>
-
-    <!-- ADMIN LOGIN MODAL -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeAdminModal()">&times;</span>
-            <h3 style="margin-bottom: 12px;">🔐 Admin Login</h3>
-            <label>Admin Email:</label>
-            <input type="email" id="adminEmail" value="admin@irshad.com">
-            <label>Password:</label>
-            <input type="password" id="adminPassword" placeholder="പാസ്‌വേഡ് നൽകുക">
-            <button class="btn-submit" style="margin-top: 10px;" onclick="loginAdmin()">Login</button>
-            <div id="loginError"></div>
-        </div>
-    </div>
-
-    <!-- EDIT PROGRAM MODAL (ADMIN ONLY) -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeEditModal()">&times;</span>
-            <h3 style="margin-bottom: 10px;">✏️ പ്രോഗ്രാം എഡിറ്റ് ചെയ്യുക</h3>
-            <label>പ്രോഗ്രാമിന്റെ പേര്:</label>
-            <input type="text" id="editProgName">
-            
-            <label style="color: #b91c1c;">🔴 ZELLIJ മത്സരാർത്ഥികൾ:</label>
-            <input type="text" id="editTeamAInput" placeholder="പേരുകൾ നൽകുക">
-            <select id="selectTeamA" onchange="appendStudent('A')"></select>
-
-            <label style="color: #1d4ed8;">🔵 IZNIK മത്സരാർത്ഥികൾ:</label>
-            <input type="text" id="editTeamBInput" placeholder="പേരുകൾ നൽകുക">
-            <select id="selectTeamB" onchange="appendStudent('B')"></select>
-
-            <div class="modal-buttons">
-                <button class="btn-submit" onclick="saveProgramChanges()">💾 Save</button>
-                <button class="btn-delete" onclick="deleteCurrentProgram()">🗑️ Delete</button>
+            <div class="program-card">
+                <div class="prog-info">
+                    <h3>ചിത്രരചന (Painting)</h3>
+                    <p>Category: Senior | Type: Off Stage | Venue: Hall A</p>
+                </div>
             </div>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 EID-E IRSHAD — IRSHADUNNASIHEEN SAHITHYA SAMAJAM
+        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
     </footer>
 
     <script>
-        const defaultPrograms = {
-            senior: {
-                onstage: [
-                    { no: "01", name: "ഖിറാഅത്ത്", teamA: "", teamB: "" },
-                    { no: "02", name: "മലയാള പ്രസംഗം", teamA: "", teamB: "" },
-                    { no: "03", name: "അറബിക് പ്രസംഗം", teamA: "", teamB: "" },
-                    { no: "04", name: "മധുരമലയാളം", teamA: "", teamB: "" },
-                    { no: "05", name: "ഖുർആൻ പ്രഭാഷണം", teamA: "", teamB: "" },
-                    { no: "06", name: "അനൗൺസ്മെന്റ്", teamA: "", teamB: "" },
-                    { no: "07", name: "മലയാള ഗാനം", teamA: "", teamB: "" },
-                    { no: "08", name: "അറബി ഗാനം", teamA: "", teamB: "" },
-                    { no: "09", name: "നിമിഷ പ്രസംഗം", teamA: "", teamB: "" },
-                    { no: "10", name: "സംഘഗാനം", teamA: "", teamB: "" }
-                ],
-                offstage: [
-                    { no: "01", name: "മലയാള പ്രബന്ധം", teamA: "", teamB: "" },
-                    { no: "02", name: "ഇംഗ്ലീഷ് പ്രബന്ധം", teamA: "", teamB: "" },
-                    { no: "03", name: "അറബിക് പ്രബന്ധം", teamA: "", teamB: "" },
-                    { no: "04", name: "മലയാളം കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                    { no: "05", name: "ഇംഗ്ലീഷ് കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                    { no: "06", name: "അറബിക് കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                    { no: "07", name: "ചിത്ര രചന", teamA: "", teamB: "" },
-                    { no: "08", name: "പോസ്റ്റർ ഡിസൈൻ", teamA: "", teamB: "" },
-                    { no: "09", name: "അറബി വായന", teamA: "", teamB: "" },
-                    { no: "10", name: "കഥാരചന", teamA: "", teamB: "" },
-                    { no: "11", name: "അടിക്കുറിപ്പ് രചന", teamA: "", teamB: "" },
-                    { no: "12", name: "AI Poster Design", teamA: "", teamB: "" },
-                    { no: "13", name: "സുഡോക്കോ", teamA: "", teamB: "" },
-                    { no: "14", name: "ഹിഫ്ള്", teamA: "", teamB: "" },
-                    { no: "15", name: "കാലിഗ്രഫി", teamA: "", teamB: "" },
-                    { no: "16", name: "കമ്പ്യൂട്ടർ ടൈപ്പിംഗ്", teamA: "", teamB: "" },
-                    { no: "17", name: "ട്രാൻസിലേഷൻ M to A", teamA: "", teamB: "" },
-                    { no: "18", name: "ട്രാൻസിലേഷൻ M to E", teamA: "", teamB: "" },
-                    { no: "19", name: "അറബിക് പദപ്പയറ്റ്", teamA: "", teamB: "" },
-                    { no: "20", name: "ക്വിസ്", teamA: "", teamB: "" },
-                    { no: "21", name: "Writing", teamA: "", teamB: "" },
-                    { no: "22", name: "മദ്ഹ്ഗാന രചന", teamA: "", teamB: "" }
-                ],
-                sports: [
-                    { no: "01", name: "100m Race", teamA: "", teamB: "" },
-                    { no: "02", name: "Long Jump", teamA: "", teamB: "" },
-                    { no: "03", name: "Shot Put", teamA: "", teamB: "" },
-                    { no: "04", name: "Cut Post Shoot", teamA: "", teamB: "" },
-                    { no: "05", name: "Discus Throw", teamA: "", teamB: "" }
-                ]
-            },
-            junior: {
-                onstage: [
-                    { no: "01", name: "ഖിറാഅത്ത്", teamA: "", teamB: "" },
-                    { no: "02", name: "മലയാള പ്രസംഗം", teamA: "", teamB: "" },
-                    { no: "03", name: "ഇംഗ്ലീഷ് പ്രസംഗം", teamA: "", teamB: "" },
-                    { no: "04", name: "മധുരമലയാളം", teamA: "", teamB: "" },
-                    { no: "05", name: "അനൗൺസ്മെന്റ്", teamA: "", teamB: "" },
-                    { no: "06", name: "മലയാള ഗാനം", teamA: "", teamB: "" },
-                    { no: "07", name: "അറബി ഗാനം", teamA: "", teamB: "" },
-                    { no: "08", name: "കവിത പാരായണം", teamA: "", teamB: "" },
-                    { no: "09", name: "സംഘഗാനം", teamA: "", teamB: "" }
-                ],
-                offstage: [
-                    { no: "01", name: "മലയാള പ്രബന്ധം", teamA: "", teamB: "" },
-                    { no: "02", name: "ഇംഗ്ലീഷ് പ്രബന്ധം", teamA: "", teamB: "" },
-                    { no: "03", name: "അറബിക് പ്രബന്ധം", teamA: "", teamB: "" },
-                    { no: "04", name: "മലയാളം കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                    { no: "05", name: "ഇംഗ്ലീഷ് കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                    { no: "06", name: "അറബിക് കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                    { no: "07", name: "ചിത്ര രചന", teamA: "", teamB: "" },
-                    { no: "08", name: "പോസ്റ്റർ ഡിസൈൻ", teamA: "", teamB: "" },
-                    { no: "09", name: "അറബി വായന", teamA: "", teamB: "" },
-                    { no: "10", name: "കഥാരചന", teamA: "", teamB: "" },
-                    { no: "11", name: "അടിക്കുറിപ്പ് രചന", teamA: "", teamB: "" },
-                    { no: "12", name: "ഇംഗ്ലീഷ് വായന", teamA: "", teamB: "" },
-                    { no: "13", name: "IQ Test", teamA: "", teamB: "" },
-                    { no: "14", name: "അറബിക് പദപ്പയറ്റ്", teamA: "", teamB: "" },
-                    { no: "15", name: "ഹിഫ്ള്", teamA: "", teamB: "" },
-                    { no: "16", name: "കാലിഗ്രഫി", teamA: "", teamB: "" },
-                    { no: "17", name: "ക്വിസ്", teamA: "", teamB: "" }
-                ],
-                sports: [
-                    { no: "01", name: "100m Race", teamA: "", teamB: "" },
-                    { no: "02", name: "Long Jump", teamA: "", teamB: "" },
-                    { no: "03", name: "Shot Put", teamA: "", teamB: "" },
-                    { no: "04", name: "Cut Post Shoot", teamA: "", teamB: "" },
-                    { no: "05", name: "Lemon & Spoon Race", teamA: "", teamB: "" }
-                ]
-            },
-            subjunior: {
-                onstage: [
-                    { no: "01", name: "ഖിറാഅത്ത്", teamA: "", teamB: "" },
-                    { no: "02", name: "മലയാള പ്രസംഗം", teamA: "", teamB: "" },
-                    { no: "03", name: "കഥ പറയൽ", teamA: "", teamB: "" },
-                    { no: "04", name: "ബാങ്ക് വിളി", teamA: "", teamB: "" },
-                    { no: "05", name: "മലയാള ഗാനം", teamA: "", teamB: "" },
-                    { no: "06", name: "അറബി ഗാനം", teamA: "", teamB: "" },
-                    { no: "07", name: "സംഘഗാനം", teamA: "", teamB: "" }
-                ],
-                offstage: [
-                    { no: "01", name: "മലയാള പ്രബന്ധം", teamA: "", teamB: "" },
-                    { no: "02", name: "പെൻസിൽ ഡ്രോയിംഗ്", teamA: "", teamB: "" },
-                    { no: "03", name: "ഇംഗ്ലീഷ് വായന", teamA: "", teamB: "" },
-                    { no: "04", name: "മലയാളം കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                    { no: "05", name: "ഇംഗ്ലീഷ് കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                    { no: "06", name: "അറബിക് കയ്യെഴുത്ത്", teamA: "", teamB: "" },
-                    { no: "07", name: "ചിത്ര രചന", teamA: "", teamB: "" },
-                    { no: "08", name: "മലയാളം വായന", teamA: "", teamB: "" },
-                    { no: "09", name: "കാലിഗ്രഫി", teamA: "", teamB: "" },
-                    { no: "10", name: "ഖുർആൻ മെമ്മറി", teamA: "", teamB: "" },
-                    { no: "11", name: "കഥാരചന", teamA: "", teamB: "" },
-                    { no: "12", name: "ക്വിസ്", teamA: "", teamB: "" },
-                    { no: "13", name: "മെമ്മറി ടെസ്റ്റ്", teamA: "", teamB: "" }
-                ],
-                sports: [
-                    { no: "01", name: "50m Race", teamA: "", teamB: "" },
-                    { no: "02", name: "Long Jump", teamA: "", teamB: "" },
-                    { no: "03", name: "Biscuit Eating", teamA: "", teamB: "" },
-                    { no: "04", name: "Cut Post Shoot", teamA: "", teamB: "" },
-                    { no: "05", name: "Filling a Bottle", teamA: "", teamB: "" }
-                ]
-            },
-            general: {
-                onstage: [
-                    { no: "01", name: "മോട്ടിവേഷൻ സ്പീച്ച്", teamA: "", teamB: "" },
-                    { no: "02", name: "കഥാപ്രസംഗം", teamA: "", teamB: "" },
-                    { no: "03", name: "ബുർദ", teamA: "", teamB: "" },
-                    { no: "04", name: "റീൽ മേക്കിങ്", teamA: "", teamB: "" },
-                    { no: "05", name: "ക്യാമ്പസ് സോങ്", teamA: "", teamB: "" },
-                    { no: "06", name: "തദ്‌രീസ്", teamA: "", teamB: "" },
-                    { no: "07", name: "ഖുതുബ & മആശറ", teamA: "", teamB: "" },
-                    { no: "08", name: "സയൻസ് പ്രൊജക്ട്", teamA: "", teamB: "" },
-                    { no: "09", name: "Table Talk", teamA: "", teamB: "" },
-                    { no: "10", name: "ഖവാലി", teamA: "", teamB: "" },
-                    { no: "11", name: "സ്പോട്ട് മാഗസിൻ", teamA: "", teamB: "" }
-                ],
-                offstage: [],
-                sports: [
-                    { no: "01", name: "Penalty Shootout", teamA: "", teamB: "" },
-                    { no: "02", name: "Tug of War", teamA: "", teamB: "" },
-                    { no: "03", name: "Relay Race", teamA: "", teamB: "" }
-                ]
-            }
-        };
-
-        const defaultTeams = {
-            teamA: {
-                senior: ["300. Safwan (C)", "301. Ramees (Vc)", "302. fayiz (Vc)", "303. Thangal", "304. Asaf", "305. Thasnif", "306. Thwahir", "307. Irfan"],
-                junior: ["308. Qasim", "309. Sinan MT", "310. Ashiq", "311. Saeed"],
-                subjunior: ["312. Shahin", "313. Muhsin", "314. Razi", "315. Anshid"]
-            },
-            teamB: {
-                senior: ["100. Shibili (C)", "101. Ismail (Vc)", "102. Abdul vahab (Vc)", "103. Sinan P.k", "104. Adhil", "105. Rahees", "106. Amir", "107. Afsal"],
-                junior: ["108. Sinan edayoor", "109. Sinan cherushola", "110. Aslam", "111. Hijaz", "112. Jazeel"],
-                subjunior: ["113. Nijad", "114. Farhan", "115. Nusaif"]
-            }
-        };
-
-        let programsData = JSON.parse(localStorage.getItem("eid_programs_data")) || JSON.parse(JSON.stringify(defaultPrograms));
-        let teamsData = JSON.parse(localStorage.getItem("eid_teams_data")) || JSON.parse(JSON.stringify(defaultTeams));
         let isAdmin = localStorage.getItem("eid_irshad_admin_logged") === "true";
-        let currentCat = "senior";
-        let currentTp = "onstage";
-        let editingIndex = null;
-
-        function savePrograms() {
-            localStorage.setItem("eid_programs_data", JSON.stringify(programsData));
-            renderTable();
-        }
-
         function updateAdminUI() {
-            document.getElementById("adminBar").style.display = isAdmin ? "flex" : "none";
-            document.getElementById("adminBtn").style.display = isAdmin ? "none" : "inline-block";
-            document.getElementById("addProgBtn").style.display = isAdmin ? "inline-block" : "none";
-            renderTable();
+            const bar = document.getElementById("adminBar");
+            if (bar) bar.style.display = isAdmin ? "flex" : "none";
         }
-
-        function renderTable() {
-            const tbody = document.getElementById("programTableBody");
-            const title = document.getElementById("tableTitle");
-            const offBtn = document.getElementById("offstageBtn");
-
-            if (currentCat === "general") {
-                offBtn.style.display = "none";
-                if (currentTp === "offstage") currentTp = "onstage";
-            } else {
-                offBtn.style.display = "inline-block";
-            }
-
-            const catNames = { senior: "SENIOR", junior: "JUNIOR", subjunior: "SUB JUNIOR", general: "GENERAL" };
-            const typeNames = { onstage: currentCat === "general" ? "GENERAL PROGRAMS" : "ON STAGE", offstage: "OFF STAGE", sports: "SPORTS" };
-            title.textContent = `${catNames[currentCat]} — ${typeNames[currentTp]}`;
-
-            const list = (programsData[currentCat] && programsData[currentCat][currentTp]) || [];
-            if (list.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px;">പ്രോഗ്രാമുകൾ ചേർത്തിട്ടില്ല.</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = list.map((item, idx) => `
-                <tr>
-                    <td><strong>${item.no}</strong></td>
-                    <td>
-                        <strong>${item.name}</strong>
-                        ${isAdmin ? `<button class="edit-row-btn" onclick="openEditModal(${idx})">✏️ Edit</button>` : ""}
-                    </td>
-                    <td>${item.teamA || '<span style="color:#aaa;">-</span>'}</td>
-                    <td>${item.teamB || '<span style="color:#aaa;">-</span>'}</td>
-                </tr>
-            `).join("");
-        }
-
-        function filterCategory(cat, btn) {
-            currentCat = cat;
-            document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-            renderTable();
-        }
-
-        function filterType(tp, btn) {
-            currentTp = tp;
-            document.querySelectorAll(".type-btn").forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-            renderTable();
-        }
-
-        /* ADMIN EDIT FUNCTIONS */
-        function openEditModal(idx) {
-            if (!isAdmin) return;
-            editingIndex = idx;
-            const item = programsData[currentCat][currentTp][idx];
-            document.getElementById("editProgName").value = item.name;
-            document.getElementById("editTeamAInput").value = item.teamA;
-            document.getElementById("editTeamBInput").value = item.teamB;
-
-            const getStudents = (tKey) => currentCat === "general"
-                ? [...teamsData[tKey].senior, ...teamsData[tKey].junior, ...teamsData[tKey].subjunior]
-                : (teamsData[tKey][currentCat] || []);
-
-            document.getElementById("selectTeamA").innerHTML = `<option value="">-- ZELLIJ ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുക --</option>` + getStudents("teamA").map(s => `<option value="${s}">${s}</option>`).join("");
-            document.getElementById("selectTeamB").innerHTML = `<option value="">-- IZNIK ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുക --</option>` + getStudents("teamB").map(s => `<option value="${s}">${s}</option>`).join("");
-            document.getElementById("editModal").style.display = "flex";
-        }
-
-        function appendStudent(team) {
-            const sel = document.getElementById("selectTeam" + team);
-            const inp = document.getElementById("editTeam" + team + "Input");
-            if (!sel.value) return;
-            inp.value = inp.value.trim() ? inp.value + ", " + sel.value : sel.value;
-            sel.value = "";
-        }
-
-        function closeEditModal() {
-            document.getElementById("editModal").style.display = "none";
-        }
-
-        function saveProgramChanges() {
-            if (!isAdmin || editingIndex === null) return;
-            const item = programsData[currentCat][currentTp][editingIndex];
-            item.name = document.getElementById("editProgName").value.trim();
-            item.teamA = document.getElementById("editTeamAInput").value.trim();
-            item.teamB = document.getElementById("editTeamBInput").value.trim();
-            closeEditModal();
-            savePrograms();
-        }
-
-        function deleteCurrentProgram() {
-            if (!isAdmin || editingIndex === null) return;
-            if (!confirm("ഈ പ്രോഗ്രാം ലിസ്റ്റിൽ നിന്ന് ഒഴിവാക്കണോ?")) return;
-            programsData[currentCat][currentTp].splice(editingIndex, 1);
-            programsData[currentCat][currentTp].forEach((it, i) => it.no = String(i + 1).padStart(2, "0"));
-            closeEditModal();
-            savePrograms();
-        }
-
-        function addNewProgram() {
-            if (!isAdmin) return;
-            const name = prompt("പുതിയ പ്രോഗ്രാമിന്റെ പേര് നൽകുക:");
-            if (!name || !name.trim()) return;
-            const list = programsData[currentCat][currentTp];
-            list.push({ no: String(list.length + 1).padStart(2, "0"), name: name.trim(), teamA: "", teamB: "" });
-            savePrograms();
-        }
-
-        function resetProgramsData() {
-            if (confirm("പ്രോഗ്രാം ലിസ്റ്റ് ആദ്യത്തെ നിലയിലേക്ക് പുനഃസ്ഥാപിക്കണോ?")) {
-                programsData = JSON.parse(JSON.stringify(defaultPrograms));
-                savePrograms();
-            }
-        }
-
-        /* ADMIN AUTH */
-        function openAdminModal() {
-            document.getElementById("loginError").textContent = "";
-            document.getElementById("adminPassword").value = "";
-            document.getElementById("loginModal").style.display = "flex";
-        }
-
-        function closeAdminModal() {
-            document.getElementById("loginModal").style.display = "none";
-        }
-
-        function loginAdmin() {
-            const email = document.getElementById("adminEmail").value.trim().toLowerCase();
-            const pass = document.getElementById("adminPassword").value.trim();
-            if (email === "admin@irshad.com" && pass === "irshad2k26") {
-                isAdmin = true;
-                localStorage.setItem("eid_irshad_admin_logged", "true");
-                closeAdminModal();
-                updateAdminUI();
-            } else {
-                document.getElementById("loginError").textContent = "തെറ്റായ ഐഡിയോ പാസ്‌വേഡോ ആണ്!";
-            }
-        }
-
         function logoutAdmin() {
-            isAdmin = false;
             localStorage.removeItem("eid_irshad_admin_logged");
+            isAdmin = false;
             updateAdminUI();
+            alert("Logged out from admin mode.");
         }
-
         updateAdminUI();
+
+        function filterCategory(cat) {
+            document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        function filterType(type) {
+            document.querySelectorAll('.type-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+        }
     </script>
 </body>
 </html>
