@@ -1,109 +1,209 @@
 <!DOCTYPE html>
-<html lang="ml">
+<html lang="ml" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ലൈവ് സ്കോർബോർഡ് — EID-E IRSHAD 2K26</title>
+    <title>Live Scoreboard — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        .vertical-chart-container { display: flex; justify-content: center; align-items: flex-end; height: 300px; gap: 45px; padding: 20px 0 10px; border-bottom: 3px solid #334155; }
-        .chart-column { display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; flex: 1; max-width: 130px; }
-        .chart-score-label { font-size: 1.8rem; font-weight: 900; color: #fbbf24; margin-bottom: 8px; font-family: 'Montserrat', sans-serif; }
-        .chart-bar-track { width: 68px; height: 210px; background: #0f172a; border-radius: 12px 12px 0 0; overflow: hidden; border: 2px solid #334155; display: flex; align-items: flex-end; }
-        .chart-bar-fill { width: 100%; border-radius: 10px 10px 0 0; transition: height 0.6s ease; }
-        .fill-team-a { background: linear-gradient(180deg, #ef4444 0%, #991b1b 100%); }
-        .fill-team-b { background: linear-gradient(180deg, #3b82f6 0%, #1e40af 100%); }
-        .chart-team-name { margin-top: 10px; font-size: 1.1rem; font-weight: 900; color: #fff; }
-        .chart-vs { font-size: 1.6rem; font-weight: 900; color: #64748b; margin-bottom: 45px; }
-        .cat-progress-row { margin-bottom: 12px; background: #0f172a; padding: 14px; border-radius: 10px; border: 1px solid #334155; color: #fff; display: flex; justify-content: space-between; font-weight: 800; }
-        .subpage-header { background: #0f172a; color: #fff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #fbbf24; }
-        .back-home-btn { background: #fbbf24; color: #0f172a; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+        [data-theme="dark"] {
+            --bg-color: #090d16;
+            --card-bg: #131c31;
+            --text-color: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #1e293b;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Anek Malayalam', 'Montserrat', sans-serif;
+            margin: 0; padding: 0;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .admin-bar { background: #059669; color: #fff; padding: 10px 15px; display: none; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 0.9rem; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .admin-actions button { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; margin-left: 5px; }
+        .btn-logout { background: #dc2626; color: #fff; }
+
+        .top-nav-bar {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .back-home-btn {
+            background: #fbbf24;
+            color: #0f172a;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; box-sizing: border-box; }
+        
+        .page-title {
+            text-align: center;
+            font-weight: 900;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #f59e0b;
+        }
+
+        .score-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .score-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        @media(max-width: 600px) { .score-grid { grid-template-columns: 1fr; } }
+
+        .team-score-box {
+            background: var(--bg-color);
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px;
+        }
+        .team-score-box h3 { margin: 0 0 5px 0; font-size: 1.2rem; font-weight: 900; }
+        .score-num { font-size: 2.2rem; font-weight: 900; font-family: 'Montserrat', sans-serif; color: #f59e0b; margin: 5px 0; }
+
+        .admin-controls-box {
+            background: var(--card-bg);
+            border: 1.5px dashed #f59e0b;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 25px;
+            display: none;
+        }
+        .admin-controls-box h3 { margin-top: 0; color: #f59e0b; font-weight: 900; }
+        .admin-controls-box input { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); box-sizing: border-box; }
+        .btn-save { background: #059669; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; }
+
+        footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.85rem; margin-top: 30px; border-top: 1px solid var(--border-color); font-family: 'Montserrat', sans-serif; }
     </style>
 </head>
-<body style="background:#0f172a; min-height:100vh;">
+<body>
 
-    <div class="subpage-header" style="background: #020617;">
-        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ ഹോം പേജിലേക്ക്</button>
-        <h2 style="color:#fbbf24;">📊 LIVE SCOREBOARD</h2>
+    <div id="adminBar" class="admin-bar">
+        <span>⚙️ Admin Mode Active</span>
+        <div class="admin-actions">
+            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
+        </div>
     </div>
 
-    <main class="container" style="max-width: 850px;">
-        <div class="card" style="background: #1e293b; border: 1px solid #334155; padding: 22px;">
-            <h3 style="text-align:center; color:#fbbf24; margin-bottom:15px;">🏆 TEAM POINTS COMPARISON</h3>
-            <div class="vertical-chart-container">
-                <div class="chart-column">
-                    <div class="chart-score-label" id="barScoreA">0</div>
-                    <div class="chart-bar-track"><div id="verticalBarA" class="chart-bar-fill fill-team-a" style="height: 15%;"></div></div>
-                    <div class="chart-team-name">ZELLIJ</div>
+    <div class="top-nav-bar">
+        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
+        <span style="font-weight: 800; font-size: 0.9rem;">📊 LIVE SCOREBOARD</span>
+    </div>
+
+    <div class="container">
+        <h1 class="page-title">Live Scoreboard</h1>
+
+        <div class="score-card">
+            <h2 style="margin-top: 0; font-weight: 800;">Houses Championship Points</h2>
+            <div class="score-grid">
+                <div class="team-score-box" style="border-top: 4px solid #b91c1c;">
+                    <h3 style="color: #b91c1c;">🔴 Team ZELLIJ</h3>
+                    <div class="score-num" id="displayPtsZellij">0</div>
+                    <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Total Points</p>
                 </div>
-                <div class="chart-vs">VS</div>
-                <div class="chart-column">
-                    <div class="chart-score-label" id="barScoreB">0</div>
-                    <div class="chart-bar-track"><div id="verticalBarB" class="chart-bar-fill fill-team-b" style="height: 15%;"></div></div>
-                    <div class="chart-team-name">IZNIK</div>
+
+                <div class="team-score-box" style="border-top: 4px solid #1d4ed8;">
+                    <h3 style="color: #1d4ed8;">🔵 Team IZNIK</h3>
+                    <div class="score-num" id="displayPtsIznik">0</div>
+                    <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Total Points</p>
                 </div>
             </div>
         </div>
 
-        <div class="card" style="background: #1e293b; border: 1px solid #334155;">
-            <div class="card-header" style="background: #020617; color:#fbbf24;"><h3>📋 കാറ്റഗറി തിരിച്ചുള്ള പോയിന്റ് നില</h3></div>
-            <div style="padding: 18px;">
-                <div class="cat-progress-row"><span>Senior Category</span><span>ZELLIJ: <strong id="srPtsA">0</strong> | IZNIK: <strong id="srPtsB">0</strong></span></div>
-                <div class="cat-progress-row"><span>Junior Category</span><span>ZELLIJ: <strong id="jrPtsA">0</strong> | IZNIK: <strong id="jrPtsB">0</strong></span></div>
-                <div class="cat-progress-row"><span>Sub Junior Category</span><span>ZELLIJ: <strong id="subPtsA">0</strong> | IZNIK: <strong id="subPtsB">0</strong></span></div>
-                <div class="cat-progress-row"><span>General & Sports</span><span>ZELLIJ: <strong id="genPtsA">0</strong> | IZNIK: <strong id="genPtsB">0</strong></span></div>
-            </div>
+        <!-- ADMIN PANEL TO UPDATE POINTS -->
+        <div id="adminPointsPanel" class="admin-controls-box">
+            <h3>⚙️ Admin: Update Team Points</h3>
+            <label>Team ZELLIJ Points:</label>
+            <input type="number" id="inputPtsZellij" placeholder="Enter points">
+            <label>Team IZNIK Points:</label>
+            <input type="number" id="inputPtsIznik" placeholder="Enter points">
+            <button class="btn-save" onclick="saveTeamPoints()">Save Points</button>
         </div>
-    </main>
+    </div>
 
-    <footer style="color:#94a3b8; border-top-color:#1e293b;">
-        &copy; 2026 EID-E IRSHAD — IRSHADUNNASIHEEN SAHITHYA SAMAJAM
+    <footer>
+        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
     </footer>
 
     <script>
-        function calculateScores() {
-            let totals = { A: 0, B: 0 };
-            let cats = { senior: { A: 0, B: 0 }, junior: { A: 0, B: 0 }, subjunior: { A: 0, B: 0 }, general: { A: 0, B: 0 } };
-            
-            let results = JSON.parse(localStorage.getItem("eid_results_list") || "[]");
-            
-            results.forEach(r => {
-                let cKey = "senior";
-                let cText = (r.category || "").toUpperCase();
-                if (cText.includes("JUNIOR") && !cText.includes("SUB")) cKey = "junior";
-                else if (cText.includes("SUB")) cKey = "subjunior";
-                else if (cText.includes("GENERAL")) cKey = "general";
+        let isAdmin = localStorage.getItem("eid_irshad_admin_logged") === "true";
 
-                const addPts = (tStr, pts) => {
-                    if (!tStr) return;
-                    let t = tStr.toUpperCase();
-                    if (t.includes("ZELLIJ") || t.includes("TEAM A")) { totals.A += pts; cats[cKey].A += pts; }
-                    else if (t.includes("IZNIK") || t.includes("TEAM B")) { totals.B += pts; cats[cKey].B += pts; }
-                };
-                
-                addPts(r.win1Team, 5);
-                addPts(r.win2Team, 3);
-                addPts(r.win3Team, 1);
-            });
-
-            document.getElementById("barScoreA").textContent = totals.A;
-            document.getElementById("barScoreB").textContent = totals.B;
-            document.getElementById("srPtsA").textContent = cats.senior.A;
-            document.getElementById("srPtsB").textContent = cats.senior.B;
-            document.getElementById("jrPtsA").textContent = cats.junior.A;
-            document.getElementById("jrPtsB").textContent = cats.junior.B;
-            document.getElementById("subPtsA").textContent = cats.subjunior.A;
-            document.getElementById("subPtsB").textContent = cats.subjunior.B;
-            document.getElementById("genPtsA").textContent = cats.general.A;
-            document.getElementById("genPtsB").textContent = cats.general.B;
-
-            let maxVal = Math.max(totals.A, totals.B, 10);
-            document.getElementById("verticalBarA").style.height = Math.max(15, Math.round((totals.A / maxVal) * 100)) + "%";
-            document.getElementById("verticalBarB").style.height = Math.max(15, Math.round((totals.B / maxVal) * 100)) + "%";
+        function updateAdminUI() {
+            const bar = document.getElementById("adminBar");
+            const panel = document.getElementById("adminPointsPanel");
+            if (isAdmin) {
+                if (bar) bar.style.display = "flex";
+                if (panel) panel.style.display = "block";
+            } else {
+                if (bar) bar.style.display = "none";
+                if (panel) panel.style.display = "none";
+            }
         }
 
-        calculateScores();
+        function logoutAdmin() {
+            localStorage.removeItem("eid_irshad_admin_logged");
+            isAdmin = false;
+            updateAdminUI();
+            alert("Logged out from admin mode.");
+        }
+
+        function loadPoints() {
+            let ptsZ = localStorage.getItem("eid_pts_zellij") || "0";
+            let ptsI = localStorage.getItem("eid_pts_iznik") || "0";
+            document.getElementById("displayPtsZellij").textContent = ptsZ;
+            document.getElementById("displayPtsIznik").textContent = ptsI;
+            document.getElementById("inputPtsZellij").value = ptsZ;
+            document.getElementById("inputPtsIznik").value = ptsI;
+        }
+
+        function saveTeamPoints() {
+            let ptsZ = document.getElementById("inputPtsZellij").value.trim() || "0";
+            let ptsI = document.getElementById("inputPtsIznik").value.trim() || "0";
+            localStorage.setItem("eid_pts_zellij", ptsZ);
+            localStorage.setItem("eid_pts_iznik", ptsI);
+            loadPoints();
+            alert("Points updated successfully!");
+            confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            updateAdminUI();
+            loadPoints();
+        });
     </script>
 </body>
 </html>
