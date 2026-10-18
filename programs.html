@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Programs List — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
     <style>
         :root {
             --bg-color: #f8fafc;
@@ -71,7 +70,6 @@
             color: #f59e0b;
         }
 
-        /* CATEGORY TABS */
         .category-tabs {
             display: flex;
             justify-content: center;
@@ -96,7 +94,6 @@
             border-color: #2563eb;
         }
 
-        /* TYPE TABS (On Stage / Off Stage / Sports) */
         .type-tabs {
             display: flex;
             justify-content: center;
@@ -136,29 +133,26 @@
         .prog-info h3 { margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 800; }
         .prog-info p { margin: 0; font-size: 0.82rem; color: var(--text-muted); }
 
-        footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.85rem; margin-top: 30px; border-top: 1px solid var(--border-color); }
+        footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.85rem; margin-top: 30px; border-top: 1px solid var(--border-color); font-family: 'Montserrat', sans-serif; }
     </style>
 </head>
 <body>
 
-    <!-- ADMIN BAR -->
     <div id="adminBar" class="admin-bar">
-        <span>⚙️ Admin mode is active (Programs can be edited)</span>
+        <span>⚙️ Admin Mode Active</span>
         <div class="admin-actions">
             <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
         </div>
     </div>
 
     <div class="top-nav-bar">
-        <!-- FIXED: "Back to Home" instead of മലയാളം -->
-        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home[span_1](start_span)[span_1](end_span)</button>
+        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
         <span style="font-weight: 800; font-size: 0.9rem;">📋 PROGRAMS LIST</span>
     </div>
 
     <div class="container">
         <h1 class="page-title">Fest Programs & Schedule</h1>
 
-        <!-- CATEGORY TABS -->
         <div class="category-tabs">
             <button class="cat-tab active" onclick="filterCategory('senior')">Senior</button>
             <button class="cat-tab" onclick="filterCategory('junior')">Junior</button>
@@ -166,7 +160,6 @@
             <button class="cat-tab" onclick="filterCategory('general')">General</button>
         </div>
 
-        <!-- TYPE TABS -->
         <div class="type-tabs">
             <button class="type-tab active" onclick="filterType('on-stage')">🎙️ On Stage</button>
             <button class="type-tab" onclick="filterType('off-stage')">✍️ Off Stage</button>
@@ -174,7 +167,6 @@
         </div>
 
         <div id="programListContainer">
-            <!-- Dynamic Programs will load here -->
             <div class="program-card">
                 <div class="prog-info">
                     <h3>പ്രസംഗ മത്സരം (Speech)</h3>
