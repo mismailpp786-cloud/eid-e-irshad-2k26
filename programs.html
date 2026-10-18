@@ -1,211 +1,317 @@
+
 <!DOCTYPE html>
-<html lang="ml" data-theme="light">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programs List — EID-E IRSHAD 2K26</title>
-    <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-color: #1e293b;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-        }
-        [data-theme="dark"] {
-            --bg-color: #090d16;
-            --card-bg: #131c31;
-            --text-color: #f1f5f9;
-            --text-muted: #94a3b8;
-            --border-color: #1e293b;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Anek Malayalam', 'Montserrat', sans-serif;
-            margin: 0; padding: 0;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
+  <title>Programs | EID-E IRSHAD CAMPUS FEST 2K26</title>
 
-        .admin-bar { background: #059669; color: #fff; padding: 10px 15px; display: none; justify-content: space-between; align-items: center; font-size: 0.9rem; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .admin-actions button { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; margin-left: 5px; }
-        .btn-logout { background: #dc2626; color: #fff; }
+  <meta
+    name="description"
+    content="Explore the programs and competitions of EID-E IRSHAD CAMPUS FEST 2K26."
+  >
 
-        .top-nav-bar {
-            background: var(--card-bg);
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        .back-home-btn {
-            background: #fbbf24;
-            color: #0f172a;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 800;
-            font-size: 0.85rem;
-            cursor: pointer;
-            font-family: 'Montserrat', sans-serif;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; box-sizing: border-box; }
-        
-        .page-title {
-            text-align: center;
-            font-weight: 900;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: #f59e0b;
-        }
-
-        .category-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        .cat-tab {
-            background: var(--card-bg);
-            color: var(--text-color);
-            border: 1.5px solid var(--border-color);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: 0.2s;
-        }
-        .cat-tab.active, .cat-tab:hover {
-            background: #2563eb;
-            color: #fff;
-            border-color: #2563eb;
-        }
-
-        .type-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-        .type-tab {
-            background: var(--card-bg);
-            border: 1.5px solid var(--border-color);
-            padding: 8px 18px;
-            border-radius: 8px;
-            font-weight: 800;
-            font-size: 0.9rem;
-            cursor: pointer;
-            color: var(--text-color);
-        }
-        .type-tab.active {
-            background: #dc2626;
-            color: #fff;
-            border-color: #dc2626;
-        }
-
-        .program-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 16px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .prog-info h3 { margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 800; }
-        .prog-info p { margin: 0; font-size: 0.82rem; color: var(--text-muted); }
-
-        footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.85rem; margin-top: 30px; border-top: 1px solid var(--border-color); font-family: 'Montserrat', sans-serif; }
-    </style>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
-    <div id="adminBar" class="admin-bar">
-        <span>⚙️ Admin Mode Active</span>
-        <div class="admin-actions">
-            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
-        </div>
+<body data-page="programs">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container nav-container">
+
+      <a class="brand" href="index.html">
+        <span class="brand-mark">EI</span>
+        <span class="brand-text">
+          <strong>EID-E IRSHAD</strong>
+          <small>CAMPUS FEST 2K26</small>
+        </span>
+      </a>
+
+      <button
+        class="menu-btn"
+        id="menuBtn"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+      >☰</button>
+
+      <nav class="main-nav" id="mainNav">
+        <a href="index.html">Home</a>
+        <a href="programs.html" class="active">Programs</a>
+        <a href="results.html">Results</a>
+        <a href="teams.html">Teams</a>
+        <a href="points.html">Points</a>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">☀</button>
+      </nav>
+
     </div>
+  </header>
 
-    <div class="top-nav-bar">
-        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
-        <span style="font-weight: 800; font-size: 0.9rem;">📋 PROGRAMS LIST</span>
-    </div>
-
+  <!-- ANNOUNCEMENT -->
+  <div class="ticker">
     <div class="container">
-        <h1 class="page-title">Fest Programs & Schedule</h1>
-
-        <div class="category-tabs">
-            <button class="cat-tab active" onclick="filterCategory('senior')">Senior</button>
-            <button class="cat-tab" onclick="filterCategory('junior')">Junior</button>
-            <button class="cat-tab" onclick="filterCategory('sub-junior')">Sub Junior</button>
-            <button class="cat-tab" onclick="filterCategory('general')">General</button>
-        </div>
-
-        <div class="type-tabs">
-            <button class="type-tab active" onclick="filterType('on-stage')">🎙️ On Stage</button>
-            <button class="type-tab" onclick="filterType('off-stage')">✍️ Off Stage</button>
-            <button class="type-tab" onclick="filterType('sports')">⚽ Sports</button>
-        </div>
-
-        <div id="programListContainer">
-            <div class="program-card">
-                <div class="prog-info">
-                    <h3>പ്രസംഗ മത്സരം (Speech)</h3>
-                    <p>Category: Senior | Type: On Stage | Venue: Stage 1</p>
-                </div>
-            </div>
-            <div class="program-card">
-                <div class="prog-info">
-                    <h3>ചിത്രരചന (Painting)</h3>
-                    <p>Category: Senior | Type: Off Stage | Venue: Hall A</p>
-                </div>
-            </div>
-        </div>
+      <p id="tickerText">
+        EID-E IRSHAD — CAMPUS FEST 2K26 | NOVEMBER 27, 28 & 29
+      </p>
     </div>
+  </div>
 
-    <footer>
-        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
+  <main>
+
+    <!-- PAGE INTRO -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow">ART • LITERATURE • SPORTS</p>
+        <h1>Festival <span>Programs</span></h1>
+        <p>
+          Discover the competitions, explore the categories,
+          and get ready to showcase your talents.
+        </p>
+
+        <div class="hero-meta">
+          <span>📅 November 27–29, 2026</span>
+          <span>📍 Rahmaniyya Arabic College, Attassery</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROGRAM FILTERS -->
+    <section class="section">
+      <div class="container">
+
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">EXPLORE THE FEST</p>
+            <h2>Find Your <span>Event</span></h2>
+          </div>
+
+          <p class="muted" id="programCount">Loading programs...</p>
+        </div>
+
+        <div class="filter-panel">
+
+          <div class="filter-group">
+            <label for="categoryFilter">Participant Category</label>
+            <select id="categoryFilter">
+              <option value="all">All Categories</option>
+              <option value="senior">Senior</option>
+              <option value="junior">Junior</option>
+              <option value="sub-junior">Sub-Junior</option>
+              <option value="general">General</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="typeFilter">Program Type</label>
+            <select id="typeFilter">
+              <option value="all">All Program Types</option>
+              <option value="on-stage">On Stage</option>
+              <option value="off-stage">Off Stage</option>
+              <option value="sports">Sports</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="programSearch">Search Program</label>
+            <input
+              id="programSearch"
+              type="search"
+              placeholder="Search by program name..."
+            >
+          </div>
+
+          <button id="resetFilters" class="btn btn-secondary" type="button">
+            Reset Filters
+          </button>
+
+        </div>
+
+        <!-- PROGRAM CARDS -->
+        <div class="program-grid" id="programGrid">
+
+          <!-- Example program cards.
+               Replace these examples with the official schedule. -->
+
+          <article
+            class="program-card"
+            data-category="senior"
+            data-type="on-stage"
+            data-name="speech"
+          >
+            <div class="program-card-top">
+              <span class="program-icon">🎤</span>
+              <span class="category-badge">Senior</span>
+            </div>
+            <p class="program-type">ON STAGE</p>
+            <h3>Speech</h3>
+            <p class="muted">Individual Competition</p>
+            <div class="program-details">
+              <span>📅 Schedule to be announced</span>
+              <span>📍 Venue to be announced</span>
+            </div>
+          </article>
+
+          <article
+            class="program-card"
+            data-category="junior"
+            data-type="off-stage"
+            data-name="essay writing"
+          >
+            <div class="program-card-top">
+              <span class="program-icon">✍️</span>
+              <span class="category-badge">Junior</span>
+            </div>
+            <p class="program-type">OFF STAGE</p>
+            <h3>Essay Writing</h3>
+            <p class="muted">Individual Competition</p>
+            <div class="program-details">
+              <span>📅 Schedule to be announced</span>
+              <span>📍 Venue to be announced</span>
+            </div>
+          </article>
+
+          <article
+            class="program-card"
+            data-category="sub-junior"
+            data-type="on-stage"
+            data-name="recitation"
+          >
+            <div class="program-card-top">
+              <span class="program-icon">📖</span>
+              <span class="category-badge">Sub-Junior</span>
+            </div>
+            <p class="program-type">ON STAGE</p>
+            <h3>Recitation</h3>
+            <p class="muted">Individual Competition</p>
+            <div class="program-details">
+              <span>📅 Schedule to be announced</span>
+              <span>📍 Venue to be announced</span>
+            </div>
+          </article>
+
+          <article
+            class="program-card"
+            data-category="general"
+            data-type="sports"
+            data-name="football"
+          >
+            <div class="program-card-top">
+              <span class="program-icon">⚽</span>
+              <span class="category-badge">General</span>
+            </div>
+            <p class="program-type">SPORTS</p>
+            <h3>Football</h3>
+            <p class="muted">Team Competition</p>
+            <div class="program-details">
+              <span>📅 Schedule to be announced</span>
+              <span>📍 Sports Ground</span>
+            </div>
+          </article>
+
+        </div>
+
+        <div id="noPrograms" class="empty-state" hidden>
+          <span>🔎</span>
+          <h3>No programs found</h3>
+          <p>Try changing the category or search keyword.</p>
+        </div>
+
+        <p class="notice-text">
+          Note: The programs shown above are sample entries for website
+          development. The official event list, timings and venues must
+          be added after confirmation by the festival committee.
+        </p>
+
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <div>
+          <strong>EID-E IRSHAD — CAMPUS FEST 2K26</strong>
+          <p>Art, Literature & Sports</p>
+          <p>Irshadunnasiheen Sahithya Samajam</p>
+          <p>Rahmaniyya Arabic College, Attassery</p>
+        </div>
+
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="results.html">Results</a>
+          <a href="teams.html">Teams</a>
+          <a href="points.html">Points</a>
+        </div>
+      </div>
+
+      <div class="container footer-bottom">
+        <p>© 2026 EID-E IRSHAD CAMPUS FEST 2K26</p>
+      </div>
     </footer>
 
-    <script>
-        let isAdmin = localStorage.getItem("eid_irshad_admin_logged") === "true";
-        function updateAdminUI() {
-            const bar = document.getElementById("adminBar");
-            if (bar) bar.style.display = isAdmin ? "flex" : "none";
-        }
-        function logoutAdmin() {
-            localStorage.removeItem("eid_irshad_admin_logged");
-            isAdmin = false;
-            updateAdminUI();
-            alert("Logged out from admin mode.");
-        }
-        updateAdminUI();
+  </main>
 
-        function filterCategory(cat) {
-            document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-        }
-        function filterType(type) {
-            document.querySelectorAll('.type-tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-        }
-    </script>
+  <script src="app.js"></script>
+
+  <!-- Program filtering for this page -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const grid = document.getElementById("programGrid");
+      const categoryFilter = document.getElementById("categoryFilter");
+      const typeFilter = document.getElementById("typeFilter");
+      const searchInput = document.getElementById("programSearch");
+      const resetButton = document.getElementById("resetFilters");
+      const count = document.getElementById("programCount");
+      const emptyState = document.getElementById("noPrograms");
+
+      if (!grid) return;
+
+      const cards = [...grid.querySelectorAll(".program-card")];
+
+      function filterPrograms() {
+        const category = categoryFilter.value;
+        const type = typeFilter.value;
+        const query = searchInput.value.trim().toLowerCase();
+
+        let visible = 0;
+
+        cards.forEach((card) => {
+          const matchesCategory =
+            category === "all" || card.dataset.category === category;
+
+          const matchesType =
+            type === "all" || card.dataset.type === type;
+
+          const matchesSearch =
+            (card.dataset.name || card.textContent).toLowerCase()
+              .includes(query);
+
+          const show =
+            matchesCategory && matchesType && matchesSearch;
+
+          card.hidden = !show;
+
+          if (show) visible++;
+        });
+
+        count.textContent = `${visible} program${visible === 1 ? "" : "s"} found`;
+        emptyState.hidden = visible !== 0;
+      }
+
+      categoryFilter.addEventListener("change", filterPrograms);
+      typeFilter.addEventListener("change", filterPrograms);
+      searchInput.addEventListener("input", filterPrograms);
+
+      resetButton.addEventListener("click", () => {
+        categoryFilter.value = "all";
+        typeFilter.value = "all";
+        searchInput.value = "";
+        filterPrograms();
+      });
+
+      filterPrograms();
+    });
+  </script>
+
 </body>
 </html>
