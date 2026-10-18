@@ -1,294 +1,121 @@
 <!DOCTYPE html>
-<html lang="ml">
+<html lang="ml" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ടീം ലിസ്റ്റ് (ZELLIJ & IZNIK) — EID-E IRSHAD 2K26</title>
+    <title>Teams List — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
     <style>
-        /* ADMIN BAR & HEADER */
-        .admin-bar { background: #059669; color: #fff; padding: 10px 15px; display: none; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 0.9rem; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .admin-actions button { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; margin-left: 5px; }
-        .btn-reset { background: #d97706; color: #fff; }
-        .btn-logout { background: #dc2626; color: #fff; }
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+        [data-theme="dark"] {
+            --bg-color: #090d16;
+            --card-bg: #131c31;
+            --text-color: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #1e293b;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Anek Malayalam', 'Montserrat', sans-serif;
+            margin: 0; padding: 0;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .top-nav-bar {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .back-home-btn {
+            background: #fbbf24;
+            color: #0f172a;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; box-sizing: border-box; }
         
-        .subpage-header { background: #0f172a; color: #fff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; border-bottom: 3px solid #fbbf24; }
-        .subpage-header h2 { font-size: 1.15rem; color: #fbbf24; font-weight: 800; }
-        .back-home-btn { background: #fbbf24; color: #0f172a; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; cursor: pointer; }
-        .admin-top-btn { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1.5px solid #fbbf24; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.82rem; cursor: pointer; }
+        .page-title {
+            text-align: center;
+            font-weight: 900;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #f59e0b;
+        }
 
-        /* TEAMS GRID & CARDS */
-        .teams-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .card-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .team-a-header { background: #b91c1c; color: #fff; padding: 14px 18px; font-weight: 800; }
-        .team-b-header { background: #1d4ed8; color: #fff; padding: 14px 18px; font-weight: 800; }
-        .team-list-body { padding: 16px; background: #fff; }
-        .team-cat-title { font-size: 1rem; font-weight: 800; color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px; margin: 14px 0 8px; }
-        .team-cat-title:first-child { margin-top: 0; }
-        .student-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 8px; border-bottom: 1px dashed #e2e8f0; font-weight: 600; font-size: 0.92rem; }
-        
-        .admin-only-btn { background: rgba(255,255,255,0.2); color: #fff; border: 1px solid #fff; padding: 5px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.82rem; display: none; }
-        .admin-only-btn:hover { background: rgba(255,255,255,0.3); }
-        .edit-row-btn { background: #3b82f6; color: #fff; border: none; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; margin-left: 4px; }
-        .del-row-btn { background: #dc2626; color: #fff; border: none; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; margin-left: 4px; }
+        .teams-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media(max-width: 600px) { .teams-grid { grid-template-columns: 1fr; } }
 
-        /* MODALS */
-        .modal { display: none; position: fixed; z-index: 500; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); align-items: center; justify-content: center; padding: 15px; }
-        .modal-content { background: #fff; width: 100%; max-width: 390px; padding: 24px; border-radius: 14px; position: relative; color: #1e293b; }
-        .close-btn { position: absolute; right: 16px; top: 12px; font-size: 1.6rem; cursor: pointer; color: #64748b; }
-        .modal-content label { display: block; font-weight: 700; font-size: 0.85rem; margin-top: 10px; margin-bottom: 4px; }
-        .modal-content input, .modal-content select { width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-family: 'Anek Malayalam', sans-serif; }
-        .btn-submit { background: #1e293b; color: #fbbf24; border: none; padding: 11px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 14px; }
-        #loginError { color: #dc2626; font-size: 0.85rem; font-weight: 700; margin-top: 8px; text-align: center; }
+        .team-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .team-box.zellij { border-top: 5px solid #b91c1c; }
+        .team-box.iznik { border-top: 5px solid #1d4ed8; }
+        .team-box h2 { margin-top: 0; font-weight: 900; font-size: 1.4rem; }
 
-        @media (max-width: 768px) { .teams-grid { grid-template-columns: 1fr; } }
+        footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.85rem; margin-top: 30px; border-top: 1px solid var(--border-color); font-family: 'Montserrat', sans-serif; }
     </style>
 </head>
 <body>
 
-    <!-- ADMIN BAR (VISIBLE ONLY WHEN LOGGED IN) -->
-    <div id="adminBar" class="admin-bar">
-        <span>⚙️ അഡ്മിൻ മോഡ് സജീവമാണ് (ടീം ലിസ്റ്റ് എഡിറ്റ് ചെയ്യാം)</span>
-        <div class="admin-actions">
-            <button class="btn-reset" onclick="resetTeamsData()">🔄 Reset Teams</button>
-            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
-        </div>
+    <div class="top-nav-bar">
+        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
+        <span style="font-weight: 800; font-size: 0.9rem;">👥 TEAMS (ZELLIJ & IZNIK)</span>
     </div>
 
-    <div class="subpage-header">
-        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ ഹോം പേജിലേക്ക്</button>
-        <h2>👥 ടീം ലിസ്റ്റ് (ZELLIJ & IZNIK)</h2>
-        <button class="admin-top-btn" id="adminBtn" onclick="openAdminModal()">🔐 Admin Login</button>
-    </div>
+    <div class="container">
+        <h1 class="page-title">Fest Houses & Teams</h1>
 
-    <main class="container">
         <div class="teams-grid">
-            <!-- Team A: ZELLIJ -->
-            <div class="card">
-                <div class="card-header team-a-header">
-                    <h3>🔴 ZELLIJ</h3>
-                    <button class="admin-only-btn" onclick="openStudentModal('teamA')">+ ആളെ ചേർക്കുക</button>
-                </div>
-                <div class="team-list-body" id="teamAContainer"></div>
+            <div class="team-box zellij">
+                <h2 style="color: #b91c1c;">🔴 Team ZELLIJ</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">റഹ്മാനിയ്യ അറബിക് കോളേജ് ഫെസ്റ്റ് ഹൗസ് - സെല്ലിജ്</p>
+                <ul style="padding-left: 18px; line-height: 1.7;">
+                    <li>അംഗങ്ങളുടെ വിവരങ്ങൾ ഇവിടെ ചേർക്കാം</li>
+                </ul>
             </div>
 
-            <!-- Team B: IZNIK -->
-            <div class="card">
-                <div class="card-header team-b-header">
-                    <h3>🔵 IZNIK</h3>
-                    <button class="admin-only-btn" onclick="openStudentModal('teamB')">+ ആളെ ചേർക്കുക</button>
-                </div>
-                <div class="team-list-body" id="teamBContainer"></div>
+            <div class="team-box iznik">
+                <h2 style="color: #1d4ed8;">🔵 Team IZNIK</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">റഹ്മാനിയ്യ അറബിക് കോളേജ് ഫെസ്റ്റ് ഹൗസ് - ഇസ്നിക്</p>
+                <ul style="padding-left: 18px; line-height: 1.7;">
+                    <li>അംഗങ്ങളുടെ വിവരങ്ങൾ ഇവിടെ ചേർക്കാം</li>
+                </ul>
             </div>
-        </div>
-    </main>
-
-    <!-- ADMIN LOGIN MODAL -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeAdminModal()">&times;</span>
-            <h3 style="margin-bottom: 12px;">🔐 Admin Login</h3>
-            <label>Admin Email:</label>
-            <input type="email" id="adminEmail" value="admin@irshad.com">
-            <label>Password:</label>
-            <input type="password" id="adminPassword" placeholder="പാസ്‌വേഡ് നൽകുക">
-            <button class="btn-submit" onclick="loginAdmin()">Login</button>
-            <div id="loginError"></div>
-        </div>
-    </div>
-
-    <!-- ADD / EDIT STUDENT MODAL (ADMIN ONLY) -->
-    <div id="studentModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeStudentModal()">&times;</span>
-            <h3 id="studentModalTitle" style="margin-bottom: 10px;">👤 വിദ്യാർത്ഥിയെ ചേർക്കുക</h3>
-            
-            <label>കാറ്റഗറി (Category):</label>
-            <select id="studentCatSelect">
-                <option value="senior">Senior</option>
-                <option value="junior">Junior</option>
-                <option value="subjunior">Sub Junior</option>
-            </select>
-
-            <label>കോഡും പേരും (ഉദാ: 316. Muhammed):</label>
-            <input type="text" id="studentNameInput" placeholder="ഉദാ: 316. Muhammed">
-
-            <button class="btn-submit" onclick="saveStudent()">💾 Save</button>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 EID-E IRSHAD — IRSHADUNNASIHEEN SAHITHYA SAMAJAM
+        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
     </footer>
-
-    <script>
-        const defaultTeams = {
-            teamA: {
-                senior: ["300. Safwan (C)", "301. Ramees (Vc)", "302. fayiz (Vc)", "303. Thangal", "304. Asaf", "305. Thasnif", "306. Thwahir", "307. Irfan"],
-                junior: ["308. Qasim", "309. Sinan MT", "310. Ashiq", "311. Saeed"],
-                subjunior: ["312. Shahin", "313. Muhsin", "314. Razi", "315. Anshid"]
-            },
-            teamB: {
-                senior: ["100. Shibili (C)", "101. Ismail (Vc)", "102. Abdul vahab (Vc)", "103. Sinan P.k", "104. Adhil", "105. Rahees", "106. Amir", "107. Afsal"],
-                junior: ["108. Sinan edayoor", "109. Sinan cherushola", "110. Aslam", "111. Hijaz", "112. Jazeel"],
-                subjunior: ["113. Nijad", "114. Farhan", "115. Nusaif"]
-            }
-        };
-
-        let teamsData = JSON.parse(localStorage.getItem("eid_teams_data")) || JSON.parse(JSON.stringify(defaultTeams));
-        let isAdmin = localStorage.getItem("eid_irshad_admin_logged") === "true";
-
-        let activeTeamKey = "teamA";
-        let editingCatKey = null;
-        let editingStudentIdx = null;
-
-        function saveTeams() {
-            localStorage.setItem("eid_teams_data", JSON.stringify(teamsData));
-            renderTeams();
-        }
-
-        function updateAdminUI() {
-            document.getElementById("adminBar").style.display = isAdmin ? "flex" : "none";
-            document.getElementById("adminBtn").style.display = isAdmin ? "none" : "inline-block";
-            document.querySelectorAll(".admin-only-btn").forEach(btn => {
-                btn.style.display = isAdmin ? "inline-block" : "none";
-            });
-            renderTeams();
-        }
-
-        function renderTeams() {
-            const categories = [
-                { key: "senior", label: "Senior" },
-                { key: "junior", label: "Junior" },
-                { key: "subjunior", label: "Sub Junior" }
-            ];
-
-            ["teamA", "teamB"].forEach(tKey => {
-                const container = document.getElementById(tKey === "teamA" ? "teamAContainer" : "teamBContainer");
-                let html = "";
-
-                categories.forEach(cat => {
-                    html += `<div class="team-cat-title">${cat.label}</div>`;
-                    const list = (teamsData[tKey] && teamsData[tKey][cat.key]) || [];
-                    
-                    if (list.length === 0) {
-                        html += `<div class="student-item" style="color:#94a3b8;">വിദ്യാർത്ഥികളെ ചേർത്തിട്ടില്ല</div>`;
-                    } else {
-                        list.forEach((student, idx) => {
-                            const adminBtns = isAdmin ? `
-                                <div>
-                                    <button class="edit-row-btn" onclick="openEditStudentModal('${tKey}', '${cat.key}', ${idx})">✏️</button>
-                                    <button class="del-row-btn" onclick="deleteStudent('${tKey}', '${cat.key}', ${idx})">🗑️</button>
-                                </div>
-                            ` : "";
-                            html += `<div class="student-item"><span>${student}</span>${adminBtns}</div>`;
-                        });
-                    }
-                });
-
-                container.innerHTML = html;
-            });
-        }
-
-        /* ADD / EDIT STUDENT MODAL FUNCTIONS */
-        function openStudentModal(teamKey) {
-            if (!isAdmin) return;
-            activeTeamKey = teamKey;
-            editingCatKey = null;
-            editingStudentIdx = null;
-
-            const teamName = teamKey === "teamA" ? "ZELLIJ" : "IZNIK";
-            document.getElementById("studentModalTitle").textContent = `👤 ${teamName} ടീമിലേക്ക് ആളെ ചേർക്കുക`;
-            document.getElementById("studentCatSelect").disabled = false;
-            document.getElementById("studentCatSelect").value = "senior";
-            document.getElementById("studentNameInput").value = "";
-            document.getElementById("studentModal").style.display = "flex";
-        }
-
-        function openEditStudentModal(teamKey, catKey, idx) {
-            if (!isAdmin) return;
-            activeTeamKey = teamKey;
-            editingCatKey = catKey;
-            editingStudentIdx = idx;
-
-            document.getElementById("studentModalTitle").textContent = "✏️ വിദ്യാർത്ഥിയുടെ പേര് തിരുത്തുക";
-            document.getElementById("studentCatSelect").value = catKey;
-            document.getElementById("studentCatSelect").disabled = true;
-            document.getElementById("studentNameInput").value = teamsData[teamKey][catKey][idx];
-            document.getElementById("studentModal").style.display = "flex";
-        }
-
-        function closeStudentModal() {
-            document.getElementById("studentModal").style.display = "none";
-        }
-
-        function saveStudent() {
-            if (!isAdmin) return;
-            const cat = document.getElementById("studentCatSelect").value;
-            const name = document.getElementById("studentNameInput").value.trim();
-
-            if (!name) {
-                alert("ദയവായി വിദ്യാർത്ഥിയുടെ പേര് നൽകുക!");
-                return;
-            }
-
-            if (editingStudentIdx !== null && editingCatKey !== null) {
-                teamsData[activeTeamKey][editingCatKey][editingStudentIdx] = name;
-            } else {
-                teamsData[activeTeamKey][cat].push(name);
-            }
-
-            closeStudentModal();
-            saveTeams();
-        }
-
-        function deleteStudent(teamKey, catKey, idx) {
-            if (!isAdmin) return;
-            if (confirm("ഈ വിദ്യാർത്ഥിയെ ലിസ്റ്റിൽ നിന്ന് ഒഴിവാക്കണോ?")) {
-                teamsData[teamKey][catKey].splice(idx, 1);
-                saveTeams();
-            }
-        }
-
-        function resetTeamsData() {
-            if (confirm("ടീം ലിസ്റ്റ് ആദ്യത്തെ നിലയിലേക്ക് പുനഃസ്ഥാപിക്കണോ?")) {
-                teamsData = JSON.parse(JSON.stringify(defaultTeams));
-                saveTeams();
-            }
-        }
-
-        /* ADMIN AUTH */
-        function openAdminModal() {
-            document.getElementById("loginError").textContent = "";
-            document.getElementById("adminPassword").value = "";
-            document.getElementById("loginModal").style.display = "flex";
-        }
-
-        function closeAdminModal() {
-            document.getElementById("loginModal").style.display = "none";
-        }
-
-        function loginAdmin() {
-            const email = document.getElementById("adminEmail").value.trim().toLowerCase();
-            const pass = document.getElementById("adminPassword").value.trim();
-            if (email === "admin@irshad.com" && pass === "irshad2k26") {
-                isAdmin = true;
-                localStorage.setItem("eid_irshad_admin_logged", "true");
-                closeAdminModal();
-                updateAdminUI();
-            } else {
-                document.getElementById("loginError").textContent = "തെറ്റായ ഐഡിയോ പാസ്‌വേഡോ ആണ്!";
-            }
-        }
-
-        function logoutAdmin() {
-            isAdmin = false;
-            localStorage.removeItem("eid_irshad_admin_logged");
-            updateAdminUI();
-        }
-
-        updateAdminUI();
-    </script>
 </body>
 </html>
