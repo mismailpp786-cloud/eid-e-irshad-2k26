@@ -1,248 +1,217 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ml" data-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Results | EID-E IRSHAD CAMPUS FEST 2K26</title>
-
-  <meta
-    name="description"
-    content="Official competition results for EID-E IRSHAD CAMPUS FEST 2K26."
-  >
-
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results & Poster Maker — EID-E IRSHAD 2K26</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <!-- html2canvas library for downloading status posters -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
+<body>
 
-<body data-page="results">
+    <!-- Sticky Admin Bar -->
+    <div id="adminBar" class="admin-bar">
+        <span>⚙️ Admin Mode Active (Results & Poster Maker)</span>
+        <div class="admin-actions">
+            <button class="btn-backup" onclick="exportBackupJSON()">📥 Backup JSON</button>
+            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
+        </div>
+    </div>
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="container nav-container">
+    <!-- Top Navigation Bar -->
+    <div class="top-nav-bar">
+        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
+        <span class="nav-page-title">🏆 RESULTS & STATUS POSTER MAKER</span>
+        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
+    </div>
 
-      <a class="brand" href="index.html">
-        <span class="brand-mark">EI</span>
-        <span class="brand-text">
-          <strong>EID-E IRSHAD</strong>
-          <small>CAMPUS FEST 2K26</small>
-        </span>
-      </a>
+    <!-- Main Container -->
+    <div class="container" style="max-width: 980px; margin: 25px auto;">
+        
+        <h1 class="page-title">Competition Results & Posters</h1>
+        <p class="page-subtitle">മത്സര വിജയികളെ തത്സമയം പ്രഖ്യാപിക്കുകയും വാട്ട്‌സ്ആപ്പ് സ്റ്റാറ്റസ് പോസ്റ്ററുകൾ ഡൗൺലോഡ് ചെയ്യുകയും ചെയ്യാം</p>
 
-      <button
-        class="menu-btn"
-        id="menuBtn"
-        aria-label="Toggle navigation"
-        aria-expanded="false"
-      >☰</button>
+        <!-- ADMIN RESULT BUILDER & POSTER MAKER (Visible only to Admin) -->
+        <div class="builder-section admin-only" data-display="block">
+            <h3 style="margin: 0 0 15px; font-family:'Montserrat',sans-serif; font-size:1.15rem; font-weight:900; color:var(--accent-gold); display:flex; align-items:center; gap:8px;">
+                <span>🛠️ Ref-1 Result Poster Builder & Publisher</span>
+            </h3>
 
-      <nav class="main-nav" id="mainNav">
-        <a href="index.html">Home</a>
-        <a href="programs.html">Programs</a>
-        <a href="results.html" class="active">Results</a>
-        <a href="teams.html">Teams</a>
-        <a href="points.html">Points</a>
-        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">☀</button>
-      </nav>
+            <div class="builder-grid">
+                
+                <!-- Left Form Inputs -->
+                <div>
+                    <div style="display:grid; grid-template-columns: 100px 1fr; gap:10px;">
+                        <div class="form-group">
+                            <label>Result #:</label>
+                            <input type="text" id="resNoInput" class="form-control" value="01" oninput="updatePosterPreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>Category:</label>
+                            <select id="resCatSelect" class="form-control" onchange="onResultCategoryChange(); updatePosterPreview();">
+                                <option value="Senior">Senior</option>
+                                <option value="Junior">Junior</option>
+                                <option value="Sub Junior">Sub Junior</option>
+                                <option value="General">General</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>മത്സര ഇനം (Program):</label>
+                        <select id="resProgSelect" class="form-control" onchange="updatePosterPreview()">
+                            <option value="">-- പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>അല്ലെങ്കിൽ പുതിയ പേര് ടൈപ്പ് ചെയ്യുക (Optional Custom Name):</label>
+                        <input type="text" id="resProgCustom" class="form-control" placeholder="ഉദാ: പ്രത്യേക മത്സരം" oninput="updatePosterPreview()">
+                    </div>
+
+                    <div class="form-group" style="display:flex; align-items:center; gap:8px; margin-top:8px; margin-bottom:14px;">
+                        <input type="checkbox" id="resIsGroupCheck" style="width:18px; height:18px; accent-color:var(--accent-gold);">
+                        <label for="resIsGroupCheck" style="margin:0; cursor:pointer; font-weight:800;">ഇത് ഗ്രൂപ്പ് ഇനമാണ് (Group Event - 10, 6, 3 Pts)</label>
+                    </div>
+
+                    <!-- Winner 1 -->
+                    <div class="winner-input-box">
+                        <h5>🥇 ഒന്നാം സ്ഥാനം (First Place)</h5>
+                        <div style="margin-bottom:6px;">
+                            <select id="selWinner1" class="form-control" style="font-size:0.8rem; padding:6px;" onchange="onWinnerStudentSelect(1)">
+                                <option value="">-- ലിസ്റ്റിൽ നിന്ന് വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
+                            </select>
+                        </div>
+                        <div style="display:grid; grid-template-columns: 1fr 130px; gap:8px;">
+                            <input type="text" id="win1Name" class="form-control" placeholder="വിജയിയുടെ പേര്" oninput="updatePosterPreview()">
+                            <select id="win1Team" class="form-control" onchange="updatePosterPreview()">
+                                <option value="teamA">🔴 ZELLIJ</option>
+                                <option value="teamB">🔵 IZNIK</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Winner 2 -->
+                    <div class="winner-input-box">
+                        <h5>🥈 രണ്ടാം സ്ഥാനം (Second Place)</h5>
+                        <div style="margin-bottom:6px;">
+                            <select id="selWinner2" class="form-control" style="font-size:0.8rem; padding:6px;" onchange="onWinnerStudentSelect(2)">
+                                <option value="">-- ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുക --</option>
+                            </select>
+                        </div>
+                        <div style="display:grid; grid-template-columns: 1fr 130px; gap:8px;">
+                            <input type="text" id="win2Name" class="form-control" placeholder="വിജയിയുടെ പേര്" oninput="updatePosterPreview()">
+                            <select id="win2Team" class="form-control" onchange="updatePosterPreview()">
+                                <option value="teamB">🔵 IZNIK</option>
+                                <option value="teamA">🔴 ZELLIJ</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Winner 3 -->
+                    <div class="winner-input-box">
+                        <h5>🥉 മൂന്നാം സ്ഥാനം (Third Place - Optional)</h5>
+                        <div style="margin-bottom:6px;">
+                            <select id="selWinner3" class="form-control" style="font-size:0.8rem; padding:6px;" onchange="onWinnerStudentSelect(3)">
+                                <option value="">-- ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുക --</option>
+                            </select>
+                        </div>
+                        <div style="display:grid; grid-template-columns: 1fr 130px; gap:8px;">
+                            <input type="text" id="win3Name" class="form-control" placeholder="വിജയിയുടെ പേര്" oninput="updatePosterPreview()">
+                            <select id="win3Team" class="form-control" onchange="updatePosterPreview()">
+                                <option value="teamA">🔴 ZELLIJ</option>
+                                <option value="teamB">🔵 IZNIK</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Poster Theme Selection -->
+                    <div class="form-group" style="margin-top:12px;">
+                        <label>പോസ്റ്റർ തീം (Poster Theme):</label>
+                        <div style="display:flex; gap:8px;">
+                            <button class="btn-action-sm" style="background:#1e293b; color:#fbbf24; padding:7px 12px;" onclick="setPosterTheme('theme-ref1')">Royal Navy</button>
+                            <button class="btn-action-sm" style="background:#fef3c7; color:#92400e; padding:7px 12px; border:1px solid #b45309;" onclick="setPosterTheme('theme-vintage')">Vintage Paper</button>
+                            <button class="btn-action-sm" style="background:#065f46; color:#fbbf24; padding:7px 12px;" onclick="setPosterTheme('theme-emerald')">Emerald Royal</button>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div style="display:flex; gap:10px; margin-top:18px;">
+                        <button class="btn-submit" style="background:#2563eb; color:#fff; margin-top:0;" onclick="downloadResultPoster()">📥 PNG ഡൗൺലോഡ് ചെയ്യുക</button>
+                        <button class="btn-submit" style="background:#059669; color:#fff; margin-top:0;" onclick="publishResultToSite()">🚀 സൈറ്റിൽ പ്രസിദ്ധീകരിക്കുക</button>
+                    </div>
+                </div>
+
+                <!-- Right Live Poster Preview (Ref-1 Style) -->
+                <div class="poster-preview-wrapper">
+                    <span style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin-bottom:8px; font-family:'Montserrat',sans-serif;">📱 LIVE POSTER PREVIEW (WhatsApp Status 9:16)</span>
+                    
+                    <div id="posterCanvas" class="theme-ref1">
+                        <div>
+                            <div class="poster-top-brand">EID-E IRSHAD CAMPUS FEST 2K26</div>
+                            <div style="display:flex; justify-content:center;">
+                                <img src="calligraphy.png" alt="സർഗ്ഗാത്മകത പൂക്കുന്നു" class="poster-calligraphy-img" onerror="this.style.display='none';">
+                            </div>
+                            <div class="poster-fest-head">EID-E IRSHAD</div>
+                            <div class="poster-res-badge" id="previewResNo">RESULT #01</div>
+                        </div>
+
+                        <div class="poster-prog-banner">
+                            <div class="poster-cat-text" id="previewCat">SENIOR</div>
+                            <div class="poster-prog-title" id="previewProg">മത്സരത്തിന്റെ പേര്</div>
+                        </div>
+
+                        <div class="poster-winners-box">
+                            <!-- Winner 1 -->
+                            <div class="poster-win-card">
+                                <div class="poster-rank-icon">🥇</div>
+                                <div class="poster-win-details">
+                                    <div class="poster-win-name" id="previewWin1Name">First Winner</div>
+                                    <div class="poster-win-team" id="previewWin1Team">Team ZELLIJ</div>
+                                </div>
+                            </div>
+                            <!-- Winner 2 -->
+                            <div class="poster-win-card">
+                                <div class="poster-rank-icon">🥈</div>
+                                <div class="poster-win-details">
+                                    <div class="poster-win-name" id="previewWin2Name">Second Winner</div>
+                                    <div class="poster-win-team" id="previewWin2Team">Team IZNIK</div>
+                                </div>
+                            </div>
+                            <!-- Winner 3 (Dynamic) -->
+                            <div class="poster-win-card" id="previewWin3Card" style="display:none;">
+                                <div class="poster-rank-icon">🥉</div>
+                                <div class="poster-win-details">
+                                    <div class="poster-win-name" id="previewWin3Name">Third Winner</div>
+                                    <div class="poster-win-team" id="previewWin3Team">Team ZELLIJ</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="poster-footer-text">
+                            Irshadunnasiheen Sahithya Samajam &bull; Rahmaniyya Arabic College
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Published Results Section -->
+        <h2 style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.2rem; margin: 30px 0 15px;">🏆 Published Results & Winners</h2>
+        <div class="results-grid" id="publishedResultsContainer">
+            <!-- Populated via app.js -->
+        </div>
 
     </div>
-  </header>
 
-  <!-- TICKER -->
-  <div class="ticker">
-    <div class="container">
-      <p id="tickerText">
-        EID-E IRSHAD — CAMPUS FEST 2K26 | OFFICIAL RESULTS
-      </p>
-    </div>
-  </div>
-
-  <main>
-
-    <!-- PAGE INTRO -->
-    <section class="page-hero">
-      <div class="container">
-        <p class="eyebrow">THE MOMENTS OF EXCELLENCE</p>
-        <h1>Competition <span>Results</span></h1>
-        <p>
-          Celebrate the talent, dedication and achievements
-          of our participants.
-        </p>
-
-        <div class="hero-meta">
-          <span>📅 November 27–29, 2026</span>
-          <span>🏆 Official Festival Results</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- RESULTS SECTION -->
-    <section class="section">
-      <div class="container">
-
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">RESULTS BOARD</p>
-            <h2>Winners <span>Gallery</span></h2>
-          </div>
-        </div>
-
-        <!-- FILTERS -->
-        <div class="filter-panel">
-
-          <div class="filter-group">
-            <label for="resultCategory">Participant Category</label>
-            <select id="resultCategory">
-              <option value="all">All Categories</option>
-              <option value="senior">Senior</option>
-              <option value="junior">Junior</option>
-              <option value="sub-junior">Sub-Junior</option>
-              <option value="general">General</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label for="resultType">Program Type</label>
-            <select id="resultType">
-              <option value="all">All Types</option>
-              <option value="on-stage">On Stage</option>
-              <option value="off-stage">Off Stage</option>
-              <option value="sports">Sports</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label for="resultSearch">Search Results</label>
-            <input
-              id="resultSearch"
-              type="search"
-              placeholder="Search program or winner..."
-            >
-          </div>
-
-          <button id="resetResults" class="btn btn-secondary" type="button">
-            Reset
-          </button>
-
-        </div>
-
-        <p class="muted" id="resultsCount">Loading results...</p>
-
-        <!-- RESULTS WILL APPEAR HERE -->
-        <div class="results-grid" id="resultsGrid">
-
-          <div class="empty-state results-empty">
-            <span>🏆</span>
-            <h3>Results Coming Soon</h3>
-            <p>
-              The competition results will be published here
-              after they are officially announced.
-            </p>
-          </div>
-
-        </div>
-
-        <p class="notice-text">
-          Only officially confirmed results should be published.
-          Sample or unverified results must not be presented as official.
-        </p>
-
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="site-footer">
-      <div class="container footer-content">
-        <div>
-          <strong>EID-E IRSHAD — CAMPUS FEST 2K26</strong>
-          <p>Art, Literature & Sports</p>
-          <p>Irshadunnasiheen Sahithya Samajam</p>
-          <p>Rahmaniyya Arabic College, Attassery</p>
-        </div>
-
-        <div class="footer-links">
-          <a href="index.html">Home</a>
-          <a href="programs.html">Programs</a>
-          <a href="teams.html">Teams</a>
-          <a href="points.html">Points</a>
-        </div>
-      </div>
-
-      <div class="container footer-bottom">
-        <p>© 2026 EID-E IRSHAD CAMPUS FEST 2K26</p>
-      </div>
+    <footer>
+        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
     </footer>
 
-  </main>
-
-  <script src="app.js"></script>
-
-  <!-- RESULTS FILTER -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const categoryFilter = document.getElementById("resultCategory");
-      const typeFilter = document.getElementById("resultType");
-      const searchInput = document.getElementById("resultSearch");
-      const resetButton = document.getElementById("resetResults");
-      const resultsGrid = document.getElementById("resultsGrid");
-      const resultsCount = document.getElementById("resultsCount");
-
-      if (!resultsGrid) return;
-
-      function filterResults() {
-        const category = categoryFilter.value;
-        const type = typeFilter.value;
-        const query = searchInput.value.trim().toLowerCase();
-
-        const cards = [
-          ...resultsGrid.querySelectorAll(".result-card")
-        ];
-
-        let visible = 0;
-
-        cards.forEach((card) => {
-          const matchesCategory =
-            category === "all" || card.dataset.category === category;
-
-          const matchesType =
-            type === "all" || card.dataset.type === type;
-
-          const matchesSearch =
-            card.textContent.toLowerCase().includes(query);
-
-          const show =
-            matchesCategory && matchesType && matchesSearch;
-
-          card.hidden = !show;
-
-          if (show) visible++;
-        });
-
-        const emptyMessage =
-          resultsGrid.querySelector(".results-empty");
-
-        if (emptyMessage) {
-          emptyMessage.hidden = cards.length > 0;
-        }
-
-        resultsCount.textContent =
-          `${visible} result${visible === 1 ? "" : "s"} found`;
-      }
-
-      categoryFilter.addEventListener("change", filterResults);
-      typeFilter.addEventListener("change", filterResults);
-      searchInput.addEventListener("input", filterResults);
-
-      resetButton.addEventListener("click", () => {
-        categoryFilter.value = "all";
-        typeFilter.value = "all";
-        searchInput.value = "";
-        filterResults();
-      });
-
-      filterResults();
-    });
-  </script>
-
+    <script src="app.js"></script>
 </body>
 </html>
