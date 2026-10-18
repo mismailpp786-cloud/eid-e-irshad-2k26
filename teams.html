@@ -1,147 +1,257 @@
+
 <!DOCTYPE html>
-<html lang="ml" data-theme="light">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teams List — EID-E IRSHAD 2K26</title>
-    <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-color: #1e293b;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-        }
-        [data-theme="dark"] {
-            --bg-color: #090d16;
-            --card-bg: #131c31;
-            --text-color: #f1f5f9;
-            --text-muted: #94a3b8;
-            --border-color: #1e293b;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Anek Malayalam', 'Montserrat', sans-serif;
-            margin: 0; padding: 0;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
+  <title>Teams | EID-E IRSHAD CAMPUS FEST 2K26</title>
 
-        .admin-bar { background: #059669; color: #fff; padding: 10px 15px; display: none; justify-content: space-between; align-items: center; font-size: 0.9rem; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .admin-actions button { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; margin-left: 5px; }
-        .btn-logout { background: #dc2626; color: #fff; }
+  <meta
+    name="description"
+    content="Meet Team ZELLIJ and Team IZNIK at EID-E IRSHAD CAMPUS FEST 2K26."
+  >
 
-        .top-nav-bar {
-            background: var(--card-bg);
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        .back-home-btn {
-            background: #fbbf24;
-            color: #0f172a;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 800;
-            font-size: 0.85rem;
-            cursor: pointer;
-            font-family: 'Montserrat', sans-serif;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; box-sizing: border-box; }
-        
-        .page-title {
-            text-align: center;
-            font-weight: 900;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: #f59e0b;
-        }
-
-        .teams-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        @media(max-width: 600px) { .teams-grid { grid-template-columns: 1fr; } }
-
-        .team-box {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        .team-box.zellij { border-top: 5px solid #b91c1c; }
-        .team-box.iznik { border-top: 5px solid #1d4ed8; }
-        .team-box h2 { margin-top: 0; font-weight: 900; font-size: 1.4rem; }
-
-        footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.85rem; margin-top: 30px; border-top: 1px solid var(--border-color); font-family: 'Montserrat', sans-serif; }
-    </style>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
-    <div id="adminBar" class="admin-bar">
-        <span>⚙️ Admin Mode Active</span>
-        <div class="admin-actions">
-            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
-        </div>
+<body data-page="teams">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container nav-container">
+
+      <a class="brand" href="index.html">
+        <span class="brand-mark">EI</span>
+        <span class="brand-text">
+          <strong>EID-E IRSHAD</strong>
+          <small>CAMPUS FEST 2K26</small>
+        </span>
+      </a>
+
+      <button
+        class="menu-btn"
+        id="menuBtn"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+      >☰</button>
+
+      <nav class="main-nav" id="mainNav">
+        <a href="index.html">Home</a>
+        <a href="programs.html">Programs</a>
+        <a href="results.html">Results</a>
+        <a href="teams.html" class="active">Teams</a>
+        <a href="points.html">Points</a>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">☀</button>
+      </nav>
+
     </div>
+  </header>
 
-    <div class="top-nav-bar">
-        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
-        <span style="font-weight: 800; font-size: 0.9rem;">👥 TEAMS (ZELLIJ & IZNIK)</span>
-    </div>
-
+  <!-- TICKER -->
+  <div class="ticker">
     <div class="container">
-        <h1 class="page-title">Fest Houses & Teams</h1>
+      <p id="tickerText">
+        TWO TEAMS • ONE FESTIVAL • ENDLESS TALENT
+      </p>
+    </div>
+  </div>
+
+  <main>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow">UNITY • PASSION • EXCELLENCE</p>
+        <h1>Meet Our <span>Teams</span></h1>
+        <p>
+          Two teams, one celebration of talent, creativity
+          and sportsmanship.
+        </p>
+
+        <div class="hero-meta">
+          <span>🔴 ZELLIJ — RED TEAM</span>
+          <span>🔵 IZNIK — BLUE TEAM</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEAMS -->
+    <section class="section">
+      <div class="container">
+
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">THE COMPETITORS</p>
+            <h2>Our <span>Team Family</span></h2>
+          </div>
+        </div>
 
         <div class="teams-grid">
-            <div class="team-box zellij">
-                <h2 style="color: #b91c1c;">🔴 Team ZELLIJ</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">റഹ്മാനിയ്യ അറബിക് കോളേജ് ഫെസ്റ്റ് ഹൗസ് - സെല്ലിജ്</p>
-                <ul style="padding-left: 18px; line-height: 1.7;">
-                    <li>അംഗങ്ങളുടെ വിവരങ്ങൾ ഇവിടെ ചേർക്കാം</li>
-                </ul>
+
+          <!-- TEAM ZELLIJ -->
+          <article class="team-card zellij-team">
+
+            <div class="team-banner">
+              <div class="team-emblem">Z</div>
+              <div>
+                <p class="team-label">TEAM RED</p>
+                <h2>ZELLIJ</h2>
+                <p>Strength in Unity</p>
+              </div>
+              <span class="team-color-dot" aria-label="Red team"></span>
             </div>
 
-            <div class="team-box iznik">
-                <h2 style="color: #1d4ed8;">🔵 Team IZNIK</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">റഹ്മാനിയ്യ അറബിക് കോളേജ് ഫെസ്റ്റ് ഹൗസ് - ഇസ്നിക്</p>
-                <ul style="padding-left: 18px; line-height: 1.7;">
-                    <li>അംഗങ്ങളുടെ വിവരങ്ങൾ ഇവിടെ ചേർക്കാം</li>
-                </ul>
+            <div class="team-card-body">
+
+              <div class="team-members-heading">
+                <h3>Team Leadership</h3>
+                <span>2026</span>
+              </div>
+
+              <div class="member-row">
+                <div class="member-avatar">C</div>
+                <div class="member-info">
+                  <span class="member-role">Captain</span>
+                  <strong lang="ml">മുഹമ്മദ് ഇസ്മായിൽ</strong>
+                </div>
+                <span class="member-star">★</span>
+              </div>
+
+              <div class="member-row">
+                <div class="member-avatar">VC</div>
+                <div class="member-info">
+                  <span class="member-role">Vice Captain</span>
+                  <strong lang="ml">അബ്ദുറഹ്മാൻ</strong>
+                </div>
+              </div>
+
+              <div class="member-row">
+                <div class="member-avatar">SR</div>
+                <div class="member-info">
+                  <span class="member-role">Senior Representative</span>
+                  <strong lang="ml">യാസിർ</strong>
+                </div>
+              </div>
+
+              <div class="member-row">
+                <div class="member-avatar">JR</div>
+                <div class="member-info">
+                  <span class="member-role">Junior Representative</span>
+                  <strong lang="ml">സാലിഹ്</strong>
+                </div>
+              </div>
+
+              <a class="btn btn-secondary team-action" href="points.html">
+                View Team Points →
+              </a>
+
             </div>
+          </article>
+
+          <!-- TEAM IZNIK -->
+          <article class="team-card iznik-team">
+
+            <div class="team-banner">
+              <div class="team-emblem">I</div>
+              <div>
+                <p class="team-label">TEAM BLUE</p>
+                <h2>IZNIK</h2>
+                <p>Driven by Excellence</p>
+              </div>
+              <span class="team-color-dot" aria-label="Blue team"></span>
+            </div>
+
+            <div class="team-card-body">
+
+              <div class="team-members-heading">
+                <h3>Team Leadership</h3>
+                <span>2026</span>
+              </div>
+
+              <div class="member-row">
+                <div class="member-avatar">C</div>
+                <div class="member-info">
+                  <span class="member-role">Captain</span>
+                  <strong lang="ml">അബ്ദുല്ല</strong>
+                </div>
+                <span class="member-star">★</span>
+              </div>
+
+              <div class="member-row">
+                <div class="member-avatar">VC</div>
+                <div class="member-info">
+                  <span class="member-role">Vice Captain</span>
+                  <strong lang="ml">മുഹ്സിൻ</strong>
+                </div>
+              </div>
+
+              <div class="member-row">
+                <div class="member-avatar">SR</div>
+                <div class="member-info">
+                  <span class="member-role">Senior Representative</span>
+                  <strong lang="ml">ബിലാൽ</strong>
+                </div>
+              </div>
+
+              <div class="member-row">
+                <div class="member-avatar">JR</div>
+                <div class="member-info">
+                  <span class="member-role">Junior Representative</span>
+                  <strong lang="ml">റയാൻ</strong>
+                </div>
+              </div>
+
+              <a class="btn btn-secondary team-action" href="points.html">
+                View Team Points →
+              </a>
+
+            </div>
+          </article>
+
         </div>
-    </div>
 
-    <footer>
-        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
+        <!-- TEAM SPIRIT -->
+        <div class="team-spirit">
+          <p class="eyebrow">CAMPUS FIESTA 2K26</p>
+          <h2>Different Colours. <span>One Community.</span></h2>
+          <p>
+            Celebrate creativity, knowledge, teamwork and
+            sportsmanship throughout the festival.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="container footer-content">
+
+        <div>
+          <strong>EID-E IRSHAD — CAMPUS FEST 2K26</strong>
+          <p>Art, Literature & Sports</p>
+          <p>Irshadunnasiheen Sahithya Samajam</p>
+          <p>Rahmaniyya Arabic College, Attassery</p>
+        </div>
+
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="programs.html">Programs</a>
+          <a href="results.html">Results</a>
+          <a href="points.html">Points</a>
+        </div>
+
+      </div>
+
+      <div class="container footer-bottom">
+        <p>© 2026 EID-E IRSHAD CAMPUS FEST 2K26</p>
+      </div>
     </footer>
 
-    <script>
-        let isAdmin = localStorage.getItem("eid_irshad_admin_logged") === "true";
-        function updateAdminUI() {
-            const bar = document.getElementById("adminBar");
-            if (bar) bar.style.display = isAdmin ? "flex" : "none";
-        }
-        function logoutAdmin() {
-            localStorage.removeItem("eid_irshad_admin_logged");
-            isAdmin = false;
-            updateAdminUI();
-            alert("Logged out from admin mode.");
-        }
-        updateAdminUI();
-    </script>
+  </main>
+
+  <script src="app.js"></script>
+
 </body>
 </html>
