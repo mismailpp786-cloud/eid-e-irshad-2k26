@@ -1,272 +1,153 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ml" data-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Points Table | EID-E IRSHAD CAMPUS FEST 2K26</title>
-
-  <meta
-    name="description"
-    content="Team leaderboard and competition points for EID-E IRSHAD CAMPUS FEST 2K26."
-  >
-
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Scoreboard — EID-E IRSHAD 2K26</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
+<body>
 
-<body data-page="points">
+    <!-- Sticky Admin Bar -->
+    <div id="adminBar" class="admin-bar">
+        <span>⚙️ Admin Mode Active (Scoreboard)</span>
+        <div class="admin-actions">
+            <button class="btn-backup" onclick="exportBackupJSON()">📥 Backup JSON</button>
+            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
+        </div>
+    </div>
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="container nav-container">
+    <!-- Top Navigation Bar -->
+    <div class="top-nav-bar">
+        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
+        <span class="nav-page-title">📊 LIVE SCOREBOARD</span>
+        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
+    </div>
 
-      <a class="brand" href="index.html">
-        <span class="brand-mark">EI</span>
-        <span class="brand-text">
-          <strong>EID-E IRSHAD</strong>
-          <small>CAMPUS FEST 2K26</small>
-        </span>
-      </a>
+    <!-- Main Container -->
+    <div class="container" style="max-width: 900px; margin: 25px auto;">
+        
+        <h1 class="page-title">Live Championship Scoreboard</h1>
+        <p class="page-subtitle">തത്സമയം മാറിക്കൊണ്ടിരിക്കുന്ന ഹൗസ് പോയിന്റ് നിലവാരം</p>
 
-      <button
-        class="menu-btn"
-        id="menuBtn"
-        aria-label="Toggle navigation"
-        aria-expanded="false"
-      >☰</button>
+        <!-- Vertical Bar Chart Scoreboard Card -->
+        <div class="scoreboard-card">
+            <h2 style="margin: 0 0 5px; font-family:'Montserrat',sans-serif; font-size:1.25rem; font-weight:900;">Houses Championship Standings</h2>
+            <p style="margin: 0 0 15px; font-size: 0.82rem; color: var(--text-muted);">Team ZELLIJ vs Team IZNIK Live Graph</p>
+            
+            <div class="vertical-chart-container">
+                <!-- Team ZELLIJ Bar -->
+                <div class="v-bar-col">
+                    <div class="v-bar-score" id="barScoreA" style="color:var(--zellij-red);">0 Pts</div>
+                    <div class="v-bar-track">
+                        <div id="verticalBarA" class="v-bar-fill zellij" style="height: 15%;"></div>
+                    </div>
+                    <div class="v-bar-label" style="color:var(--zellij-red);">🔴 ZELLIJ</div>
+                </div>
 
-      <nav class="main-nav" id="mainNav">
-        <a href="index.html">Home</a>
-        <a href="programs.html">Programs</a>
-        <a href="results.html">Results</a>
-        <a href="teams.html">Teams</a>
-        <a href="points.html" class="active">Points</a>
-        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">☀</button>
-      </nav>
+                <!-- Team IZNIK Bar -->
+                <div class="v-bar-col">
+                    <div class="v-bar-score" id="barScoreB" style="color:var(--iznik-blue);">0 Pts</div>
+                    <div class="v-bar-track">
+                        <div id="verticalBarB" class="v-bar-fill iznik" style="height: 15%;"></div>
+                    </div>
+                    <div class="v-bar-label" style="color:var(--iznik-blue);">🔵 IZNIK</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category-wise Points Breakdown Grid -->
+        <h3 style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.15rem; margin: 25px 0 12px; text-align:center;">🏆 Category-wise Breakdown</h3>
+        <div class="cat-points-grid">
+            
+            <!-- Senior Points -->
+            <div class="cat-point-card">
+                <h4>Senior Category</h4>
+                <div class="cat-pts-row">
+                    <span style="color:var(--zellij-red);">🔴 ZELLIJ</span>
+                    <span id="srPtsA">0 Pts</span>
+                </div>
+                <div class="cat-pts-row">
+                    <span style="color:var(--iznik-blue);">🔵 IZNIK</span>
+                    <span id="srPtsB">0 Pts</span>
+                </div>
+            </div>
+
+            <!-- Junior Points -->
+            <div class="cat-point-card">
+                <h4>Junior Category</h4>
+                <div class="cat-pts-row">
+                    <span style="color:var(--zellij-red);">🔴 ZELLIJ</span>
+                    <span id="jrPtsA">0 Pts</span>
+                </div>
+                <div class="cat-pts-row">
+                    <span style="color:var(--iznik-blue);">🔵 IZNIK</span>
+                    <span id="jrPtsB">0 Pts</span>
+                </div>
+            </div>
+
+            <!-- Sub Junior Points -->
+            <div class="cat-point-card">
+                <h4>Sub-Junior Category</h4>
+                <div class="cat-pts-row">
+                    <span style="color:var(--zellij-red);">🔴 ZELLIJ</span>
+                    <span id="subPtsA">0 Pts</span>
+                </div>
+                <div class="cat-pts-row">
+                    <span style="color:var(--iznik-blue);">🔵 IZNIK</span>
+                    <span id="subPtsB">0 Pts</span>
+                </div>
+            </div>
+
+            <!-- General & Sports Points -->
+            <div class="cat-point-card">
+                <h4>General & Sports</h4>
+                <div class="cat-pts-row">
+                    <span style="color:var(--zellij-red);">🔴 ZELLIJ</span>
+                    <span id="genPtsA">0 Pts</span>
+                </div>
+                <div class="cat-pts-row">
+                    <span style="color:var(--iznik-blue);">🔵 IZNIK</span>
+                    <span id="genPtsB">0 Pts</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Admin Override Panel -->
+        <div class="card admin-only" data-display="block" style="margin-top: 30px; border: 2px dashed var(--accent-gold);">
+            <div class="card-header" style="background:#b45309;">
+                <h3>⚙️ Admin: Manual Points Control</h3>
+            </div>
+            <div class="rules-body" style="padding: 18px;">
+                <p style="font-size: 0.85rem; color:var(--text-muted); margin-top:0;">ശ്രദ്ധിക്കുക: റിസൾട്ടുകൾ ചേർത്തുള്ള ഓട്ടോമാറ്റിക് പോയിന്റ് കണക്കുകൂട്ടലിന് പുറമെ നേരിട്ട് പോയിന്റുകൾ മാറ്റാൻ ഈ പാനൽ ഉപയോഗിക്കാം.</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <div>
+                        <label style="font-weight:800; font-size:0.82rem; display:block; margin-bottom:5px;">Team ZELLIJ Points:</label>
+                        <input type="number" id="inputPtsZellij" class="form-control" placeholder="0">
+                    </div>
+                    <div>
+                        <label style="font-weight:800; font-size:0.82rem; display:block; margin-bottom:5px;">Team IZNIK Points:</label>
+                        <input type="number" id="inputPtsIznik" class="form-control" placeholder="0">
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-submit" style="background:#059669; color:#fff; margin-top:0;" onclick="saveTeamPoints()">പോയിന്റുകൾ സേവ് ചെയ്യുക</button>
+                    <button class="btn-submit" style="background:#dc2626; color:#fff; margin-top:0;" onclick="disableManualScoreOverride()">ഓട്ടോമാറ്റിക് മോഡ് പുനഃസ്ഥാപിക്കുക</button>
+                </div>
+            </div>
+        </div>
 
     </div>
-  </header>
 
-  <!-- TICKER -->
-  <div class="ticker">
-    <div class="container">
-      <p id="tickerText">
-        EID-E IRSHAD — CAMPUS FEST 2K26 | LIVE POINTS TABLE
-      </p>
-    </div>
-  </div>
-
-  <main>
-
-    <!-- PAGE HERO -->
-    <section class="page-hero">
-      <div class="container">
-        <p class="eyebrow">EVERY POINT COUNTS</p>
-        <h1>Team <span>Scoreboard</span></h1>
-        <p>
-          Track the competition standings of Team ZELLIJ
-          and Team IZNIK.
-        </p>
-
-        <div class="hero-meta">
-          <span>🔴 ZELLIJ</span>
-          <span>🔵 IZNIK</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- LEADERBOARD -->
-    <section class="section">
-      <div class="container">
-
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">CURRENT STANDINGS</p>
-            <h2>Points <span>Leaderboard</span></h2>
-          </div>
-
-          <span class="live-indicator">
-            <span class="live-dot"></span>
-            SCOREBOARD
-          </span>
-        </div>
-
-        <div class="leaderboard" id="leaderboard">
-
-          <!-- ZELLIJ -->
-          <article class="score-card zellij-score-card">
-
-            <div class="score-card-header">
-              <span class="score-team-symbol">Z</span>
-              <div>
-                <p class="score-team-label">TEAM RED</p>
-                <h3>ZELLIJ</h3>
-              </div>
-              <span class="rank-badge">TEAM A</span>
-            </div>
-
-            <div class="score-number" id="zellijScore">0</div>
-            <p class="score-caption">TOTAL POINTS</p>
-
-            <div class="score-progress-track">
-              <div
-                class="score-progress zellij-progress"
-                id="zellijBar"
-                style="width: 0%"
-              ></div>
-            </div>
-
-            <p class="score-footnote">Team ZELLIJ</p>
-
-          </article>
-
-          <!-- IZNIK -->
-          <article class="score-card iznik-score-card">
-
-            <div class="score-card-header">
-              <span class="score-team-symbol">I</span>
-              <div>
-                <p class="score-team-label">TEAM BLUE</p>
-                <h3>IZNIK</h3>
-              </div>
-              <span class="rank-badge">TEAM B</span>
-            </div>
-
-            <div class="score-number" id="iznikScore">0</div>
-            <p class="score-caption">TOTAL POINTS</p>
-
-            <div class="score-progress-track">
-              <div
-                class="score-progress iznik-progress"
-                id="iznikBar"
-                style="width: 0%"
-              ></div>
-            </div>
-
-            <p class="score-footnote">Team IZNIK</p>
-
-          </article>
-
-        </div>
-
-        <p class="notice-text">
-          Points will appear here when the scoring system is connected
-          to the official competition records.
-        </p>
-
-      </div>
-    </section>
-
-    <!-- POINT SCHEME -->
-    <section class="section section-alt">
-      <div class="container">
-
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">SCORING SYSTEM</p>
-            <h2>Points <span>Distribution</span></h2>
-          </div>
-        </div>
-
-        <div class="scoring-grid">
-
-          <article class="scoring-card">
-            <div class="scoring-icon">🥇</div>
-            <h3>Individual Events</h3>
-
-            <div class="scoring-row">
-              <span>1st Place</span>
-              <strong>5 Points</strong>
-            </div>
-
-            <div class="scoring-row">
-              <span>2nd Place</span>
-              <strong>3 Points</strong>
-            </div>
-
-            <div class="scoring-row">
-              <span>3rd Place</span>
-              <strong>1 Point</strong>
-            </div>
-          </article>
-
-          <article class="scoring-card">
-            <div class="scoring-icon">🏆</div>
-            <h3>Group Events</h3>
-
-            <div class="scoring-row">
-              <span>1st Place</span>
-              <strong>10 Points</strong>
-            </div>
-
-            <div class="scoring-row">
-              <span>2nd Place</span>
-              <strong>6 Points</strong>
-            </div>
-
-            <div class="scoring-row">
-              <span>3rd Place</span>
-              <strong>3 Points</strong>
-            </div>
-          </article>
-
-        </div>
-
-        <p class="notice-text">
-          The scoring values shown above follow the proposed point scheme.
-          Confirm the final scheme with the festival committee before
-          publishing official scores.
-        </p>
-
-      </div>
-    </section>
-
-    <!-- TEAM LINKS -->
-    <section class="section">
-      <div class="container">
-        <div class="team-spirit">
-          <p class="eyebrow">FOLLOW THE COMPETITION</p>
-          <h2>Every Event Makes <span>a Difference</span></h2>
-          <p>
-            Visit the results page to see officially announced winners.
-          </p>
-
-          <a href="results.html" class="btn btn-primary">
-            View Results →
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="site-footer">
-      <div class="container footer-content">
-
-        <div>
-          <strong>EID-E IRSHAD — CAMPUS FEST 2K26</strong>
-          <p>Art, Literature & Sports</p>
-          <p>Irshadunnasiheen Sahithya Samajam</p>
-          <p>Rahmaniyya Arabic College, Attassery</p>
-        </div>
-
-        <div class="footer-links">
-          <a href="index.html">Home</a>
-          <a href="programs.html">Programs</a>
-          <a href="results.html">Results</a>
-          <a href="teams.html">Teams</a>
-        </div>
-
-      </div>
-
-      <div class="container footer-bottom">
-        <p>© 2026 EID-E IRSHAD CAMPUS FEST 2K26</p>
-      </div>
+    <footer>
+        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
     </footer>
 
-  </main>
-
-  <script src="app.js"></script>
-
+    <script src="app.js"></script>
 </body>
 </html>
