@@ -1,257 +1,102 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ml" data-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Teams | EID-E IRSHAD CAMPUS FEST 2K26</title>
-
-  <meta
-    name="description"
-    content="Meet Team ZELLIJ and Team IZNIK at EID-E IRSHAD CAMPUS FEST 2K26."
-  >
-
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teams & Members — EID-E IRSHAD 2K26</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
+<body>
 
-<body data-page="teams">
-
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="container nav-container">
-
-      <a class="brand" href="index.html">
-        <span class="brand-mark">EI</span>
-        <span class="brand-text">
-          <strong>EID-E IRSHAD</strong>
-          <small>CAMPUS FEST 2K26</small>
-        </span>
-      </a>
-
-      <button
-        class="menu-btn"
-        id="menuBtn"
-        aria-label="Toggle navigation"
-        aria-expanded="false"
-      >☰</button>
-
-      <nav class="main-nav" id="mainNav">
-        <a href="index.html">Home</a>
-        <a href="programs.html">Programs</a>
-        <a href="results.html">Results</a>
-        <a href="teams.html" class="active">Teams</a>
-        <a href="points.html">Points</a>
-        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">☀</button>
-      </nav>
-
-    </div>
-  </header>
-
-  <!-- TICKER -->
-  <div class="ticker">
-    <div class="container">
-      <p id="tickerText">
-        TWO TEAMS • ONE FESTIVAL • ENDLESS TALENT
-      </p>
-    </div>
-  </div>
-
-  <main>
-
-    <!-- PAGE HERO -->
-    <section class="page-hero">
-      <div class="container">
-        <p class="eyebrow">UNITY • PASSION • EXCELLENCE</p>
-        <h1>Meet Our <span>Teams</span></h1>
-        <p>
-          Two teams, one celebration of talent, creativity
-          and sportsmanship.
-        </p>
-
-        <div class="hero-meta">
-          <span>🔴 ZELLIJ — RED TEAM</span>
-          <span>🔵 IZNIK — BLUE TEAM</span>
+    <!-- Sticky Admin Bar -->
+    <div id="adminBar" class="admin-bar">
+        <span>⚙️ Admin Mode Active (Teams Roster)</span>
+        <div class="admin-actions">
+            <button class="btn-backup" onclick="exportBackupJSON()">📥 Backup JSON</button>
+            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
         </div>
-      </div>
-    </section>
+    </div>
 
-    <!-- TEAMS -->
-    <section class="section">
-      <div class="container">
+    <!-- Top Navigation Bar -->
+    <div class="top-nav-bar">
+        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
+        <span class="nav-page-title">👥 TEAMS (ZELLIJ & IZNIK)</span>
+        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
+    </div>
 
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">THE COMPETITORS</p>
-            <h2>Our <span>Team Family</span></h2>
-          </div>
+    <!-- Main Container -->
+    <div class="container" style="max-width: 950px; margin: 25px auto;">
+        
+        <h1 class="page-title">Fest Houses & Teams</h1>
+        <p class="page-subtitle">റഹ്മാനിയ്യ അറബിക് കോളേജ് ഫെസ്റ്റ് ഹൗസുകളും അംഗങ്ങളും</p>
+
+        <!-- Admin Add Student Box -->
+        <div class="card admin-only" data-display="block" style="margin-bottom: 25px; border: 2px dashed var(--accent-gold);">
+            <div class="card-header">
+                <h3>➕ പുതിയ വിദ്യാർത്ഥിയെ ടീമിലേക്ക് ചേർക്കുക</h3>
+            </div>
+            <div class="rules-body" style="padding: 15px;">
+                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; align-items: end;">
+                    <div>
+                        <label style="font-size: 0.78rem; font-weight: 800; margin-bottom: 4px; display: block;">വിദ്യാർത്ഥിയുടെ പേര്:</label>
+                        <input type="text" id="newStudentName" class="form-control" placeholder="ഉദാ: മുഹമ്മദ് ഇസ്മായിൽ">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.78rem; font-weight: 800; margin-bottom: 4px; display: block;">ടീം:</label>
+                        <select id="newStudentTeam" class="form-control">
+                            <option value="teamA">🔴 Team ZELLIJ</option>
+                            <option value="teamB">🔵 Team IZNIK</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size: 0.78rem; font-weight: 800; margin-bottom: 4px; display: block;">വിഭാഗം:</label>
+                        <select id="newStudentCat" class="form-control">
+                            <option value="senior">Senior</option>
+                            <option value="junior">Junior</option>
+                            <option value="subjunior">Sub Junior</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button class="btn-submit" style="margin-top:0; height: 42px;" onclick="addNewStudent()">ചേർക്കുക</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
+        <!-- Teams Grid (ZELLIJ & IZNIK) -->
         <div class="teams-grid">
-
-          <!-- TEAM ZELLIJ -->
-          <article class="team-card zellij-team">
-
-            <div class="team-banner">
-              <div class="team-emblem">Z</div>
-              <div>
-                <p class="team-label">TEAM RED</p>
-                <h2>ZELLIJ</h2>
-                <p>Strength in Unity</p>
-              </div>
-              <span class="team-color-dot" aria-label="Red team"></span>
+            
+            <!-- Team ZELLIJ -->
+            <div class="team-box zellij">
+                <div class="team-banner zellij">
+                    <h2>🔴 Team ZELLIJ</h2>
+                    <span style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:0.8rem; background:rgba(0,0,0,0.25); padding:4px 10px; border-radius:12px;">RED HOUSE</span>
+                </div>
+                <div class="team-body" id="teamAContainer">
+                    <!-- Populated via app.js -->
+                </div>
             </div>
 
-            <div class="team-card-body">
-
-              <div class="team-members-heading">
-                <h3>Team Leadership</h3>
-                <span>2026</span>
-              </div>
-
-              <div class="member-row">
-                <div class="member-avatar">C</div>
-                <div class="member-info">
-                  <span class="member-role">Captain</span>
-                  <strong lang="ml">മുഹമ്മദ് ഇസ്മായിൽ</strong>
+            <!-- Team IZNIK -->
+            <div class="team-box iznik">
+                <div class="team-banner iznik">
+                    <h2>🔵 Team IZNIK</h2>
+                    <span style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:0.8rem; background:rgba(0,0,0,0.25); padding:4px 10px; border-radius:12px;">BLUE HOUSE</span>
                 </div>
-                <span class="member-star">★</span>
-              </div>
-
-              <div class="member-row">
-                <div class="member-avatar">VC</div>
-                <div class="member-info">
-                  <span class="member-role">Vice Captain</span>
-                  <strong lang="ml">അബ്ദുറഹ്മാൻ</strong>
+                <div class="team-body" id="teamBContainer">
+                    <!-- Populated via app.js -->
                 </div>
-              </div>
-
-              <div class="member-row">
-                <div class="member-avatar">SR</div>
-                <div class="member-info">
-                  <span class="member-role">Senior Representative</span>
-                  <strong lang="ml">യാസിർ</strong>
-                </div>
-              </div>
-
-              <div class="member-row">
-                <div class="member-avatar">JR</div>
-                <div class="member-info">
-                  <span class="member-role">Junior Representative</span>
-                  <strong lang="ml">സാലിഹ്</strong>
-                </div>
-              </div>
-
-              <a class="btn btn-secondary team-action" href="points.html">
-                View Team Points →
-              </a>
-
-            </div>
-          </article>
-
-          <!-- TEAM IZNIK -->
-          <article class="team-card iznik-team">
-
-            <div class="team-banner">
-              <div class="team-emblem">I</div>
-              <div>
-                <p class="team-label">TEAM BLUE</p>
-                <h2>IZNIK</h2>
-                <p>Driven by Excellence</p>
-              </div>
-              <span class="team-color-dot" aria-label="Blue team"></span>
             </div>
 
-            <div class="team-card-body">
-
-              <div class="team-members-heading">
-                <h3>Team Leadership</h3>
-                <span>2026</span>
-              </div>
-
-              <div class="member-row">
-                <div class="member-avatar">C</div>
-                <div class="member-info">
-                  <span class="member-role">Captain</span>
-                  <strong lang="ml">അബ്ദുല്ല</strong>
-                </div>
-                <span class="member-star">★</span>
-              </div>
-
-              <div class="member-row">
-                <div class="member-avatar">VC</div>
-                <div class="member-info">
-                  <span class="member-role">Vice Captain</span>
-                  <strong lang="ml">മുഹ്സിൻ</strong>
-                </div>
-              </div>
-
-              <div class="member-row">
-                <div class="member-avatar">SR</div>
-                <div class="member-info">
-                  <span class="member-role">Senior Representative</span>
-                  <strong lang="ml">ബിലാൽ</strong>
-                </div>
-              </div>
-
-              <div class="member-row">
-                <div class="member-avatar">JR</div>
-                <div class="member-info">
-                  <span class="member-role">Junior Representative</span>
-                  <strong lang="ml">റയാൻ</strong>
-                </div>
-              </div>
-
-              <a class="btn btn-secondary team-action" href="points.html">
-                View Team Points →
-              </a>
-
-            </div>
-          </article>
-
         </div>
+    </div>
 
-        <!-- TEAM SPIRIT -->
-        <div class="team-spirit">
-          <p class="eyebrow">CAMPUS FIESTA 2K26</p>
-          <h2>Different Colours. <span>One Community.</span></h2>
-          <p>
-            Celebrate creativity, knowledge, teamwork and
-            sportsmanship throughout the festival.
-          </p>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="site-footer">
-      <div class="container footer-content">
-
-        <div>
-          <strong>EID-E IRSHAD — CAMPUS FEST 2K26</strong>
-          <p>Art, Literature & Sports</p>
-          <p>Irshadunnasiheen Sahithya Samajam</p>
-          <p>Rahmaniyya Arabic College, Attassery</p>
-        </div>
-
-        <div class="footer-links">
-          <a href="index.html">Home</a>
-          <a href="programs.html">Programs</a>
-          <a href="results.html">Results</a>
-          <a href="points.html">Points</a>
-        </div>
-
-      </div>
-
-      <div class="container footer-bottom">
-        <p>© 2026 EID-E IRSHAD CAMPUS FEST 2K26</p>
-      </div>
+    <footer>
+        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
     </footer>
 
-  </main>
-
-  <script src="app.js"></script>
-
+    <script src="app.js"></script>
 </body>
 </html>
