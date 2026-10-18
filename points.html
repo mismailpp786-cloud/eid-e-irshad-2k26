@@ -1,209 +1,272 @@
+
 <!DOCTYPE html>
-<html lang="ml" data-theme="light">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Scoreboard — EID-E IRSHAD 2K26</title>
-    <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <style>
-        :root {
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-color: #1e293b;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-        }
-        [data-theme="dark"] {
-            --bg-color: #090d16;
-            --card-bg: #131c31;
-            --text-color: #f1f5f9;
-            --text-muted: #94a3b8;
-            --border-color: #1e293b;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Anek Malayalam', 'Montserrat', sans-serif;
-            margin: 0; padding: 0;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
+  <title>Points Table | EID-E IRSHAD CAMPUS FEST 2K26</title>
 
-        .admin-bar { background: #059669; color: #fff; padding: 10px 15px; display: none; justify-content: space-between; align-items: center; font-size: 0.9rem; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .admin-actions button { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; margin-left: 5px; }
-        .btn-logout { background: #dc2626; color: #fff; }
+  <meta
+    name="description"
+    content="Team leaderboard and competition points for EID-E IRSHAD CAMPUS FEST 2K26."
+  >
 
-        .top-nav-bar {
-            background: var(--card-bg);
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        .back-home-btn {
-            background: #fbbf24;
-            color: #0f172a;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 800;
-            font-size: 0.85rem;
-            cursor: pointer;
-            font-family: 'Montserrat', sans-serif;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; box-sizing: border-box; }
-        
-        .page-title {
-            text-align: center;
-            font-weight: 900;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: #f59e0b;
-        }
-
-        .score-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        .score-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 15px;
-        }
-        @media(max-width: 600px) { .score-grid { grid-template-columns: 1fr; } }
-
-        .team-score-box {
-            background: var(--bg-color);
-            border: 1.5px solid var(--border-color);
-            border-radius: 10px;
-            padding: 16px;
-        }
-        .team-score-box h3 { margin: 0 0 5px 0; font-size: 1.2rem; font-weight: 900; }
-        .score-num { font-size: 2.2rem; font-weight: 900; font-family: 'Montserrat', sans-serif; color: #f59e0b; margin: 5px 0; }
-
-        .admin-controls-box {
-            background: var(--card-bg);
-            border: 1.5px dashed #f59e0b;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 25px;
-            display: none;
-        }
-        .admin-controls-box h3 { margin-top: 0; color: #f59e0b; font-weight: 900; }
-        .admin-controls-box input { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); box-sizing: border-box; }
-        .btn-save { background: #059669; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; }
-
-        footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.85rem; margin-top: 30px; border-top: 1px solid var(--border-color); font-family: 'Montserrat', sans-serif; }
-    </style>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
-    <div id="adminBar" class="admin-bar">
-        <span>⚙️ Admin Mode Active</span>
-        <div class="admin-actions">
-            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
-        </div>
+<body data-page="points">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container nav-container">
+
+      <a class="brand" href="index.html">
+        <span class="brand-mark">EI</span>
+        <span class="brand-text">
+          <strong>EID-E IRSHAD</strong>
+          <small>CAMPUS FEST 2K26</small>
+        </span>
+      </a>
+
+      <button
+        class="menu-btn"
+        id="menuBtn"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+      >☰</button>
+
+      <nav class="main-nav" id="mainNav">
+        <a href="index.html">Home</a>
+        <a href="programs.html">Programs</a>
+        <a href="results.html">Results</a>
+        <a href="teams.html">Teams</a>
+        <a href="points.html" class="active">Points</a>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">☀</button>
+      </nav>
+
     </div>
+  </header>
 
-    <div class="top-nav-bar">
-        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
-        <span style="font-weight: 800; font-size: 0.9rem;">📊 LIVE SCOREBOARD</span>
-    </div>
-
+  <!-- TICKER -->
+  <div class="ticker">
     <div class="container">
-        <h1 class="page-title">Live Scoreboard</h1>
-
-        <div class="score-card">
-            <h2 style="margin-top: 0; font-weight: 800;">Houses Championship Points</h2>
-            <div class="score-grid">
-                <div class="team-score-box" style="border-top: 4px solid #b91c1c;">
-                    <h3 style="color: #b91c1c;">🔴 Team ZELLIJ</h3>
-                    <div class="score-num" id="displayPtsZellij">0</div>
-                    <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Total Points</p>
-                </div>
-
-                <div class="team-score-box" style="border-top: 4px solid #1d4ed8;">
-                    <h3 style="color: #1d4ed8;">🔵 Team IZNIK</h3>
-                    <div class="score-num" id="displayPtsIznik">0</div>
-                    <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Total Points</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ADMIN PANEL TO UPDATE POINTS -->
-        <div id="adminPointsPanel" class="admin-controls-box">
-            <h3>⚙️ Admin: Update Team Points</h3>
-            <label>Team ZELLIJ Points:</label>
-            <input type="number" id="inputPtsZellij" placeholder="Enter points">
-            <label>Team IZNIK Points:</label>
-            <input type="number" id="inputPtsIznik" placeholder="Enter points">
-            <button class="btn-save" onclick="saveTeamPoints()">Save Points</button>
-        </div>
+      <p id="tickerText">
+        EID-E IRSHAD — CAMPUS FEST 2K26 | LIVE POINTS TABLE
+      </p>
     </div>
+  </div>
 
-    <footer>
-        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
+  <main>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow">EVERY POINT COUNTS</p>
+        <h1>Team <span>Scoreboard</span></h1>
+        <p>
+          Track the competition standings of Team ZELLIJ
+          and Team IZNIK.
+        </p>
+
+        <div class="hero-meta">
+          <span>🔴 ZELLIJ</span>
+          <span>🔵 IZNIK</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEADERBOARD -->
+    <section class="section">
+      <div class="container">
+
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">CURRENT STANDINGS</p>
+            <h2>Points <span>Leaderboard</span></h2>
+          </div>
+
+          <span class="live-indicator">
+            <span class="live-dot"></span>
+            SCOREBOARD
+          </span>
+        </div>
+
+        <div class="leaderboard" id="leaderboard">
+
+          <!-- ZELLIJ -->
+          <article class="score-card zellij-score-card">
+
+            <div class="score-card-header">
+              <span class="score-team-symbol">Z</span>
+              <div>
+                <p class="score-team-label">TEAM RED</p>
+                <h3>ZELLIJ</h3>
+              </div>
+              <span class="rank-badge">TEAM A</span>
+            </div>
+
+            <div class="score-number" id="zellijScore">0</div>
+            <p class="score-caption">TOTAL POINTS</p>
+
+            <div class="score-progress-track">
+              <div
+                class="score-progress zellij-progress"
+                id="zellijBar"
+                style="width: 0%"
+              ></div>
+            </div>
+
+            <p class="score-footnote">Team ZELLIJ</p>
+
+          </article>
+
+          <!-- IZNIK -->
+          <article class="score-card iznik-score-card">
+
+            <div class="score-card-header">
+              <span class="score-team-symbol">I</span>
+              <div>
+                <p class="score-team-label">TEAM BLUE</p>
+                <h3>IZNIK</h3>
+              </div>
+              <span class="rank-badge">TEAM B</span>
+            </div>
+
+            <div class="score-number" id="iznikScore">0</div>
+            <p class="score-caption">TOTAL POINTS</p>
+
+            <div class="score-progress-track">
+              <div
+                class="score-progress iznik-progress"
+                id="iznikBar"
+                style="width: 0%"
+              ></div>
+            </div>
+
+            <p class="score-footnote">Team IZNIK</p>
+
+          </article>
+
+        </div>
+
+        <p class="notice-text">
+          Points will appear here when the scoring system is connected
+          to the official competition records.
+        </p>
+
+      </div>
+    </section>
+
+    <!-- POINT SCHEME -->
+    <section class="section section-alt">
+      <div class="container">
+
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">SCORING SYSTEM</p>
+            <h2>Points <span>Distribution</span></h2>
+          </div>
+        </div>
+
+        <div class="scoring-grid">
+
+          <article class="scoring-card">
+            <div class="scoring-icon">🥇</div>
+            <h3>Individual Events</h3>
+
+            <div class="scoring-row">
+              <span>1st Place</span>
+              <strong>5 Points</strong>
+            </div>
+
+            <div class="scoring-row">
+              <span>2nd Place</span>
+              <strong>3 Points</strong>
+            </div>
+
+            <div class="scoring-row">
+              <span>3rd Place</span>
+              <strong>1 Point</strong>
+            </div>
+          </article>
+
+          <article class="scoring-card">
+            <div class="scoring-icon">🏆</div>
+            <h3>Group Events</h3>
+
+            <div class="scoring-row">
+              <span>1st Place</span>
+              <strong>10 Points</strong>
+            </div>
+
+            <div class="scoring-row">
+              <span>2nd Place</span>
+              <strong>6 Points</strong>
+            </div>
+
+            <div class="scoring-row">
+              <span>3rd Place</span>
+              <strong>3 Points</strong>
+            </div>
+          </article>
+
+        </div>
+
+        <p class="notice-text">
+          The scoring values shown above follow the proposed point scheme.
+          Confirm the final scheme with the festival committee before
+          publishing official scores.
+        </p>
+
+      </div>
+    </section>
+
+    <!-- TEAM LINKS -->
+    <section class="section">
+      <div class="container">
+        <div class="team-spirit">
+          <p class="eyebrow">FOLLOW THE COMPETITION</p>
+          <h2>Every Event Makes <span>a Difference</span></h2>
+          <p>
+            Visit the results page to see officially announced winners.
+          </p>
+
+          <a href="results.html" class="btn btn-primary">
+            View Results →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="container footer-content">
+
+        <div>
+          <strong>EID-E IRSHAD — CAMPUS FEST 2K26</strong>
+          <p>Art, Literature & Sports</p>
+          <p>Irshadunnasiheen Sahithya Samajam</p>
+          <p>Rahmaniyya Arabic College, Attassery</p>
+        </div>
+
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="programs.html">Programs</a>
+          <a href="results.html">Results</a>
+          <a href="teams.html">Teams</a>
+        </div>
+
+      </div>
+
+      <div class="container footer-bottom">
+        <p>© 2026 EID-E IRSHAD CAMPUS FEST 2K26</p>
+      </div>
     </footer>
 
-    <script>
-        let isAdmin = localStorage.getItem("eid_irshad_admin_logged") === "true";
+  </main>
 
-        function updateAdminUI() {
-            const bar = document.getElementById("adminBar");
-            const panel = document.getElementById("adminPointsPanel");
-            if (isAdmin) {
-                if (bar) bar.style.display = "flex";
-                if (panel) panel.style.display = "block";
-            } else {
-                if (bar) bar.style.display = "none";
-                if (panel) panel.style.display = "none";
-            }
-        }
+  <script src="app.js"></script>
 
-        function logoutAdmin() {
-            localStorage.removeItem("eid_irshad_admin_logged");
-            isAdmin = false;
-            updateAdminUI();
-            alert("Logged out from admin mode.");
-        }
-
-        function loadPoints() {
-            let ptsZ = localStorage.getItem("eid_pts_zellij") || "0";
-            let ptsI = localStorage.getItem("eid_pts_iznik") || "0";
-            document.getElementById("displayPtsZellij").textContent = ptsZ;
-            document.getElementById("displayPtsIznik").textContent = ptsI;
-            document.getElementById("inputPtsZellij").value = ptsZ;
-            document.getElementById("inputPtsIznik").value = ptsI;
-        }
-
-        function saveTeamPoints() {
-            let ptsZ = document.getElementById("inputPtsZellij").value.trim() || "0";
-            let ptsI = document.getElementById("inputPtsIznik").value.trim() || "0";
-            localStorage.setItem("eid_pts_zellij", ptsZ);
-            localStorage.setItem("eid_pts_iznik", ptsI);
-            loadPoints();
-            alert("Points updated successfully!");
-            confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            updateAdminUI();
-            loadPoints();
-        });
-    </script>
 </body>
 </html>
