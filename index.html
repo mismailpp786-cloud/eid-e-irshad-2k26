@@ -27,15 +27,10 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            transition: background 0.3s ease, color 0.3s ease;
             font-family: 'Anek Malayalam', 'Montserrat', sans-serif;
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
+            transition: background 0.3s ease, color 0.3s ease;
         }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb { background: #f59e0b; border-radius: 4px; }
 
         .live-ticker {
             background: #b91c1c;
@@ -47,71 +42,44 @@
             overflow: hidden;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .live-ticker marquee { font-family: 'Anek Malayalam', sans-serif; }
 
-        #introSplash {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #172554 100%);
-            color: #ffffff; display: flex; flex-direction: column;
-            justify-content: space-between; align-items: center;
-            padding: 20px 15px; z-index: 99999; text-align: center;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-            box-sizing: border-box; overflow-y: auto;
+        .hero {
+            background: var(--header-bg);
+            color: #ffffff;
+            text-align: center;
+            padding: 25px 15px 35px;
+            border-bottom: 5px solid #f59e0b;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
         }
-        #introSplash.fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
-        .intro-top-brand { display: flex; justify-content: space-between; width: 100%; max-width: 600px; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; color: #cbd5e1; text-transform: uppercase; font-family: 'Montserrat', sans-serif; }
-        .intro-center-box { display: flex; flex-direction: column; align-items: center; max-width: 600px; width: 100%; margin: auto 0; }
-        
-        .countdown-container {
-            display: flex; gap: 8px; justify-content: center; margin-bottom: 15px; flex-wrap: wrap;
+        .hero-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 900px;
+            margin: 0 auto 15px;
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        .countdown-box {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1.5px solid rgba(255, 255, 255, 0.25);
-            border-radius: 10px; padding: 8px 6px; min-width: 55px;
-            backdrop-filter: blur(5px);
-        }
-        .countdown-box span.num {
-            display: block; font-size: 1.5rem; font-weight: 900;
-            font-family: 'Montserrat', sans-serif; color: #fbbf24; line-height: 1;
-        }
-        .countdown-box span.label {
-            display: block; font-size: 0.55rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 1px; color: #e2e8f0; margin-top: 3px;
-        }
-
-        .intro-title { font-size: 1.9rem; font-weight: 900; letter-spacing: 2px; margin-bottom: 3px; text-shadow: 2px 2px 6px rgba(0,0,0,0.4); font-family: 'Montserrat', sans-serif; }
-        .intro-subtitle { font-size: 0.9rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Montserrat', sans-serif; }
-        
-        .intro-calligraphy-box { margin-bottom: 12px; }
-        .intro-calligraphy-img { max-height: 48px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
-
-        .intro-details { font-size: 0.8rem; color: #e2e8f0; line-height: 1.4; margin-bottom: 15px; }
-        .btn-enter-site { border: none; padding: 11px 30px; border-radius: 30px; font-weight: 900; font-size: 0.95rem; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.3); transition: 0.2s; font-family: 'Montserrat', sans-serif; background: #fbbf24; color: #0f172a; }
-        .btn-enter-site:hover { transform: translateY(-3px); filter: brightness(1.1); }
-        .intro-footer { font-size: 0.65rem; color: #94a3b8; letter-spacing: 1px; font-family: 'Montserrat', sans-serif; }
-
-        .hero { background: var(--header-bg); color: #ffffff; text-align: center; padding: 25px 15px 40px; border-bottom: 5px solid #f59e0b; box-shadow: 0 4px 20px rgba(0,0,0,0.25); position: relative; }
-        .hero-top-bar { display: flex; justify-content: space-between; align-items: center; max-width: 980px; margin: 0 auto 15px; padding: 8px 14px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.1); flex-wrap: wrap; gap: 10px; }
         .top-controls { display: flex; gap: 8px; align-items: center; }
-        
-        .admin-top-btn { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1.5px solid #fbbf24; padding: 6px 16px; border-radius: 20px; font-weight: 800; font-size: 0.82rem; cursor: pointer; transition: 0.2s; }
-        .admin-top-btn:hover { background: #fbbf24; color: #0f172a; }
-        
-        .theme-toggle-btn { background: rgba(255, 255, 255, 0.15); color: #fff; border: 1.5px solid rgba(255,255,255,0.3); padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.82rem; cursor: pointer; transition: 0.2s; }
-        .theme-toggle-btn:hover { background: rgba(255, 255, 255, 0.3); }
+        .admin-top-btn { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1.5px solid #fbbf24; padding: 5px 14px; border-radius: 20px; font-weight: 800; font-size: 0.8rem; cursor: pointer; }
+        .theme-toggle-btn { background: rgba(255, 255, 255, 0.15); color: #fff; border: 1.5px solid rgba(255,255,255,0.3); padding: 5px 12px; border-radius: 20px; font-weight: 800; font-size: 0.8rem; cursor: pointer; }
 
-        .calligraphy-box { margin-bottom: 12px; display: flex; justify-content: center; }
-        .hero-calligraphy-img { max-height: 65px; width: auto; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3)); }
+        .main-title { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 2.3rem; letter-spacing: 2px; margin: 10px 0 4px; }
+        .sub-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.05rem; letter-spacing: 2px; color: #fbbf24; }
+        .ribbon { font-family: 'Montserrat', sans-serif; font-size: 0.75rem; margin: 8px 0 15px; letter-spacing: 2px; color: #e2e8f0; }
 
         .date-container { display: flex; justify-content: center; gap: 8px; align-items: center; margin-top: 15px; flex-wrap: wrap; }
-        .month-year { background: rgba(255,255,255,0.1); padding: 6px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 800; line-height: 1.2; text-align: center; }
+        .month-year { background: rgba(255,255,255,0.1); padding: 6px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 800; text-align: center; }
         .date-box { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 8px; text-align: center; min-width: 45px; }
-        .date-box span.num { display: block; font-size: 1.2rem; font-weight: 900; line-height: 1; color: #fbbf24; }
-        .date-box span.day { display: block; font-size: 0.6rem; font-weight: 700; letter-spacing: 1px; margin-top: 2px; }
+        .date-box span.num { display: block; font-size: 1.2rem; font-weight: 900; color: #fbbf24; }
+        .date-box span.day { display: block; font-size: 0.6rem; font-weight: 700; letter-spacing: 1px; }
 
-        .global-search-box { max-width: 650px; margin: 20px auto 10px; padding: 0 15px; box-sizing: border-box; }
-        .global-search-input { width: 100%; padding: 12px 18px; border-radius: 30px; border: 2px solid #f59e0b; background: var(--card-bg); color: var(--text-color); font-size: 0.95rem; font-family: 'Anek Malayalam', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.08); outline: none; box-sizing: border-box; }
+        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; box-sizing: border-box; }
 
         .team-progress-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .progress-header { display: flex; justify-content: space-between; font-weight: 800; font-size: 0.85rem; margin-bottom: 8px; flex-wrap: wrap; gap: 5px; }
@@ -120,86 +88,47 @@
         .progress-iznik { background: #1d4ed8; height: 100%; transition: width 0.6s ease; }
 
         .poll-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .poll-title { font-weight: 800; font-size: 1rem; margin-bottom: 12px; color: #f59e0b; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .poll-title { font-weight: 800; font-size: 1rem; margin-bottom: 12px; color: #f59e0b; }
         .poll-option { background: var(--bg-color); border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; cursor: pointer; font-weight: 700; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
         .poll-option:hover { border-color: #f59e0b; background: rgba(245, 158, 11, 0.05); }
 
-        .card { background: var(--card-bg) !important; border-color: var(--border-color) !important; color: var(--text-color) !important; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-radius: 12px; margin-bottom: 20px; }
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .card-header { background: #1e293b; color: #fbbf24; padding: 14px 18px; border-radius: 12px 12px 0 0; font-weight: 800; }
-        .points-box { background: var(--bg-color) !important; border-color: var(--border-color) !important; border-radius: 10px; padding: 14px; margin-top: 15px; }
-        .point-item { background: var(--card-bg) !important; color: var(--text-color) !important; border-radius: 8px; padding: 10px; margin-top: 8px; border: 1px solid var(--border-color); }
+        .rules-body { padding: 18px; }
+        .rules-list { padding-left: 18px; line-height: 1.7; font-size: 0.92rem; }
         
-        .nav-card { background: var(--card-bg) !important; border-color: var(--border-color) !important; color: var(--text-color) !important; border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 15px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: 1px solid var(--border-color); }
-        .nav-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-        .nav-card-info h3 { color: var(--text-color) !important; font-weight: 800; margin-bottom: 3px; }
-        .nav-card-info p { color: var(--text-muted) !important; font-size: 0.85rem; }
-        
-        footer { color: var(--text-muted) !important; border-color: var(--border-color) !important; text-align: center; padding: 20px; font-size: 0.85rem; font-family: 'Montserrat', sans-serif; border-top: 1px solid var(--border-color); }
+        .points-box { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; margin-top: 15px; }
+        .points-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        @media(max-width: 600px) { .points-grid { grid-template-columns: 1fr; } }
+        .point-item { background: var(--card-bg); color: var(--text-color); border-radius: 8px; padding: 10px; border: 1px solid var(--border-color); font-size: 0.85rem; }
 
-        .admin-bar { background: #059669; color: #fff; padding: 10px 15px; display: none; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 0.9rem; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .home-nav-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        @media(max-width: 600px) { .home-nav-grid { grid-template-columns: 1fr; } }
+        
+        .nav-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 15px; cursor: pointer; transition: 0.2s; }
+        .nav-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .nav-card-info h3 { margin: 0 0 3px; font-weight: 800; font-size: 1.05rem; }
+        .nav-card-info p { margin: 0; font-size: 0.82rem; color: var(--text-muted); }
+
+        .admin-bar { background: #059669; color: #fff; padding: 10px 15px; display: none; justify-content: space-between; align-items: center; font-size: 0.9rem; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
         .admin-actions button { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; margin-left: 5px; }
         .btn-logout { background: #dc2626; color: #fff; }
-        
+
         .modal { display: none; position: fixed; z-index: 500; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); align-items: center; justify-content: center; padding: 15px; box-sizing: border-box; }
-        .modal-content { background: var(--card-bg); width: 100%; max-width: 380px; padding: 24px; border-radius: 14px; position: relative; color: var(--text-color); text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .modal-content { background: var(--card-bg); width: 100%; max-width: 380px; padding: 24px; border-radius: 14px; position: relative; color: var(--text-color); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .close-btn { position: absolute; right: 16px; top: 12px; font-size: 1.6rem; cursor: pointer; color: var(--text-muted); }
         .modal-content label { display: block; font-weight: 700; font-size: 0.85rem; margin-top: 10px; margin-bottom: 4px; }
         .modal-content input { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); border-radius: 8px; font-size: 0.95rem; margin-bottom: 10px; box-sizing: border-box; }
         .btn-submit { background: #1e293b; color: #fbbf24; border: none; padding: 11px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 10px; }
         #loginError { color: #dc2626; font-size: 0.85rem; font-weight: 700; margin-top: 5px; text-align: center; }
 
-        @media(max-width: 600px) {
-            .home-nav-grid { grid-template-columns: 1fr !important; }
-            .points-grid { grid-template-columns: 1fr !important; }
-        }
+        footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.85rem; margin-top: 30px; border-top: 1px solid var(--border-color); font-family: 'Montserrat', sans-serif; }
     </style>
 </head>
 <body>
 
     <div class="live-ticker">
         <marquee scrollamount="5">📢 സ്വാഗതം! EID-E IRSHAD CAMPUS FEST 2K26 നവംബർ 27, 28, 29 തീയതികളിൽ റഹ്മാനിയ്യ അറബിക് കോളേജിൽ വെച്ച് നടക്കുന്നു! മത്സര ഫലങ്ങളും പ്രോഗ്രാം ലിസ്റ്റുകളും തത്സമയം പരിശോധിക്കുക.</marquee>
-    </div>
-
-    <div id="introSplash">
-        <div class="intro-top-brand">
-            <span>IRSHADUNNASIHEEN SAMAJAM</span>
-            <span>EID-E IRSHAD 2K26</span>
-        </div>
-        <div class="intro-center-box">
-            
-            <div class="countdown-container">
-                <div class="countdown-box">
-                    <span class="num" id="cdDays">00</span>
-                    <span class="label">Days</span>
-                </div>
-                <div class="countdown-box">
-                    <span class="num" id="cdHours">00</span>
-                    <span class="label">Hours</span>
-                </div>
-                <div class="countdown-box">
-                    <span class="num" id="cdMins">00</span>
-                    <span class="label">Mins</span>
-                </div>
-                <div class="countdown-box">
-                    <span class="num" id="cdSecs">00</span>
-                    <span class="label">Secs</span>
-                </div>
-            </div>
-
-            <h1 class="intro-title" id="splashTitle">EID-E IRSHAD</h1>
-            <div class="intro-subtitle" id="splashSubtitle">CAMPUS FEST 2K26</div>
-            
-            <div class="intro-calligraphy-box">
-                <img src="calligraphy.png" alt="Calligraphy" class="intro-calligraphy-img" onerror="this.style.display='none';">
-            </div>
-
-            <div class="intro-details">
-                <strong>Rahmaniyya Arabic College, Attassery</strong><br>
-                November 27, 28, 29 (2026) • Art, Literature & Sports
-            </div>
-            <button class="btn-enter-site" id="splashBtn" onclick="closeIntroSplash()">Enter Fest ➔</button>
-        </div>
-        <div class="intro-footer">IRSHADUNNASIHEEN SAMAJAM &bull; All Rights Reserved</div>
     </div>
 
     <div id="adminBar" class="admin-bar">
@@ -209,81 +138,223 @@
         </div>
     </div>
 
-    <div class="page-view active">
-        <header class="hero">
-            <div class="hero-top-bar">
-                <span style="font-size: 0.82rem; color: #cbd5e1; font-weight: 700; font-family: 'Montserrat', sans-serif;">✨ EID-E IRSHAD 2K26</span>
-                <div class="top-controls">
-                    <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark Mode</button>
-                    <button class="admin-top-btn" id="adminBtn" onclick="openAdminModal()">🔐 Admin Login</button>
-                </div>
+    <header class="hero">
+        <div class="hero-top-bar">
+            <span style="font-size: 0.82rem; color: #cbd5e1; font-weight: 700; font-family: 'Montserrat', sans-serif;">✨ EID-E IRSHAD 2K26</span>
+            <div class="top-controls">
+                <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark Mode</button>
+                <button class="admin-top-btn" id="adminBtn" onclick="openAdminModal()">🔐 Admin Login</button>
             </div>
-            <div class="hero-content">
-                <div class="calligraphy-box">
-                    <img src="calligraphy.png" alt="Calligraphy" class="hero-calligraphy-img" onerror="this.style.display='none';">
-                </div>
-                
-                <h1 class="main-title" style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:2.5rem; letter-spacing:2px;">EID-E IRSHAD</h1>
-                <div class="sub-title" style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:1.05rem; letter-spacing:3px; color:#fbbf24; margin-top:4px;">CAMPUS FEST 2K26</div>
-                <div class="ribbon" style="font-family:'Montserrat',sans-serif; font-size:0.75rem; margin:8px 0 16px; letter-spacing:2px; color:#e2e8f0;">ART • LITERATURE • SPORTS</div>
-                
-                <div class="date-container">
-                    <div class="month-year"><span style="font-family:'Montserrat',sans-serif;">2026</span><br>NOV</div>
-                    <div class="date-box d-fri"><span class="num" style="font-family:'Montserrat',sans-serif;">27</span><span class="day" style="font-family:'Montserrat',sans-serif;">FRI</span></div>
-                    <div class="date-box d-sat"><span class="num" style="font-family:'Montserrat',sans-serif;">28</span><span class="day" style="font-family:'Montserrat',sans-serif;">SAT</span></div>
-                    <div class="date-box d-sun"><span class="num" style="font-family:'Montserrat',sans-serif;">29</span><span class="day" style="font-family:'Montserrat',sans-serif;">SUN</span></div>
-                </div>
-                
-                <div class="org-info" style="font-family:'Montserrat',sans-serif; font-size:0.78rem; line-height:1.5; color:#cbd5e1; margin-top:15px;">
-                    IRSHADUNNASIHEEN SAHITHYA SAMAJAM<br>
-                    Rahmaniyya Arabic College, Attassery, Po Trikkadeeri, Palakkad Dt, Kerala - 679502
-                </div>
+        </div>
+        <div class="hero-content">
+            <h1 class="main-title">EID-E IRSHAD</h1>
+            <div class="sub-title">CAMPUS FEST 2K26</div>
+            <div class="ribbon">ART • LITERATURE • SPORTS</div>
+            
+            <div class="date-container">
+                <div class="month-year"><span>2026</span><br>NOV</div>
+                <div class="date-box"><span class="num">27</span><span class="day">FRI</span></div>
+                <div class="date-box"><span class="num">28</span><span class="day">SAT</span></div>
+                <div class="date-box"><span class="num">29</span><span class="day">SUN</span></div>
             </div>
-        </header>
+            
+            <div class="org-info" style="font-family:'Montserrat',sans-serif; font-size:0.78rem; line-height:1.5; color:#cbd5e1; margin-top:15px;">
+                IRSHADUNNASIHEEN SAHITHYA SAMAJAM<br>
+                Rahmaniyya Arabic College, Attassery, Po Trikkadeeri, Palakkad Dt, Kerala - 679502
+            </div>
+        </div>
+    </header>
 
-        <div class="global-search-box">
-            <input type="text" class="global-search-input" placeholder="🔍 പ്രോഗ്രാമോ വിദ്യാർത്ഥിയെയോ ഇവിടെ തിരയുക..." onkeyup="handleGlobalSearch(this.value)">
+    <main class="container">
+        
+        <div class="team-progress-card">
+            <div class="progress-header">
+                <span style="color: #b91c1c;">🔴 ZELLIJ: <span id="ptsA">0</span> Pts</span>
+                <span style="color: #64748b;">LIVE LEADERBOARD</span>
+                <span style="color: #1d4ed8;"><span id="ptsB">0</span> Pts :IZNIK 🔵</span>
+            </div>
+            <div class="progress-bar-container">
+                <div id="barA" class="progress-zellij" style="width: 50%;"></div>
+                <div id="barB" class="progress-iznik" style="width: 50%;"></div>
+            </div>
         </div>
 
-        <main class="container" style="max-width: 900px; margin: 15px auto; padding: 0 15px; box-sizing: border-box;">
-            
-            <div class="team-progress-card">
-                <div class="progress-header">
-                    <span style="color: #b91c1c;">🔴 ZELLIJ: <span id="ptsA">0</span> Pts</span>
-                    <span style="color: #64748b;">LIVE LEADERBOARD</span>
-                    <span style="color: #1d4ed8;"><span id="ptsB">0</span> Pts :IZNIK 🔵</span>
+        <div class="poll-card">
+            <div class="poll-title">🗳️ Audience Choice Poll: ഏത് ടീമാണ് ഇന്ന് കൂടുതൽ തിളങ്ങിയത്?</div>
+            <div class="poll-option" onclick="votePoll('zellij')">
+                <span>🔴 Team ZELLIJ</span>
+                <span id="voteZellijCount">0 votes</span>
+            </div>
+            <div class="poll-option" onclick="votePoll('iznik')">
+                <span>🔵 Team IZNIK</span>
+                <span id="voteIznikCount">0 votes</span>
+            </div>
+            <div id="pollMsg" style="font-size: 0.8rem; color: #10b981; font-weight: 700; margin-top: 6px; text-align: center;"></div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>📜 ഫെസ്റ്റിന്റെ പൊതുനിയമങ്ങളും വിവരങ്ങളും</h3>
+            </div>
+            <div class="rules-body">
+                <ol class="rules-list">
+                    <li>മത്സരങ്ങളിൽ പങ്കെടുക്കുന്ന മുഴുവൻ വിദ്യാർത്ഥികളും കൃത്യസമയത്ത് സ്റ്റേജിൽ/വേദിയിൽ ഹാജരാകേണ്ടതാണ്.</li>
+                    <li>വിധികർത്താക്കളുടെ തീരുമാനം അന്തിമമായിരിക്കും. അതിൽ തർക്കങ്ങൾ അനുവദനീയമല്ല.</li>
+                    <li>ഓരോ മത്സരത്തിലും പങ്കെടുക്കുന്നവരുടെ എണ്ണം അതത് കാറ്റഗറി കോർഡിനേറ്റർമാർ മുൻകൂട്ടി ഉറപ്പുവരുത്തണം.</li>
+                    <li>സ്റ്റേജ്, ഓഫ്-സ്റ്റേജ്, സ്പോർട്സ് ഇനങ്ങളിൽ സമയപരിധി കർശനമായി പാലിക്കേണ്ടതാണ്.</li>
+                    <li>ആശയക്കുഴപ്പങ്ങൾ ഉണ്ടായാൽ ജനറൽ കൺവീനറുടെ തീരുമാനം അന്തിമമായിരിക്കും.</li>
+                </ol>
+
+                <div class="points-box">
+                    <h4 style="font-weight: 800; margin-bottom: 8px; font-size: 0.95rem;">📊 പോയിന്റ് നിലവാരം (Points System)</h4>
+                    <div class="points-grid">
+                        <div class="point-item"><strong>വ്യക്തിഗത ഇനങ്ങൾ (Individual):</strong><br>🥇 First: 5 Pts | 🥈 Second: 3 Pts | 🥉 Third: 1 Pt</div>
+                        <div class="point-item"><strong>ഗ്രൂപ്പ് ഇനങ്ങൾ (Group):</strong><br>🥇 First: 10 Pts | 🥈 Second: 6 Pts | 🥉 Third: 3 Pts</div>
+                    </div>
                 </div>
-                <div class="progress-bar-container">
-                    <div id="barA" class="progress-zellij" style="width: 50%;"></div>
-                    <div id="barB" class="progress-iznik" style="width: 50%;"></div>
+
+                <div style="text-align: right; margin-top: 15px; font-weight: 700; color: var(--text-muted); font-size: 0.85rem;">
+                    - Convener, EID-E IRSHAD Campus Fest 2K26
+                </div>
+            </div>
+        </div>
+
+        <div class="home-nav-grid">
+            <div class="nav-card" onclick="location.href='programs.html'">
+                <div style="font-size: 1.8rem;">📋</div>
+                <div class="nav-card-info">
+                    <h3>പ്രോഗ്രാം ലിസ്റ്റ്</h3>
+                    <p>Senior, Junior, Sub Junior, General മത്സരങ്ങൾ</p>
                 </div>
             </div>
 
-            <div class="poll-card">
-                <div class="poll-title">🗳️ Audience Choice Poll: ഏത് ടീമാണ് ഇന്ന് കൂടുതൽ തിളങ്ങിയത്?</div>
-                <div class="poll-option" onclick="votePoll('zellij')">
-                    <span>🔴 Team ZELLIJ</span>
-                    <span id="voteZellijCount">0 votes</span>
+            <div class="nav-card" onclick="location.href='results.html'" style="border-color: #f59e0b;">
+                <div style="font-size: 1.8rem;">🏆</div>
+                <div class="nav-card-info">
+                    <h3>മത്സര ഫലങ്ങൾ</h3>
+                    <p>വിജയികളുടെ വിവരങ്ങളും റിസൾട്ട് പോസ്റ്ററുകളും</p>
                 </div>
-                <div class="poll-option" onclick="votePoll('iznik')">
-                    <span>🔵 Team IZNIK</span>
-                    <span id="voteIznikCount">0 votes</span>
-                </div>
-                <div id="pollMsg" style="font-size: 0.8rem; color: #10b981; font-weight: 700; margin-top: 6px; text-align: center;"></div>
             </div>
 
-            <div class="card home-rules-card">
-                <div class="card-header">
-                    <h3>📜 ഫെസ്റ്റിന്റെ പൊതുനിയമങ്ങളും വിവരങ്ങളും</h3>
+            <div class="nav-card" onclick="location.href='teams.html'">
+                <div style="font-size: 1.8rem;">👥</div>
+                <div class="nav-card-info">
+                    <h3>ടീം ലിസ്റ്റ്</h3>
+                    <p>ZELLIJ & IZNIK മുഴുവൻ അംഗങ്ങളുടെ വിവരങ്ങൾ</p>
                 </div>
-                <div class="rules-body" style="padding: 18px;">
-                    <ol class="rules-list" style="padding-left: 18px; line-height: 1.7; font-size: 0.92rem;">
-                        <li>മത്സരങ്ങളിൽ പങ്കെടുക്കുന്ന മുഴുവൻ വിദ്യാർത്ഥികളും കൃത്യസമയത്ത് സ്റ്റേജിൽ/വേദിയിൽ ഹാജരാകേണ്ടതാണ്.</li>
-                        <li>വിധികർത്താക്കളുടെ തീരുമാനം അന്തിമമായിരിക്കും. അതിൽ തർക്കങ്ങൾ അനുവദനീയമല്ല.</li>
-                        <li>ഓരോ മത്സരത്തിലും പങ്കെടുക്കുന്നവരുടെ എണ്ണം അതത് കാറ്റഗറി കോർഡിനേറ്റർമാർ മുൻകൂട്ടി ഉറപ്പുവരുത്തണം.</li>
-                        <li>സ്റ്റേജ്, ഓഫ്-സ്റ്റേജ്, സ്പോർട്സ് ഇനങ്ങളിൽ സമയപരിധി കർശനമായി പാലിക്കേണ്ടതാണ്.</li>
-                        <li>ആശയക്കുഴപ്പങ്ങൾ ഉണ്ടായാൽ ജനറൽ കൺവീനറുടെ തീരുമാനം അന്തിമമായിരിക്കും.</li>
-                    </ol>
+            </div>
 
-                    <div class="points-box">
-                        <h4 style="font-weight: 800; margin-bottom: 8px; font-size: 0.95rem;">📊 പോയിന്റ് നി
+            <div class="nav-card" onclick="location.href='points.html'" style="border-color: #2563eb;">
+                <div style="font-size: 1.8rem;">📊</div>
+                <div class="nav-card-info">
+                    <h3>ലൈവ് സ്കോർബോർഡ്</h3>
+                    <p>തത്സമയം മാറിക്കൊണ്ടിരിക്കുന്ന പോയിന്റ് നില</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAdminModal()">&times;</span>
+            <h3 style="margin-bottom: 12px; font-weight: 800;">🔐 Admin Login</h3>
+            <label>Admin Email:</label>
+            <input type="email" id="adminEmail" value="admin@irshad.com">
+            <label>Password:</label>
+            <input type="password" id="adminPassword" placeholder="Enter password">
+            <button class="btn-submit" onclick="loginAdmin()">Login</button>
+            <div id="loginError"></div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute("data-theme");
+            const newTheme = currentTheme === "dark" ? "light" : "dark";
+            html.setAttribute("data-theme", newTheme);
+            localStorage.setItem("eid_theme", newTheme);
+            document.getElementById("themeToggleBtn").textContent = newTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
+        }
+
+        function loadTeamPointsProgress() {
+            let ptsA = parseInt(localStorage.getItem("eid_pts_zellij") || "0");
+            let ptsB = parseInt(localStorage.getItem("eid_pts_iznik") || "0");
+            document.getElementById("ptsA").textContent = ptsA;
+            document.getElementById("ptsB").textContent = ptsB;
+
+            const total = ptsA + ptsB;
+            let pctA = total > 0 ? (ptsA / total) * 100 : 50;
+            let pctB = total > 0 ? (ptsB / total) * 100 : 50;
+
+            document.getElementById("barA").style.width = pctA + "%";
+            document.getElementById("barB").style.width = pctB + "%";
+        }
+
+        function votePoll(team) {
+            let vZellij = parseInt(localStorage.getItem("eid_poll_zellij") || "12");
+            let vIznik = parseInt(localStorage.getItem("eid_poll_iznik") || "15");
+
+            if(localStorage.getItem("eid_has_voted")) {
+                document.getElementById("pollMsg").textContent = "നിങ്ങൾ ഇതിനകം വോട്ട് രേഖപ്പെടുത്തിയിട്ടുണ്ട്!";
+                return;
+            }
+
+            if(team === 'zellij') vZellij++;
+            if(team === 'iznik') vIznik++;
+
+            localStorage.setItem("eid_poll_zellij", vZellij);
+            localStorage.setItem("eid_poll_iznik", vIznik);
+            localStorage.setItem("eid_has_voted", "true");
+
+            updatePollUI(vZellij, vIznik);
+            document.getElementById("pollMsg").textContent = "നന്ദി! നിങ്ങളുടെ വോട്ട് വിജയകരമായി രേഖപ്പെടുത്തി.";
+            confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+        }
+
+        function updatePollUI(z, i) {
+            const total = z + i;
+            const pctZ = total > 0 ? Math.round((z / total) * 100) : 50;
+            const pctI = total > 0 ? Math.round((i / total) * 100) : 50;
+            document.getElementById("voteZellijCount").textContent = z + ` votes (${pctZ}%)`;
+            document.getElementById("voteIznikCount").textContent = i + ` votes (${pctI}%)`;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem("eid_theme") || "light";
+            document.documentElement.setAttribute("data-theme", savedTheme);
+            document.getElementById("themeToggleBtn").textContent = savedTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
+
+            loadTeamPointsProgress();
+
+            let vZellij = parseInt(localStorage.getItem("eid_poll_zellij") || "12");
+            let vIznik = parseInt(localStorage.getItem("eid_poll_iznik") || "15");
+            updatePollUI(vZellij, vIznik);
+        });
+
+        let isAdmin = localStorage.getItem("eid_irshad_admin_logged") === "true";
+
+        function updateAdminUI() {
+            const bar = document.getElementById("adminBar");
+            const btn = document.getElementById("adminBtn");
+            if (isAdmin) {
+                if (bar) bar.style.display = "flex";
+                if (btn) btn.style.display = "none";
+            } else {
+                if (bar) bar.style.display = "none";
+                if (btn) btn.style.display = "inline-block";
+            }
+        }
+
+        function openAdminModal() {
+            document.getElementById("loginError").textContent = "";
+            document.getElementById("adminPassword").value = "";
+            document.getElementById("loginModal").style.display = "flex";
+        }
+
+        function closeAdminModal() {
+            docum
