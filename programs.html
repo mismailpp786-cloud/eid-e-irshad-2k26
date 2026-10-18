@@ -1,317 +1,109 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ml" data-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Programs | EID-E IRSHAD CAMPUS FEST 2K26</title>
-
-  <meta
-    name="description"
-    content="Explore the programs and competitions of EID-E IRSHAD CAMPUS FEST 2K26."
-  >
-
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programs List — EID-E IRSHAD 2K26</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
+<body>
 
-<body data-page="programs">
-
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="container nav-container">
-
-      <a class="brand" href="index.html">
-        <span class="brand-mark">EI</span>
-        <span class="brand-text">
-          <strong>EID-E IRSHAD</strong>
-          <small>CAMPUS FEST 2K26</small>
-        </span>
-      </a>
-
-      <button
-        class="menu-btn"
-        id="menuBtn"
-        aria-label="Toggle navigation"
-        aria-expanded="false"
-      >☰</button>
-
-      <nav class="main-nav" id="mainNav">
-        <a href="index.html">Home</a>
-        <a href="programs.html" class="active">Programs</a>
-        <a href="results.html">Results</a>
-        <a href="teams.html">Teams</a>
-        <a href="points.html">Points</a>
-        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">☀</button>
-      </nav>
-
+    <!-- Sticky Admin Bar -->
+    <div id="adminBar" class="admin-bar">
+        <span>⚙️ Admin Mode Active (Programs)</span>
+        <div class="admin-actions">
+            <button class="btn-backup" onclick="exportBackupJSON()">📥 Backup JSON</button>
+            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
+        </div>
     </div>
-  </header>
 
-  <!-- ANNOUNCEMENT -->
-  <div class="ticker">
-    <div class="container">
-      <p id="tickerText">
-        EID-E IRSHAD — CAMPUS FEST 2K26 | NOVEMBER 27, 28 & 29
-      </p>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav-bar">
+        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
+        <span class="nav-page-title">📋 PROGRAMS SCHEDULE</span>
+        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
     </div>
-  </div>
 
-  <main>
+    <!-- Main Container -->
+    <div class="container" style="max-width: 950px; margin: 25px auto;">
+        
+        <h1 class="page-title">Fest Programs & Schedule</h1>
+        <p class="page-subtitle">റഹ്മാനിയ്യ അറബിക് കോളേജ് ഫെസ്റ്റ് മത്സര ഇനങ്ങളും വേദികളും</p>
 
-    <!-- PAGE INTRO -->
-    <section class="page-hero">
-      <div class="container">
-        <p class="eyebrow">ART • LITERATURE • SPORTS</p>
-        <h1>Festival <span>Programs</span></h1>
-        <p>
-          Discover the competitions, explore the categories,
-          and get ready to showcase your talents.
-        </p>
-
-        <div class="hero-meta">
-          <span>📅 November 27–29, 2026</span>
-          <span>📍 Rahmaniyya Arabic College, Attassery</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- PROGRAM FILTERS -->
-    <section class="section">
-      <div class="container">
-
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">EXPLORE THE FEST</p>
-            <h2>Find Your <span>Event</span></h2>
-          </div>
-
-          <p class="muted" id="programCount">Loading programs...</p>
+        <!-- Category Tabs -->
+        <div class="category-tabs">
+            <button class="cat-tab active" onclick="setCategory('senior', this)">Senior</button>
+            <button class="cat-tab" onclick="setCategory('junior', this)">Junior</button>
+            <button class="cat-tab" onclick="setCategory('subjunior', this)">Sub Junior</button>
+            <button class="cat-tab" onclick="setCategory('general', this)">General</button>
         </div>
 
-        <div class="filter-panel">
+        <!-- Type Filter Tabs & Admin Add Button -->
+        <div class="table-header-bar">
+            <div class="type-tabs" style="margin-bottom:0;">
+                <button class="type-tab active" onclick="setType('all', this)">എല്ലാം (All)</button>
+                <button class="type-tab" onclick="setType('onStage', this)">🎙️ On Stage</button>
+                <button class="type-tab" onclick="setType('offStage', this)">✍️ Off Stage</button>
+                <button class="type-tab" onclick="setType('sports', this)">⚽ Sports</button>
+            </div>
+            
+            <button class="btn-add-main admin-only" data-display="inline-block" onclick="openAddProgramModal()">+ പുതിയ മത്സരം ചേർക്കുക</button>
+        </div>
 
-          <div class="filter-group">
-            <label for="categoryFilter">Participant Category</label>
-            <select id="categoryFilter">
-              <option value="all">All Categories</option>
-              <option value="senior">Senior</option>
-              <option value="junior">Junior</option>
-              <option value="sub-junior">Sub-Junior</option>
-              <option value="general">General</option>
+        <!-- Search Filter inside Programs page -->
+        <div style="margin: 15px 0 20px;">
+            <input type="text" id="programSearchInput" class="global-search-input" placeholder="🔍 ഈ വിഭാഗത്തിൽ മത്സരങ്ങൾ തിരയുക..." oninput="renderPrograms()">
+        </div>
+
+        <!-- Programs Table Container -->
+        <div class="card" style="margin-bottom: 0; box-shadow: var(--shadow-md);">
+            <div class="card-header">
+                <h3 id="tableTitle">Senior Category Programs</h3>
+            </div>
+            <div class="table-responsive">
+                <table class="program-table">
+                    <thead>
+                        <tr>
+                            <th style="width:60px;">#</th>
+                            <th>മത്സര ഇനം (Program Name)</th>
+                            <th style="width:140px;">തരം (Type)</th>
+                            <th class="admin-only" data-display="table-cell" style="width:90px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="programTableBody">
+                        <!-- Dynamically populated via app.js -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Add/Edit Program Modal -->
+    <div id="programModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeProgramModal()">&times;</span>
+            <h3 style="margin: 0 0 14px; font-weight: 800;">📋 പ്രോഗ്രാം ചേർക്കുക / തിരുത്തുക</h3>
+            
+            <label>മത്സരത്തിന്റെ പേര് (Program Name):</label>
+            <input type="text" id="progNameInput" class="form-control" placeholder="ഉദാ: പ്രസംഗ മത്സരം">
+            
+            <label style="margin-top: 10px;">വിഭാഗം (Type):</label>
+            <select id="progTypeSelect" class="form-control" style="margin-bottom: 15px;">
+                <option value="onStage">🎙️ On Stage</option>
+                <option value="offStage">✍️ Off Stage</option>
+                <option value="sports">⚽ Sports</option>
             </select>
-          </div>
 
-          <div class="filter-group">
-            <label for="typeFilter">Program Type</label>
-            <select id="typeFilter">
-              <option value="all">All Program Types</option>
-              <option value="on-stage">On Stage</option>
-              <option value="off-stage">Off Stage</option>
-              <option value="sports">Sports</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label for="programSearch">Search Program</label>
-            <input
-              id="programSearch"
-              type="search"
-              placeholder="Search by program name..."
-            >
-          </div>
-
-          <button id="resetFilters" class="btn btn-secondary" type="button">
-            Reset Filters
-          </button>
-
+            <button class="btn-submit" onclick="saveProgramChanges()">സേവ് ചെയ്യുക (Save)</button>
         </div>
+    </div>
 
-        <!-- PROGRAM CARDS -->
-        <div class="program-grid" id="programGrid">
-
-          <!-- Example program cards.
-               Replace these examples with the official schedule. -->
-
-          <article
-            class="program-card"
-            data-category="senior"
-            data-type="on-stage"
-            data-name="speech"
-          >
-            <div class="program-card-top">
-              <span class="program-icon">🎤</span>
-              <span class="category-badge">Senior</span>
-            </div>
-            <p class="program-type">ON STAGE</p>
-            <h3>Speech</h3>
-            <p class="muted">Individual Competition</p>
-            <div class="program-details">
-              <span>📅 Schedule to be announced</span>
-              <span>📍 Venue to be announced</span>
-            </div>
-          </article>
-
-          <article
-            class="program-card"
-            data-category="junior"
-            data-type="off-stage"
-            data-name="essay writing"
-          >
-            <div class="program-card-top">
-              <span class="program-icon">✍️</span>
-              <span class="category-badge">Junior</span>
-            </div>
-            <p class="program-type">OFF STAGE</p>
-            <h3>Essay Writing</h3>
-            <p class="muted">Individual Competition</p>
-            <div class="program-details">
-              <span>📅 Schedule to be announced</span>
-              <span>📍 Venue to be announced</span>
-            </div>
-          </article>
-
-          <article
-            class="program-card"
-            data-category="sub-junior"
-            data-type="on-stage"
-            data-name="recitation"
-          >
-            <div class="program-card-top">
-              <span class="program-icon">📖</span>
-              <span class="category-badge">Sub-Junior</span>
-            </div>
-            <p class="program-type">ON STAGE</p>
-            <h3>Recitation</h3>
-            <p class="muted">Individual Competition</p>
-            <div class="program-details">
-              <span>📅 Schedule to be announced</span>
-              <span>📍 Venue to be announced</span>
-            </div>
-          </article>
-
-          <article
-            class="program-card"
-            data-category="general"
-            data-type="sports"
-            data-name="football"
-          >
-            <div class="program-card-top">
-              <span class="program-icon">⚽</span>
-              <span class="category-badge">General</span>
-            </div>
-            <p class="program-type">SPORTS</p>
-            <h3>Football</h3>
-            <p class="muted">Team Competition</p>
-            <div class="program-details">
-              <span>📅 Schedule to be announced</span>
-              <span>📍 Sports Ground</span>
-            </div>
-          </article>
-
-        </div>
-
-        <div id="noPrograms" class="empty-state" hidden>
-          <span>🔎</span>
-          <h3>No programs found</h3>
-          <p>Try changing the category or search keyword.</p>
-        </div>
-
-        <p class="notice-text">
-          Note: The programs shown above are sample entries for website
-          development. The official event list, timings and venues must
-          be added after confirmation by the festival committee.
-        </p>
-
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="site-footer">
-      <div class="container footer-content">
-        <div>
-          <strong>EID-E IRSHAD — CAMPUS FEST 2K26</strong>
-          <p>Art, Literature & Sports</p>
-          <p>Irshadunnasiheen Sahithya Samajam</p>
-          <p>Rahmaniyya Arabic College, Attassery</p>
-        </div>
-
-        <div class="footer-links">
-          <a href="index.html">Home</a>
-          <a href="results.html">Results</a>
-          <a href="teams.html">Teams</a>
-          <a href="points.html">Points</a>
-        </div>
-      </div>
-
-      <div class="container footer-bottom">
-        <p>© 2026 EID-E IRSHAD CAMPUS FEST 2K26</p>
-      </div>
+    <footer>
+        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
     </footer>
 
-  </main>
-
-  <script src="app.js"></script>
-
-  <!-- Program filtering for this page -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const grid = document.getElementById("programGrid");
-      const categoryFilter = document.getElementById("categoryFilter");
-      const typeFilter = document.getElementById("typeFilter");
-      const searchInput = document.getElementById("programSearch");
-      const resetButton = document.getElementById("resetFilters");
-      const count = document.getElementById("programCount");
-      const emptyState = document.getElementById("noPrograms");
-
-      if (!grid) return;
-
-      const cards = [...grid.querySelectorAll(".program-card")];
-
-      function filterPrograms() {
-        const category = categoryFilter.value;
-        const type = typeFilter.value;
-        const query = searchInput.value.trim().toLowerCase();
-
-        let visible = 0;
-
-        cards.forEach((card) => {
-          const matchesCategory =
-            category === "all" || card.dataset.category === category;
-
-          const matchesType =
-            type === "all" || card.dataset.type === type;
-
-          const matchesSearch =
-            (card.dataset.name || card.textContent).toLowerCase()
-              .includes(query);
-
-          const show =
-            matchesCategory && matchesType && matchesSearch;
-
-          card.hidden = !show;
-
-          if (show) visible++;
-        });
-
-        count.textContent = `${visible} program${visible === 1 ? "" : "s"} found`;
-        emptyState.hidden = visible !== 0;
-      }
-
-      categoryFilter.addEventListener("change", filterPrograms);
-      typeFilter.addEventListener("change", filterPrograms);
-      searchInput.addEventListener("input", filterPrograms);
-
-      resetButton.addEventListener("click", () => {
-        categoryFilter.value = "all";
-        typeFilter.value = "all";
-        searchInput.value = "";
-        filterPrograms();
-      });
-
-      filterPrograms();
-    });
-  </script>
-
+    <script src="app.js"></script>
 </body>
 </html>
