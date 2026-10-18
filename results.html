@@ -1,143 +1,248 @@
+
 <!DOCTYPE html>
-<html lang="ml" data-theme="light">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Results & Posters — EID-E IRSHAD 2K26</title>
-    <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-color: #1e293b;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-        }
-        [data-theme="dark"] {
-            --bg-color: #090d16;
-            --card-bg: #131c31;
-            --text-color: #f1f5f9;
-            --text-muted: #94a3b8;
-            --border-color: #1e293b;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Anek Malayalam', 'Montserrat', sans-serif;
-            margin: 0; padding: 0;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
+  <title>Results | EID-E IRSHAD CAMPUS FEST 2K26</title>
 
-        .admin-bar { background: #059669; color: #fff; padding: 10px 15px; display: none; justify-content: space-between; align-items: center; font-size: 0.9rem; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .admin-actions button { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; margin-left: 5px; }
-        .btn-logout { background: #dc2626; color: #fff; }
+  <meta
+    name="description"
+    content="Official competition results for EID-E IRSHAD CAMPUS FEST 2K26."
+  >
 
-        .top-nav-bar {
-            background: var(--card-bg);
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        .back-home-btn {
-            background: #fbbf24;
-            color: #0f172a;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 800;
-            font-size: 0.85rem;
-            cursor: pointer;
-            font-family: 'Montserrat', sans-serif;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; box-sizing: border-box; }
-        
-        .page-title {
-            text-align: center;
-            font-weight: 900;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: #f59e0b;
-        }
-
-        .result-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        .result-card h3 { margin: 0 0 8px 0; font-size: 1.1rem; font-weight: 800; color: #f59e0b; }
-        .winner-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 12px;
-            background: var(--bg-color);
-            border-radius: 8px;
-            margin-top: 6px;
-            font-weight: 700;
-            border: 1px solid var(--border-color);
-        }
-
-        footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.85rem; margin-top: 30px; border-top: 1px solid var(--border-color); font-family: 'Montserrat', sans-serif; }
-    </style>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
-    <div id="adminBar" class="admin-bar">
-        <span>⚙️ Admin Mode Active</span>
-        <div class="admin-actions">
-            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
-        </div>
+<body data-page="results">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container nav-container">
+
+      <a class="brand" href="index.html">
+        <span class="brand-mark">EI</span>
+        <span class="brand-text">
+          <strong>EID-E IRSHAD</strong>
+          <small>CAMPUS FEST 2K26</small>
+        </span>
+      </a>
+
+      <button
+        class="menu-btn"
+        id="menuBtn"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+      >☰</button>
+
+      <nav class="main-nav" id="mainNav">
+        <a href="index.html">Home</a>
+        <a href="programs.html">Programs</a>
+        <a href="results.html" class="active">Results</a>
+        <a href="teams.html">Teams</a>
+        <a href="points.html">Points</a>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">☀</button>
+      </nav>
+
     </div>
+  </header>
 
-    <div class="top-nav-bar">
-        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
-        <span style="font-weight: 800; font-size: 0.9rem;">🏆 RESULTS & POSTERS</span>
-    </div>
-
+  <!-- TICKER -->
+  <div class="ticker">
     <div class="container">
-        <h1 class="page-title">Competition Results</h1>
-
-        <div class="result-card">
-            <h3>പ്രസംഗ മത്സരം (Speech - Senior)</h3>
-            <div class="winner-row">
-                <span>🥇 First Place: മുഹമ്മദ് ഇസ്മായിൽ</span>
-                <span style="color: #b91c1c;">Team ZELLIJ</span>
-            </div>
-            <div class="winner-row">
-                <span>🥈 Second Place: അബ്ദുല്ല</span>
-                <span style="color: #1d4ed8;">Team IZNIK</span>
-            </div>
-        </div>
+      <p id="tickerText">
+        EID-E IRSHAD — CAMPUS FEST 2K26 | OFFICIAL RESULTS
+      </p>
     </div>
+  </div>
 
-    <footer>
-        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
+  <main>
+
+    <!-- PAGE INTRO -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow">THE MOMENTS OF EXCELLENCE</p>
+        <h1>Competition <span>Results</span></h1>
+        <p>
+          Celebrate the talent, dedication and achievements
+          of our participants.
+        </p>
+
+        <div class="hero-meta">
+          <span>📅 November 27–29, 2026</span>
+          <span>🏆 Official Festival Results</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTS SECTION -->
+    <section class="section">
+      <div class="container">
+
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">RESULTS BOARD</p>
+            <h2>Winners <span>Gallery</span></h2>
+          </div>
+        </div>
+
+        <!-- FILTERS -->
+        <div class="filter-panel">
+
+          <div class="filter-group">
+            <label for="resultCategory">Participant Category</label>
+            <select id="resultCategory">
+              <option value="all">All Categories</option>
+              <option value="senior">Senior</option>
+              <option value="junior">Junior</option>
+              <option value="sub-junior">Sub-Junior</option>
+              <option value="general">General</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="resultType">Program Type</label>
+            <select id="resultType">
+              <option value="all">All Types</option>
+              <option value="on-stage">On Stage</option>
+              <option value="off-stage">Off Stage</option>
+              <option value="sports">Sports</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="resultSearch">Search Results</label>
+            <input
+              id="resultSearch"
+              type="search"
+              placeholder="Search program or winner..."
+            >
+          </div>
+
+          <button id="resetResults" class="btn btn-secondary" type="button">
+            Reset
+          </button>
+
+        </div>
+
+        <p class="muted" id="resultsCount">Loading results...</p>
+
+        <!-- RESULTS WILL APPEAR HERE -->
+        <div class="results-grid" id="resultsGrid">
+
+          <div class="empty-state results-empty">
+            <span>🏆</span>
+            <h3>Results Coming Soon</h3>
+            <p>
+              The competition results will be published here
+              after they are officially announced.
+            </p>
+          </div>
+
+        </div>
+
+        <p class="notice-text">
+          Only officially confirmed results should be published.
+          Sample or unverified results must not be presented as official.
+        </p>
+
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <div>
+          <strong>EID-E IRSHAD — CAMPUS FEST 2K26</strong>
+          <p>Art, Literature & Sports</p>
+          <p>Irshadunnasiheen Sahithya Samajam</p>
+          <p>Rahmaniyya Arabic College, Attassery</p>
+        </div>
+
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="programs.html">Programs</a>
+          <a href="teams.html">Teams</a>
+          <a href="points.html">Points</a>
+        </div>
+      </div>
+
+      <div class="container footer-bottom">
+        <p>© 2026 EID-E IRSHAD CAMPUS FEST 2K26</p>
+      </div>
     </footer>
 
-    <script>
-        let isAdmin = localStorage.getItem("eid_irshad_admin_logged") === "true";
-        function updateAdminUI() {
-            const bar = document.getElementById("adminBar");
-            if (bar) bar.style.display = isAdmin ? "flex" : "none";
+  </main>
+
+  <script src="app.js"></script>
+
+  <!-- RESULTS FILTER -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const categoryFilter = document.getElementById("resultCategory");
+      const typeFilter = document.getElementById("resultType");
+      const searchInput = document.getElementById("resultSearch");
+      const resetButton = document.getElementById("resetResults");
+      const resultsGrid = document.getElementById("resultsGrid");
+      const resultsCount = document.getElementById("resultsCount");
+
+      if (!resultsGrid) return;
+
+      function filterResults() {
+        const category = categoryFilter.value;
+        const type = typeFilter.value;
+        const query = searchInput.value.trim().toLowerCase();
+
+        const cards = [
+          ...resultsGrid.querySelectorAll(".result-card")
+        ];
+
+        let visible = 0;
+
+        cards.forEach((card) => {
+          const matchesCategory =
+            category === "all" || card.dataset.category === category;
+
+          const matchesType =
+            type === "all" || card.dataset.type === type;
+
+          const matchesSearch =
+            card.textContent.toLowerCase().includes(query);
+
+          const show =
+            matchesCategory && matchesType && matchesSearch;
+
+          card.hidden = !show;
+
+          if (show) visible++;
+        });
+
+        const emptyMessage =
+          resultsGrid.querySelector(".results-empty");
+
+        if (emptyMessage) {
+          emptyMessage.hidden = cards.length > 0;
         }
-        function logoutAdmin() {
-            localStorage.removeItem("eid_irshad_admin_logged");
-            isAdmin = false;
-            updateAdminUI();
-            alert("Logged out from admin mode.");
-        }
-        updateAdminUI();
-    </script>
+
+        resultsCount.textContent =
+          `${visible} result${visible === 1 ? "" : "s"} found`;
+      }
+
+      categoryFilter.addEventListener("change", filterResults);
+      typeFilter.addEventListener("change", filterResults);
+      searchInput.addEventListener("input", filterResults);
+
+      resetButton.addEventListener("click", () => {
+        categoryFilter.value = "all";
+        typeFilter.value = "all";
+        searchInput.value = "";
+        filterResults();
+      });
+
+      filterResults();
+    });
+  </script>
+
 </body>
 </html>
