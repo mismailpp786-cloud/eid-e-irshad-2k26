@@ -29,6 +29,10 @@
             transition: background 0.3s ease, color 0.3s ease;
         }
 
+        .admin-bar { background: #059669; color: #fff; padding: 10px 15px; display: none; justify-content: space-between; align-items: center; font-size: 0.9rem; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .admin-actions button { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; margin-left: 5px; }
+        .btn-logout { background: #dc2626; color: #fff; }
+
         .top-nav-bar {
             background: var(--card-bg);
             border-bottom: 1px solid var(--border-color);
@@ -89,6 +93,13 @@
 </head>
 <body>
 
+    <div id="adminBar" class="admin-bar">
+        <span>⚙️ Admin Mode Active</span>
+        <div class="admin-actions">
+            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
+        </div>
+    </div>
+
     <div class="top-nav-bar">
         <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
         <span style="font-weight: 800; font-size: 0.9rem;">🏆 RESULTS & POSTERS</span>
@@ -113,5 +124,20 @@
     <footer>
         &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
     </footer>
+
+    <script>
+        let isAdmin = localStorage.getItem("eid_irshad_admin_logged") === "true";
+        function updateAdminUI() {
+            const bar = document.getElementById("adminBar");
+            if (bar) bar.style.display = isAdmin ? "flex" : "none";
+        }
+        function logoutAdmin() {
+            localStorage.removeItem("eid_irshad_admin_logged");
+            isAdmin = false;
+            updateAdminUI();
+            alert("Logged out from admin mode.");
+        }
+        updateAdminUI();
+    </script>
 </body>
 </html>
