@@ -1,5 +1,5 @@
 /* ==========================================================================
-   EID-E IRSHAD — CAMPUS FEST 2K26 | COMPLETE UNIFIED STYLESHEET (style.css)
+   EID-E IRSHAD — CAMPUS FEST 2K26 | UNIFIED STYLESHEET (style.css)
    ========================================================================== */
 
 :root {
@@ -12,10 +12,7 @@
     --accent-gold: #f59e0b;
     --accent-gold-light: #fbbf24;
     --zellij-red: #b91c1c;
-    --zellij-light: rgba(185, 28, 28, 0.1);
     --iznik-blue: #1d4ed8;
-    --iznik-light: rgba(29, 78, 216, 0.1);
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
     --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
@@ -27,1210 +24,156 @@
     --text-muted: #94a3b8;
     --border-color: #1e293b;
     --header-bg: linear-gradient(135deg, #020617 0%, #090d16 50%, #0f172a 100%);
-    --zellij-light: rgba(239, 68, 68, 0.15);
-    --iznik-light: rgba(59, 130, 246, 0.15);
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
-    --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.35);
 }
 
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: 'Anek Malayalam', 'Montserrat', sans-serif;
-    margin: 0;
-    padding: 0;
+    margin: 0; padding: 0;
     transition: background-color 0.3s ease, color 0.3s ease;
-    overflow-x: hidden;
 }
 
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: var(--bg-color); }
-::-webkit-scrollbar-thumb { background: var(--accent-gold); border-radius: 4px; }
-
-/* ==========================================================================
-   1. LIVE TICKER & ADMIN STICKY BAR
-   ========================================================================== */
-.live-ticker {
-    background: #b91c1c;
-    color: #ffffff;
-    padding: 8px 15px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    white-space: nowrap;
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-.live-ticker marquee {
-    font-family: 'Anek Malayalam', sans-serif;
-}
-
-.admin-bar {
-    background: linear-gradient(90deg, #059669, #047857);
-    color: #ffffff;
-    padding: 10px 16px;
-    display: none;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
-}
-
-.admin-actions {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-.admin-actions button {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 800;
-    font-size: 0.78rem;
-    font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
-    transition: 0.2s;
-}
-
+.live-ticker { background: #b91c1c; color: #fff; padding: 8px 15px; font-size: 0.85rem; font-weight: 700; white-space: nowrap; overflow: hidden; }
+.admin-bar { background: linear-gradient(90deg, #059669, #047857); color: #fff; padding: 10px 16px; display: none; justify-content: space-between; align-items: center; font-size: 0.85rem; font-weight: 700; position: sticky; top: 0; z-index: 999; }
+.admin-actions button { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 800; font-size: 0.78rem; }
 .btn-backup { background: #fbbf24; color: #0f172a; }
-.btn-reset { background: #f97316; color: #ffffff; }
-.btn-logout { background: #dc2626; color: #ffffff; }
-.admin-actions button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.btn-logout { background: #dc2626; color: #fff; }
+.admin-only { display: none; }
 
-.admin-only {
-    display: none;
-}
-
-/* ==========================================================================
-   2. HERO HEADER & SUB-PAGE NAVIGATION BAR
-   ========================================================================== */
-.hero {
-    background: var(--header-bg);
-    color: #ffffff;
-    text-align: center;
-    padding: 18px 15px 35px;
-    border-bottom: 5px solid var(--accent-gold);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-    position: relative;
-}
-
-.hero-top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 900px;
-    margin: 0 auto 18px;
-    padding: 8px 14px;
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(10px);
-    border-radius: 50px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    gap: 8px;
-}
-
-.brand-pill {
-    font-size: 0.75rem;
-    color: #cbd5e1;
-    font-weight: 800;
-    font-family: 'Montserrat', sans-serif;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-}
-
-.top-controls {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-    flex-shrink: 0;
-}
-
-.theme-toggle-btn {
-    background: rgba(255, 255, 255, 0.12);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    padding: 5px 11px;
-    border-radius: 20px;
-    font-weight: 700;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: 0.2s;
-    white-space: nowrap;
-}
-.theme-toggle-btn:hover { background: rgba(255, 255, 255, 0.25); }
-
-.admin-top-btn {
-    background: rgba(251, 191, 36, 0.18);
-    color: #fbbf24;
-    border: 1px solid #fbbf24;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-weight: 800;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: 0.2s;
-    white-space: nowrap;
-}
-.admin-top-btn:hover { background: #fbbf24; color: #0f172a; }
-
-.calligraphy-box {
-    margin: 6px auto 10px;
-    display: flex;
-    justify-content: center;
-}
-
-.hero-calligraphy-img {
-    max-height: 62px;
-    width: auto;
-    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
-}
-
-.main-title {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 2.3rem;
-    letter-spacing: 2px;
-    margin: 5px 0 2px;
-    text-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
-}
-
-.sub-title {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 800;
-    font-size: 1rem;
-    letter-spacing: 3px;
-    color: #fbbf24;
-    margin-top: 2px;
-}
-
-.ribbon {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.72rem;
-    margin: 8px 0 16px;
-    letter-spacing: 2.5px;
-    color: #cbd5e1;
-    font-weight: 700;
-}
-
-.date-container {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    align-items: center;
-    margin: 14px 0;
-    flex-wrap: wrap;
-}
-
-.month-year {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 8px 12px;
-    border-radius: 10px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    line-height: 1.25;
-    font-family: 'Montserrat', sans-serif;
-}
-
-.date-box {
-    background: rgba(255, 255, 255, 0.14);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    padding: 7px 14px;
-    border-radius: 10px;
-    text-align: center;
-    min-width: 48px;
-    backdrop-filter: blur(4px);
-}
-
-.date-box span.num {
-    display: block;
-    font-size: 1.25rem;
-    font-weight: 900;
-    line-height: 1;
-    color: #fbbf24;
-    font-family: 'Montserrat', sans-serif;
-}
-
-.date-box span.day {
-    display: block;
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    margin-top: 3px;
-    font-family: 'Montserrat', sans-serif;
-}
-
-.countdown-container {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin: 18px auto 6px;
-    flex-wrap: wrap;
-}
-
-.countdown-box {
-    background: rgba(0, 0, 0, 0.38);
-    border: 1.5px solid rgba(251, 191, 36, 0.35);
-    border-radius: 12px;
-    padding: 10px 8px;
-    min-width: 62px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-}
-
-.countdown-box span.num {
-    display: block;
-    font-size: 1.45rem;
-    font-weight: 900;
-    font-family: 'Montserrat', sans-serif;
-    color: #fbbf24;
-    line-height: 1;
-}
-
-.countdown-box span.label {
-    display: block;
-    font-size: 0.55rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #e2e8f0;
-    margin-top: 4px;
-    font-family: 'Montserrat', sans-serif;
-}
-
-.org-info {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.76rem;
-    line-height: 1.5;
-    color: #cbd5e1;
-    margin-top: 14px;
-}
-
-/* Sub-page Top Navigation Bar */
 .top-nav-bar {
     background: var(--header-bg);
-    color: #ffffff;
+    color: #fff;
     border-bottom: 3px solid var(--accent-gold);
     padding: 12px 18px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
-    box-shadow: var(--shadow-md);
 }
+.back-home-btn { background: #fbbf24; color: #0f172a; border: none; padding: 7px 15px; border-radius: 20px; font-weight: 800; font-size: 0.8rem; cursor: pointer; text-decoration: none; }
+.nav-page-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 0.85rem; color: #fbbf24; }
 
-.back-home-btn {
-    background: var(--accent-gold-light);
-    color: #0f172a;
-    border: none;
-    padding: 7px 15px;
-    border-radius: 20px;
-    font-weight: 800;
-    font-size: 0.8rem;
-    cursor: pointer;
-    font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    transition: 0.2s;
-}
-.back-home-btn:hover { filter: brightness(1.08); transform: translateX(-2px); }
+.container { max-width: 980px; margin: 20px auto; padding: 0 15px; }
+.page-title { text-align: center; font-weight: 900; font-size: 1.65rem; margin: 10px 0 5px; color: var(--accent-gold); }
+.page-subtitle { text-align: center; font-size: 0.88rem; color: var(--text-muted); margin: 0 0 20px; }
 
-.nav-page-title {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 800;
-    font-size: 0.85rem;
-    color: #fbbf24;
-    letter-spacing: 1px;
-}
-
-/* ==========================================================================
-   3. CONTAINERS, SEARCH BAR, LEADERBOARD & POLL (HOME)
-   ========================================================================== */
-.container {
-    max-width: 960px;
-    margin: 18px auto;
-    padding: 0 15px;
-}
-
-.global-search-box {
-    max-width: 680px;
-    margin: 20px auto 10px;
-    padding: 0 15px;
-    position: relative;
-}
-
-.global-search-input {
-    width: 100%;
-    padding: 13px 20px;
-    border-radius: 30px;
-    border: 2px solid var(--accent-gold);
-    background: var(--card-bg);
-    color: var(--text-color);
-    font-size: 0.95rem;
-    font-family: 'Anek Malayalam', 'Montserrat', sans-serif;
-    box-shadow: var(--shadow-md);
-    outline: none;
-}
-
-.search-results-dropdown {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    margin-top: 6px;
-    box-shadow: var(--shadow-lg);
-    max-height: 300px;
-    overflow-y: auto;
-    display: none;
-    padding: 8px;
-}
-
-.search-result-item {
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--border-color);
-    font-size: 0.88rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-}
-.search-result-item:last-child { border-bottom: none; }
-.search-result-item:hover { background: rgba(245, 158, 11, 0.08); }
-
-.team-progress-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 18px;
-    box-shadow: var(--shadow-md);
-}
-
-.progress-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 800;
-    font-size: 0.88rem;
-    margin-bottom: 10px;
-    font-family: 'Montserrat', sans-serif;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-
-.progress-bar-container {
-    height: 15px;
-    background: #e2e8f0;
-    border-radius: 8px;
-    overflow: hidden;
-    display: flex;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.12);
-}
-
-.progress-zellij {
-    background: linear-gradient(90deg, #991b1b, #dc2626);
-    height: 100%;
-    transition: width 0.6s ease;
-}
-
-.progress-iznik {
-    background: linear-gradient(90deg, #2563eb, #1e40af);
-    height: 100%;
-    transition: width 0.6s ease;
-}
-
-.poll-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 14px;
-    padding: 18px;
-    margin-bottom: 20px;
-    box-shadow: var(--shadow-md);
-}
-
-.poll-title {
-    font-weight: 800;
-    font-size: 1rem;
-    margin-bottom: 12px;
-    color: #d97706;
-}
-
-.poll-option {
-    background: var(--bg-color);
-    border: 1.5px solid var(--border-color);
-    padding: 12px 16px;
-    border-radius: 10px;
-    margin-bottom: 8px;
-    cursor: pointer;
-    font-weight: 800;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: 0.2s;
-    font-family: 'Montserrat', sans-serif;
-}
-.poll-option:hover {
-    border-color: var(--accent-gold);
-    background: rgba(245, 158, 11, 0.06);
-}
-
-.card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 14px;
-    margin-bottom: 20px;
-    box-shadow: var(--shadow-md);
-    overflow: hidden;
-}
-
-.card-header {
-    background: #1e293b;
-    color: #fbbf24;
-    padding: 14px 18px;
-    font-weight: 800;
-}
-.card-header h3 { margin: 0; font-size: 1.05rem; }
-
-.rules-body { padding: 18px; }
-.rules-list { padding-left: 18px; line-height: 1.75; font-size: 0.93rem; margin: 0; }
-
-.points-box {
-    background: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 14px;
-    margin-top: 15px;
-}
-
-.points-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.point-item {
-    background: var(--card-bg);
-    color: var(--text-color);
-    border-radius: 8px;
-    padding: 10px 12px;
-    border: 1px solid var(--border-color);
-    font-size: 0.85rem;
-    line-height: 1.55;
-}
-
-.section-heading {
-    text-align: center;
-    font-size: 1.08rem;
-    font-weight: 800;
-    margin: 25px 0 15px;
-}
-
-.home-nav-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-}
-
-.nav-card {
-    background: var(--card-bg);
-    border: 1.5px solid var(--border-color);
-    border-radius: 14px;
-    padding: 16px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: var(--shadow-sm);
-}
-.nav-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-lg);
-}
-.nav-card-info h3 { margin: 0 0 4px; font-weight: 800; font-size: 1.05rem; color: var(--text-color); }
-.nav-card-info p { margin: 0; font-size: 0.82rem; color: var(--text-muted); }
-.nav-card-arrow { margin-left: auto; font-weight: 900; color: var(--accent-gold); font-size: 1.1rem; }
-
-/* ==========================================================================
-   4. PROGRAMS PAGE (TABS, FILTERS & TABLE)
-   ========================================================================== */
-.page-title {
-    text-align: center;
-    font-weight: 900;
-    font-size: 1.65rem;
-    margin: 10px 0 6px;
-    color: var(--accent-gold);
-}
-
-.page-subtitle {
-    text-align: center;
-    font-size: 0.88rem;
-    color: var(--text-muted);
-    margin: 0 0 20px;
-}
-
-.category-tabs, .type-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 14px;
-    flex-wrap: wrap;
-}
-
-.cat-tab, .type-tab {
-    background: var(--card-bg);
-    color: var(--text-color);
-    border: 1.5px solid var(--border-color);
-    padding: 8px 18px;
-    border-radius: 25px;
-    font-weight: 800;
-    cursor: pointer;
-    font-size: 0.85rem;
-    font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
-    transition: 0.2s;
-}
-
-.cat-tab.active, .cat-tab:hover {
-    background: #1e293b;
-    color: #fbbf24;
-    border-color: #fbbf24;
-}
-
-.type-tab.active, .type-tab:hover {
-    background: #b91c1c;
-    color: #ffffff;
-    border-color: #b91c1c;
-}
-
-.table-header-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 12px;
-}
-
-.table-responsive {
-    width: 100%;
-    overflow-x: auto;
-    background: var(--card-bg);
-    border-radius: 14px;
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-md);
-}
-
-.program-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-}
-
-.program-table th {
-    background: #1e293b;
-    color: #fbbf24;
-    padding: 13px 15px;
-    font-size: 0.85rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
-}
-
-.program-table td {
-    padding: 12px 15px;
-    border-bottom: 1px solid var(--border-color);
-    font-size: 0.94rem;
-    font-weight: 600;
-}
-
-.program-table tr:last-child td { border-bottom: none; }
-.program-table tr:hover td { background: rgba(245, 158, 11, 0.04); }
-
-.badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 0.74rem;
-    font-weight: 800;
-    font-family: 'Montserrat', sans-serif;
-}
-.badge-onstage { background: rgba(37, 99, 235, 0.12); color: #2563eb; }
-.badge-offstage { background: rgba(217, 119, 6, 0.14); color: #d97706; }
-.badge-sports { background: rgba(5, 150, 105, 0.14); color: #059669; }
-.badge-group { background: rgba(185, 28, 28, 0.12); color: #dc2626; margin-left: 5px; }
-
-.btn-action-sm {
-    padding: 5px 10px;
-    border-radius: 6px;
-    border: none;
-    font-size: 0.75rem;
-    font-weight: 700;
-    cursor: pointer;
-    margin-right: 4px;
-}
-.btn-edit-sm { background: #fbbf24; color: #0f172a; }
-.btn-del-sm { background: #ef4444; color: #ffffff; }
-.btn-add-main {
-    background: #059669;
-    color: #ffffff;
-    border: none;
-    padding: 9px 16px;
-    border-radius: 20px;
-    font-weight: 800;
-    font-size: 0.82rem;
-    cursor: pointer;
-}
-
-/* ==========================================================================
-   5. TEAMS PAGE (ZELLIJ & IZNIK ROSTERS)
-   ========================================================================== */
-.teams-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-.team-box {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
-}
-
-.team-box.zellij { border-top: 6px solid var(--zellij-red); }
-.team-box.iznik { border-top: 6px solid var(--iznik-blue); }
-
-.team-banner {
-    padding: 16px 20px;
-    color: #ffffff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.team-banner.zellij { background: linear-gradient(135deg, #991b1b, #dc2626); }
-.team-banner.iznik { background: linear-gradient(135deg, #1e40af, #2563eb); }
-
-.team-banner h2 {
-    margin: 0;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.35rem;
-    font-weight: 900;
-}
-
-.team-body { padding: 18px; }
-
-.cat-roster-block {
-    margin-bottom: 16px;
-    background: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 12px 14px;
-}
-
-.cat-roster-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin: 0 0 10px;
-    color: var(--text-muted);
-    border-bottom: 1px dashed var(--border-color);
-    padding-bottom: 6px;
-}
-
-.student-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.student-pill {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    box-shadow: var(--shadow-sm);
-}
-
-.role-tag {
-    background: #fbbf24;
-    color: #0f172a;
-    font-size: 0.68rem;
-    font-weight: 900;
-    padding: 2px 6px;
-    border-radius: 10px;
-    font-family: 'Montserrat', sans-serif;
-}
-
-/* ==========================================================================
-   6. POINTS / LIVE SCOREBOARD PAGE (VERTICAL BAR CHART & BREAKDOWN)
-   ========================================================================== */
-.scoreboard-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 24px 18px;
-    margin-bottom: 22px;
-    box-shadow: var(--shadow-md);
-    text-align: center;
-}
-
-.vertical-chart-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 45px;
-    height: 270px;
-    padding: 25px 20px 10px;
-    margin: 15px auto;
-    max-width: 500px;
-    background: var(--bg-color);
-    border-radius: 14px;
-    border: 1px solid var(--border-color);
-}
-
-.v-bar-col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 110px;
-    height: 100%;
-    justify-content: flex-end;
-}
-
-.v-bar-score {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.55rem;
-    font-weight: 900;
-    margin-bottom: 8px;
-}
-
-.v-bar-track {
-    width: 72px;
-    height: 180px;
-    background: rgba(148, 163, 184, 0.18);
-    border-radius: 12px 12px 4px 4px;
-    display: flex;
-    align-items: flex-end;
-    overflow: hidden;
-    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12);
-}
-
-.v-bar-fill {
-    width: 100%;
-    height: 15%;
-    border-radius: 10px 10px 0 0;
-    transition: height 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.v-bar-fill.zellij {
-    background: linear-gradient(180deg, #ef4444 0%, #991b1b 100%);
-    box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
-}
-
-.v-bar-fill.iznik {
-    background: linear-gradient(180deg, #3b82f6 0%, #1e3a8a 100%);
-    box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
-}
-
-.v-bar-label {
-    margin-top: 10px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 0.9rem;
-    letter-spacing: 0.5px;
-}
-
-.cat-points-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-    margin-top: 18px;
-}
-
-.cat-point-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: var(--shadow-sm);
-}
-
-.cat-point-card h4 {
-    margin: 0 0 12px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 800;
-    color: var(--accent-gold);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    text-align: center;
-}
-
-.cat-pts-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 12px;
-    border-radius: 8px;
-    background: var(--bg-color);
-    margin-bottom: 6px;
-    font-weight: 800;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.9rem;
-}
-
-/* ==========================================================================
-   7. RESULTS PAGE & REF-1 POSTER GENERATOR
-   ========================================================================== */
 .builder-section {
     background: var(--card-bg);
     border: 2px solid var(--accent-gold);
     border-radius: 16px;
     padding: 20px;
-    margin-bottom: 28px;
+    margin-bottom: 25px;
     box-shadow: var(--shadow-md);
 }
-
 .builder-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 24px;
     align-items: start;
 }
+@media (max-width: 768px) { .builder-grid { grid-template-columns: 1fr; } }
 
-.form-group {
-    margin-bottom: 12px;
-}
-
-.form-group label {
-    display: block;
-    font-size: 0.82rem;
-    font-weight: 800;
-    margin-bottom: 5px;
-    color: var(--text-color);
-}
-
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; font-size: 0.82rem; font-weight: 800; margin-bottom: 5px; }
 .form-control {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-color);
-    color: var(--text-color);
-    font-family: 'Anek Malayalam', 'Montserrat', sans-serif;
-    font-size: 0.92rem;
+    width: 100%; padding: 10px 12px; border-radius: 8px;
+    border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);
+    font-family: 'Anek Malayalam', 'Montserrat', sans-serif; font-size: 0.92rem;
 }
-
 .winner-input-box {
-    background: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 12px;
-    margin-bottom: 10px;
+    background: var(--bg-color); border: 1px solid var(--border-color);
+    border-radius: 10px; padding: 12px; margin-bottom: 10px;
 }
+.winner-input-box h5 { margin: 0 0 8px; font-size: 0.85rem; font-weight: 800; color: var(--accent-gold); }
 
-.winner-input-box h5 {
-    margin: 0 0 8px;
-    font-size: 0.85rem;
-    font-weight: 800;
-    color: var(--accent-gold);
-}
-
-/* Ref-1 Poster Canvas (4:5 Social / Status Ready) */
+/* ==========================================================================
+   UNIFIED 9:16 POSTER CANVAS (Fixed Background & Theme across Layouts)
+   ========================================================================== */
 .poster-preview-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: flex; flex-direction: column; align-items: center;
 }
 
 #posterCanvas {
-    width: 100%;
-    max-width: 380px;
-    min-height: 475px;
-    border-radius: 14px;
-    padding: 22px 18px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
-    text-align: center;
+    width: 100%; max-width: 380px; min-height: 480px;
+    border-radius: 16px; padding: 22px 18px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    position: relative; overflow: hidden;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3); text-align: left;
 }
 
-/* Poster Theme 1: Ref-1 Royal Navy & Gold */
-#posterCanvas.theme-ref1 {
-    background: radial-gradient(circle at top, #1e293b 0%, #0f172a 70%, #020617 100%);
-    color: #ffffff;
-    border: 3px solid #fbbf24;
+#posterCanvas.theme-green {
+    background: radial-gradient(circle at top right, #065f46 0%, #064e3b 60%, #022c22 100%);
+    color: #ffffff; border: 3px solid #fbbf24;
 }
-
-/* Poster Theme 2: Vintage Cream & Islamic Gold */
-#posterCanvas.theme-vintage {
-    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 50%, #fde68a 100%);
-    color: #1e293b;
-    border: 3px solid #b45309;
+#posterCanvas.theme-maroon {
+    background: radial-gradient(circle at top right, #581c87 0%, #3b0764 60%, #1e1b4b 100%);
+    color: #ffffff; border: 3px solid #fbbf24;
 }
-
-/* Poster Theme 3: Emerald Royal */
-#posterCanvas.theme-emerald {
-    background: radial-gradient(circle at top, #065f46 0%, #064e3b 70%, #022c22 100%);
-    color: #ffffff;
-    border: 3px solid #fbbf24;
-}
-
-.poster-top-brand {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    opacity: 0.85;
-    text-transform: uppercase;
+#posterCanvas.theme-navy {
+    background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 60%, #020617 100%);
+    color: #ffffff; border: 3px solid #fbbf24;
 }
 
 .poster-calligraphy-img {
-    max-height: 46px;
-    width: auto;
-    margin: 6px auto;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    max-height: 38px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
 }
 
-.poster-fest-head {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 1.45rem;
-    letter-spacing: 1.5px;
-    color: #fbbf24;
-    margin: 2px 0;
-}
-#posterCanvas.theme-vintage .poster-fest-head { color: #92400e; }
-
-.poster-res-badge {
-    display: inline-block;
-    background: #fbbf24;
-    color: #0f172a;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 0.75rem;
-    padding: 4px 14px;
-    border-radius: 20px;
-    margin: 8px auto;
-    letter-spacing: 1px;
+.poster-footer-brand {
+    font-family: 'Montserrat', sans-serif; font-size: 0.6rem; opacity: 0.75;
+    border-top: 1px solid rgba(255, 255, 255, 0.15); padding-top: 6px; display: flex; justify-content: space-between;
 }
 
-.poster-prog-banner {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(251, 191, 36, 0.4);
-    border-radius: 10px;
-    padding: 10px 12px;
-    margin-bottom: 12px;
-}
-#posterCanvas.theme-vintage .poster-prog-banner {
-    background: rgba(146, 64, 14, 0.08);
-    border-color: rgba(146, 64, 14, 0.3);
-}
+/* ==========================================================================
+   LAYOUT DESIGN VARIATIONS (Switchable Models)
+   ========================================================================== */
 
-.poster-cat-text {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #fbbf24;
-}
-#posterCanvas.theme-vintage .poster-cat-text { color: #b45309; }
+/* Layout 1: Sahithyolsav Model */
+.layout-model-1 .l1-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.layout-model-1 .l1-res-box { display: flex; align-items: baseline; gap: 4px; }
+.layout-model-1 .l1-res-tag { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; font-weight: 800; opacity: 0.8; }
+.layout-model-1 .l1-res-num { font-family: 'Montserrat', sans-serif; font-size: 2rem; font-weight: 900; color: #fbbf24; line-height: 1; }
+.layout-model-1 .l1-prog-sec { margin: 8px 0; }
+.layout-model-1 .l1-cat-badge { display: inline-block; background: #fbbf24; color: #0f172a; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.72rem; padding: 3px 10px; border-radius: 6px; margin-bottom: 4px; }
+.layout-model-1 .l1-prog-title { font-family: 'Anek Malayalam', 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: 900; line-height: 1.2; }
+.layout-model-1 .l1-winners-box { background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 12px; margin: 6px 0; }
+.layout-model-1 .l1-win-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.layout-model-1 .l1-win-row:last-child { border-bottom: none; }
+.layout-model-1 .l1-rank-circle { width: 26px; height: 26px; background: #fbbf24; color: #0f172a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.8rem; flex-shrink: 0; }
+.layout-model-1 .l1-win-info { flex: 1; }
+.layout-model-1 .l1-win-name { font-weight: 800; font-size: 0.9rem; line-height: 1.2; }
+.layout-model-1 .l1-win-team { font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 700; color: #fbbf24; }
 
-.poster-prog-title {
-    font-family: 'Anek Malayalam', 'Montserrat', sans-serif;
-    font-size: 1.15rem;
-    font-weight: 800;
-    margin-top: 2px;
-}
+/* Layout 2: Centered Modern Badge & Cards Model */
+.layout-model-2 { text-align: center !important; }
+.layout-model-2 .l2-top { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.layout-model-2 .l2-res-badge { background: #fbbf24; color: #0f172a; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.75rem; padding: 3px 14px; border-radius: 20px; }
+.layout-model-2 .l2-prog-title { font-family: 'Anek Malayalam', 'Montserrat', sans-serif; font-size: 1.15rem; font-weight: 900; margin: 6px 0; }
+.layout-model-2 .l2-winners-box { display: flex; flex-direction: column; gap: 6px; margin: 6px 0; }
+.layout-model-2 .l2-win-card { background: rgba(0,0,0,0.3); border-left: 4px solid #fbbf24; border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; gap: 10px; text-align: left; }
+.layout-model-2 .l2-win-name { font-weight: 800; font-size: 0.9rem; }
+.layout-model-2 .l2-win-team { font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 700; color: #fbbf24; }
 
-.poster-winners-box {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin: 6px 0 12px;
-    text-align: left;
-}
+/* Layout 3: Compact Side Result Number Model */
+.layout-model-3 .l3-header { display: flex; justify-content: space-between; align-items: center; }
+.layout-model-3 .l3-big-res { font-family: 'Montserrat', sans-serif; font-size: 1.8rem; font-weight: 900; color: #fbbf24; }
+.layout-model-3 .l3-prog-title { font-family: 'Anek Malayalam', 'Montserrat', sans-serif; font-size: 1.15rem; font-weight: 900; margin: 4px 0 10px; }
+.layout-model-3 .l3-winners-box { display: flex; flex-direction: column; gap: 8px; }
+.layout-model-3 .l3-win-row { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; }
+.layout-model-3 .l3-win-name { font-weight: 800; font-size: 0.9rem; }
+.layout-model-3 .l3-win-team { font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 700; color: #fbbf24; }
 
-.poster-win-card {
-    background: rgba(0, 0, 0, 0.28);
-    border-left: 4px solid #fbbf24;
-    border-radius: 8px;
-    padding: 8px 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-#posterCanvas.theme-vintage .poster-win-card {
-    background: rgba(255, 255, 255, 0.75);
-    border-left: 4px solid #b45309;
-}
-
-.poster-rank-icon {
-    font-size: 1.35rem;
-    line-height: 1;
-}
-
-.poster-win-details {
-    flex: 1;
-}
-
-.poster-win-name {
-    font-weight: 800;
-    font-size: 0.95rem;
-    line-height: 1.2;
-}
-
-.poster-win-team {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.72rem;
-    font-weight: 700;
-    opacity: 0.85;
-}
-
-.poster-footer-text {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.62rem;
-    opacity: 0.75;
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
-    padding-top: 8px;
-}
-
-/* Published Result Cards Grid */
-.results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 16px;
-}
-
-.result-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 14px;
-    padding: 16px;
-    box-shadow: var(--shadow-md);
-}
-
-.result-card-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 8px;
-    margin-bottom: 10px;
-}
-
-.winner-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 10px;
-    background: var(--bg-color);
-    border-radius: 8px;
-    margin-top: 6px;
-    font-weight: 700;
-    font-size: 0.88rem;
-    border: 1px solid var(--border-color);
-}
-
+/* Published Results Grid */
+.results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+.result-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; box-shadow: var(--shadow-md); }
+.result-card-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 10px; }
+.winner-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: var(--bg-color); border-radius: 8px; margin-top: 6px; font-weight: 700; font-size: 0.88rem; border: 1px solid var(--border-color); }
 .team-badge-a { color: var(--zellij-red); font-weight: 800; font-family: 'Montserrat', sans-serif; font-size: 0.78rem; }
 .team-badge-b { color: var(--iznik-blue); font-weight: 800; font-family: 'Montserrat', sans-serif; font-size: 0.78rem; }
 
-/* ==========================================================================
-   8. MODALS & FOOTER
-   ========================================================================== */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.65);
-    align-items: center;
-    justify-content: center;
-    padding: 15px;
-}
-
-.modal-content {
-    background: var(--card-bg);
-    width: 100%;
-    max-width: 400px;
-    padding: 24px;
-    border-radius: 14px;
-    position: relative;
-    color: var(--text-color);
-    box-shadow: var(--shadow-lg);
-}
-
-.close-btn {
-    position: absolute;
-    right: 16px;
-    top: 12px;
-    font-size: 1.6rem;
-    cursor: pointer;
-    color: var(--text-muted);
-}
-
-.btn-submit {
-    background: #1e293b;
-    color: #fbbf24;
-    border: none;
-    padding: 11px 16px;
-    border-radius: 8px;
-    font-weight: 800;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 10px;
-    font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
-}
-
-footer {
-    color: var(--text-muted);
-    text-align: center;
-    padding: 22px 15px;
-    font-size: 0.8rem;
-    margin-top: 35px;
-    font-family: 'Montserrat', sans-serif;
-    border-top: 1px solid var(--border-color);
-}
-
-/* ==========================================================================
-   9. MOBILE RESPONSIVENESS
-   ========================================================================== */
-@media (max-width: 768px) {
-    .builder-grid { grid-template-columns: 1fr; }
-    .teams-grid { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 600px) {
-    .home-nav-grid { grid-template-columns: 1fr; }
-    .points-grid { grid-template-columns: 1fr; }
-    .cat-points-grid { grid-template-columns: 1fr; }
-    .main-title { font-size: 1.95rem; }
-    .vertical-chart-container { gap: 25px; }
-}
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); align-items: center; justify-content: center; padding: 15px; }
+.modal-content { background: var(--card-bg); width: 100%; max-width: 400px; padding: 24px; border-radius: 14px; position: relative; box-shadow: var(--shadow-lg); }
+.close-btn { position: absolute; right: 16px; top: 12px; font-size: 1.6rem; cursor: pointer; color: var(--text-muted); }
+.btn-submit { background: #1e293b; color: #fbbf24; border: none; padding: 11px 16px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 10px; font-family: 'Montserrat', sans-serif; }
+footer { color: var(--text-muted); text-align: center; padding: 22px 15px; font-size: 0.8rem; margin-top: 35px; border-top: 1px solid var(--border-color); font-family: 'Montserrat', sans-serif; }
