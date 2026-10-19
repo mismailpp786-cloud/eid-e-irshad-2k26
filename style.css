@@ -43,7 +43,7 @@ body {
 .btn-logout { background: #dc2626; color: #fff; }
 .admin-only { display: none; }
 
-/* Hero Section Fixes */
+/* Hero Section */
 .hero {
     background: var(--header-bg);
     color: #ffffff;
@@ -105,7 +105,7 @@ body {
 .date-box .day { font-family: 'Montserrat', sans-serif; font-size: 0.65rem; font-weight: 700; opacity: 0.8; }
 
 .countdown-container {
-    display: flex; justify-content: center; gap: 10px; margin-bottom: 18px;
+    display: flex; justify-content: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap;
 }
 .countdown-box {
     background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(251, 191, 36, 0.3);
@@ -137,7 +137,7 @@ body {
     background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px;
     padding: 15px; margin-bottom: 20px; box-shadow: var(--shadow-md);
 }
-.progress-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 0.82rem; margin-bottom: 8px; }
+.progress-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 0.82rem; margin-bottom: 8px; flex-wrap: wrap; gap: 5px; }
 .progress-bar-container { height: 12px; background: #e2e8f0; border-radius: 6px; display: flex; overflow: hidden; }
 .progress-zellij { background: var(--zellij-red); height: 100%; transition: width 0.5s ease; }
 .progress-iznik { background: var(--iznik-blue); height: 100%; transition: width 0.5s ease; }
@@ -161,9 +161,6 @@ body {
 .card-header h3 { margin: 0; font-size: 1.05rem; font-weight: 900; }
 .rules-body { font-size: 0.85rem; line-height: 1.6; }
 .rules-list { padding-left: 18px; margin: 10px 0; }
-.points-box { background: var(--bg-color); border-radius: 10px; padding: 12px; margin-top: 12px; border: 1px solid var(--border-color); }
-.points-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.8rem; }
-@media(max-width:600px){ .points-grid { grid-template-columns: 1fr; } }
 
 .home-nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 15px; }
 .nav-card {
@@ -182,7 +179,7 @@ body {
 /* Top Navigation Bar */
 .top-nav-bar {
     background: var(--header-bg); color: #fff; border-bottom: 3px solid var(--accent-gold);
-    padding: 12px 18px; display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
 }
 .back-home-btn { background: #fbbf24; color: #0f172a; border: none; padding: 7px 15px; border-radius: 20px; font-weight: 800; font-size: 0.8rem; cursor: pointer; text-decoration: none; }
 .nav-page-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 0.85rem; color: #fbbf24; }
