@@ -5,98 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teams & Members — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <!-- Sticky Admin Bar -->
-    <div id="adminBar" class="admin-bar">
-        <span>⚙️ Admin Mode Active (Teams Roster)</span>
-        <div class="admin-actions">
-            <button class="btn-backup" onclick="exportBackupJSON()">📥 Backup JSON</button>
-            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
-        </div>
-    </div>
-
-    <!-- Top Navigation Bar -->
     <div class="top-nav-bar">
         <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
-        <span class="nav-page-title">👥 TEAMS (ZELLIJ & IZNIK)</span>
+        <span class="nav-page-title">👥 FESTIVAL TEAMS & ROSTERS</span>
         <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
     </div>
-
-    <!-- Main Container -->
-    <div class="container" style="max-width: 950px; margin: 25px auto;">
-        
-        <h1 class="page-title">Fest Houses & Teams</h1>
-        <p class="page-subtitle">റഹ്മാനിയ്യ അറബിക് കോളേജ് ഫെസ്റ്റ് ഹൗസുകളും അംഗങ്ങളും</p>
-
-        <!-- Admin Add Student Box -->
-        <div class="card admin-only" data-display="block" style="margin-bottom: 25px; border: 2px dashed var(--accent-gold);">
-            <div class="card-header">
-                <h3>➕ പുതിയ വിദ്യാർത്ഥിയെ ടീമിലേക്ക് ചേർക്കുക</h3>
+    <div class="container" style="max-width: 950px; margin: 30px auto;">
+        <h1 class="page-title">ടീമുകളും അംഗങ്ങളും</h1>
+        <p class="page-subtitle">Team ZELLIJ, Team IZNIK എന്നിവയിലെ സീനിയർ, ജൂനിയർ, സബ് ജൂനിയർ പ്രതിഭകൾ</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+            <div class="card" style="border-top: 5px solid var(--zellij-red);">
+                <h2 style="color: var(--zellij-red); font-family: 'Montserrat', sans-serif; margin-top: 0;">🔴 Team ZELLIJ</h2>
+                <div id="zellijRosterContent"></div>
             </div>
-            <div class="rules-body" style="padding: 15px;">
-                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; align-items: end;">
-                    <div>
-                        <label style="font-size: 0.78rem; font-weight: 800; margin-bottom: 4px; display: block;">വിദ്യാർത്ഥിയുടെ പേര്:</label>
-                        <input type="text" id="newStudentName" class="form-control" placeholder="ഉദാ: മുഹമ്മദ് ഇസ്മായിൽ">
-                    </div>
-                    <div>
-                        <label style="font-size: 0.78rem; font-weight: 800; margin-bottom: 4px; display: block;">ടീം:</label>
-                        <select id="newStudentTeam" class="form-control">
-                            <option value="teamA">🔴 Team ZELLIJ</option>
-                            <option value="teamB">🔵 Team IZNIK</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label style="font-size: 0.78rem; font-weight: 800; margin-bottom: 4px; display: block;">വിഭാഗം:</label>
-                        <select id="newStudentCat" class="form-control">
-                            <option value="senior">Senior</option>
-                            <option value="junior">Junior</option>
-                            <option value="subjunior">Sub Junior</option>
-                        </select>
-                    </div>
-                    <div>
-                        <button class="btn-submit" style="margin-top:0; height: 42px;" onclick="addNewStudent()">ചേർക്കുക</button>
-                    </div>
-                </div>
+            <div class="card" style="border-top: 5px solid var(--iznik-blue);">
+                <h2 style="color: var(--iznik-blue); font-family: 'Montserrat', sans-serif; margin-top: 0;">🔵 Team IZNIK</h2>
+                <div id="iznikRosterContent"></div>
             </div>
-        </div>
-
-        <!-- Teams Grid (ZELLIJ & IZNIK) -->
-        <div class="teams-grid">
-            
-            <!-- Team ZELLIJ -->
-            <div class="team-box zellij">
-                <div class="team-banner zellij">
-                    <h2>🔴 Team ZELLIJ</h2>
-                    <span style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:0.8rem; background:rgba(0,0,0,0.25); padding:4px 10px; border-radius:12px;">RED HOUSE</span>
-                </div>
-                <div class="team-body" id="teamAContainer">
-                    <!-- Populated via app.js -->
-                </div>
-            </div>
-
-            <!-- Team IZNIK -->
-            <div class="team-box iznik">
-                <div class="team-banner iznik">
-                    <h2>🔵 Team IZNIK</h2>
-                    <span style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:0.8rem; background:rgba(0,0,0,0.25); padding:4px 10px; border-radius:12px;">BLUE HOUSE</span>
-                </div>
-                <div class="team-body" id="teamBContainer">
-                    <!-- Populated via app.js -->
-                </div>
-            </div>
-
         </div>
     </div>
-
-    <footer>
-        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
-    </footer>
-
+    <footer>&copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM</footer>
     <script src="app.js"></script>
+    <script>
+        function renderTeamsRoster() {
+            if (typeof appData === 'undefined' || !appData.teams) return;
+            const renderTeamBox = (teamKey, containerId) => {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                const team = appData.teams[teamKey];
+                if (!team) return;
+                let html = `<p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Short Name: <strong>${team.shortName}</strong></p>`;
+                const sections = [
+                    { key: 'senior', label: 'Senior Roster' },
+                    { key: 'junior', label: 'Junior Roster' },
+                    { key: 'subjunior', label: 'Sub Junior Roster' }
+                ];
+                sections.forEach(sec => {
+                    const members = team[sec.key] || [];
+                    if (members.length > 0) {
+                        html += `<div style="margin-bottom:12px;">
+                            <h4 style="margin:0 0 5px; font-size:0.9rem; color:var(--accent-gold);">${sec.label}</h4>
+                            <div style="display:flex; flex-wrap:wrap; gap:6px;">`;
+                        members.forEach(m => {
+                            html += `<span style="background:var(--bg-color); border:1px solid var(--border-color); padding:4px 10px; border-radius:6px; font-size:0.8rem; font-weight:700;">${m}</span>`;
+                        });
+                        html += `</div></div>`;
+                    }
+                });
+                container.innerHTML = html;
+            };
+            renderTeamBox('teamA', 'zellijRosterContent');
+            renderTeamBox('teamB', 'iznikRosterContent');
+        }
+        window.addEventListener("DOMContentLoaded", () => {
+            setTimeout(() => { renderTeamsRoster(); }, 200);
+        });
+    </script>
 </body>
 </html>
