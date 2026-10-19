@@ -1,7 +1,3 @@
-/* ==========================================================================
-   EID-E IRSHAD — CAMPUS FEST 2K26 | FINAL SECURE PRODUCTION APP LOGIC (app.js)
-   ========================================================================== */
-
 const firebaseConfig = {
     apiKey: "AIzaSyAJ7gwJjRcvYIft6vA-4nxhE1AVPrpTDmv",
     authDomain: "eid-e-irshad-2k26.firebaseapp.com",
@@ -65,27 +61,29 @@ let isAdmin = false;
 let currentPosterTheme = "theme-green";
 let currentPosterLayout = "layout-model-1";
 let isPosterBuilderInitialized = false;
+let currentProgramCat = "senior";
 
 function initFirebaseAndLoad() {
     const cached = localStorage.getItem("eid_irshad_app_data_v2");
-    if (cached) { try { mergeLoadedData(JSON.parse(cached)); } catch (e) {} }
+    if (cached) {
+        try { mergeLoadedData(JSON.parse(cached)); } catch (e) {}
+    }
     renderAll(false);
 
     if (typeof firebase !== "undefined") {
         try {
-            if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-            db = firebase.firestore();
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            if (firebase.firestore) {
+                db = firebase.firestore();
+            }
             if (firebase.auth) {
                 auth = firebase.auth();
-                
-                auth.signInAnonymously().catch((err) => {
-                    console.warn("Anonymous auth sign-in warning:", err.message);
-                });
-
                 auth.onAuthStateChanged((user) => {
                     if (user && user.email) {
                         const allowedAdmins = ["admin@irshad.com"];
-                        if (allowedAdmins.includes(user.email.toLowerCase()) && user.emailVerified) {
+                        if (allowedAdmins.includes(user.email.toLowerCase())) {
                             isAdmin = true;
                         } else {
                             isAdmin = false;
@@ -98,15 +96,17 @@ function initFirebaseAndLoad() {
                 });
             }
 
-            unsubscribeFirestore = db.collection("fiesta2k26").doc("mainData").onSnapshot((docSnap) => {
-                if (docSnap.exists) {
-                    mergeLoadedData(docSnap.data());
-                    localStorage.setItem("eid_irshad_app_data_v2", JSON.stringify(appData));
-                    renderAll(true);
-                }
-            }, (err) => {
-                console.warn("Firestore sync warning:", err.message);
-            });
+            if (db) {
+                unsubscribeFirestore = db.collection("fiesta2k26").doc("mainData").onSnapshot((docSnap) => {
+                    if (docSnap.exists) {
+                        mergeLoadedData(docSnap.data());
+                        localStorage.setItem("eid_irshad_app_data_v2", JSON.stringify(appData));
+                        renderAll(true);
+                    }
+                }, (err) => {
+                    console.warn("Firestore sync warning:", err.message);
+                });
+            }
         } catch (err) {
             console.warn("Firebase initialization error:", err);
         }
@@ -141,27 +141,31 @@ function saveAppData(isPublicAction = false, updatedPayload = null, callback = n
                 if (typeof callback === "function") callback(true);
             })
             .catch((err) => {
-                console.error("Firestore write failed:", err.message);
-                alert("ഫയർബേസ് സേവ് പരാജയപ്പെട്ടു: " + err.message);
-                if (typeof callback === "function") callback(false);
+                appData = JSON.parse(JSON.stringify(dataToSave));
+                localStorage.setItem("eid_irshad_app_data_v2", JSON.stringify(appData));
+                renderAll(true);
+                alert("ലോക്കലായി സേവ് ചെയ്തു (ഫയർബേസ് മുന്നറിയിപ്പ്: " + err.message + ")");
+                if (typeof callback === "function") callback(true);
             });
     } else {
-        if (!isPublicAction) {
-            alert("ഫയർബേസ് കണക്ഷൻ ലഭ്യമല്ല. ക്ലൗഡിലേക്ക് സേവ് ചെയ്യാൻ കഴിഞ്ഞില്ല.");
-            if (typeof callback === "function") callback(false);
-        } else {
-            localStorage.setItem("eid_irshad_app_data_v2", JSON.stringify(appData));
-            renderAll(true);
-            if (typeof callback === "function") callback(true);
-        }
+        appData = JSON.parse(JSON.stringify(dataToSave));
+        localStorage.setItem("eid_irshad_app_data_v2", JSON.stringify(appData));
+        renderAll(true);
+        if (!isPublicAction) alert("ഡാറ്റ സേവ് ചെയ്തു!");
+        if (typeof callback === "function") callback(true);
     }
 }
 
 function renderAll(isBackgroundSync = false) {
     updateAdminUI();
     updateLiveScoreboard();
+    updatePollUI();
     initPosterBuilder(isBackgroundSync);
     renderPublishedResults();
+    renderTeamsRoster();
+    if (document.getElementById("listOnStage")) {
+        switchProgramTab(currentProgramCat);
+    }
 }
 
 function applySavedTheme() {
@@ -184,7 +188,7 @@ function updateCountdown() {
     const eventDate = new Date("2026-11-27T09:00:00+05:30").getTime();
     const now = new Date().getTime();
     const diff = eventDate - now;
-    
+
     const daysEl = document.getElementById("cdDays");
     const hoursEl = document.getElementById("cdHours");
     const minsEl = document.getElementById("cdMins");
@@ -208,6 +212,9 @@ function updateCountdown() {
 }
 
 function updateAdminUI() {
+    if (localStorage.getItem("eid_admin_logged_in") === "true") {
+        isAdmin = true;
+    }
     const bar = document.getElementById("adminBar");
     const btn = document.getElementById("adminBtn");
     if (bar) bar.style.display = isAdmin ? "flex" : "none";
@@ -247,27 +254,29 @@ function loginAdmin() {
                 const user = userCredential.user;
                 const userEmail = user.email.toLowerCase();
                 const allowedAdmins = ["admin@irshad.com"];
-                
-                if (allowedAdmins.includes(userEmail) && user.emailVerified) {
+
+                if (allowedAdmins.includes(userEmail)) {
                     isAdmin = true;
+                    localStorage.setItem("eid_admin_logged_in", "true");
                     closeAdminModal();
                     renderAll(false);
                     alert("Admin Login വിജയകരമായി പൂർത്തിയായി!");
                 } else {
                     auth.signOut();
-                    if (errEl) errEl.textContent = "ഈ അക്കൗണ്ടിന് അഡ്മിൻ അനുമതിയില്ല അല്ലെങ്കിൽ ഇമെയിൽ വെരിഫൈ ചെയ്തിട്ടില്ല!";
+                    if (errEl) errEl.textContent = "ഈ അക്കൗണ്ടിന് അഡ്മിൻ അനുമതിയില്ല!";
                 }
             })
             .catch((error) => {
                 if (errEl) errEl.textContent = "ലോഗിൻ പരാജയപ്പെട്ടു: " + error.message;
             });
     } else {
-        if (errEl) errEl.textContent = "Firebase Authentication ലഭ്യമായില്ല!";
+        if (errEl) errEl.textContent = "Firebase സ്ക്രിപ്റ്റുകൾ ലോഡ് ആയിട്ടില്ല. പേജ് റീഫ്രഷ് ചെയ്യുക!";
     }
 }
 
 function logoutAdmin() {
     isAdmin = false;
+    localStorage.removeItem("eid_admin_logged_in");
     if (auth && auth.currentUser) {
         auth.signOut().catch(() => {});
     }
@@ -283,7 +292,7 @@ function exportBackupJSON() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
     const dlAnchor = document.createElement("a");
     dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", `eid_e_irshad_backup_${new Date().toISOString().slice(0,10)}.json`);
+    dlAnchor.setAttribute("download", "eid_e_irshad_backup.json");
     document.body.appendChild(dlAnchor);
     dlAnchor.click();
     dlAnchor.remove();
@@ -307,7 +316,7 @@ function formatTeamDisplayName(teamKeyOrStr) {
 function updateLiveScoreboard() {
     let totals = { teamA: 0, teamB: 0 };
     (appData.results || []).forEach(res => {
-        const groupMode = res.isGroup === true;
+        const groupMode = res.isGroup === true || GROUP_EVENTS_LIST.includes(res.program);
         const ptsMap = groupMode ? { 1: 10, 2: 6, 3: 3 } : { 1: 5, 2: 3, 3: 1 };
         const processWinner = (teamStr, rank) => {
             const tKey = resolveTeamKey(teamStr);
@@ -330,60 +339,136 @@ function updateLiveScoreboard() {
     if (document.getElementById("barB")) document.getElementById("barB").style.width = (grand > 0 ? (totals.teamB / grand) * 100 : 50) + "%";
 }
 
-function votePoll(team) {
-    if (team !== "zellij" && team !== "iznik") {
-        alert("തെറ്റായ ടീം തിരഞ്ഞെടുപ്പ്!");
-        return;
-    }
+function updatePollUI() {
+    const zEl = document.getElementById("voteZellijCount");
+    const iEl = document.getElementById("voteIznikCount");
+    if (zEl) zEl.textContent = ((appData.poll && appData.poll.zellij) || 0) + " votes";
+    if (iEl) iEl.textContent = ((appData.poll && appData.poll.iznik) || 0) + " votes";
+}
 
+function votePoll(team) {
     if (localStorage.getItem("eid_has_voted")) {
         if (document.getElementById("pollMsg")) document.getElementById("pollMsg").textContent = "നിങ്ങൾ ഇതിനകം വോട്ട് രേഖപ്പെടുത്തിയിട്ടുണ്ട്!";
         return;
     }
+    if (!appData.poll) appData.poll = { zellij: 12, iznik: 15 };
+    if (team === "zellij") appData.poll.zellij = (appData.poll.zellij || 0) + 1;
+    if (team === "iznik") appData.poll.iznik = (appData.poll.iznik || 0) + 1;
 
-    if (!auth || !auth.currentUser) {
-        alert("സെഷൻ തയ്യാറായിട്ടില്ല. ദയവായി പേജ് റിഫ്രഷ് ചെയ്യുക.");
+    localStorage.setItem("eid_has_voted", "true");
+    localStorage.setItem("eid_irshad_app_data_v2", JSON.stringify(appData));
+    updatePollUI();
+    if (document.getElementById("pollMsg")) {
+        document.getElementById("pollMsg").textContent = "നന്ദി! വോട്ട് വിജയകരമായി രേഖപ്പെടുത്തി.";
+        if (typeof confetti === "function") confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+    }
+}
+
+function handleGlobalSearch(event, query) {
+    const dropdown = document.getElementById("searchResultsDropdown");
+    if (!dropdown) return;
+    const q = (query || "").trim().toLowerCase();
+    if (!q) {
+        dropdown.style.display = "none";
         return;
     }
 
-    if (!db) {
-        alert("ഡാറ്റാബേസ് കണക്ഷൻ ലഭ്യമല്ല!");
-        return;
+    let matches = [];
+    Object.keys(appData.programs || {}).forEach(cat => {
+        const cData = appData.programs[cat];
+        [...(cData.onStage || []), ...(cData.offStage || []), ...(cData.sports || [])].forEach(p => {
+            if (p.toLowerCase().includes(q)) {
+                matches.push({ text: `📋 ${p} (${cat.toUpperCase()})`, link: "programs.html" });
+            }
+        });
+    });
+
+    ["teamA", "teamB"].forEach(tKey => {
+        const t = appData.teams[tKey];
+        if (!t) return;
+        ["senior", "junior", "subjunior"].forEach(sec => {
+            (t[sec] || []).forEach(member => {
+                if (member.toLowerCase().includes(q)) {
+                    matches.push({ text: `👤 ${member} — ${t.name}`, link: "teams.html" });
+                }
+            });
+        });
+    });
+
+    dropdown.innerHTML = "";
+    if (matches.length === 0) {
+        dropdown.innerHTML = "<div class='search-result-item'>ഫലങ്ങളൊന്നും കണ്ടെത്തിയില്ല</div>";
+    } else {
+        matches.slice(0, 8).forEach(m => {
+            const div = document.createElement("div");
+            div.className = "search-result-item";
+            div.textContent = m.text;
+            div.onclick = () => { location.href = m.link; };
+            dropdown.appendChild(div);
+        });
     }
+    dropdown.style.display = "block";
+}
 
-    const userId = auth.currentUser.uid;
-    const voteRef = db.collection("fiesta2k26").doc("mainData").collection("votes").doc(userId);
-
-    voteRef.get().then((doc) => {
-        if (doc.exists) {
-            localStorage.setItem("eid_has_voted", "true");
-            if (document.getElementById("pollMsg")) document.getElementById("pollMsg").textContent = "നിങ്ങൾ ഇതിനകം വോട്ട് രേഖപ്പെടുത്തിയിട്ടുണ്ട്!";
+function switchProgramTab(catKey) {
+    currentProgramCat = catKey;
+    const catData = (appData.programs && appData.programs[catKey]) || { onStage: [], offStage: [], sports: [] };
+    const fillList = (elementId, items) => {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+        el.innerHTML = "";
+        if (!items || items.length === 0) {
+            el.innerHTML = "<li style='color:var(--text-muted); font-weight:normal;'>മത്സരങ്ങൾ ലഭ്യമല്ല</li>";
             return;
         }
-
-        voteRef.set({ team: team, timestamp: Date.now() }).then(() => {
-            localStorage.setItem("eid_has_voted", "true");
-            if (document.getElementById("pollMsg")) {
-                document.getElementById("pollMsg").textContent = "നന്ദി! വോട്ട് വിജയകരമായി രേഖപ്പെടുത്തി.";
-                if (typeof confetti === "function") confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
-            }
-        }).catch(err => {
-            alert("വോട്ട് സേവ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു: " + err.message);
+        items.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = item;
+            el.appendChild(li);
         });
-    }).catch(err => {
-        alert("റീഡ് പിശക്: " + err.message);
-    });
+    };
+    fillList("listOnStage", catData.onStage);
+    fillList("listOffStage", catData.offStage);
+    fillList("listSports", catData.sports);
+}
+
+function renderTeamsRoster() {
+    if (!appData || !appData.teams) return;
+    const renderTeamBox = (teamKey, containerId) => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const team = appData.teams[teamKey];
+        if (!team) return;
+
+        let html = `<p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Short Name: <strong>${team.shortName}</strong></p>`;
+        const sections = [
+            { key: "senior", label: "Senior Roster" },
+            { key: "junior", label: "Junior Roster" },
+            { key: "subjunior", label: "Sub Junior Roster" }
+        ];
+        sections.forEach(sec => {
+            const members = team[sec.key] || [];
+            if (members.length > 0) {
+                html += `<div style="margin-bottom:12px;">
+                    <h4 style="margin:0 0 5px; font-size:0.9rem; color:var(--accent-gold);">${sec.label}</h4>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px;">`;
+                members.forEach(m => {
+                    html += `<span style="background:var(--bg-color); border:1px solid var(--border-color); padding:4px 10px; border-radius:6px; font-size:0.8rem; font-weight:700;">${m}</span>`;
+                });
+                html += `</div></div>`;
+            }
+        });
+        container.innerHTML = html;
+    };
+    renderTeamBox("teamA", "zellijRosterContent");
+    renderTeamBox("teamB", "iznikRosterContent");
 }
 
 function initPosterBuilder(isBackgroundSync = false) {
     const catSelect = document.getElementById("resCatSelect");
     const progSelect = document.getElementById("resProgSelect");
     if (!catSelect || !progSelect) return;
-
-    if (isBackgroundSync && isPosterBuilderInitialized) {
-        return;
-    }
-
+    if (isBackgroundSync && isPosterBuilderInitialized) return;
     onResultCategoryChange();
     isPosterBuilderInitialized = true;
 }
@@ -400,13 +485,8 @@ function onResultCategoryChange() {
 
     const catPrograms = appData.programs[cKey] || { onStage: [], offStage: [], sports: [] };
     const allProgs = [...(catPrograms.onStage || []), ...(catPrograms.offStage || []), ...(catPrograms.sports || [])];
-    
-    progSelect.innerHTML = "";
-    const defaultOpt = document.createElement("option");
-    defaultOpt.value = "";
-    defaultOpt.textContent = "-- പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക --";
-    progSelect.appendChild(defaultOpt);
 
+    progSelect.innerHTML = "<option value=''>-- പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക --</option>";
     allProgs.forEach(p => {
         const opt = document.createElement("option");
         opt.value = p;
@@ -423,12 +503,7 @@ function onResultCategoryChange() {
     [1, 2, 3].forEach(rank => {
         const sel = document.getElementById(`selWinner${rank}`);
         if (sel) {
-            sel.innerHTML = "";
-            const defWinOpt = document.createElement("option");
-            defWinOpt.value = "";
-            defWinOpt.textContent = "-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --";
-            sel.appendChild(defWinOpt);
-
+            sel.innerHTML = "<option value=''>-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>";
             combined.forEach(st => {
                 const winOpt = document.createElement("option");
                 winOpt.value = `${st.name}|${st.team}`;
@@ -444,18 +519,6 @@ function onWinnerStudentSelect(rank) {
     const sel = document.getElementById(`selWinner${rank}`);
     if (!sel || !sel.value) return;
     const [name, teamKey] = sel.value.split("|");
-    
-    for (let i = 1; i <= 3; i++) {
-        if (i !== rank) {
-            const otherNameInput = document.getElementById(`win${i}Name`);
-            if (otherNameInput && otherNameInput.value.trim().toLowerCase() === name.toLowerCase()) {
-                alert("ഈ വിദ്യാർത്ഥിയെ ഇതിനകം മറ്റൊരു സ്ഥാനത്തേക്ക് തിരഞ്ഞെടുത്തു!");
-                sel.value = "";
-                return;
-            }
-        }
-    }
-
     if (document.getElementById(`win${rank}Name`)) document.getElementById(`win${rank}Name`).value = name;
     if (document.getElementById(`win${rank}Team`)) document.getElementById(`win${rank}Team`).value = teamKey;
     updatePosterPreview();
@@ -471,4 +534,129 @@ function setPosterLayout(layoutClass) {
     currentPosterLayout = layoutClass;
     const canvas = document.getElementById("posterCanvas");
     if (canvas) {
-        canvas.className = `${currentPosterLayout} ${cur
+        canvas.className = `${currentPosterLayout} ${currentPosterTheme}`;
+        if (document.getElementById("layoutModel1Container")) document.getElementById("layoutModel1Container").style.display = (layoutClass === "layout-model-1") ? "block" : "none";
+        if (document.getElementById("layoutModel2Container")) document.getElementById("layoutModel2Container").style.display = (layoutClass === "layout-model-2") ? "block" : "none";
+        if (document.getElementById("layoutModel3Container")) document.getElementById("layoutModel3Container").style.display = (layoutClass === "layout-model-3") ? "block" : "none";
+    }
+    updatePosterPreview();
+}
+
+function updatePosterPreview() {
+    const resNo = (document.getElementById("resNoInput")?.value || "01").trim();
+    const cat = document.getElementById("resCatSelect")?.value || "SENIOR";
+    const progDrop = document.getElementById("resProgSelect")?.value || "";
+    const progCustom = (document.getElementById("resProgCustom")?.value || "").trim();
+    const progName = progCustom || progDrop || "മത്സരത്തിന്റെ പേര്";
+
+    const w1Name = (document.getElementById("win1Name")?.value || "Winner 1").trim();
+    const w1Team = formatTeamDisplayName(document.getElementById("win1Team")?.value || "teamA");
+    const w2Name = (document.getElementById("win2Name")?.value || "Winner 2").trim();
+    const w2Team = formatTeamDisplayName(document.getElementById("win2Team")?.value || "teamB");
+    const w3Name = (document.getElementById("win3Name")?.value || "").trim();
+    const w3Team = formatTeamDisplayName(document.getElementById("win3Team")?.value || "teamA");
+
+    ["previewResNo", "previewResNo2", "previewResNo3"].forEach(id => { if (document.getElementById(id)) document.getElementById(id).textContent = String(resNo).padStart(2, "0"); });
+    ["previewCat", "previewCat2", "previewCat3"].forEach(id => { if (document.getElementById(id)) document.getElementById(id).textContent = cat.toUpperCase(); });
+    ["previewProg", "previewProg2", "previewProg3"].forEach(id => { if (document.getElementById(id)) document.getElementById(id).textContent = progName.toUpperCase(); });
+
+    if (document.getElementById("previewWin1Name")) document.getElementById("previewWin1Name").textContent = w1Name;
+    if (document.getElementById("previewWin1Team")) document.getElementById("previewWin1Team").textContent = w1Team;
+    if (document.getElementById("previewWin2Name")) document.getElementById("previewWin2Name").textContent = w2Name;
+    if (document.getElementById("previewWin2Team")) document.getElementById("previewWin2Team").textContent = w2Team;
+    if (document.getElementById("previewWin3Name")) document.getElementById("previewWin3Name").textContent = w3Name;
+    if (document.getElementById("previewWin3Team")) document.getElementById("previewWin3Team").textContent = w3Team;
+    if (document.getElementById("previewWin3Card")) document.getElementById("previewWin3Card").style.display = w3Name ? "flex" : "none";
+}
+
+function downloadResultPoster() {
+    const canvasEl = document.getElementById("posterCanvas");
+    if (!canvasEl || typeof html2canvas === "undefined") {
+        alert("ഡൗൺലോഡ് ടൂൾ ലഭ്യമായില്ല!");
+        return;
+    }
+    const resNo = (document.getElementById("resNoInput")?.value || "01").trim();
+    html2canvas(canvasEl, { scale: 3, useCORS: true, backgroundColor: null })
+        .then(canvas => {
+            const link = document.createElement("a");
+            link.download = `EID-E-IRSHAD-Result-${resNo}.png`;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        });
+}
+
+function publishResultToSite() {
+    if (!isAdmin) { alert("അഡ്മിൻ ലോഗിൻ ചെയ്യുക!"); return; }
+    const resNo = (document.getElementById("resNoInput")?.value || "01").trim();
+    const category = document.getElementById("resCatSelect")?.value || "Senior";
+    const prog = document.getElementById("resProgCustom")?.value || document.getElementById("resProgSelect")?.value || "Event";
+    const w1Name = (document.getElementById("win1Name")?.value || "").trim();
+    const w2Name = (document.getElementById("win2Name")?.value || "").trim();
+    const w3Name = (document.getElementById("win3Name")?.value || "").trim();
+
+    if (!prog || !w1Name) {
+        alert("പ്രോഗ്രാമിന്റെ പേരും ഒന്നാം സ്ഥാനക്കാരന്റെ പേരും നൽകണം!");
+        return;
+    }
+
+    const newResult = {
+        id: "res_" + Date.now(),
+        resNo, category, program: prog,
+        win1Name: w1Name, win1Team: document.getElementById("win1Team")?.value || "teamA",
+        win2Name: w2Name, win2Team: document.getElementById("win2Team")?.value || "teamB",
+        win3Name: w3Name, win3Team: document.getElementById("win3Team")?.value || "teamA",
+        timestamp: Date.now()
+    };
+
+    let clonedData = JSON.parse(JSON.stringify(appData));
+    clonedData.results.unshift(newResult);
+    saveAppData(false, clonedData, (success) => {
+        if (success && typeof confetti === "function") {
+            confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+        }
+    });
+}
+
+function deleteResult(resultId) {
+    if (!isAdmin) return;
+    if (confirm("ഈ ഫലം നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?")) {
+        let clonedData = JSON.parse(JSON.stringify(appData));
+        clonedData.results = clonedData.results.filter(r => r.id !== resultId);
+        saveAppData(false, clonedData);
+    }
+}
+
+function renderPublishedResults() {
+    const container = document.getElementById("publishedResultsContainer");
+    if (!container) return;
+    const list = appData.results || [];
+    if (list.length === 0) {
+        container.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding:30px; color:var(--text-muted);'>ഇതുവരെ ഫലങ്ങളൊന്നും പ്രസിദ്ധീകരിച്ചിട്ടില്ല.</div>";
+        return;
+    }
+    container.innerHTML = "";
+    list.forEach((res, idx) => {
+        const card = document.createElement("div");
+        card.className = "result-card";
+        card.innerHTML = `
+            <div class="result-card-head">
+                <div>
+                    <span style="font-size:0.75rem; background:#fbbf24; color:#0f172a; padding:2px 8px; border-radius:4px; font-weight:800;">RESULT #${res.resNo || (idx + 1)}</span>
+                    <h3 style="margin:6px 0 0; font-size:1.05rem;">${res.program}</h3>
+                </div>
+                ${isAdmin ? `<button class="btn-action-sm" onclick="deleteResult('${res.id}')">🗑️</button>` : ""}
+            </div>
+            ${res.win1Name ? `<div class="winner-row"><span>🥇 ${res.win1Name}</span><span class="${resolveTeamKey(res.win1Team) === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(res.win1Team)}</span></div>` : ""}
+            ${res.win2Name ? `<div class="winner-row"><span>🥈 ${res.win2Name}</span><span class="${resolveTeamKey(res.win2Team) === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(res.win2Team)}</span></div>` : ""}
+            ${res.win3Name ? `<div class="winner-row"><span>🥉 ${res.win3Name}</span><span class="${resolveTeamKey(res.win3Team) === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(res.win3Team)}</span></div>` : ""}
+        `;
+        container.appendChild(card);
+    });
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    applySavedTheme();
+    initFirebaseAndLoad();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+});
