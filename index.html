@@ -6,6 +6,12 @@
     <title>EID-E IRSHAD — CAMPUS FEST 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- Firebase App (Core) & Auth & Firestore SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -48,22 +54,10 @@
             </div>
 
             <div class="countdown-container">
-                <div class="countdown-box">
-                    <span class="num" id="cdDays">00</span>
-                    <span class="label">Days</span>
-                </div>
-                <div class="countdown-box">
-                    <span class="num" id="cdHours">00</span>
-                    <span class="label">Hours</span>
-                </div>
-                <div class="countdown-box">
-                    <span class="num" id="cdMins">00</span>
-                    <span class="label">Mins</span>
-                </div>
-                <div class="countdown-box">
-                    <span class="num" id="cdSecs">00</span>
-                    <span class="label">Secs</span>
-                </div>
+                <div class="countdown-box"><span class="num" id="cdDays">00</span><span class="label">Days</span></div>
+                <div class="countdown-box"><span class="num" id="cdHours">00</span><span class="label">Hours</span></div>
+                <div class="countdown-box"><span class="num" id="cdMins">00</span><span class="label">Mins</span></div>
+                <div class="countdown-box"><span class="num" id="cdSecs">00</span><span class="label">Secs</span></div>
             </div>
             
             <div class="org-info">
@@ -73,7 +67,7 @@
     </header>
 
     <div class="global-search-box">
-        <input type="text" id="programSearchInput" class="global-search-input" placeholder="🔍 പ്രോഗ്രാമോ വിദ്യാർത്ഥിയെയോ ഇവിടെ തിരയുക..." oninput="handleGlobalSearch(event, this.value)" onkeypress="handleGlobalSearch(event, this.value)">
+        <input type="text" id="programSearchInput" class="global-search-input" placeholder="🔍 പ്രോഗ്രാമോ വിദ്യാർത്ഥിയെയോ ഇവിടെ തിരയുക..." oninput="handleGlobalSearch(event, this.value)">
         <div id="searchResultsDropdown" class="search-results-dropdown"></div>
     </div>
 
@@ -113,7 +107,6 @@
                     <li>മത്സരങ്ങളിൽ പങ്കെടുക്കുന്ന മുഴുവൻ വിദ്യാർത്ഥികളും കൃത്യസമയത്ത് സ്റ്റേജിൽ/വേദിയിൽ ഹാജരാകേണ്ടതാണ്.</li>
                     <li>വിധികർത്താക്കളുടെ തീരുമാനം അന്തിമമായിരിക്കും. അതിൽ തർക്കങ്ങൾ അനുവദനീയമല്ല.</li>
                     <li>ഓരോ മത്സരത്തിലും പങ്കെടുക്കുന്നവരുടെ എണ്ണം അതത് കാറ്റഗറി കോർഡിനേറ്റർമാർ മുൻകൂട്ടി ഉറപ്പുവരുത്തണം.</li>
-                    <li>സ്റ്റേജ്, ഓഫ്-സ്റ്റേജ്, സ്പോർട്സ് ഇനങ്ങളിൽ സമയപരിധി കർശനമായി പാലിക്കേണ്ടതാണ്.</li>
                 </ol>
             </div>
         </div>
@@ -122,37 +115,22 @@
         <div class="home-nav-grid">
             <div class="nav-card" onclick="location.href='programs.html'">
                 <div style="font-size: 1.8rem;">📋</div>
-                <div class="nav-card-info">
-                    <h3>പ്രോഗ്രാം ലിസ്റ്റ്</h3>
-                    <p>Senior, Junior, Sub Junior മത്സരങ്ങൾ</p>
-                </div>
+                <div class="nav-card-info"><h3>പ്രോഗ്രാം ലിസ്റ്റ്</h3><p>Senior, Junior, Sub Junior മത്സരങ്ങൾ</p></div>
                 <div class="nav-card-arrow">➔</div>
             </div>
-
             <div class="nav-card" onclick="location.href='results.html'">
                 <div style="font-size: 1.8rem;">🏆</div>
-                <div class="nav-card-info">
-                    <h3>മത്സര ഫലങ്ങൾ</h3>
-                    <p>വിജയികളും റിസൾട്ട് പോസ്റ്ററുകളും</p>
-                </div>
+                <div class="nav-card-info"><h3>മത്സര ഫലങ്ങൾ</h3><p>വിജയികളും റിസൾട്ട് പോസ്റ്ററുകളും</p></div>
                 <div class="nav-card-arrow">➔</div>
             </div>
-
             <div class="nav-card" onclick="location.href='teams.html'">
                 <div style="font-size: 1.8rem;">👥</div>
-                <div class="nav-card-info">
-                    <h3>ടീം ലിസ്റ്റ്</h3>
-                    <p>ZELLIJ & IZNIK മുഴുവൻ അംഗങ്ങൾ</p>
-                </div>
+                <div class="nav-card-info"><h3>ടീം ലിസ്റ്റ്</h3><p>ZELLIJ & IZNIK മുഴുവൻ അംഗങ്ങൾ</p></div>
                 <div class="nav-card-arrow">➔</div>
             </div>
-
             <div class="nav-card" onclick="location.href='points.html'">
                 <div style="font-size: 1.8rem;">📊</div>
-                <div class="nav-card-info">
-                    <h3>സ്കോർബോർഡ്</h3>
-                    <p>തത്സമയ പോയിന്റ് നിലവാരം</p>
-                </div>
+                <div class="nav-card-info"><h3>സ്കോർബോർഡ്</h3><p>തത്സമയ പോയിന്റ് നിലവാരം</p></div>
                 <div class="nav-card-arrow">➔</div>
             </div>
         </div>
