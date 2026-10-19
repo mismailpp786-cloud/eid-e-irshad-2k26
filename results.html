@@ -30,7 +30,6 @@
         <h1 class="page-title">Poster Maker with Layout Switcher</h1>
         <p class="page-subtitle">ഒരേ ബാക്ക്ഗ്രൗണ്ടിൽ വ്യത്യസ്ത ഡിസൈൻ മോഡലുകൾ ഒറ്റക്ലിക്കിൽ സ്വിച്ച് ചെയ്യാം</p>
 
-        <!-- ADMIN BUILDER SECTION -->
         <div class="builder-section admin-only" data-display="block">
             <h3 style="margin: 0 0 15px; font-family:'Montserrat',sans-serif; font-size:1.15rem; font-weight:900; color:var(--accent-gold);">
                 🛠️ Poster Design & Layout Controls
@@ -38,15 +37,13 @@
 
             <div class="builder-grid">
                 
-                <!-- Left Form Inputs -->
                 <div>
-                    <!-- Layout Switcher Buttons -->
                     <div class="form-group">
                         <label>ഡിസൈൻ മോഡൽ (Layout Model):</label>
                         <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                            <button class="btn-action-sm" style="background:#059669; color:#fff; padding:7px 10px;" onclick="setPosterLayout('layout-model-1')">Model 1 (Sahithyolsav)</button>
-                            <button class="btn-action-sm" style="background:#2563eb; color:#fff; padding:7px 10px;" onclick="setPosterLayout('layout-model-2')">Model 2 (Centered)</button>
-                            <button class="btn-action-sm" style="background:#7c3aed; color:#fff; padding:7px 10px;" onclick="setPosterLayout('layout-model-3')">Model 3 (Compact)</button>
+                            <button class="btn-action-sm" style="background:#059669; color:#fff; padding:7px 10px;" onclick="setPosterLayout('layout-model-1')">Model 1</button>
+                            <button class="btn-action-sm" style="background:#2563eb; color:#fff; padding:7px 10px;" onclick="setPosterLayout('layout-model-2')">Model 2</button>
+                            <button class="btn-action-sm" style="background:#7c3aed; color:#fff; padding:7px 10px;" onclick="setPosterLayout('layout-model-3')">Model 3</button>
                         </div>
                     </div>
 
@@ -78,7 +75,6 @@
                         <input type="text" id="resProgCustom" class="form-control" placeholder="ഉദാ: ഖിറാഅത്ത്" oninput="updatePosterPreview()">
                     </div>
 
-                    <!-- Winner 1 -->
                     <div class="winner-input-box">
                         <h5>🥇 ഒന്നാം സ്ഥാനം (First Place)</h5>
                         <select id="selWinner1" class="form-control" style="font-size:0.8rem; padding:6px; margin-bottom:6px;" onchange="onWinnerStudentSelect(1)">
@@ -93,7 +89,6 @@
                         </div>
                     </div>
 
-                    <!-- Winner 2 -->
                     <div class="winner-input-box">
                         <h5>🥈 രണ്ടാം സ്ഥാനം (Second Place)</h5>
                         <select id="selWinner2" class="form-control" style="font-size:0.8rem; padding:6px; margin-bottom:6px;" onchange="onWinnerStudentSelect(2)">
@@ -108,7 +103,6 @@
                         </div>
                     </div>
 
-                    <!-- Winner 3 -->
                     <div class="winner-input-box">
                         <h5>🥉 മൂന്നാം സ്ഥാനം (Third Place)</h5>
                         <select id="selWinner3" class="form-control" style="font-size:0.8rem; padding:6px; margin-bottom:6px;" onchange="onWinnerStudentSelect(3)">
@@ -123,7 +117,6 @@
                         </div>
                     </div>
 
-                    <!-- Themes -->
                     <div class="form-group" style="margin-top:12px;">
                         <label>ബാക്ക്ഗ്രൗണ്ട് തീം (Background Theme):</label>
                         <div style="display:flex; gap:8px;">
@@ -139,13 +132,11 @@
                     </div>
                 </div>
 
-                <!-- Right Live Poster Preview with all 3 Models inside -->
                 <div class="poster-preview-wrapper">
                     <span style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin-bottom:8px; font-family:'Montserrat',sans-serif;">📱 LIVE POSTER PREVIEW (9:16)</span>
                     
                     <div id="posterCanvas" class="layout-model-1 theme-green">
                         
-                        <!-- MODEL 1: Sahithyolsav Layout -->
                         <div id="layoutModel1Container">
                             <div class="l1-header">
                                 <img src="calligraphy.png" alt="സർഗ്ഗാത്മകത പൂക്കുന്നു" class="poster-calligraphy-img" onerror="this.style.display='none';">
@@ -162,28 +153,27 @@
                                 <div class="l1-win-row">
                                     <div class="l1-rank-circle">1</div>
                                     <div class="l1-win-info">
-                                        <div class="l1-win-name" id="previewWin1Name">Winner Name 1</div>
+                                        <div class="l1-win-name" id="previewWin1Name">Winner 1</div>
                                         <div class="l1-win-team" id="previewWin1Team">Team ZELLIJ</div>
                                     </div>
                                 </div>
                                 <div class="l1-win-row">
                                     <div class="l1-rank-circle">2</div>
                                     <div class="l1-win-info">
-                                        <div class="l1-win-name" id="previewWin2Name">Winner Name 2</div>
+                                        <div class="l1-win-name" id="previewWin2Name">Winner 2</div>
                                         <div class="l1-win-team" id="previewWin2Team">Team IZNIK</div>
                                     </div>
                                 </div>
                                 <div class="l1-win-row" id="previewWin3Card">
                                     <div class="l1-rank-circle">3</div>
                                     <div class="l1-win-info">
-                                        <div class="l1-win-name" id="previewWin3Name">Winner Name 3</div>
+                                        <div class="l1-win-name" id="previewWin3Name">Winner 3</div>
                                         <div class="l1-win-team" id="previewWin3Team">Team ZELLIJ</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- MODEL 2: Centered Modern Badge Layout -->
                         <div id="layoutModel2Container" style="display:none;">
                             <div class="l2-top">
                                 <img src="calligraphy.png" alt="സർഗ്ഗാത്മകത പൂക്കുന്നു" class="poster-calligraphy-img" onerror="this.style.display='none';">
@@ -195,28 +185,27 @@
                                 <div class="l2-win-card">
                                     <div style="font-size:1.2rem;">🥇</div>
                                     <div>
-                                        <div class="l2-win-name" id="previewWin1Name2">Winner Name 1</div>
+                                        <div class="l2-win-name" id="previewWin1Name2">Winner 1</div>
                                         <div class="l2-win-team" id="previewWin1Team2">Team ZELLIJ</div>
                                     </div>
                                 </div>
                                 <div class="l2-win-card">
                                     <div style="font-size:1.2rem;">🥈</div>
                                     <div>
-                                        <div class="l2-win-name" id="previewWin2Name2">Winner Name 2</div>
+                                        <div class="l2-win-name" id="previewWin2Name2">Winner 2</div>
                                         <div class="l2-win-team" id="previewWin2Team2">Team IZNIK</div>
                                     </div>
                                 </div>
                                 <div class="l2-win-card" id="previewWin3Card2">
                                     <div style="font-size:1.2rem;">🥉</div>
                                     <div>
-                                        <div class="l2-win-name" id="previewWin3Name2">Winner Name 3</div>
+                                        <div class="l2-win-name" id="previewWin3Name2">Winner 3</div>
                                         <div class="l2-win-team" id="previewWin3Team2">Team ZELLIJ</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- MODEL 3: Compact Side Number Layout -->
                         <div id="layoutModel3Container" style="display:none;">
                             <div class="l3-header">
                                 <img src="calligraphy.png" alt="സർഗ്ഗാത്മകത പൂക്കുന്നു" class="poster-calligraphy-img" onerror="this.style.display='none';">
@@ -230,28 +219,27 @@
                                 <div class="l3-win-row">
                                     <div>
                                         <span style="font-size:0.75rem; font-weight:900; color:#fbbf24;">1st</span>
-                                        <div class="l3-win-name" id="previewWin1Name3">Winner Name 1</div>
+                                        <div class="l3-win-name" id="previewWin1Name3">Winner 1</div>
                                     </div>
                                     <div class="l3-win-team" id="previewWin1Team3">ZELLIJ</div>
                                 </div>
                                 <div class="l3-win-row">
                                     <div>
                                         <span style="font-size:0.75rem; font-weight:900; color:#fbbf24;">2nd</span>
-                                        <div class="l3-win-name" id="previewWin2Name3">Winner Name 2</div>
+                                        <div class="l3-win-name" id="previewWin2Name3">Winner 2</div>
                                     </div>
                                     <div class="l3-win-team" id="previewWin2Team3">IZNIK</div>
                                 </div>
                                 <div class="l3-win-row" id="previewWin3Card3">
                                     <div>
                                         <span style="font-size:0.75rem; font-weight:900; color:#fbbf24;">3rd</span>
-                                        <div class="l3-win-name" id="previewWin3Name3">Winner Name 3</div>
+                                        <div class="l3-win-name" id="previewWin3Name3">Winner 3</div>
                                     </div>
                                     <div class="l3-win-team" id="previewWin3Team3">ZELLIJ</div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Common Footer Brand -->
                         <div class="poster-footer-brand">
                             <span>EID-E IRSHAD 2K26</span>
                             <span>Rahmaniyya Arabic College</span>
