@@ -1,5 +1,5 @@
 /* ==========================================================================
-   EID-E IRSHAD — CAMPUS FEST 2K26 | APP LOGIC (app.js)
+   EID-E IRSHAD — CAMPUS FEST 2K26 | SECURE PRODUCTION APP LOGIC (app.js)
    ========================================================================== */
 
 const firebaseConfig = {
@@ -61,14 +61,15 @@ const defaultData = {
 };
 
 let appData = JSON.parse(JSON.stringify(defaultData));
-let isAdmin = localStorage.getItem("eid_irshad_admin_logged") === "true";
+let isAdmin = false;
 let currentPosterTheme = "theme-green";
 let currentPosterLayout = "layout-model-1";
+let isPosterBuilderInitialized = false;
 
 function initFirebaseAndLoad() {
     const cached = localStorage.getItem("eid_irshad_app_data_v2");
     if (cached) { try { mergeLoadedData(JSON.parse(cached)); } catch (e) {} }
-    renderAll();
+    renderAll(false);
 
     if (typeof firebase !== "undefined") {
         try {
@@ -77,18 +78,34 @@ function initFirebaseAndLoad() {
             if (firebase.auth) {
                 auth = firebase.auth();
                 auth.onAuthStateChanged((user) => {
-                    if (user && user.email) { isAdmin = true; localStorage.setItem("eid_irshad_admin_logged", "true"); }
-                    updateAdminUI(); renderAll();
+                    if (user && user.email) {
+                        const allowedAdmins = ["admin@irshad.com"];
+                        if (allowedAdmins.includes(user.email.toLowerCase())) {
+                            isAdmin = true;
+                        } else {
+                            isAdmin = false;
+                            auth.signOut();
+                        }
+                    } else {
+                        isAdmin = false;
+                    }
+                    updateAdminUI();
+                    renderAll(false);
                 });
             }
+
             unsubscribeFirestore = db.collection("fiesta2k26").doc("mainData").onSnapshot((docSnap) => {
                 if (docSnap.exists) {
                     mergeLoadedData(docSnap.data());
                     localStorage.setItem("eid_irshad_app_data_v2", JSON.stringify(appData));
-                    renderAll();
-                } else { saveAppData(true); }
-            }, (err) => {});
-        } catch (err) {}
+                    renderAll(true);
+                }
+            }, (err) => {
+                console.warn("Firestore sync warning:", err.message);
+            });
+        } catch (err) {
+            console.warn("Firebase initialization error:", err);
+        }
     }
 }
 
@@ -101,17 +118,38 @@ function mergeLoadedData(incoming) {
     if (incoming.poll) appData.poll = incoming.poll;
 }
 
-function saveAppData(silent = false) {
-    localStorage.setItem("eid_irshad_app_data_v2", JSON.stringify(appData));
-    renderAll();
-    if (db) { db.collection("fiesta2k26").doc("mainData").set(appData, { merge: true }).catch(() => {}); }
+function saveAppData(silent = false, callback = null) {
+    if (!isAdmin) {
+        alert("അഡ്മിൻ അനുമതി ഇല്ലാത്തതിനാൽ മാറ്റങ്ങൾ സേവ് ചെയ്യാൻ സാധിക്കില്ല!");
+        if (typeof callback === "function") callback(false);
+        return;
+    }
+    
+    if (db) {
+        db.collection("fiesta2k26").doc("mainData").set(appData, { merge: true })
+            .then(() => {
+                localStorage.setItem("eid_irshad_app_data_v2", JSON.stringify(appData));
+                renderAll(true);
+                if (!silent) alert("ഡാറ്റ ഫയർബേസിലേക്ക് വിജയകരമായി സേവ് ചെയ്തു!");
+                if (typeof callback === "function") callback(true);
+            })
+            .catch((err) => {
+                console.error("Firestore write failed:", err.message);
+                if (!silent) alert("ഫയർബേസ് സേവ് പരാജയപ്പെട്ടു: " + err.message);
+                if (typeof callback === "function") callback(false);
+            });
+    } else {
+        localStorage.setItem("eid_irshad_app_data_v2", JSON.stringify(appData));
+        renderAll(true);
+        if (!silent) alert("ലോക്കൽ സ്റ്റോറേജിൽ സേവ് ചെയ്തു (ഫയർബേസ് കണക്ഷൻ ലഭ്യമല്ല).");
+        if (typeof callback === "function") callback(true);
+    }
 }
 
-function renderAll() {
+function renderAll(isBackgroundSync = false) {
     updateAdminUI();
     updateLiveScoreboard();
-    updateCountdown();
-    initPosterBuilder();
+    initPosterBuilder(isBackgroundSync);
     renderPublishedResults();
 }
 
@@ -157,28 +195,70 @@ function updateAdminUI() {
     });
 }
 
-function openAdminModal() { document.getElementById("loginModal").style.display = "flex"; }
-function closeAdminModal() { document.getElementById("loginModal").style.display = "none"; }
+function openAdminModal() {
+    const modal = document.getElementById("loginModal");
+    const err = document.getElementById("loginError");
+    if (err) err.textContent = "";
+    if (modal) modal.style.display = "flex";
+}
+
+function closeAdminModal() {
+    const modal = document.getElementById("loginModal");
+    if (modal) modal.style.display = "none";
+}
 
 function loginAdmin() {
-    const email = document.getElementById("adminEmail").value.trim().toLowerCase();
-    const pass = document.getElementById("adminPassword").value.trim();
-    if (email === "admin@irshad.com" && pass === "irshad2k26") {
-        isAdmin = true; localStorage.setItem("eid_irshad_admin_logged", "true");
-        closeAdminModal(); renderAll(); alert("Admin Mode Enabled!");
-    } else { document.getElementById("loginError").textContent = "തെറ്റായ ഇമെയിൽ അല്ലെങ്കിൽ പാസ്‌വേഡ്!"; }
+    const emailEl = document.getElementById("adminEmail");
+    const passEl = document.getElementById("adminPassword");
+    const errEl = document.getElementById("loginError");
+    const email = emailEl ? emailEl.value.trim().toLowerCase() : "";
+    const pass = passEl ? passEl.value.trim() : "";
+
+    if (!email || !pass) {
+        if (errEl) errEl.textContent = "ഇമെയിലും പാസ്‌വേഡും നൽകുക!";
+        return;
+    }
+
+    if (auth) {
+        auth.signInWithEmailAndPassword(email, pass)
+            .then((userCredential) => {
+                const userEmail = userCredential.user.email.toLowerCase();
+                const allowedAdmins = ["admin@irshad.com"];
+                if (allowedAdmins.includes(userEmail)) {
+                    isAdmin = true;
+                    closeAdminModal();
+                    renderAll(false);
+                    alert("Admin Login വിജയകരമായി പൂർത്തിയായി!");
+                } else {
+                    auth.signOut();
+                    if (errEl) errEl.textContent = "ഈ അക്കൗണ്ടിന് അഡ്മിൻ അനുമതിയില്ല!";
+                }
+            })
+            .catch((error) => {
+                if (errEl) errEl.textContent = "ലോഗിൻ പരാജയപ്പെട്ടു: " + error.message;
+            });
+    } else {
+        if (errEl) errEl.textContent = "Firebase Authentication ലഭ്യമായില്ല!";
+    }
 }
 
 function logoutAdmin() {
-    isAdmin = false; localStorage.removeItem("eid_irshad_admin_logged");
-    renderAll(); alert("Logged out.");
+    isAdmin = false;
+    if (auth && auth.currentUser) {
+        auth.signOut().catch(() => {});
+    }
+    renderAll(false);
+    alert("Admin ലോഗൗട്ട് ചെയ്തു.");
 }
 
 function exportBackupJSON() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
     const dlAnchor = document.createElement("a");
-    dlAnchor.setAttribute("href", dataStr); dlAnchor.setAttribute("download", `eid_e_irshad_backup.json`);
-    document.body.appendChild(dlAnchor); dlAnchor.click(); dlAnchor.remove();
+    dlAnchor.setAttribute("href", dataStr);
+    dlAnchor.setAttribute("download", `eid_e_irshad_backup_${new Date().toISOString().slice(0,10)}.json`);
+    document.body.appendChild(dlAnchor);
+    dlAnchor.click();
+    dlAnchor.remove();
 }
 
 function resolveTeamKey(teamValue) {
@@ -229,18 +309,29 @@ function votePoll(team) {
     }
     if (team === "zellij") appData.poll.zellij++;
     if (team === "iznik") appData.poll.iznik++;
-    localStorage.setItem("eid_has_voted", "true");
-    saveAppData(true);
-    if (document.getElementById("pollMsg")) document.getElementById("pollMsg").textContent = "നന്ദി! വോട്ട് വിജയകരമായി രേഖപ്പെടുത്തി.";
-    if (typeof confetti === "function") confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+    
+    saveAppData(false, (success) => {
+        if (success) {
+            localStorage.setItem("eid_has_voted", "true");
+            if (document.getElementById("pollMsg")) {
+                document.getElementById("pollMsg").textContent = "നന്ദി! വോട്ട് വിജയകരമായി രേഖപ്പെടുത്തി.";
+                if (typeof confetti === "function") confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+            }
+        }
+    });
 }
 
-/* Poster Builder Logic */
-function initPosterBuilder() {
+function initPosterBuilder(isBackgroundSync = false) {
     const catSelect = document.getElementById("resCatSelect");
     const progSelect = document.getElementById("resProgSelect");
     if (!catSelect || !progSelect) return;
+
+    if (isBackgroundSync && isPosterBuilderInitialized) {
+        return;
+    }
+
     onResultCategoryChange();
+    isPosterBuilderInitialized = true;
 }
 
 function onResultCategoryChange() {
@@ -255,7 +346,19 @@ function onResultCategoryChange() {
 
     const catPrograms = appData.programs[cKey] || { onStage: [], offStage: [], sports: [] };
     const allProgs = [...(catPrograms.onStage || []), ...(catPrograms.offStage || []), ...(catPrograms.sports || [])];
-    progSelect.innerHTML = `<option value="">-- പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക --</option>` + allProgs.map(p => `<option value="${p}">${p}</option>`).join("");
+    
+    progSelect.innerHTML = "";
+    const defaultOpt = document.createElement("option");
+    defaultOpt.value = "";
+    defaultOpt.textContent = "-- പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക --";
+    progSelect.appendChild(defaultOpt);
+
+    allProgs.forEach(p => {
+        const opt = document.createElement("option");
+        opt.value = p;
+        opt.textContent = p;
+        progSelect.appendChild(opt);
+    });
 
     const rosterKey = cKey === "general" ? "senior" : cKey;
     const combined = [
@@ -265,7 +368,20 @@ function onResultCategoryChange() {
 
     [1, 2, 3].forEach(rank => {
         const sel = document.getElementById(`selWinner${rank}`);
-        if (sel) sel.innerHTML = `<option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>` + combined.map(st => `<option value="${st.name}|${st.team}">${st.label}</option>`).join("");
+        if (sel) {
+            sel.innerHTML = "";
+            const defWinOpt = document.createElement("option");
+            defWinOpt.value = "";
+            defWinOpt.textContent = "-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --";
+            sel.appendChild(defWinOpt);
+
+            combined.forEach(st => {
+                const winOpt = document.createElement("option");
+                winOpt.value = `${st.name}|${st.team}`;
+                winOpt.textContent = st.label;
+                sel.appendChild(winOpt);
+            });
+        }
     });
     updatePosterPreview();
 }
@@ -343,14 +459,23 @@ function updatePosterPreview() {
 
 function downloadResultPoster() {
     const canvasEl = document.getElementById("posterCanvas");
-    if (!canvasEl || typeof html2canvas === "undefined") return;
+    if (!canvasEl || typeof html2canvas === "undefined") {
+        alert("ഡൗൺലോഡ് ടൂൾ ലഭ്യമായില്ല!");
+        return;
+    }
     const resNo = (document.getElementById("resNoInput")?.value || "01").trim();
-    html2canvas(canvasEl, { scale: 3, useCORS: true, backgroundColor: null }).then(canvas => {
-        const link = document.createElement("a");
-        link.download = `EID-E-IRSHAD-Result-${resNo}.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-    });
+    
+    html2canvas(canvasEl, { scale: 3, useCORS: true, backgroundColor: null })
+        .then(canvas => {
+            const link = document.createElement("a");
+            link.download = `EID-E-IRSHAD-Result-${resNo}.png`;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        })
+        .catch(err => {
+            console.error("Poster download failed:", err);
+            alert("പോസ്റ്റർ ഡൗൺലോഡ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു. ദയവായി വീണ്ടും ശ്രമിക്കുക.");
+        });
 }
 
 function publishResultToSite() {
@@ -359,5 +484,122 @@ function publishResultToSite() {
     const category = document.getElementById("resCatSelect")?.value || "Senior";
     const prog = document.getElementById("resProgCustom")?.value || document.getElementById("resProgSelect")?.value || "Event";
 
+    const uniqueResultId = "res_" + Date.now() + "_" + Math.random().toString(36).substring(2, 9);
+
     const newResult = {
-        id: `${category}_${prog
+        id: uniqueResultId,
+        resNo, category, program: prog,
+        win1Name: document.getElementById("win1Name")?.value || "",
+        win1Team: document.getElementById("win1Team")?.value || "teamA",
+        win2Name: document.getElementById("win2Name")?.value || "",
+        win2Team: document.getElementById("win2Team")?.value || "teamB",
+        win3Name: document.getElementById("win3Name")?.value || "",
+        win3Team: document.getElementById("win3Team")?.value || "teamA",
+        theme: currentPosterTheme, layout: currentPosterLayout, timestamp: Date.now()
+    };
+    
+    appData.results.unshift(newResult);
+    
+    saveAppData(false, (success) => {
+        if (success) {
+            if (typeof confetti === "function") confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+            alert("റിസൾട്ട് വിജയകരമായി പ്രസിദ്ധീകരിച്ചു!");
+        } else {
+            appData.results.shift(); // Rollback local state on failure
+            renderPublishedResults();
+        }
+    });
+}
+
+function deleteResult(resultId) {
+    if (!isAdmin) { alert("അഡ്മിൻ ലോഗിൻ ചെയ്യുക!"); return; }
+    if (confirm("ഈ ഫലം നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?")) {
+        const index = appData.results.findIndex(r => r.id === resultId);
+        if (index === -1) return;
+        
+        const removedItem = appData.results.splice(index, 1)[0];
+        
+        saveAppData(false, (success) => {
+            if (success) {
+                alert("ഫലം വിജയകരമായി നീക്കം ചെയ്തു.");
+            } else {
+                appData.results.splice(index, 0, removedItem); // Rollback on failure
+                renderPublishedResults();
+            }
+        });
+    }
+}
+
+function renderPublishedResults() {
+    const container = document.getElementById("publishedResultsContainer");
+    if (!container) return;
+    const list = appData.results || [];
+    if (list.length === 0) {
+        container.innerHTML = "";
+        const emptyMsg = document.createElement("div");
+        emptyMsg.style.cssText = "grid-column: 1/-1; text-align:center; padding:30px; color:var(--text-muted);";
+        emptyMsg.textContent = "ഇതുവരെ ഫലങ്ങളൊന്നും പ്രസിദ്ധീകരിച്ചിട്ടില്ല.";
+        container.appendChild(emptyMsg);
+        return;
+    }
+    
+    container.innerHTML = "";
+    list.forEach((res, idx) => {
+        const card = document.createElement("div");
+        card.className = "result-card";
+
+        const head = document.createElement("div");
+        head.className = "result-card-head";
+        
+        const headLeft = document.createElement("div");
+        const tag = document.createElement("span");
+        tag.style.cssText = "font-size:0.75rem; background:#fbbf24; color:#0f172a; padding:2px 8px; border-radius:4px; font-weight:800;";
+        tag.textContent = `RESULT #${res.resNo || (idx + 1)}`;
+        
+        const h3 = document.createElement("h3");
+        h3.style.cssText = "margin:6px 0 0; font-size:1.05rem;";
+        h3.textContent = res.program;
+        
+        headLeft.appendChild(tag);
+        headLeft.appendChild(h3);
+        head.appendChild(headLeft);
+
+        if (isAdmin) {
+            const delBtn = document.createElement("button");
+            delBtn.className = "btn-action-sm btn-del-sm";
+            delBtn.textContent = "🗑️";
+            const targetId = res.id || `fallback_${idx}`;
+            delBtn.onclick = () => deleteResult(targetId);
+            head.appendChild(delBtn);
+        }
+        card.appendChild(head);
+
+        const addWinnerRow = (rankText, name, teamKey) => {
+            if (!name) return;
+            const row = document.createElement("div");
+            row.className = "winner-row";
+            const spanName = document.createElement("span");
+            spanName.textContent = `${rankText} ${name}`;
+            const spanTeam = document.createElement("span");
+            spanTeam.className = resolveTeamKey(teamKey) === "teamA" ? "team-badge-a" : "team-badge-b";
+            spanTeam.textContent = formatTeamDisplayName(teamKey);
+            row.appendChild(spanName);
+            row.appendChild(spanTeam);
+            card.appendChild(row);
+        };
+
+        addWinnerRow("🥇", res.win1Name, res.win1Team);
+        addWinnerRow("🥈", res.win2Name, res.win2Team);
+        addWinnerRow("🥉", res.win3Name, res.win3Team);
+
+        container.appendChild(card);
+    });
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    applySavedTheme();
+    initFirebaseAndLoad();
+    setInterval(updateCountdown, 1000);
+});
+
+/* END OF COMPLETE APP.JS */
