@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
-    <!-- Firebase App (Core) & Auth & Firestore SDKs -->
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -67,12 +67,11 @@
     </header>
 
     <div class="global-search-box">
-        <input type="text" id="programSearchInput" class="global-search-input" placeholder="🔍 പ്രോഗ്രാമോ വിദ്യാർത്ഥിയെയോ ഇവിടെ തിരയുക..." oninput="handleGlobalSearch(event, this.value)">
+        <input type="text" id="programSearchInput" class="global-search-input" placeholder="🔍 പ്രോഗ്രാമോ വിദ്യാർത്ഥിയെയോ ഇവിടെ തിരയുക...">
         <div id="searchResultsDropdown" class="search-results-dropdown"></div>
     </div>
 
     <main class="container">
-        
         <div class="team-progress-card">
             <div class="progress-header">
                 <span style="color: var(--zellij-red);">🔴 ZELLIJ: <span id="ptsA">0</span> Pts</span>
@@ -99,9 +98,7 @@
         </div>
 
         <div class="card">
-            <div class="card-header">
-                <h3>📜 ഫെസ്റ്റിന്റെ പൊതുനിയമങ്ങളും വിവരങ്ങളും</h3>
-            </div>
+            <div class="card-header"><h3>📜 ഫെസ്റ്റിന്റെ പൊതുനിയമങ്ങളും വിവരങ്ങളും</h3></div>
             <div class="rules-body">
                 <ol class="rules-list">
                     <li>മത്സരങ്ങളിൽ പങ്കെടുക്കുന്ന മുഴുവൻ വിദ്യാർത്ഥികളും കൃത്യസമയത്ത് സ്റ്റേജിൽ/വേദിയിൽ ഹാജരാകേണ്ടതാണ്.</li>
@@ -149,10 +146,7 @@
         </div>
     </div>
 
-    <footer>
-        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
-    </footer>
-
+    <footer>&copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College</footer>
     <script src="app.js"></script>
 </body>
 </html>
