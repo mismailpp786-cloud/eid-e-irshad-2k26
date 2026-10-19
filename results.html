@@ -7,6 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -26,7 +32,6 @@
     </div>
 
     <div class="container" style="max-width: 980px; margin: 25px auto;">
-        
         <h1 class="page-title">Poster Maker with Layout Switcher</h1>
         <p class="page-subtitle">ഒരേ ബാക്ക്ഗ്രൗണ്ടിൽ വ്യത്യസ്ത ഡിസൈൻ മോഡലുകൾ ഒറ്റക്ലിക്കിൽ സ്വിച്ച് ചെയ്യാം</p>
 
@@ -34,9 +39,7 @@
             <h3 style="margin: 0 0 15px; font-family:'Montserrat',sans-serif; font-size:1.15rem; font-weight:900; color:var(--accent-gold);">
                 🛠️ Poster Design & Layout Controls
             </h3>
-
             <div class="builder-grid">
-                
                 <div>
                     <div class="form-group">
                         <label>ഡിസൈൻ മോഡൽ (Layout Model):</label>
@@ -117,15 +120,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-top:12px;">
-                        <label>ബാക്ക്ഗ്രൗണ്ട് തീം (Background Theme):</label>
-                        <div style="display:flex; gap:8px;">
-                            <button class="btn-action-sm" style="background:#065f46; color:#fbbf24; padding:7px 12px;" onclick="setPosterTheme('theme-green')">Rich Green</button>
-                            <button class="btn-action-sm" style="background:#581c87; color:#fbbf24; padding:7px 12px;" onclick="setPosterTheme('theme-maroon')">Deep Maroon</button>
-                            <button class="btn-action-sm" style="background:#1e293b; color:#fbbf24; padding:7px 12px;" onclick="setPosterTheme('theme-navy')">Royal Navy</button>
-                        </div>
-                    </div>
-
                     <div style="display:flex; gap:10px; margin-top:18px;">
                         <button class="btn-submit" style="background:#2563eb; color:#fff; margin-top:0;" onclick="downloadResultPoster()">📥 PNG ഡൗൺലോഡ് ചെയ്യുക</button>
                         <button class="btn-submit" style="background:#059669; color:#fff; margin-top:0;" onclick="publishResultToSite()">🚀 സൈറ്റിൽ പ്രസിദ്ധീകരിക്കുക</button>
@@ -134,9 +128,7 @@
 
                 <div class="poster-preview-wrapper">
                     <span style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin-bottom:8px; font-family:'Montserrat',sans-serif;">📱 LIVE POSTER PREVIEW (9:16)</span>
-                    
                     <div id="posterCanvas" class="layout-model-1 theme-green">
-                        
                         <div id="layoutModel1Container">
                             <div class="l1-header">
                                 <img src="calligraphy.png" alt="സർഗ്ഗാത്മകത പൂക്കുന്നു" class="poster-calligraphy-img" onerror="this.style.display='none';">
@@ -152,114 +144,28 @@
                             <div class="l1-winners-box">
                                 <div class="l1-win-row">
                                     <div class="l1-rank-circle">1</div>
-                                    <div class="l1-win-info">
-                                        <div class="l1-win-name" id="previewWin1Name">Winner 1</div>
-                                        <div class="l1-win-team" id="previewWin1Team">Team ZELLIJ</div>
-                                    </div>
+                                    <div class="l1-win-info"><div class="l1-win-name" id="previewWin1Name">Winner 1</div><div class="l1-win-team" id="previewWin1Team">Team ZELLIJ</div></div>
                                 </div>
                                 <div class="l1-win-row">
                                     <div class="l1-rank-circle">2</div>
-                                    <div class="l1-win-info">
-                                        <div class="l1-win-name" id="previewWin2Name">Winner 2</div>
-                                        <div class="l1-win-team" id="previewWin2Team">Team IZNIK</div>
-                                    </div>
+                                    <div class="l1-win-info"><div class="l1-win-name" id="previewWin2Name">Winner 2</div><div class="l1-win-team" id="previewWin2Team">Team IZNIK</div></div>
                                 </div>
                                 <div class="l1-win-row" id="previewWin3Card">
                                     <div class="l1-rank-circle">3</div>
-                                    <div class="l1-win-info">
-                                        <div class="l1-win-name" id="previewWin3Name">Winner 3</div>
-                                        <div class="l1-win-team" id="previewWin3Team">Team ZELLIJ</div>
-                                    </div>
+                                    <div class="l1-win-info"><div class="l1-win-name" id="previewWin3Name">Winner 3</div><div class="l1-win-team" id="previewWin3Team">Team ZELLIJ</div></div>
                                 </div>
                             </div>
                         </div>
-
-                        <div id="layoutModel2Container" style="display:none;">
-                            <div class="l2-top">
-                                <img src="calligraphy.png" alt="സർഗ്ഗാത്മകത പൂക്കുന്നു" class="poster-calligraphy-img" onerror="this.style.display='none';">
-                                <span class="l2-res-badge" id="previewResNo2">RESULT #01</span>
-                                <span style="font-size:0.68rem; font-weight:800; opacity:0.8; letter-spacing:1px;" id="previewCat2">SENIOR</span>
-                                <div class="l2-prog-title" id="previewProg2">മത്സരത്തിന്റെ പേര്</div>
-                            </div>
-                            <div class="l2-winners-box">
-                                <div class="l2-win-card">
-                                    <div style="font-size:1.2rem;">🥇</div>
-                                    <div>
-                                        <div class="l2-win-name" id="previewWin1Name2">Winner 1</div>
-                                        <div class="l2-win-team" id="previewWin1Team2">Team ZELLIJ</div>
-                                    </div>
-                                </div>
-                                <div class="l2-win-card">
-                                    <div style="font-size:1.2rem;">🥈</div>
-                                    <div>
-                                        <div class="l2-win-name" id="previewWin2Name2">Winner 2</div>
-                                        <div class="l2-win-team" id="previewWin2Team2">Team IZNIK</div>
-                                    </div>
-                                </div>
-                                <div class="l2-win-card" id="previewWin3Card2">
-                                    <div style="font-size:1.2rem;">🥉</div>
-                                    <div>
-                                        <div class="l2-win-name" id="previewWin3Name2">Winner 3</div>
-                                        <div class="l2-win-team" id="previewWin3Team2">Team ZELLIJ</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="layoutModel3Container" style="display:none;">
-                            <div class="l3-header">
-                                <img src="calligraphy.png" alt="സർഗ്ഗാത്മകത പൂക്കുന്നു" class="poster-calligraphy-img" onerror="this.style.display='none';">
-                                <div class="l3-big-res">#<span id="previewResNo3">01</span></div>
-                            </div>
-                            <div>
-                                <span style="font-size:0.65rem; font-weight:800; color:#fbbf24;" id="previewCat3">SENIOR</span>
-                                <div class="l3-prog-title" id="previewProg3">മത്സരത്തിന്റെ പേര്</div>
-                            </div>
-                            <div class="l3-winners-box">
-                                <div class="l3-win-row">
-                                    <div>
-                                        <span style="font-size:0.75rem; font-weight:900; color:#fbbf24;">1st</span>
-                                        <div class="l3-win-name" id="previewWin1Name3">Winner 1</div>
-                                    </div>
-                                    <div class="l3-win-team" id="previewWin1Team3">ZELLIJ</div>
-                                </div>
-                                <div class="l3-win-row">
-                                    <div>
-                                        <span style="font-size:0.75rem; font-weight:900; color:#fbbf24;">2nd</span>
-                                        <div class="l3-win-name" id="previewWin2Name3">Winner 2</div>
-                                    </div>
-                                    <div class="l3-win-team" id="previewWin2Team3">IZNIK</div>
-                                </div>
-                                <div class="l3-win-row" id="previewWin3Card3">
-                                    <div>
-                                        <span style="font-size:0.75rem; font-weight:900; color:#fbbf24;">3rd</span>
-                                        <div class="l3-win-name" id="previewWin3Name3">Winner 3</div>
-                                    </div>
-                                    <div class="l3-win-team" id="previewWin3Team3">ZELLIJ</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="poster-footer-brand">
-                            <span>EID-E IRSHAD 2K26</span>
-                            <span>Rahmaniyya Arabic College</span>
-                        </div>
-
                     </div>
                 </div>
-
             </div>
         </div>
 
         <h2 style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.2rem; margin: 30px 0 15px;">🏆 Published Results</h2>
         <div class="results-grid" id="publishedResultsContainer"></div>
-
     </div>
 
-    <footer>
-        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
-    </footer>
-
+    <footer>&copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM</footer>
     <script src="app.js"></script>
 </body>
 </html>
