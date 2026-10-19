@@ -43,93 +43,172 @@ body {
 .btn-logout { background: #dc2626; color: #fff; }
 .admin-only { display: none; }
 
-.top-nav-bar {
+/* Hero Section Fixes */
+.hero {
     background: var(--header-bg);
-    color: #fff;
-    border-bottom: 3px solid var(--accent-gold);
-    padding: 12px 18px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    color: #ffffff;
+    padding: 20px 15px 35px;
+    text-align: center;
+    border-bottom: 4px solid var(--accent-gold);
+}
+.hero-top-bar {
+    max-width: 900px; margin: 0 auto 15px;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.brand-pill {
+    background: rgba(251, 191, 36, 0.15); color: var(--accent-gold-light);
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 0.75rem;
+    padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(251, 191, 36, 0.3);
+}
+.top-controls { display: flex; gap: 8px; }
+.theme-toggle-btn, .admin-top-btn {
+    background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer;
+}
+
+.hero-content { max-width: 700px; margin: 0 auto; }
+.calligraphy-box { margin-bottom: 8px; }
+.hero-calligraphy-img {
+    max-height: 50px !important;
+    width: auto !important;
+    max-width: 100% !important;
+    object-fit: contain;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+}
+
+.main-title {
+    font-family: 'Montserrat', sans-serif; font-size: 2.2rem; font-weight: 900;
+    margin: 5px 0 0; color: #ffffff; letter-spacing: 1px;
+}
+.sub-title {
+    font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 800;
+    color: var(--accent-gold-light); margin-bottom: 10px;
+}
+.ribbon {
+    display: inline-block; background: var(--zellij-red); color: #fff;
+    font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 800;
+    padding: 4px 14px; border-radius: 4px; margin-bottom: 15px; letter-spacing: 1px;
+}
+
+.date-container {
+    display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 20px;
+}
+.month-year {
+    font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 900;
+    background: rgba(255,255,255,0.1); padding: 6px 10px; border-radius: 8px; line-height: 1.2;
+}
+.date-box {
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+    padding: 6px 12px; border-radius: 8px; text-align: center;
+}
+.date-box .num { display: block; font-family: 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: 900; color: #fbbf24; }
+.date-box .day { font-family: 'Montserrat', sans-serif; font-size: 0.65rem; font-weight: 700; opacity: 0.8; }
+
+.countdown-container {
+    display: flex; justify-content: center; gap: 10px; margin-bottom: 18px;
+}
+.countdown-box {
+    background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(251, 191, 36, 0.3);
+    padding: 8px 12px; border-radius: 8px; min-width: 60px; text-align: center;
+}
+.countdown-box .num { display: block; font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 900; color: #fff; }
+.countdown-box .label { font-size: 0.62rem; font-weight: 700; color: #fbbf24; text-transform: uppercase; }
+
+.org-info { font-size: 0.75rem; opacity: 0.85; line-height: 1.4; }
+
+/* Global Search */
+.global-search-box { max-width: 650px; margin: -18px auto 20px; padding: 0 15px; position: relative; z-index: 10; }
+.global-search-input {
+    width: 100%; padding: 12px 18px; border-radius: 30px; border: 2px solid var(--accent-gold);
+    background: var(--card-bg); color: var(--text-color); font-size: 0.9rem; font-weight: 700;
+    box-shadow: var(--shadow-md); outline: none;
+}
+.search-results-dropdown {
+    position: absolute; top: 52px; left: 15px; right: 15px; background: var(--card-bg);
+    border: 1px solid var(--border-color); border-radius: 12px; max-height: 250px; overflow-y: auto;
+    box-shadow: var(--shadow-lg); display: none; z-index: 20;
+}
+.search-result-item { padding: 10px 14px; border-bottom: 1px solid var(--border-color); cursor: pointer; }
+.search-result-item:hover { background: rgba(245, 158, 11, 0.1); }
+
+/* Containers & Cards */
+.container { max-width: 950px; margin: 20px auto; padding: 0 15px; }
+.team-progress-card {
+    background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px;
+    padding: 15px; margin-bottom: 20px; box-shadow: var(--shadow-md);
+}
+.progress-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 0.82rem; margin-bottom: 8px; }
+.progress-bar-container { height: 12px; background: #e2e8f0; border-radius: 6px; display: flex; overflow: hidden; }
+.progress-zellij { background: var(--zellij-red); height: 100%; transition: width 0.5s ease; }
+.progress-iznik { background: var(--iznik-blue); height: 100%; transition: width 0.5s ease; }
+
+.poll-card {
+    background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px;
+    padding: 15px; margin-bottom: 20px; box-shadow: var(--shadow-md);
+}
+.poll-title { font-weight: 800; font-size: 0.9rem; margin-bottom: 10px; }
+.poll-option {
+    background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px;
+    padding: 10px 14px; margin-bottom: 8px; display: flex; justify-content: space-between;
+    align-items: center; cursor: pointer; font-weight: 700; font-size: 0.85rem;
+}
+.poll-option:hover { border-color: var(--accent-gold); }
+
+.card {
+    background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px;
+    padding: 18px; margin-bottom: 20px; box-shadow: var(--shadow-md);
+}
+.card-header h3 { margin: 0; font-size: 1.05rem; font-weight: 900; }
+.rules-body { font-size: 0.85rem; line-height: 1.6; }
+.rules-list { padding-left: 18px; margin: 10px 0; }
+.points-box { background: var(--bg-color); border-radius: 10px; padding: 12px; margin-top: 12px; border: 1px solid var(--border-color); }
+.points-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.8rem; }
+@media(max-width:600px){ .points-grid { grid-template-columns: 1fr; } }
+
+.home-nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 15px; }
+.nav-card {
+    background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px;
+    padding: 15px; display: flex; align-items: center; gap: 12px; cursor: pointer;
+    box-shadow: var(--shadow-md); transition: transform 0.2s;
+}
+.nav-card:hover { transform: translateY(-2px); border-color: var(--accent-gold); }
+.nav-card-info { flex: 1; }
+.nav-card-info h3 { margin: 0 0 3px; font-size: 0.95rem; font-weight: 800; }
+.nav-card-info p { margin: 0; font-size: 0.72rem; color: var(--text-muted); }
+.nav-card-arrow { font-weight: 900; color: var(--accent-gold); font-size: 1.1rem; }
+
+.section-heading { text-align: center; font-size: 1.1rem; font-weight: 900; margin: 25px 0 12px; }
+
+/* Top Navigation Bar */
+.top-nav-bar {
+    background: var(--header-bg); color: #fff; border-bottom: 3px solid var(--accent-gold);
+    padding: 12px 18px; display: flex; justify-content: space-between; align-items: center;
 }
 .back-home-btn { background: #fbbf24; color: #0f172a; border: none; padding: 7px 15px; border-radius: 20px; font-weight: 800; font-size: 0.8rem; cursor: pointer; text-decoration: none; }
 .nav-page-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 0.85rem; color: #fbbf24; }
+.page-title { text-align: center; font-weight: 900; font-size: 1.5rem; margin: 10px 0 5px; color: var(--accent-gold); }
+.page-subtitle { text-align: center; font-size: 0.85rem; color: var(--text-muted); margin: 0 0 20px; }
 
-.container { max-width: 980px; margin: 20px auto; padding: 0 15px; }
-.page-title { text-align: center; font-weight: 900; font-size: 1.65rem; margin: 10px 0 5px; color: var(--accent-gold); }
-.page-subtitle { text-align: center; font-size: 0.88rem; color: var(--text-muted); margin: 0 0 20px; }
-
-.builder-section {
-    background: var(--card-bg);
-    border: 2px solid var(--accent-gold);
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 25px;
-    box-shadow: var(--shadow-md);
-}
-.builder-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    align-items: start;
-}
+/* Poster Canvas & Builder */
+.builder-section { background: var(--card-bg); border: 2px solid var(--accent-gold); border-radius: 16px; padding: 20px; margin-bottom: 25px; box-shadow: var(--shadow-md); }
+.builder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
 @media (max-width: 768px) { .builder-grid { grid-template-columns: 1fr; } }
-
 .form-group { margin-bottom: 12px; }
 .form-group label { display: block; font-size: 0.82rem; font-weight: 800; margin-bottom: 5px; }
-.form-control {
-    width: 100%; padding: 10px 12px; border-radius: 8px;
-    border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);
-    font-family: 'Anek Malayalam', 'Montserrat', sans-serif; font-size: 0.92rem;
-}
-.winner-input-box {
-    background: var(--bg-color); border: 1px solid var(--border-color);
-    border-radius: 10px; padding: 12px; margin-bottom: 10px;
-}
+.form-control { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-family: 'Anek Malayalam', 'Montserrat', sans-serif; font-size: 0.92rem; }
+.winner-input-box { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
 .winner-input-box h5 { margin: 0 0 8px; font-size: 0.85rem; font-weight: 800; color: var(--accent-gold); }
 
-/* ==========================================================================
-   UNIFIED 9:16 POSTER CANVAS (Fixed Background & Theme across Layouts)
-   ========================================================================== */
-.poster-preview-wrapper {
-    display: flex; flex-direction: column; align-items: center;
-}
+.poster-preview-wrapper { display: flex; flex-direction: column; align-items: center; }
+#posterCanvas { width: 100%; max-width: 380px; min-height: 480px; border-radius: 16px; padding: 22px 18px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3); text-align: left; }
+#posterCanvas.theme-green { background: radial-gradient(circle at top right, #065f46 0%, #064e3b 60%, #022c22 100%); color: #ffffff; border: 3px solid #fbbf24; }
+#posterCanvas.theme-maroon { background: radial-gradient(circle at top right, #581c87 0%, #3b0764 60%, #1e1b4b 100%); color: #ffffff; border: 3px solid #fbbf24; }
+#posterCanvas.theme-navy { background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 60%, #020617 100%); color: #ffffff; border: 3px solid #fbbf24; }
 
-#posterCanvas {
-    width: 100%; max-width: 380px; min-height: 480px;
-    border-radius: 16px; padding: 22px 18px;
-    display: flex; flex-direction: column; justify-content: space-between;
-    position: relative; overflow: hidden;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3); text-align: left;
-}
+.poster-calligraphy-img { max-height: 38px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); }
+.poster-footer-brand { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; opacity: 0.75; border-top: 1px solid rgba(255, 255, 255, 0.15); padding-top: 6px; display: flex; justify-content: space-between; }
 
-#posterCanvas.theme-green {
-    background: radial-gradient(circle at top right, #065f46 0%, #064e3b 60%, #022c22 100%);
-    color: #ffffff; border: 3px solid #fbbf24;
-}
-#posterCanvas.theme-maroon {
-    background: radial-gradient(circle at top right, #581c87 0%, #3b0764 60%, #1e1b4b 100%);
-    color: #ffffff; border: 3px solid #fbbf24;
-}
-#posterCanvas.theme-navy {
-    background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 60%, #020617 100%);
-    color: #ffffff; border: 3px solid #fbbf24;
-}
-
-.poster-calligraphy-img {
-    max-height: 38px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
-}
-
-.poster-footer-brand {
-    font-family: 'Montserrat', sans-serif; font-size: 0.6rem; opacity: 0.75;
-    border-top: 1px solid rgba(255, 255, 255, 0.15); padding-top: 6px; display: flex; justify-content: space-between;
-}
-
-/* ==========================================================================
-   LAYOUT DESIGN VARIATIONS (Switchable Models)
-   ========================================================================== */
-
-/* Layout 1: Sahithyolsav Model */
+/* Layout Models */
 .layout-model-1 .l1-header { display: flex; justify-content: space-between; align-items: flex-start; }
 .layout-model-1 .l1-res-box { display: flex; align-items: baseline; gap: 4px; }
 .layout-model-1 .l1-res-tag { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; font-weight: 800; opacity: 0.8; }
@@ -145,7 +224,6 @@ body {
 .layout-model-1 .l1-win-name { font-weight: 800; font-size: 0.9rem; line-height: 1.2; }
 .layout-model-1 .l1-win-team { font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 700; color: #fbbf24; }
 
-/* Layout 2: Centered Modern Badge & Cards Model */
 .layout-model-2 { text-align: center !important; }
 .layout-model-2 .l2-top { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .layout-model-2 .l2-res-badge { background: #fbbf24; color: #0f172a; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.75rem; padding: 3px 14px; border-radius: 20px; }
@@ -155,7 +233,6 @@ body {
 .layout-model-2 .l2-win-name { font-weight: 800; font-size: 0.9rem; }
 .layout-model-2 .l2-win-team { font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 700; color: #fbbf24; }
 
-/* Layout 3: Compact Side Result Number Model */
 .layout-model-3 .l3-header { display: flex; justify-content: space-between; align-items: center; }
 .layout-model-3 .l3-big-res { font-family: 'Montserrat', sans-serif; font-size: 1.8rem; font-weight: 900; color: #fbbf24; }
 .layout-model-3 .l3-prog-title { font-family: 'Anek Malayalam', 'Montserrat', sans-serif; font-size: 1.15rem; font-weight: 900; margin: 4px 0 10px; }
@@ -164,7 +241,6 @@ body {
 .layout-model-3 .l3-win-name { font-weight: 800; font-size: 0.9rem; }
 .layout-model-3 .l3-win-team { font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 700; color: #fbbf24; }
 
-/* Published Results Grid */
 .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
 .result-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; box-shadow: var(--shadow-md); }
 .result-card-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 10px; }
