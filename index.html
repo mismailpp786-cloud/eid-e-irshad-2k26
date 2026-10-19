@@ -14,17 +14,14 @@
         <marquee scrollamount="5">📢 സ്വാഗതം! EID-E IRSHAD CAMPUS FEST 2K26 നവംബർ 27, 28, 29 തീയതികളിൽ റഹ്മാനിയ്യ അറബിക് കോളേജിൽ വെച്ച് നടക്കുന്നു! മത്സര ഫലങ്ങളും പ്രോഗ്രാം ലിസ്റ്റുകളും തത്സമയം പരിശോധിക്കുക.</marquee>
     </div>
 
-    <!-- Sticky Admin Bar -->
     <div id="adminBar" class="admin-bar">
         <span>⚙️ Admin Mode Active (EID-E IRSHAD)</span>
         <div class="admin-actions">
             <button class="btn-backup" onclick="exportBackupJSON()">📥 Backup JSON</button>
-            <button class="btn-reset" onclick="resetToDefaultData()">🔄 Reset Data</button>
             <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
         </div>
     </div>
 
-    <!-- Hero Header -->
     <header class="hero">
         <div class="hero-top-bar">
             <span class="brand-pill">✨ EID-E IRSHAD 2K26</span>
@@ -70,22 +67,18 @@
             </div>
             
             <div class="org-info">
-                IRSHADUNNASIHEEN SAHITHYA SAMAJAM<br>
-                Rahmaniyya Arabic College, Attassery, Po Trikkadeeri, Palakkad Dt, Kerala - 679502
+                IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
             </div>
         </div>
     </header>
 
-    <!-- Global Search Box -->
     <div class="global-search-box">
         <input type="text" id="programSearchInput" class="global-search-input" placeholder="🔍 പ്രോഗ്രാമോ വിദ്യാർത്ഥിയെയോ ഇവിടെ തിരയുക..." oninput="handleGlobalSearch(event, this.value)" onkeypress="handleGlobalSearch(event, this.value)">
         <div id="searchResultsDropdown" class="search-results-dropdown"></div>
     </div>
 
-    <!-- Main Container -->
     <main class="container">
         
-        <!-- Live Leaderboard Progress Bar -->
         <div class="team-progress-card">
             <div class="progress-header">
                 <span style="color: var(--zellij-red);">🔴 ZELLIJ: <span id="ptsA">0</span> Pts</span>
@@ -98,7 +91,6 @@
             </div>
         </div>
 
-        <!-- Audience Choice Poll -->
         <div class="poll-card">
             <div class="poll-title">🗳️ Audience Choice Poll: ഏത് ടീമാണ് ഇന്ന് കൂടുതൽ തിളങ്ങിയത്?</div>
             <div class="poll-option" onclick="votePoll('zellij')">
@@ -112,7 +104,6 @@
             <div id="pollMsg" style="font-size: 0.82rem; color: #10b981; font-weight: 700; margin-top: 8px; text-align: center;"></div>
         </div>
 
-        <!-- General Rules & Points Card -->
         <div class="card">
             <div class="card-header">
                 <h3>📜 ഫെസ്റ്റിന്റെ പൊതുനിയമങ്ങളും വിവരങ്ങളും</h3>
@@ -123,65 +114,50 @@
                     <li>വിധികർത്താക്കളുടെ തീരുമാനം അന്തിമമായിരിക്കും. അതിൽ തർക്കങ്ങൾ അനുവദനീയമല്ല.</li>
                     <li>ഓരോ മത്സരത്തിലും പങ്കെടുക്കുന്നവരുടെ എണ്ണം അതത് കാറ്റഗറി കോർഡിനേറ്റർമാർ മുൻകൂട്ടി ഉറപ്പുവരുത്തണം.</li>
                     <li>സ്റ്റേജ്, ഓഫ്-സ്റ്റേജ്, സ്പോർട്സ് ഇനങ്ങളിൽ സമയപരിധി കർശനമായി പാലിക്കേണ്ടതാണ്.</li>
-                    <li>ആശയക്കുഴപ്പങ്ങൾ ഉണ്ടായാൽ ജനറൽ കൺവീനറുടെ തീരുമാനം അന്തിമമായിരിക്കും.</li>
                 </ol>
-
-                <div class="points-box">
-                    <h4 style="font-weight: 800; margin: 0 0 10px; font-size: 0.95rem;">📊 പോയിന്റ് നിലവാരം (Points System)</h4>
-                    <div class="points-grid">
-                        <div class="point-item"><strong>വ്യക്തിഗത ഇനങ്ങൾ (Individual):</strong><br>🥇 First: 5 Pts | 🥈 Second: 3 Pts | 🥉 Third: 1 Pt</div>
-                        <div class="point-item"><strong>ഗ്രൂപ്പ് ഇനങ്ങൾ (Group):</strong><br>🥇 First: 10 Pts | 🥈 Second: 6 Pts | 🥉 Third: 3 Pts</div>
-                    </div>
-                </div>
-
-                <div style="text-align: right; margin-top: 15px; font-weight: 700; color: var(--text-muted); font-size: 0.85rem;">
-                    - Convener, EID-E IRSHAD Campus Fest 2K26
-                </div>
             </div>
         </div>
 
-        <!-- Navigation Grid Cards -->
         <h2 class="section-heading">👇 കൂടുതൽ വിവരങ്ങൾക്കായി താഴെ ക്ലിക്ക് ചെയ്യുക</h2>
         <div class="home-nav-grid">
             <div class="nav-card" onclick="location.href='programs.html'">
-                <div style="font-size: 1.9rem;">📋</div>
+                <div style="font-size: 1.8rem;">📋</div>
                 <div class="nav-card-info">
                     <h3>പ്രോഗ്രാം ലിസ്റ്റ്</h3>
-                    <p>Senior, Junior, Sub Junior, General മത്സരങ്ങൾ</p>
+                    <p>Senior, Junior, Sub Junior മത്സരങ്ങൾ</p>
                 </div>
                 <div class="nav-card-arrow">➔</div>
             </div>
 
-            <div class="nav-card" onclick="location.href='results.html'" style="border-color: #f59e0b;">
-                <div style="font-size: 1.9rem;">🏆</div>
+            <div class="nav-card" onclick="location.href='results.html'">
+                <div style="font-size: 1.8rem;">🏆</div>
                 <div class="nav-card-info">
                     <h3>മത്സര ഫലങ്ങൾ</h3>
-                    <p>വിജയികളുടെ വിവരങ്ങളും റിസൾട്ട് പോസ്റ്ററുകളും</p>
+                    <p>വിജയികളും റിസൾട്ട് പോസ്റ്ററുകളും</p>
                 </div>
                 <div class="nav-card-arrow">➔</div>
             </div>
 
             <div class="nav-card" onclick="location.href='teams.html'">
-                <div style="font-size: 1.9rem;">👥</div>
+                <div style="font-size: 1.8rem;">👥</div>
                 <div class="nav-card-info">
                     <h3>ടീം ലിസ്റ്റ്</h3>
-                    <p>ZELLIJ & IZNIK മുഴുവൻ അംഗങ്ങളുടെ വിവരങ്ങൾ</p>
+                    <p>ZELLIJ & IZNIK മുഴുവൻ അംഗങ്ങൾ</p>
                 </div>
                 <div class="nav-card-arrow">➔</div>
             </div>
 
-            <div class="nav-card" onclick="location.href='points.html'" style="border-color: #2563eb;">
-                <div style="font-size: 1.9rem;">📊</div>
+            <div class="nav-card" onclick="location.href='points.html'">
+                <div style="font-size: 1.8rem;">📊</div>
                 <div class="nav-card-info">
-                    <h3>ലൈവ് സ്കോർബോർഡ്</h3>
-                    <p>തത്സമയം മാറിക്കൊണ്ടിരിക്കുന്ന പോയിന്റ് നില</p>
+                    <h3>സ്കോർബോർഡ്</h3>
+                    <p>തത്സമയ പോയിന്റ് നിലവാരം</p>
                 </div>
                 <div class="nav-card-arrow">➔</div>
             </div>
         </div>
     </main>
 
-    <!-- Admin Login Modal -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeAdminModal()">&times;</span>
@@ -191,7 +167,7 @@
             <label>Password:</label>
             <input type="password" id="adminPassword" placeholder="Enter password">
             <button class="btn-submit" onclick="loginAdmin()">Login</button>
-            <div id="loginError"></div>
+            <div id="loginError" style="color:red; font-size:0.8rem; margin-top:8px;"></div>
         </div>
     </div>
 
