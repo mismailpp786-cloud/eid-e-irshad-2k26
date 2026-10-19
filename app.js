@@ -110,6 +110,7 @@ function saveAppData(silent = false) {
 function renderAll() {
     updateAdminUI();
     updateLiveScoreboard();
+    updateCountdown();
     initPosterBuilder();
     renderPublishedResults();
 }
@@ -128,6 +129,22 @@ function toggleTheme() {
     localStorage.setItem("eid_theme", newTheme);
     const btn = document.getElementById("themeToggleBtn");
     if (btn) btn.textContent = newTheme === "dark" ? "☀️ Light" : "🌙 Dark";
+}
+
+function updateCountdown() {
+    const eventDate = new Date("2026-11-27T09:00:00").getTime();
+    const now = new Date().getTime();
+    const diff = eventDate - now;
+    if (diff > 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((diff % (1000 * 60)) / 1000);
+        if (document.getElementById("cdDays")) document.getElementById("cdDays").textContent = String(days).padStart(2, "0");
+        if (document.getElementById("cdHours")) document.getElementById("cdHours").textContent = String(hours).padStart(2, "0");
+        if (document.getElementById("cdMins")) document.getElementById("cdMins").textContent = String(mins).padStart(2, "0");
+        if (document.getElementById("cdSecs")) document.getElementById("cdSecs").textContent = String(secs).padStart(2, "0");
+    }
 }
 
 function updateAdminUI() {
@@ -160,8 +177,7 @@ function logoutAdmin() {
 function exportBackupJSON() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
     const dlAnchor = document.createElement("a");
-    dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", `eid_e_irshad_backup.json`);
+    dlAnchor.setAttribute("href", dataStr); dlAnchor.setAttribute("download", `eid_e_irshad_backup.json`);
     document.body.appendChild(dlAnchor); dlAnchor.click(); dlAnchor.remove();
 }
 
@@ -199,15 +215,27 @@ function updateLiveScoreboard() {
         totals.teamB = appData.manualScoreOverride.teamB;
     }
 
-    const ptsAEl = document.getElementById("ptsA");
-    const ptsBEl = document.getElementById("ptsB");
-    if (ptsAEl) ptsAEl.textContent = totals.teamA;
-    if (ptsBEl) ptsBEl.textContent = totals.teamB;
+    if (document.getElementById("ptsA")) document.getElementById("ptsA").textContent = totals.teamA;
+    if (document.getElementById("ptsB")) document.getElementById("ptsB").textContent = totals.teamB;
+    const grand = totals.teamA + totals.teamB;
+    if (document.getElementById("barA")) document.getElementById("barA").style.width = (grand > 0 ? (totals.teamA / grand) * 100 : 50) + "%";
+    if (document.getElementById("barB")) document.getElementById("barB").style.width = (grand > 0 ? (totals.teamB / grand) * 100 : 50) + "%";
 }
 
-/* ==========================================================================
-   POSTER BUILDER & LAYOUT SWITCHER LOGIC
-   ========================================================================== */
+function votePoll(team) {
+    if (localStorage.getItem("eid_has_voted")) {
+        if (document.getElementById("pollMsg")) document.getElementById("pollMsg").textContent = "നിങ്ങൾ ഇതിനകം വോട്ട് രേഖപ്പെടുത്തിയിട്ടുണ്ട്!";
+        return;
+    }
+    if (team === "zellij") appData.poll.zellij++;
+    if (team === "iznik") appData.poll.iznik++;
+    localStorage.setItem("eid_has_voted", "true");
+    saveAppData(true);
+    if (document.getElementById("pollMsg")) document.getElementById("pollMsg").textContent = "നന്ദി! വോട്ട് വിജയകരമായി രേഖപ്പെടുത്തി.";
+    if (typeof confetti === "function") confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+}
+
+/* Poster Builder Logic */
 function initPosterBuilder() {
     const catSelect = document.getElementById("resCatSelect");
     const progSelect = document.getElementById("resProgSelect");
@@ -219,7 +247,6 @@ function onResultCategoryChange() {
     const catSelect = document.getElementById("resCatSelect");
     const progSelect = document.getElementById("resProgSelect");
     if (!catSelect || !progSelect) return;
-
     const catVal = catSelect.value || "Senior";
     let cKey = "senior";
     if (catVal.toLowerCase().includes("sub")) cKey = "subjunior";
@@ -228,9 +255,7 @@ function onResultCategoryChange() {
 
     const catPrograms = appData.programs[cKey] || { onStage: [], offStage: [], sports: [] };
     const allProgs = [...(catPrograms.onStage || []), ...(catPrograms.offStage || []), ...(catPrograms.sports || [])];
-
-    progSelect.innerHTML = `<option value="">-- പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക --</option>` +
-        allProgs.map(p => `<option value="${p}">${p}</option>`).join("");
+    progSelect.innerHTML = `<option value="">-- പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക --</option>` + allProgs.map(p => `<option value="${p}">${p}</option>`).join("");
 
     const rosterKey = cKey === "general" ? "senior" : cKey;
     const combined = [
@@ -240,12 +265,8 @@ function onResultCategoryChange() {
 
     [1, 2, 3].forEach(rank => {
         const sel = document.getElementById(`selWinner${rank}`);
-        if (sel) {
-            sel.innerHTML = `<option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>` +
-                combined.map(st => `<option value="${st.name}|${st.team}">${st.label}</option>`).join("");
-        }
+        if (sel) sel.innerHTML = `<option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>` + combined.map(st => `<option value="${st.name}|${st.team}">${st.label}</option>`).join("");
     });
-
     updatePosterPreview();
 }
 
@@ -253,19 +274,15 @@ function onWinnerStudentSelect(rank) {
     const sel = document.getElementById(`selWinner${rank}`);
     if (!sel || !sel.value) return;
     const [name, teamKey] = sel.value.split("|");
-    const nameInput = document.getElementById(`win${rank}Name`);
-    const teamSelect = document.getElementById(`win${rank}Team`);
-    if (nameInput) nameInput.value = name;
-    if (teamSelect) teamSelect.value = teamKey;
+    if (document.getElementById(`win${rank}Name`)) document.getElementById(`win${rank}Name`).value = name;
+    if (document.getElementById(`win${rank}Team`)) document.getElementById(`win${rank}Team`).value = teamKey;
     updatePosterPreview();
 }
 
 function setPosterTheme(themeClass) {
     currentPosterTheme = themeClass;
     const canvas = document.getElementById("posterCanvas");
-    if (canvas) {
-        canvas.className = `${currentPosterLayout} ${currentPosterTheme}`;
-    }
+    if (canvas) canvas.className = `${currentPosterLayout} ${currentPosterTheme}`;
 }
 
 function setPosterLayout(layoutClass) {
@@ -273,10 +290,9 @@ function setPosterLayout(layoutClass) {
     const canvas = document.getElementById("posterCanvas");
     if (canvas) {
         canvas.className = `${currentPosterLayout} ${currentPosterTheme}`;
-        
-        document.getElementById("layoutModel1Container").style.display = (layoutClass === "layout-model-1") ? "block" : "none";
-        document.getElementById("layoutModel2Container").style.display = (layoutClass === "layout-model-2") ? "block" : "none";
-        document.getElementById("layoutModel3Container").style.display = (layoutClass === "layout-model-3") ? "block" : "none";
+        if (document.getElementById("layoutModel1Container")) document.getElementById("layoutModel1Container").style.display = (layoutClass === "layout-model-1") ? "block" : "none";
+        if (document.getElementById("layoutModel2Container")) document.getElementById("layoutModel2Container").style.display = (layoutClass === "layout-model-2") ? "block" : "none";
+        if (document.getElementById("layoutModel3Container")) document.getElementById("layoutModel3Container").style.display = (layoutClass === "layout-model-3") ? "block" : "none";
     }
     updatePosterPreview();
 }
@@ -288,57 +304,46 @@ function updatePosterPreview() {
     const progCustom = (document.getElementById("resProgCustom")?.value || "").trim();
     const progName = progCustom || progDrop || "മത്സരത്തിന്റെ പേര്";
 
-    const w1Name = (document.getElementById("win1Name")?.value || "Winner Name 1").trim();
+    const w1Name = (document.getElementById("win1Name")?.value || "Winner 1").trim();
     const w1Team = formatTeamDisplayName(document.getElementById("win1Team")?.value || "teamA");
-
-    const w2Name = (document.getElementById("win2Name")?.value || "Winner Name 2").trim();
+    const w2Name = (document.getElementById("win2Name")?.value || "Winner 2").trim();
     const w2Team = formatTeamDisplayName(document.getElementById("win2Team")?.value || "teamB");
-
     const w3Name = (document.getElementById("win3Name")?.value || "").trim();
     const w3Team = formatTeamDisplayName(document.getElementById("win3Team")?.value || "teamA");
 
-    const setElText = (id, txt) => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = txt;
-    };
+    ["previewResNo", "previewResNo2", "previewResNo3"].forEach(id => { if(document.getElementById(id)) document.getElementById(id).textContent = String(resNo).padStart(2, "0"); });
+    ["previewCat", "previewCat2", "previewCat3"].forEach(id => { if(document.getElementById(id)) document.getElementById(id).textContent = cat.toUpperCase(); });
+    ["previewProg", "previewProg2", "previewProg3"].forEach(id => { if(document.getElementById(id)) document.getElementById(id).textContent = progName.toUpperCase(); });
 
-    ["previewResNo", "previewResNo2", "previewResNo3"].forEach(id => setElText(id, String(resNo).padStart(2, "0")));
-    ["previewCat", "previewCat2", "previewCat3"].forEach(id => setElText(id, cat.toUpperCase()));
-    ["previewProg", "previewProg2", "previewProg3"].forEach(id => setElText(id, progName.toUpperCase()));
+    if(document.getElementById("previewWin1Name")) document.getElementById("previewWin1Name").textContent = w1Name;
+    if(document.getElementById("previewWin1Team")) document.getElementById("previewWin1Team").textContent = w1Team;
+    if(document.getElementById("previewWin2Name")) document.getElementById("previewWin2Name").textContent = w2Name;
+    if(document.getElementById("previewWin2Team")) document.getElementById("previewWin2Team").textContent = w2Team;
+    if(document.getElementById("previewWin3Name")) document.getElementById("previewWin3Name").textContent = w3Name;
+    if(document.getElementById("previewWin3Team")) document.getElementById("previewWin3Team").textContent = w3Team;
 
-    setElText("previewWin1Name", w1Name); setElText("previewWin1Team", w1Team);
-    setElText("previewWin2Name", w2Name); setElText("previewWin2Team", w2Team);
-    setElText("previewWin3Name", w3Name); setElText("previewWin3Team", w3Team);
+    if(document.getElementById("previewWin1Name2")) document.getElementById("previewWin1Name2").textContent = w1Name;
+    if(document.getElementById("previewWin1Team2")) document.getElementById("previewWin1Team2").textContent = w1Team;
+    if(document.getElementById("previewWin2Name2")) document.getElementById("previewWin2Name2").textContent = w2Name;
+    if(document.getElementById("previewWin2Team2")) document.getElementById("previewWin2Team2").textContent = w2Team;
+    if(document.getElementById("previewWin3Name2")) document.getElementById("previewWin3Name2").textContent = w3Name;
+    if(document.getElementById("previewWin3Team2")) document.getElementById("previewWin3Team2").textContent = w3Team;
 
-    setElText("previewWin1Name2", w1Name); setElText("previewWin1Team2", w1Team);
-    setElText("previewWin2Name2", w2Name); setElText("previewWin2Team2", w2Team);
-    setElText("previewWin3Name2", w3Name); setElText("previewWin3Team2", w3Team);
+    if(document.getElementById("previewWin1Name3")) document.getElementById("previewWin1Name3").textContent = w1Name;
+    if(document.getElementById("previewWin1Team3")) document.getElementById("previewWin1Team3").textContent = w1Team;
+    if(document.getElementById("previewWin2Name3")) document.getElementById("previewWin2Name3").textContent = w2Name;
+    if(document.getElementById("previewWin2Team3")) document.getElementById("previewWin2Team3").textContent = w2Team;
+    if(document.getElementById("previewWin3Name3")) document.getElementById("previewWin3Name3").textContent = w3Name;
+    if(document.getElementById("previewWin3Team3")) document.getElementById("previewWin3Team3").textContent = w3Team;
 
-    setElText("previewWin1Name3", w1Name); setElText("previewWin1Team3", w1Team);
-    setElText("previewWin2Name3", w2Name); setElText("previewWin2Team3", w2Team);
-    setElText("previewWin3Name3", w3Name); setElText("previewWin3Team3", w3Team);
-
-    const w3Card = document.getElementById("previewWin3Card");
-    const w3Card2 = document.getElementById("previewWin3Card2");
-    const w3Card3 = document.getElementById("previewWin3Card3");
-
-    if (w3Name) {
-        if (w3Card) w3Card.style.display = "flex";
-        if (w3Card2) w3Card2.style.display = "flex";
-        if (w3Card3) w3Card3.style.display = "flex";
-    } else {
-        if (w3Card) w3Card.style.display = "none";
-        if (w3Card2) w3Card2.style.display = "none";
-        if (w3Card3) w3Card3.style.display = "none";
-    }
+    if (document.getElementById("previewWin3Card")) document.getElementById("previewWin3Card").style.display = w3Name ? "flex" : "none";
+    if (document.getElementById("previewWin3Card2")) document.getElementById("previewWin3Card2").style.display = w3Name ? "flex" : "none";
+    if (document.getElementById("previewWin3Card3")) document.getElementById("previewWin3Card3").style.display = w3Name ? "flex" : "none";
 }
 
 function downloadResultPoster() {
     const canvasEl = document.getElementById("posterCanvas");
-    if (!canvasEl || typeof html2canvas === "undefined") {
-        alert("ഡൗൺലോഡ് ചെയ്യാൻ അല്പം കാത്തിരിക്കുക!");
-        return;
-    }
+    if (!canvasEl || typeof html2canvas === "undefined") return;
     const resNo = (document.getElementById("resNoInput")?.value || "01").trim();
     html2canvas(canvasEl, { scale: 3, useCORS: true, backgroundColor: null }).then(canvas => {
         const link = document.createElement("a");
@@ -355,48 +360,4 @@ function publishResultToSite() {
     const prog = document.getElementById("resProgCustom")?.value || document.getElementById("resProgSelect")?.value || "Event";
 
     const newResult = {
-        id: `${category}_${prog}`.toLowerCase(),
-        resNo, category, program: prog,
-        win1Name: document.getElementById("win1Name")?.value || "",
-        win1Team: document.getElementById("win1Team")?.value || "teamA",
-        win2Name: document.getElementById("win2Name")?.value || "",
-        win2Team: document.getElementById("win2Team")?.value || "teamB",
-        win3Name: document.getElementById("win3Name")?.value || "",
-        win3Team: document.getElementById("win3Team")?.value || "teamA",
-        theme: currentPosterTheme, layout: currentPosterLayout, timestamp: Date.now()
-    };
-
-    appData.results.unshift(newResult);
-    saveAppData();
-    if (typeof confetti === "function") confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
-    alert("റിസൾട്ട് വിജയകരമായി പ്രസിദ്ധീകരിച്ചു!");
-}
-
-function renderPublishedResults() {
-    const container = document.getElementById("publishedResultsContainer");
-    if (!container) return;
-    const list = appData.results || [];
-    if (list.length === 0) {
-        container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:30px; color:var(--text-muted);">ഇതുവരെ ഫലങ്ങളൊന്നും പ്രസിദ്ധീകരിച്ചിട്ടില്ല.</div>`;
-        return;
-    }
-    container.innerHTML = list.map((res, idx) => `
-        <div class="result-card">
-            <div class="result-card-head">
-                <div>
-                    <span style="font-size:0.75rem; background:#fbbf24; color:#0f172a; padding:2px 8px; border-radius:4px; font-weight:800;">RESULT #${res.resNo || (idx+1)}</span>
-                    <h3 style="margin:6px 0 0; font-size:1.05rem;">${res.program}</h3>
-                </div>
-                ${isAdmin ? `<button class="btn-action-sm btn-del-sm" onclick="appData.results.splice(${idx},1); saveAppData();">🗑️</button>` : ''}
-            </div>
-            <div class="winner-row"><span>🥇 ${res.win1Name}</span><span class="team-badge-a">${formatTeamDisplayName(res.win1Team)}</span></div>
-            ${res.win2Name ? `<div class="winner-row"><span>🥈 ${res.win2Name}</span><span class="team-badge-b">${formatTeamDisplayName(res.win2Team)}</span></div>` : ''}
-            ${res.win3Name ? `<div class="winner-row"><span>🥉 ${res.win3Name}</span><span class="team-badge-a">${formatTeamDisplayName(res.win3Team)}</span></div>` : ''}
-        </div>
-    `).join("");
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-    applySavedTheme();
-    initFirebaseAndLoad();
-});
+        id: `${category}_${prog
