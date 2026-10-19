@@ -3,151 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Scoreboard — EID-E IRSHAD 2K26</title>
+    <title>Scoreboard & Points — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <!-- Sticky Admin Bar -->
-    <div id="adminBar" class="admin-bar">
-        <span>⚙️ Admin Mode Active (Scoreboard)</span>
-        <div class="admin-actions">
-            <button class="btn-backup" onclick="exportBackupJSON()">📥 Backup JSON</button>
-            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
-        </div>
-    </div>
-
-    <!-- Top Navigation Bar -->
     <div class="top-nav-bar">
         <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
-        <span class="nav-page-title">📊 LIVE SCOREBOARD</span>
+        <span class="nav-page-title">📊 LIVE SCOREBOARD & POINTS</span>
         <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
     </div>
+    <div class="container" style="max-width: 850px; margin: 30px auto;">
+        <h1 class="page-title">തത്സമയ പോയിന്റ് നിലവാരം</h1>
+        <p class="page-subtitle">Team ZELLIJ, Team IZNIK എന്നിവയുടെ മത്സര പോയിന്റുകളും ലീഡർബോർഡും</p>
 
-    <!-- Main Container -->
-    <div class="container" style="max-width: 900px; margin: 25px auto;">
-        
-        <h1 class="page-title">Live Championship Scoreboard</h1>
-        <p class="page-subtitle">തത്സമയം മാറിക്കൊണ്ടിരിക്കുന്ന ഹൗസ് പോയിന്റ് നിലവാരം</p>
-
-        <!-- Vertical Bar Chart Scoreboard Card -->
-        <div class="scoreboard-card">
-            <h2 style="margin: 0 0 5px; font-family:'Montserrat',sans-serif; font-size:1.25rem; font-weight:900;">Houses Championship Standings</h2>
-            <p style="margin: 0 0 15px; font-size: 0.82rem; color: var(--text-muted);">Team ZELLIJ vs Team IZNIK Live Graph</p>
-            
-            <div class="vertical-chart-container">
-                <!-- Team ZELLIJ Bar -->
-                <div class="v-bar-col">
-                    <div class="v-bar-score" id="barScoreA" style="color:var(--zellij-red);">0 Pts</div>
-                    <div class="v-bar-track">
-                        <div id="verticalBarA" class="v-bar-fill zellij" style="height: 15%;"></div>
-                    </div>
-                    <div class="v-bar-label" style="color:var(--zellij-red);">🔴 ZELLIJ</div>
-                </div>
-
-                <!-- Team IZNIK Bar -->
-                <div class="v-bar-col">
-                    <div class="v-bar-score" id="barScoreB" style="color:var(--iznik-blue);">0 Pts</div>
-                    <div class="v-bar-track">
-                        <div id="verticalBarB" class="v-bar-fill iznik" style="height: 15%;"></div>
-                    </div>
-                    <div class="v-bar-label" style="color:var(--iznik-blue);">🔵 IZNIK</div>
-                </div>
+        <div class="team-progress-card" style="margin-top: 25px;">
+            <div class="progress-header" style="font-size: 1rem;">
+                <span style="color: var(--zellij-red);">🔴 Team ZELLIJ: <span id="ptsA">0</span> Pts</span>
+                <span style="color: var(--iznik-blue);"><span id="ptsB">0</span> Pts :Team IZNIK 🔵</span>
+            </div>
+            <div class="progress-bar-container" style="height: 18px; margin-top: 10px;">
+                <div id="barA" class="progress-zellij" style="width: 50%;"></div>
+                <div id="barB" class="progress-iznik" style="width: 50%;"></div>
             </div>
         </div>
 
-        <!-- Category-wise Points Breakdown Grid -->
-        <h3 style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.15rem; margin: 25px 0 12px; text-align:center;">🏆 Category-wise Breakdown</h3>
-        <div class="cat-points-grid">
-            
-            <!-- Senior Points -->
-            <div class="cat-point-card">
-                <h4>Senior Category</h4>
-                <div class="cat-pts-row">
-                    <span style="color:var(--zellij-red);">🔴 ZELLIJ</span>
-                    <span id="srPtsA">0 Pts</span>
-                </div>
-                <div class="cat-pts-row">
-                    <span style="color:var(--iznik-blue);">🔵 IZNIK</span>
-                    <span id="srPtsB">0 Pts</span>
-                </div>
-            </div>
-
-            <!-- Junior Points -->
-            <div class="cat-point-card">
-                <h4>Junior Category</h4>
-                <div class="cat-pts-row">
-                    <span style="color:var(--zellij-red);">🔴 ZELLIJ</span>
-                    <span id="jrPtsA">0 Pts</span>
-                </div>
-                <div class="cat-pts-row">
-                    <span style="color:var(--iznik-blue);">🔵 IZNIK</span>
-                    <span id="jrPtsB">0 Pts</span>
-                </div>
-            </div>
-
-            <!-- Sub Junior Points -->
-            <div class="cat-point-card">
-                <h4>Sub-Junior Category</h4>
-                <div class="cat-pts-row">
-                    <span style="color:var(--zellij-red);">🔴 ZELLIJ</span>
-                    <span id="subPtsA">0 Pts</span>
-                </div>
-                <div class="cat-pts-row">
-                    <span style="color:var(--iznik-blue);">🔵 IZNIK</span>
-                    <span id="subPtsB">0 Pts</span>
-                </div>
-            </div>
-
-            <!-- General & Sports Points -->
-            <div class="cat-point-card">
-                <h4>General & Sports</h4>
-                <div class="cat-pts-row">
-                    <span style="color:var(--zellij-red);">🔴 ZELLIJ</span>
-                    <span id="genPtsA">0 Pts</span>
-                </div>
-                <div class="cat-pts-row">
-                    <span style="color:var(--iznik-blue);">🔵 IZNIK</span>
-                    <span id="genPtsB">0 Pts</span>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Admin Override Panel -->
-        <div class="card admin-only" data-display="block" style="margin-top: 30px; border: 2px dashed var(--accent-gold);">
-            <div class="card-header" style="background:#b45309;">
-                <h3>⚙️ Admin: Manual Points Control</h3>
-            </div>
-            <div class="rules-body" style="padding: 18px;">
-                <p style="font-size: 0.85rem; color:var(--text-muted); margin-top:0;">ശ്രദ്ധിക്കുക: റിസൾട്ടുകൾ ചേർത്തുള്ള ഓട്ടോമാറ്റിക് പോയിന്റ് കണക്കുകൂട്ടലിന് പുറമെ നേരിട്ട് പോയിന്റുകൾ മാറ്റാൻ ഈ പാനൽ ഉപയോഗിക്കാം.</p>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
-                    <div>
-                        <label style="font-weight:800; font-size:0.82rem; display:block; margin-bottom:5px;">Team ZELLIJ Points:</label>
-                        <input type="number" id="inputPtsZellij" class="form-control" placeholder="0">
-                    </div>
-                    <div>
-                        <label style="font-weight:800; font-size:0.82rem; display:block; margin-bottom:5px;">Team IZNIK Points:</label>
-                        <input type="number" id="inputPtsIznik" class="form-control" placeholder="0">
-                    </div>
-                </div>
-
-                <div style="display:flex; gap:10px;">
-                    <button class="btn-submit" style="background:#059669; color:#fff; margin-top:0;" onclick="saveTeamPoints()">പോയിന്റുകൾ സേവ് ചെയ്യുക</button>
-                    <button class="btn-submit" style="background:#dc2626; color:#fff; margin-top:0;" onclick="disableManualScoreOverride()">ഓട്ടോമാറ്റിക് മോഡ് പുനഃസ്ഥാപിക്കുക</button>
-                </div>
+        <div class="card" style="margin-top: 25px;">
+            <div class="card-header"><h3>📌 പോയിന്റ് കണക്കാക്കുന്ന വിധം</h3></div>
+            <div class="rules-body" style="padding-top: 10px;">
+                <ul style="line-height: 1.8; font-weight: 700; margin: 0; padding-left: 20px;">
+                    <li><strong>സ്റ്റേജേതര / സ്റ്റേജ് മത്സരങ്ങൾ:</strong> ഒന്നാം സ്ഥാനം - 5 പോയിന്റ്, രണ്ടാം സ്ഥാനം - 3 പോയിന്റ്, മൂന്നാം സ്ഥാനം - 1 പോയിന്റ്.</li>
+                    <li><strong>ഗ്രൂപ്പ് മത്സരങ്ങൾ:</strong> ഒന്നാം സ്ഥാനം - 10 പോയിന്റ്, രണ്ടാം സ്ഥാനം - 6 പോയിന്റ്, മൂന്നാം സ്ഥാനം - 3 പോയിന്റ്.</li>
+                </ul>
             </div>
         </div>
-
     </div>
-
-    <footer>
-        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
-    </footer>
-
+    <footer>&copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM</footer>
     <script src="app.js"></script>
 </body>
 </html>
