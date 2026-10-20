@@ -14,11 +14,81 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Unique Reference Poster Styles for Model 1, 2, and 3 */
+        #posterCanvas {
+            width: 100%;
+            max-width: 420px;
+            aspect-ratio: 1 / 1;
+            border-radius: 16px;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            text-align: left;
+        }
+
+        /* Model 1: Green Reference Style */
+        #posterCanvas.layout-model-1 {
+            background: linear-gradient(135deg, #047857 0%, #065f46 60%, #022c22 100%);
+            color: #ffffff;
+            border: 3px solid #fbbf24;
+        }
+        #posterCanvas.layout-model-1 .ref-result-num-box { background: #022c22; border: 2px solid #fbbf24; }
+        #posterCanvas.layout-model-1 .ref-win-card { background: rgba(0, 0, 0, 0.45); border-left: 4px solid #fbbf24; }
+
+        /* Model 2: Maroon / Purple Style */
+        #posterCanvas.layout-model-2 {
+            background: linear-gradient(135deg, #581c87 0%, #3b0764 60%, #1e1b4b 100%);
+            color: #ffffff;
+            border: 3px solid #f43f5e;
+        }
+        #posterCanvas.layout-model-2 .ref-result-num-box { background: #1e1b4b; border: 2px solid #f43f5e; }
+        #posterCanvas.layout-model-2 .ref-win-card { background: rgba(0, 0, 0, 0.5); border-radius: 20px; border: 1px solid rgba(244, 63, 94, 0.4); }
+        #posterCanvas.layout-model-2 .ref-rank-badge { background: #f43f5e; color: #ffffff; }
+
+        /* Model 3: Warm Brown / Card Style */
+        #posterCanvas.layout-model-3 {
+            background: linear-gradient(135deg, #78350f 0%, #451a03 60%, #1c0f03 100%);
+            color: #ffffff;
+            border: 3px solid #d97706;
+        }
+        #posterCanvas.layout-model-3 .ref-result-num-box { background: #1c0f03; border: 2px solid #d97706; }
+        #posterCanvas.layout-model-3 .ref-win-card { background: #ffffff; color: #0f172a; border-radius: 8px; }
+        #posterCanvas.layout-model-3 .ref-win-name { color: #0f172a; }
+        #posterCanvas.layout-model-3 .ref-win-sub { color: #b45309; }
+        #posterCanvas.layout-model-3 .ref-rank-badge { background: #d97706; color: #ffffff; }
+
+        .ref-top-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px; }
+        .ref-brand-txt { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.82rem; color: #fbbf24; }
+        .ref-sub-brand { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.55rem; opacity: 0.8; text-align: right; }
+
+        .ref-center-banner { display: flex; align-items: center; gap: 12px; margin: 8px 0; }
+        .ref-result-num-box { padding: 6px 10px; border-radius: 10px; text-align: center; flex-shrink: 0; min-width: 65px; }
+        .ref-result-hash { display: block; font-family: 'Montserrat', sans-serif; font-size: 0.52rem; font-weight: 800; opacity: 0.85; color: #fbbf24; }
+        .ref-result-digits { font-family: 'Montserrat', sans-serif; font-size: 1.6rem; font-weight: 900; color: #ffffff; line-height: 1; }
+
+        .ref-prog-meta { flex: 1; }
+        .ref-cat-title { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; font-weight: 900; background: #fbbf24; color: #0f172a; display: inline-block; padding: 2px 7px; border-radius: 4px; margin-bottom: 3px; }
+        .ref-prog-title { font-family: 'Anek Malayalam', 'Montserrat', sans-serif; font-size: 1.05rem; font-weight: 900; line-height: 1.2; }
+
+        .ref-winners-container { display: flex; flex-direction: column; gap: 6px; margin: 6px 0; }
+        .ref-win-card { padding: 7px 10px; display: flex; align-items: center; gap: 10px; }
+        .ref-rank-badge { width: 22px; height: 22px; background: #fbbf24; color: #0f172a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.7rem; flex-shrink: 0; }
+        .ref-win-details { flex: 1; }
+        .ref-win-name { font-family: 'Montserrat', 'Anek Malayalam', sans-serif; font-weight: 900; font-size: 0.88rem; line-height: 1.2; }
+        .ref-win-sub { font-family: 'Montserrat', 'Anek Malayalam', sans-serif; font-size: 0.64rem; font-weight: 700; opacity: 0.9; color: #fbbf24; }
+
+        .ref-footer-bar { font-family: 'Montserrat', sans-serif; font-size: 0.58rem; opacity: 0.8; border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 5px; display: flex; justify-content: space-between; }
+    </style>
 </head>
 <body>
 
     <div id="adminBar" class="admin-bar">
-        <span>⚙️ Admin Mode Active (Reference Poster Maker)</span>
+        <span>⚙️ Admin Mode Active (Auto Result & Poster Maker)</span>
         <div class="admin-actions">
             <button class="btn-backup" onclick="exportBackupJSON()">📥 Backup</button>
             <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
@@ -33,7 +103,7 @@
 
     <div class="container" style="max-width: 1050px; margin: 25px auto;">
         <h1 class="page-title">രഫറൻസ് മോഡൽ പോസ്റ്റർ മേക്കർ</h1>
-        <p class="page-subtitle">റഫറൻസ് ഡിസൈൻ ശൈലിയിലുള്ള പ്രൊഫഷണൽ റിസൾട്ട് പോസ്റ്ററുകൾ നിർമ്മിക്കാം</p>
+        <p class="page-subtitle">ഓട്ടോമാറ്റിക് റിസൾട്ട് നമ്പറും പ്രോഗ്രാം ലിസ്റ്റിൽ നിന്നും എളുപ്പത്തിൽ പോസ്റ്റർ നിർമ്മിക്കാം</p>
 
         <div class="builder-section admin-only" data-display="block">
             <h3 style="margin: 0 0 15px; font-family:'Montserrat',sans-serif; font-size:1.15rem; font-weight:900; color:var(--accent-gold);">
@@ -52,8 +122,8 @@
 
                     <div style="display:grid; grid-template-columns: 100px 1fr; gap:10px;">
                         <div class="form-group">
-                            <label>Result No:</label>
-                            <input type="text" id="resNoInput" class="form-control" value="111" oninput="updatePosterPreview()">
+                            <label>Result No (Auto):</label>
+                            <input type="text" id="resNoInput" class="form-control" readonly style="background:var(--bg-color); font-weight:900; color:var(--accent-gold);" value="01">
                         </div>
                         <div class="form-group">
                             <label>Category:</label>
@@ -67,12 +137,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label>സബ് ടൈറ്റിൽ (ഉദാ: HIGHER SECONDARY GIRLS):</label>
-                        <input type="text" id="resSubTitleInput" class="form-control" value="HIGHER SECONDARY GIRLS" oninput="updatePosterPreview()">
+                        <label>സബ് ടൈറ്റിൽ (ഉദാ: SENIOR - ON STAGE):</label>
+                        <input type="text" id="resSubTitleInput" class="form-control" value="SENIOR - ON STAGE" oninput="updatePosterPreview()">
                     </div>
 
                     <div class="form-group">
-                        <label>മത്സര ഇനം (Program Name):</label>
+                        <label>മത്സര ഇനം തിരഞ്ഞെടുക്കുക (Program List):</label>
                         <select id="resProgSelect" class="form-control" onchange="onProgramDropdownSelect()">
                             <option value="">-- പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക --</option>
                         </select>
@@ -90,13 +160,13 @@
                             <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
                         </select>
                         <div style="display:grid; grid-template-columns: 1fr 130px; gap:8px; margin-bottom:6px;">
-                            <input type="text" id="win1Name" class="form-control" value="NIHLA" oninput="updatePosterPreview()">
-                            <select id="win1Team" class="form-control" onchange="updatePosterPreview()">
+                            <input type="text" id="win1Name" class="form-control" placeholder="വിദ്യാർത്ഥിയുടെ പേര്" oninput="updatePosterPreview()">
+                            <select id="win1Team" class="form-control" onchange="onWinnerStudentSelectTeam(1)">
                                 <option value="teamA">🔴 ZELLIJ</option>
                                 <option value="teamB">🔵 IZNIK</option>
                             </select>
                         </div>
-                        <input type="text" id="win1Sub" class="form-control" value="PURATHUR" placeholder="ഉദാ: സ്ഥാപനം / സ്ഥലം" oninput="updatePosterPreview()">
+                        <input type="text" id="win1Sub" class="form-control" placeholder="ടീം / സ്ഥാപനം (ഉദാ: Team ZELLIJ)" oninput="updatePosterPreview()">
                     </div>
 
                     <!-- Winner 2 -->
@@ -106,13 +176,13 @@
                             <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
                         </select>
                         <div style="display:grid; grid-template-columns: 1fr 130px; gap:8px; margin-bottom:6px;">
-                            <input type="text" id="win2Name" class="form-control" value="SHABANA" oninput="updatePosterPreview()">
-                            <select id="win2Team" class="form-control" onchange="updatePosterPreview()">
+                            <input type="text" id="win2Name" class="form-control" placeholder="വിദ്യാർത്ഥിയുടെ പേര്" oninput="updatePosterPreview()">
+                            <select id="win2Team" class="form-control" onchange="onWinnerStudentSelectTeam(2)">
                                 <option value="teamB">🔵 IZNIK</option>
                                 <option value="teamA">🔴 ZELLIJ</option>
                             </select>
                         </div>
-                        <input type="text" id="win2Sub" class="form-control" value="KOOTTAYI" placeholder="ഉദാ: സ്ഥാപനം / സ്ഥലം" oninput="updatePosterPreview()">
+                        <input type="text" id="win2Sub" class="form-control" placeholder="ടീം / സ്ഥാപനം" oninput="updatePosterPreview()">
                     </div>
 
                     <!-- Winner 3 -->
@@ -122,13 +192,13 @@
                             <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
                         </select>
                         <div style="display:grid; grid-template-columns: 1fr 130px; gap:8px; margin-bottom:6px;">
-                            <input type="text" id="win3Name" class="form-control" value="AJISHA" oninput="updatePosterPreview()">
-                            <select id="win3Team" class="form-control" onchange="updatePosterPreview()">
+                            <input type="text" id="win3Name" class="form-control" placeholder="വിദ്യാർത്ഥിയുടെ പേര്" oninput="updatePosterPreview()">
+                            <select id="win3Team" class="form-control" onchange="onWinnerStudentSelectTeam(3)">
                                 <option value="teamA">🔴 ZELLIJ</option>
                                 <option value="teamB">🔵 IZNIK</option>
                             </select>
                         </div>
-                        <input type="text" id="win3Sub" class="form-control" value="IRINGAVOOR" placeholder="ഉദാ: സ്ഥാപനം / സ്ഥലം" oninput="updatePosterPreview()">
+                        <input type="text" id="win3Sub" class="form-control" placeholder="ടീം / സ്ഥാപനം" oninput="updatePosterPreview()">
                     </div>
 
                     <div style="display:flex; gap:10px; margin-top:18px;">
@@ -150,11 +220,11 @@
                         <div class="ref-center-banner">
                             <div class="ref-result-num-box">
                                 <span class="ref-result-hash">#RESULT</span>
-                                <span class="ref-result-digits" id="previewResNo">111</span>
+                                <span class="ref-result-digits" id="previewResNo">01</span>
                             </div>
                             <div class="ref-prog-meta">
-                                <div class="ref-cat-title" id="previewCat">HIGHER SECONDARY GIRLS</div>
-                                <div class="ref-prog-title" id="previewProg">ARABIC CALLIGRAPHY</div>
+                                <div class="ref-cat-title" id="previewCat">SENIOR - ON STAGE</div>
+                                <div class="ref-prog-title" id="previewProg">മത്സരത്തിന്റെ പേര്</div>
                             </div>
                         </div>
 
@@ -162,24 +232,24 @@
                             <div class="ref-win-card">
                                 <div class="ref-rank-badge">1</div>
                                 <div class="ref-win-details">
-                                    <div class="ref-win-name" id="previewWin1Name">NIHLA</div>
-                                    <div class="ref-win-sub" id="previewWin1Sub">PURATHUR &bull; <span id="previewWin1Team">Team ZELLIJ</span></div>
+                                    <div class="ref-win-name" id="previewWin1Name">-</div>
+                                    <div class="ref-win-sub" id="previewWin1Sub">Team ZELLIJ</div>
                                 </div>
                             </div>
 
                             <div class="ref-win-card">
                                 <div class="ref-rank-badge">2</div>
                                 <div class="ref-win-details">
-                                    <div class="ref-win-name" id="previewWin2Name">SHABANA</div>
-                                    <div class="ref-win-sub" id="previewWin2Sub">KOOTTAYI &bull; <span id="previewWin2Team">Team IZNIK</span></div>
+                                    <div class="ref-win-name" id="previewWin2Name">-</div>
+                                    <div class="ref-win-sub" id="previewWin2Sub">Team IZNIK</div>
                                 </div>
                             </div>
 
                             <div class="ref-win-card" id="previewWin3Card">
                                 <div class="ref-rank-badge">3</div>
                                 <div class="ref-win-details">
-                                    <div class="ref-win-name" id="previewWin3Name">AJISHA</div>
-                                    <div class="ref-win-sub" id="previewWin3Sub">IRINGAVOOR &bull; <span id="previewWin3Team">Team ZELLIJ</span></div>
+                                    <div class="ref-win-name" id="previewWin3Name">-</div>
+                                    <div class="ref-win-sub" id="previewWin3Sub">Team ZELLIJ</div>
                                 </div>
                             </div>
                         </div>
@@ -200,7 +270,6 @@
     <footer>&copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM</footer>
     <script src="app.js"></script>
     <script>
-        // Additional UI binders for Poster Switcher & Preview
         function setPosterLayout(layoutClass) {
             currentPosterLayout = layoutClass;
             const canvas = document.getElementById("posterCanvas");
@@ -218,12 +287,20 @@
             updatePosterPreview();
         }
 
+        function getNextAutoResultNo() {
+            const list = appData.results || [];
+            return String(list.length + 1).padStart(2, "0");
+        }
+
         function updatePosterPreview() {
-            const resNo = (document.getElementById("resNoInput")?.value || "111").trim();
-            const subTitle = (document.getElementById("resSubTitleInput")?.value || "HIGHER SECONDARY GIRLS").trim();
+            const autoNo = getNextAutoResultNo();
+            const resInput = document.getElementById("resNoInput");
+            if (resInput) resInput.value = autoNo;
+
+            const subTitle = (document.getElementById("resSubTitleInput")?.value || "SENIOR - ON STAGE").trim();
             const progCustom = (document.getElementById("resProgCustom")?.value || "").trim();
             const progDrop = document.getElementById("resProgSelect")?.value || "";
-            const progName = progCustom || progDrop || "ARABIC CALLIGRAPHY";
+            const progName = progCustom || progDrop || "മത്സരത്തിന്റെ പേര്";
 
             const w1Name = (document.getElementById("win1Name")?.value || "").trim();
             const w1Sub = (document.getElementById("win1Sub")?.value || "").trim();
@@ -240,19 +317,80 @@
             const w3TeamKey = document.getElementById("win3Team")?.value || "teamA";
             const w3TeamName = formatTeamDisplayName(w3TeamKey);
 
-            if (document.getElementById("previewResNo")) document.getElementById("previewResNo").textContent = String(resNo).padStart(3, "0");
+            if (document.getElementById("previewResNo")) document.getElementById("previewResNo").textContent = autoNo;
             if (document.getElementById("previewCat")) document.getElementById("previewCat").textContent = subTitle.toUpperCase();
             if (document.getElementById("previewProg")) document.getElementById("previewProg").textContent = progName.toUpperCase();
 
-            if (document.getElementById("previewWin1Name")) document.getElementById("previewWin1Name").textContent = w1Name;
-            if (document.getElementById("previewWin1Sub")) document.getElementById("previewWin1Sub.innerHTML") || (document.getElementById("previewWin1Sub").innerHTML = `${w1Sub} &bull; <span>${w1TeamName}</span>`);
+            if (document.getElementById("previewWin1Name")) document.getElementById("previewWin1Name").textContent = w1Name || "-";
+            if (document.getElementById("previewWin1Sub")) document.getElementById("previewWin1Sub").textContent = w1Sub ? `${w1Sub} • ${w1TeamName}` : w1TeamName;
 
-            if (document.getElementById("previewWin2Name")) document.getElementById("previewWin2Name").textContent = w2Name;
-            if (document.getElementById("previewWin2Sub")) document.getElementById("previewWin2Sub").innerHTML = `${w2Sub} &bull; <span>${w2TeamName}</span>`;
+            if (document.getElementById("previewWin2Name")) document.getElementById("previewWin2Name").textContent = w2Name || "-";
+            if (document.getElementById("previewWin2Sub")) document.getElementById("previewWin2Sub").textContent = w2Sub ? `${w2Sub} • ${w2TeamName}` : w2TeamName;
 
-            if (document.getElementById("previewWin3Name")) document.getElementById("previewWin3Name").textContent = w3Name;
-            if (document.getElementById("previewWin3Sub")) document.getElementById("previewWin3Sub").innerHTML = `${w3Sub} &bull; <span>${w3TeamName}</span>`;
-            if (document.getElementById("previewWin3Card")) document.getElementById("previewWin3Card").style.display = w3Name ? "flex" : "none";
+            if (document.getElementById("previewWin3Name")) document.getElementById("previewWin3Name").textContent = w3Name || "-";
+            if (document.getElementById("previewWin3Sub")) document.getElementById("previewWin3Sub").textContent = w3Sub ? `${w3Sub} • ${w3TeamName}` : w3TeamName;
+            
+            const w3Card = document.getElementById("previewWin3Card");
+            if (w3Card) {
+                w3Card.style.display = w3Name ? "flex" : "none";
+            }
+        }
+
+        function onWinnerStudentSelectTeam(rank) {
+            updatePosterPreview();
+        }
+
+        // Override onResultCategoryChange to ensure dynamic clean student selection
+        function onResultCategoryChange() {
+            const catSelect = document.getElementById("resCatSelect");
+            const progSelect = document.getElementById("resProgSelect");
+            if (!catSelect || !progSelect) return;
+            const catVal = catSelect.value || "Senior";
+            const cKey = normalizeCategoryKey(catVal);
+
+            const progs = normalizeProgramsData(appData.programs);
+            const catPrograms = progs[cKey] || { onStage: [], offStage: [], sports: [] };
+            const allProgs = [...(catPrograms.onStage || []), ...(catPrograms.offStage || []), ...(catPrograms.sports || [])];
+
+            progSelect.innerHTML = "<option value=''>-- പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക --</option>";
+            allProgs.forEach(p => {
+                const opt = document.createElement("option");
+                opt.value = p;
+                opt.textContent = p;
+                progSelect.appendChild(opt);
+            });
+
+            const teams = normalizeTeamsData(appData.teams);
+            const rosterKey = cKey === "general" ? "senior" : cKey;
+            const combined = [
+                ...(teams.teamA[rosterKey] || []).map(s => ({ name: s.replace(/(\(C\)|\(Vc\))/g, "").trim(), team: "teamA", label: `🔴 ${s} (ZELLIJ)` })),
+                ...(teams.teamB[rosterKey] || []).map(s => ({ name: s.replace(/(\(C\)|\(Vc\))/g, "").trim(), team: "teamB", label: `🔵 ${s} (IZNIK)` }))
+            ];
+
+            [1, 2, 3].forEach(rank => {
+                const sel = document.getElementById(`selWinner${rank}`);
+                if (sel) {
+                    sel.innerHTML = "<option value=''>-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>";
+                    combined.forEach(st => {
+                        const winOpt = document.createElement("option");
+                        winOpt.value = `${st.name}|${st.team}`;
+                        winOpt.textContent = st.label;
+                        sel.appendChild(winOpt);
+                    });
+                }
+            });
+            updatePosterPreview();
+        }
+
+        function onWinnerStudentSelect(rank) {
+            const sel = document.getElementById(`selWinner${rank}`);
+            if (!sel || !sel.value) return;
+            const [name, teamKey] = sel.value.split("|");
+            const nameInput = document.getElementById(`win${rank}Name`);
+            const teamSelect = document.getElementById(`win${rank}Team`);
+            if (nameInput) nameInput.value = name;
+            if (teamSelect) teamSelect.value = teamKey;
+            updatePosterPreview();
         }
     </script>
 </body>
