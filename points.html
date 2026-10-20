@@ -16,22 +16,22 @@
         .live-status-bar {
             background: #131c31;
             color: #ffffff;
-            padding: 5px 10px;
+            padding: 4px 10px;
             border-radius: 6px;
             border: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
-            font-size: 0.75rem;
+            margin-bottom: 4px;
+            font-size: 0.72rem;
         }
         .live-pulse-dot {
-            width: 7px;
-            height: 7px;
+            width: 6px;
+            height: 6px;
             background: #ef4444;
             border-radius: 50%;
             display: inline-block;
-            margin-right: 5px;
+            margin-right: 4px;
             animation: pulseLive 1.5s infinite;
         }
         @keyframes pulseLive {
@@ -43,11 +43,11 @@
             background: #fbbf24;
             color: #0f172a;
             border: none;
-            padding: 3px 8px;
+            padding: 2px 6px;
             border-radius: 4px;
             font-weight: 900;
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             cursor: pointer;
         }
 
@@ -55,32 +55,32 @@
         .broadcast-score-banner {
             display: grid;
             grid-template-columns: 1fr auto 1fr;
-            gap: 8px;
+            gap: 6px;
             align-items: center;
             background: var(--card-bg);
             color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 8px;
+            padding: 4px 10px;
+            border-radius: 6px;
             border: 1px solid var(--border-color);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
         .team-score-box {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 4px 8px;
-            border-radius: 6px;
+            padding: 3px 6px;
+            border-radius: 5px;
             background: var(--bg-color);
             border: 1px solid var(--border-color);
         }
-        .team-score-box.zellij-box { border-left: 4px solid #ef4444; }
-        .team-score-box.iznik-box { border-left: 4px solid #3b82f6; }
-        .team-badge-title { font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 900; }
-        .team-giant-pts { font-family: 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: 900; color: var(--accent-gold); }
+        .team-score-box.zellij-box { border-left: 3px solid #ef4444; }
+        .team-score-box.iznik-box { border-left: 3px solid #3b82f6; }
+        .team-badge-title { font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 900; }
+        .team-giant-pts { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 900; color: var(--accent-gold); }
         .vs-circle {
-            width: 26px; height: 26px; border-radius: 50%;
+            width: 22px; height: 22px; border-radius: 50%;
             background: var(--accent-gold); color: #0f172a;
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.7rem;
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.62rem;
             display: flex; align-items: center; justify-content: center;
         }
 
@@ -88,20 +88,20 @@
         .matrix-section-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 6px 8px;
-            margin-bottom: 8px;
+            border-radius: 6px;
+            padding: 5px 8px;
+            margin-bottom: 6px;
         }
         .matrix-section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 3px;
-            padding-bottom: 3px;
+            margin-bottom: 2px;
+            padding-bottom: 2px;
             border-bottom: 1px solid var(--border-color);
         }
         .matrix-section-title {
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 900;
             margin: 0;
             font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
@@ -109,24 +109,23 @@
         }
         .section-sub-score {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 900;
         }
 
-        /* Single Screen Fit Table Layout (No Horizontal Scroll needed for TV) */
+        /* Table Layout */
         .matrix-scroll-wrapper {
             width: 100%;
             overflow-x: hidden;
-            border-radius: 4px;
         }
         .score-matrix-table {
             border-collapse: separate;
             border-spacing: 0;
             width: 100%;
             background: var(--card-bg);
-            font-size: 0.65rem;
+            font-size: 0.6rem;
         }
         .score-matrix-table th,
         .score-matrix-table td {
@@ -142,34 +141,34 @@
             z-index: 5;
             background: var(--card-bg);
             border-right: 2px solid var(--accent-gold);
-            width: 75px;
-            min-width: 75px;
+            width: 70px;
+            min-width: 70px;
         }
         .score-matrix-table th.sticky-col {
             z-index: 6;
             background: var(--bg-color);
             font-family: 'Montserrat', sans-serif;
             font-weight: 900;
-            font-size: 0.6rem;
-            padding: 3px 1px;
+            font-size: 0.55rem;
+            padding: 2px 1px;
         }
         .score-matrix-table th.cat-group-banner {
-            background: rgba(245, 158, 11, 0.2);
+            background: rgba(245, 158, 11, 0.18);
             color: var(--accent-gold);
             font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
             font-weight: 900;
-            font-size: 0.68rem;
-            padding: 3px;
+            font-size: 0.62rem;
+            padding: 2px;
             text-align: center;
             border-right: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
         }
         .score-matrix-table th.prog-vert-header {
-            height: 75px;
-            padding: 3px 1px;
+            height: 68px;
+            padding: 2px 1px;
             writing-mode: vertical-rl;
             transform: rotate(180deg);
-            font-size: 0.6rem;
+            font-size: 0.56rem;
             font-weight: 700;
             line-height: 1;
             white-space: nowrap;
@@ -181,13 +180,13 @@
         }
         .score-matrix-table th.sec-total-header,
         .score-matrix-table th.sticky-right-col {
-            height: 75px;
-            width: 40px;
-            min-width: 40px;
-            padding: 3px 1px;
+            height: 68px;
+            width: 38px;
+            min-width: 38px;
+            padding: 2px 1px;
             writing-mode: vertical-rl;
             transform: rotate(180deg);
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 900;
             font-family: 'Montserrat', sans-serif;
         }
@@ -201,23 +200,23 @@
             background: #0f172a;
             color: #fbbf24;
             border-left: 2px solid var(--accent-gold);
-            width: 45px;
-            min-width: 45px;
+            width: 42px;
+            min-width: 42px;
         }
         .score-matrix-table th.sticky-right-col { z-index: 6; }
 
         .score-matrix-table td.team-name-cell {
             font-weight: 900;
-            font-size: 0.68rem;
-            padding: 4px 3px;
+            font-size: 0.62rem;
+            padding: 3px 2px;
             font-family: 'Montserrat', sans-serif;
             text-align: left;
             white-space: nowrap;
         }
         .score-matrix-table td.score-stack-cell {
             padding: 1px;
-            min-height: 36px;
-            height: 36px;
+            min-height: 32px;
+            height: 32px;
             vertical-align: middle;
         }
         .score-matrix-table td.score-stack-cell.admin-clickable { cursor: pointer; }
@@ -227,21 +226,21 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
         }
         .stacked-score-badge {
-            display: inline-block; min-width: 16px; padding: 1px 2px; border-radius: 2px;
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.6rem;
+            display: inline-block; min-width: 15px; padding: 1px 2px; border-radius: 2px;
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.55rem;
         }
         .badge-team-a { background: #ef4444; color: #ffffff; }
         .badge-team-b { background: #3b82f6; color: #ffffff; }
-        .empty-dash { color: var(--text-muted); opacity: 0.3; font-size: 0.55rem; }
+        .empty-dash { color: var(--text-muted); opacity: 0.3; font-size: 0.5rem; }
 
         .score-matrix-table td.sec-total-cell {
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.75rem; padding: 3px 1px; background: rgba(16, 185, 129, 0.06);
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.7rem; padding: 2px 1px; background: rgba(16, 185, 129, 0.06);
         }
         .score-matrix-table td.grand-total-cell {
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.82rem; padding: 3px 1px; background: #0f172a;
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.76rem; padding: 2px 1px; background: #0f172a;
         }
 
-        /* TV Fullscreen Mode Optimized */
+        /* TV Fullscreen Mode */
         body.tv-live-mode .top-nav-bar,
         body.tv-live-mode footer,
         body.tv-live-mode .admin-only {
@@ -252,7 +251,7 @@
             margin: 2px auto !important;
         }
         body.tv-live-mode .matrix-section-card {
-            padding: 4px;
+            padding: 3px 6px;
             margin-bottom: 4px;
         }
     </style>
@@ -322,7 +321,7 @@
             </div>
         </div>
 
-        <!-- Master Score Matrix Container (Arts & Sports 2 Main Boxes with Category Group Headers) -->
+        <!-- Master Score Matrix Container (3 Boxes: On-Stage, Off-Stage, Sports) -->
         <div id="masterScoreMatrixContainer"></div>
 
     </div>
@@ -360,7 +359,8 @@
 
             const progs = normalizeProgramsData(appData.programs);
             
-            let artsGroups = []; // Will store objects with category name and its programs
+            let onStageGroups = [];
+            let offStageGroups = [];
             let sportsGroups = [];
 
             const categoriesOrder = [
@@ -372,9 +372,12 @@
 
             categoriesOrder.forEach(cat => {
                 const cObj = progs[cat.key] || { onStage: [], offStage: [], sports: [] };
-                const catProgs = [...(cObj.onStage || []), ...(cObj.offStage || [])];
-                if (catProgs.length > 0) {
-                    artsGroups.push({ catLabel: cat.label, programs: catProgs, catKey: cat.key });
+                
+                if ((cObj.onStage || []).length > 0) {
+                    onStageGroups.push({ catLabel: cat.label, programs: cObj.onStage, catKey: cat.key });
+                }
+                if ((cObj.offStage || []).length > 0) {
+                    offStageGroups.push({ catLabel: cat.label, programs: cObj.offStage, catKey: cat.key });
                 }
                 if ((cObj.sports || []).length > 0) {
                     sportsGroups.push({ catLabel: cat.label, programs: cObj.sports, catKey: cat.key });
@@ -465,8 +468,9 @@
                 `;
             };
 
-            container.innerHTML = renderGroupedBoxTable("ARTS FESTIVAL (Stage & Off-Stage)", artsGroups) +
-                                  renderGroupedBoxTable("SPORTS FESTIVAL", sportsGroups);
+            container.innerHTML = renderGroupedBoxTable("ON-STAGE EVENTS (സ്റ്റേജ് മത്സരങ്ങൾ)", onStageGroups) +
+                                  renderGroupedBoxTable("OFF-STAGE EVENTS (ഓഫ്-സ്റ്റേജ് മത്സരങ്ങൾ)", offStageGroups) +
+                                  renderGroupedBoxTable("SPORTS EVENTS (സ്പോർട്സ് മത്സരങ്ങൾ)", sportsGroups);
         }
     </script>
 </body>
