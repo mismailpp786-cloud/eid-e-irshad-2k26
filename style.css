@@ -103,28 +103,61 @@ body { background-color: var(--bg-color); color: var(--text-color); font-family:
 .winner-input-box { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
 .winner-input-box h5 { margin: 0 0 8px; font-size: 0.85rem; font-weight: 800; color: var(--accent-gold); }
 
+/* --- REFERENCE STYLE POSTER CANVAS (1:1 Square) --- */
 .poster-preview-wrapper { display: flex; flex-direction: column; align-items: center; }
-#posterCanvas { width: 100%; max-width: 380px; min-height: 480px; border-radius: 16px; padding: 22px 18px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3); text-align: left; }
-#posterCanvas.theme-green { background: radial-gradient(circle at top right, #065f46 0%, #064e3b 60%, #022c22 100%); color: #ffffff; border: 3px solid #fbbf24; }
-#posterCanvas.theme-maroon { background: radial-gradient(circle at top right, #581c87 0%, #3b0764 60%, #1e1b4b 100%); color: #ffffff; border: 3px solid #fbbf24; }
-#posterCanvas.theme-navy { background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 60%, #020617 100%); color: #ffffff; border: 3px solid #fbbf24; }
-.poster-calligraphy-img { max-height: 38px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); }
-.poster-footer-brand { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; opacity: 0.75; border-top: 1px solid rgba(255, 255, 255, 0.15); padding-top: 6px; display: flex; justify-content: space-between; }
+#posterCanvas {
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 1 / 1;
+    border-radius: 16px;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    text-align: left;
+    border: 3px solid #fbbf24;
+}
 
-.layout-model-1 .l1-header { display: flex; justify-content: space-between; align-items: flex-start; }
-.layout-model-1 .l1-res-box { display: flex; align-items: baseline; gap: 4px; }
-.layout-model-1 .l1-res-tag { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; font-weight: 800; opacity: 0.8; }
-.layout-model-1 .l1-res-num { font-family: 'Montserrat', sans-serif; font-size: 2rem; font-weight: 900; color: #fbbf24; line-height: 1; }
-.layout-model-1 .l1-prog-sec { margin: 8px 0; }
-.layout-model-1 .l1-cat-badge { display: inline-block; background: #fbbf24; color: #0f172a; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.72rem; padding: 3px 10px; border-radius: 6px; margin-bottom: 4px; }
-.layout-model-1 .l1-prog-title { font-family: 'Anek Malayalam', 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: 900; line-height: 1.2; }
-.layout-model-1 .l1-winners-box { background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 12px; margin: 6px 0; }
-.layout-model-1 .l1-win-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
-.layout-model-1 .l1-win-row:last-child { border-bottom: none; }
-.layout-model-1 .l1-rank-circle { width: 26px; height: 26px; background: #fbbf24; color: #0f172a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.8rem; flex-shrink: 0; }
-.layout-model-1 .l1-win-info { flex: 1; }
-.layout-model-1 .l1-win-name { font-weight: 800; font-size: 0.9rem; line-height: 1.2; }
-.layout-model-1 .l1-win-team { font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 700; color: #fbbf24; }
+/* Layout Model 1: Green Reference Style */
+#posterCanvas.layout-model-1 {
+    background: radial-gradient(circle at top right, #065f46 0%, #064e3b 60%, #022c22 100%);
+    color: #ffffff;
+}
+/* Layout Model 2: Maroon Reference Style */
+#posterCanvas.layout-model-2 {
+    background: radial-gradient(circle at top right, #581c87 0%, #3b0764 60%, #1e1b4b 100%);
+    color: #ffffff;
+}
+/* Layout Model 3: Brown / Warm Reference Style */
+#posterCanvas.layout-model-3 {
+    background: radial-gradient(circle at top right, #78350f 0%, #451a03 60%, #1c0f03 100%);
+    color: #ffffff;
+}
+
+.ref-top-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 8px; }
+.ref-brand-txt { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.85rem; color: #fbbf24; letter-spacing: 0.5px; }
+.ref-sub-brand { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.58rem; opacity: 0.75; text-align: right; }
+
+.ref-center-banner { display: flex; align-items: center; gap: 14px; margin: 10px 0; }
+.ref-result-num-box { background: rgba(0,0,0,0.3); border: 2px solid rgba(251,191,36,0.5); padding: 6px 12px; border-radius: 10px; text-align: center; flex-shrink: 0; }
+.ref-result-hash { display: block; font-family: 'Montserrat', sans-serif; font-size: 0.55rem; font-weight: 800; opacity: 0.8; letter-spacing: 1px; color: #fbbf24; }
+.ref-result-digits { font-family: 'Montserrat', sans-serif; font-size: 1.8rem; font-weight: 900; color: #ffffff; line-height: 1; }
+
+.ref-prog-meta { flex: 1; }
+.ref-cat-title { font-family: 'Montserrat', sans-serif; font-size: 0.65rem; font-weight: 900; background: #fbbf24; color: #0f172a; display: inline-block; padding: 2px 8px; border-radius: 4px; margin-bottom: 3px; }
+.ref-prog-title { font-family: 'Anek Malayalam', 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 900; line-height: 1.2; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+
+.ref-winners-container { display: flex; flex-direction: column; gap: 8px; margin: 8px 0; }
+.ref-win-card { background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 8px 12px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+.ref-rank-badge { width: 24px; height: 24px; background: #fbbf24; color: #0f172a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.75rem; flex-shrink: 0; }
+.ref-win-details { flex: 1; }
+.ref-win-name { font-family: 'Montserrat', 'Anek Malayalam', sans-serif; font-weight: 900; font-size: 0.92rem; line-height: 1.2; color: #ffffff; }
+.ref-win-sub { font-family: 'Montserrat', 'Anek Malayalam', sans-serif; font-size: 0.68rem; font-weight: 700; color: #fbbf24; opacity: 0.9; }
+
+.ref-footer-bar { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; opacity: 0.75; border-top: 1px solid rgba(255, 255, 255, 0.15); padding-top: 6px; display: flex; justify-content: space-between; }
 
 .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
 .result-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; box-shadow: var(--shadow-md); }
