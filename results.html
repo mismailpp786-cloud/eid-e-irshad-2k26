@@ -75,7 +75,7 @@
         .ref-rank-badge { width: 22px; height: 22px; background: #fbbf24; color: #0f172a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.7rem; flex-shrink: 0; }
         .ref-win-details { flex: 1; }
         .ref-win-name { font-family: 'Montserrat', 'Anek Malayalam', sans-serif; font-weight: 900; font-size: 0.88rem; line-height: 1.2; }
-        .ref-win-sub { font-family: 'Montserrat', 'Anek Malayalam', sans-serif; font-size: 0.64rem; font-weight: 700; opacity: 0.9; color: #fbbf24; }
+        .ref-win-sub { font-family: 'Montserrat', sans-serif; font-size: 0.64rem; font-weight: 700; opacity: 0.9; color: #fbbf24; }
 
         .ref-footer-bar { font-family: 'Montserrat', sans-serif; font-size: 0.58rem; opacity: 0.8; border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 5px; display: flex; justify-content: space-between; }
     </style>
@@ -426,6 +426,19 @@
                 return;
             }
 
+            // Check if same program result already exists (prevent duplicates unless editing)
+            const existingList = appData.results || [];
+            const isDuplicate = existingList.some(r => {
+                if (editingId && r.id === editingId) return false;
+                return normalizeCategoryKey(r.category) === normalizeCategoryKey(category) && 
+                       String(r.program).trim().toLowerCase() === String(prog).trim().toLowerCase();
+            });
+
+            if (isDuplicate) {
+                alert("ഈ മത്സരത്തിന്റെ ഫലം ഇതിനകം പ്രസിദ്ധീകരിച്ചിട്ടുണ്ട്! വീണ്ടും പ്രസിദ്ധീകരിക്കാൻ കഴിയില്ല.");
+                return;
+            }
+
             const newResult = {
                 id: editingId ? editingId : ("res_" + Date.now()),
                 resNo,
@@ -480,6 +493,21 @@
             updatePosterPreview();
             window.scrollTo({ top: 0, behavior: 'smooth' });
             alert("ഫലം എഡിറ്റിംഗിനായി ലോഡ് ചെയ്തു. മാറ്റങ്ങൾ വരുത്തി വീണ്ടും 'സൈറ്റിൽ പ്രസിദ്ധീകരിക്കുക' ക്ലിക്ക് ചെയ്യുക.");
+        }
+
+        function deleteResult(resultId) {
+            if (!isAdmin) {
+                alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!");
+                return;
+            }
+            if (confirm("ഈ ഫലം നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?")) {
+                let clonedData = JSON.parse(JSON.stringify(appData));
+                clonedData.results = clonedData.results.filter(r => r.id !== resultId);
+                saveAppData(false, clonedData, () => {
+                    alert("ഫലം വിജയകരമായി നീക്കം ചെയ്തു!");
+                    renderPublishedResults();
+                });
+            }
         }
 
         function renderPublishedResults() {
