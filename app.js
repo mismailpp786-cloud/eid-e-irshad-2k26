@@ -232,7 +232,7 @@ function startAutoRefreshCycle() {
         }
         const timerEl = document.getElementById("autoRefreshTimerText");
         if (timerEl) {
-            timerEl.textContent = `🔄 Sync in: ${autoRefreshCountdown}s`;
+            timerEl.textContent = `🔄 ${autoRefreshCountdown}s`;
         }
     }, 1000);
 
@@ -251,7 +251,7 @@ function toggleTvFullscreenMode() {
     const isTv = document.body.classList.contains("tv-live-mode");
     const btn = document.getElementById("tvModeBtn");
     if (btn) {
-        btn.textContent = isTv ? "❌ Exit TV Mode" : "📺 Fullscreen TV Mode";
+        btn.textContent = isTv ? "❌ Exit" : "📺 Fullscreen TV Mode";
     }
     if (isTv && document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen().catch(() => {});
@@ -600,35 +600,10 @@ function updateLiveScoreboard() {
     computedCategoryTotals = catScores;
     computedGrandTotals = totals;
 
-    if (document.getElementById("ptsA")) document.getElementById("ptsA").textContent = totals.teamA;
-    if (document.getElementById("ptsB")) document.getElementById("ptsB").textContent = totals.teamB;
-    const grand = totals.teamA + totals.teamB;
-    if (document.getElementById("barA")) document.getElementById("barA").style.width = (grand > 0 ? (totals.teamA / grand) * 100 : 50) + "%";
-    if (document.getElementById("barB")) document.getElementById("barB").style.width = (grand > 0 ? (totals.teamB / grand) * 100 : 50) + "%";
-
     if (document.getElementById("bigPtsA")) document.getElementById("bigPtsA").textContent = totals.teamA;
     if (document.getElementById("bigPtsB")) document.getElementById("bigPtsB").textContent = totals.teamB;
-    if (document.getElementById("medalsA")) document.getElementById("medalsA").textContent = `🥇 ${medals.teamA.first}   🥈 ${medals.teamA.second}   🥉 ${medals.teamA.third}`;
-    if (document.getElementById("medalsB")) document.getElementById("medalsB").textContent = `🥇 ${medals.teamB.first}   🥈 ${medals.teamB.second}   🥉 ${medals.teamB.third}`;
-
-    const summaryStrip = document.getElementById("categorySummaryStrip");
-    if (summaryStrip) {
-        const catMeta = [
-            { key: "senior", label: "🎓 SENIOR TOTAL" },
-            { key: "junior", label: "📘 JUNIOR TOTAL" },
-            { key: "subjunior", label: "🌱 SUB JUNIOR TOTAL" },
-            { key: "general", label: "🌟 GENERAL TOTAL" }
-        ];
-        summaryStrip.innerHTML = catMeta.map(cm => `
-            <div class="cat-summary-box">
-                <h4><span>${cm.label}</span></h4>
-                <div class="cat-summary-scores">
-                    <span style="color:#ef4444;">🔴 ZELLIJ: ${catScores[cm.key].teamA}</span>
-                    <span style="color:#3b82f6;">🔵 IZNIK: ${catScores[cm.key].teamB}</span>
-                </div>
-            </div>
-        `).join("");
-    }
+    if (document.getElementById("medalsA")) document.getElementById("medalsA").textContent = `🥇${medals.teamA.first} 🥈${medals.teamA.second} 🥉${medals.teamA.third}`;
+    if (document.getElementById("medalsB")) document.getElementById("medalsB").textContent = `🥇${medals.teamB.first} 🥈${medals.teamB.second} 🥉${medals.teamB.third}`;
 
     const presetSel = document.getElementById("pointPresetSelect");
     if (presetSel) presetSel.value = appData.pointPreset || "5-3-1";
@@ -658,9 +633,9 @@ function renderMasterScoreMatrix() {
     ];
 
     const subSections = [
-        { key: "onStage", short: "ON-STAGE", label: "ON-STAGE (സ്റ്റേജ് മത്സരങ്ങൾ)" },
-        { key: "offStage", short: "OFF-STAGE", label: "OFF-STAGE (ഓഫ്-സ്റ്റേജ് മത്സരങ്ങൾ)" },
-        { key: "sports", short: "SPORTS", label: "SPORTS (സ്പോർട്സ് മത്സരങ്ങൾ)" }
+        { key: "onStage", short: "ON-STAGE", label: "ON-STAGE" },
+        { key: "offStage", short: "OFF-STAGE", label: "OFF-STAGE" },
+        { key: "sports", short: "SPORTS", label: "SPORTS" }
     ];
 
     let fullHtml = "";
@@ -702,12 +677,10 @@ function renderMasterScoreMatrix() {
                 const safeProg = pName.replace(/'/g, "\\'");
                 const clickAttr = isAdmin ? `onclick="openCellScoreModal('${safeCat}', '${safeProg}')"` : "";
                 const clickClass = isAdmin ? "admin-clickable" : "";
-                const activeClassA = cellData.teamA.length > 0 ? "has-score-a" : "";
-                const activeClassB = cellData.teamB.length > 0 ? "has-score-b" : "";
 
-                headerColsHtml += `<th class="prog-vert-header" title="${pName}">${pName}${isGrp ? ' <span class="group-tag-dot" title="Group Event (10, 6, 3)"></span>' : ''}</th>`;
-                rowACellsHtml += `<td class="score-stack-cell ${activeClassA} ${clickClass}" ${clickAttr}>${stackAHtml}</td>`;
-                rowBCellsHtml += `<td class="score-stack-cell ${activeClassB} ${clickClass}" ${clickAttr}>${stackBHtml}</td>`;
+                headerColsHtml += `<th class="prog-vert-header" title="${pName}">${pName}${isGrp ? ' <span class="group-tag-dot" title="Group Event"></span>' : ''}</th>`;
+                rowACellsHtml += `<td class="score-stack-cell ${clickClass}" ${clickAttr}>${stackAHtml}</td>`;
+                rowBCellsHtml += `<td class="score-stack-cell ${clickClass}" ${clickAttr}>${stackBHtml}</td>`;
             });
 
             fullHtml += `
@@ -715,32 +688,31 @@ function renderMasterScoreMatrix() {
                     <div class="matrix-section-header">
                         <h3 class="matrix-section-title">${cat.icon} ${cat.title} — ${sub.label}</h3>
                         <div class="section-sub-score">
-                            <span class="sub-pill-a">🔴 ${sub.short}: ${secTotalA}</span>
-                            <span class="sub-pill-b">🔵 ${sub.short}: ${secTotalB}</span>
-                            <span class="sub-pill-cat">🏆 ${cat.title} TOTAL — 🔴 ${catFullA} | 🔵 ${catFullB}</span>
+                            <span class="sub-pill-a">🔴 ${secTotalA}</span>
+                            <span class="sub-pill-b">🔵 ${secTotalB}</span>
                         </div>
                     </div>
                     <div class="matrix-scroll-wrapper">
                         <table class="score-matrix-table">
                             <thead>
                                 <tr>
-                                    <th class="sticky-col">${cat.title}<br><span style="font-size:0.65rem; color:var(--accent-gold);">${sub.short}</span></th>
+                                    <th class="sticky-col">${cat.title}<br><span style="font-size:0.58rem; color:var(--accent-gold);">${sub.short}</span></th>
                                     ${headerColsHtml}
-                                    <th class="sec-total-header">${sub.short} TOTAL</th>
-                                    <th class="cat-total-header">${cat.title} FULL SCORE</th>
-                                    <th class="sticky-right-col">GRAND TOTAL</th>
+                                    <th class="sec-total-header">TOTAL</th>
+                                    <th class="cat-total-header">${cat.title}</th>
+                                    <th class="sticky-right-col">GRAND</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="sticky-col team-name-cell" style="color:#ef4444;">🔴 Team A<br><span style="font-size:0.68rem; color:var(--text-muted);">ZELLIJ</span></td>
+                                    <td class="sticky-col team-name-cell" style="color:#ef4444;">🔴 ZELLIJ</td>
                                     ${rowACellsHtml}
                                     <td class="sec-total-cell" style="color:#10b981;">${secTotalA}</td>
                                     <td class="cat-total-cell" style="color:#ef4444;">${catFullA}</td>
                                     <td class="sticky-right-col grand-total-cell" style="color:#f87171;">${computedGrandTotals.teamA}</td>
                                 </tr>
                                 <tr>
-                                    <td class="sticky-col team-name-cell" style="color:#3b82f6;">🔵 Team B<br><span style="font-size:0.68rem; color:var(--text-muted);">IZNIK</span></td>
+                                    <td class="sticky-col team-name-cell" style="color:#3b82f6;">🔵 IZNIK</td>
                                     ${rowBCellsHtml}
                                     <td class="sec-total-cell" style="color:#10b981;">${secTotalB}</td>
                                     <td class="cat-total-cell" style="color:#3b82f6;">${catFullB}</td>
@@ -832,357 +804,6 @@ function saveManualScoreFromUI() {
     cloned.manualScoreOverride = { enabled, teamA: ptsA, teamB: ptsB };
     saveAppData(false, cloned, () => {
         alert("പോയിന്റുകൾ സേവ് ചെയ്തു!");
-    });
-}
-
-function resetProgramsToDefault() {
-    if (!isAdmin) {
-        alert("അഡ്മിൻ ലോഗിൻ ചെയ്യുക!");
-        return;
-    }
-    let cloned = JSON.parse(JSON.stringify(appData));
-    cloned.programs = JSON.parse(JSON.stringify(defaultData.programs));
-    saveAppData(false, cloned, () => {
-        alert("പ്രോഗ്രാം ലിസ്റ്റ് പുനഃസ്ഥാപിച്ചു!");
-    });
-}
-
-function updatePollUI() {
-    const zEl = document.getElementById("voteZellijCount");
-    const iEl = document.getElementById("voteIznikCount");
-    if (zEl) zEl.textContent = ((appData.poll && appData.poll.zellij) || 0) + " votes";
-    if (iEl) iEl.textContent = ((appData.poll && appData.poll.iznik) || 0) + " votes";
-}
-
-function votePoll(team) {
-    if (localStorage.getItem("eid_has_voted")) {
-        if (document.getElementById("pollMsg")) document.getElementById("pollMsg").textContent = "നിങ്ങൾ ഇതിനകം വോട്ട് രേഖപ്പെടുത്തിയിട്ടുണ്ട്!";
-        return;
-    }
-    if (!appData.poll) appData.poll = { zellij: 12, iznik: 15 };
-    if (team === "zellij") appData.poll.zellij = (appData.poll.zellij || 0) + 1;
-    if (team === "iznik") appData.poll.iznik = (appData.poll.iznik || 0) + 1;
-
-    localStorage.setItem("eid_has_voted", "true");
-    saveAppData(true, appData);
-    if (document.getElementById("pollMsg")) {
-        document.getElementById("pollMsg").textContent = "നന്ദി! വോട്ട് വിജയകരമായി രേഖപ്പെടുത്തി.";
-        if (typeof confetti === "function") confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
-    }
-}
-
-function handleGlobalSearch(event, query) {
-    const dropdown = document.getElementById("searchResultsDropdown");
-    if (!dropdown) return;
-    const q = (query || "").trim().toLowerCase();
-    if (!q) {
-        dropdown.style.display = "none";
-        return;
-    }
-
-    let matches = [];
-    Object.keys(appData.programs || {}).forEach(cat => {
-        const cData = appData.programs[cat];
-        [...(cData.onStage || []), ...(cData.offStage || []), ...(cData.sports || [])].forEach(p => {
-            if (String(p).toLowerCase().includes(q)) {
-                matches.push({ text: `📋 ${p} (${cat.toUpperCase()})`, link: "programs.html" });
-            }
-        });
-    });
-
-    ["teamA", "teamB"].forEach(tKey => {
-        const t = appData.teams[tKey];
-        if (!t) return;
-        ["senior", "junior", "subjunior"].forEach(sec => {
-            (t[sec] || []).forEach(member => {
-                if (String(member).toLowerCase().includes(q)) {
-                    matches.push({ text: `👤 ${member} — ${t.name}`, link: "teams.html" });
-                }
-            });
-        });
-    });
-
-    dropdown.innerHTML = "";
-    if (matches.length === 0) {
-        dropdown.innerHTML = "<div class='search-result-item'>ഫലങ്ങളൊന്നും കണ്ടെത്തിയില്ല</div>";
-    } else {
-        matches.slice(0, 8).forEach(m => {
-            const div = document.createElement("div");
-            div.className = "search-result-item";
-            div.textContent = m.text;
-            div.onclick = () => { location.href = m.link; };
-            dropdown.appendChild(div);
-        });
-    }
-    dropdown.style.display = "block";
-}
-
-function switchProgramTab(catKey) {
-    currentProgramCat = catKey;
-    const progs = normalizeProgramsData(appData.programs);
-    const catData = progs[catKey] || defaultData.programs[catKey] || { onStage: [], offStage: [], sports: [] };
-
-    ["senior", "junior", "subjunior", "general"].forEach(k => {
-        const btn = document.getElementById("tabBtn_" + k);
-        if (btn) {
-            if (k === catKey) {
-                btn.style.background = "var(--accent-gold)";
-                btn.style.color = "#0f172a";
-            } else {
-                btn.style.background = "var(--card-bg)";
-                btn.style.color = "var(--text-color)";
-            }
-        }
-    });
-
-    const fillList = (elementId, items) => {
-        const el = document.getElementById(elementId);
-        if (!el) return;
-        el.innerHTML = "";
-        if (!items || items.length === 0) {
-            el.innerHTML = "<li style='color:var(--text-muted); font-weight:normal;'>ഈ വിഭാഗത്തിൽ മത്സരങ്ങൾ ഇല്ല</li>";
-            return;
-        }
-        items.forEach(item => {
-            const li = document.createElement("li");
-            li.textContent = item;
-            el.appendChild(li);
-        });
-    };
-
-    fillList("listOnStage", catData.onStage);
-    fillList("listOffStage", catData.offStage);
-    fillList("listSports", catData.sports);
-}
-
-function renderTeamsRoster() {
-    if (!appData || !appData.teams) return;
-    const teams = normalizeTeamsData(appData.teams);
-    const renderTeamBox = (teamKey, containerId) => {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-        const team = teams[teamKey];
-        if (!team) return;
-
-        let html = `<p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Short Name: <strong>${team.shortName}</strong></p>`;
-        const sections = [
-            { key: "senior", label: "Senior Roster" },
-            { key: "junior", label: "Junior Roster" },
-            { key: "subjunior", label: "Sub Junior Roster" }
-        ];
-        sections.forEach(sec => {
-            const members = team[sec.key] || [];
-            if (members.length > 0) {
-                html += `<div style="margin-bottom:12px;">
-                    <h4 style="margin:0 0 5px; font-size:0.9rem; color:var(--accent-gold);">${sec.label}</h4>
-                    <div style="display:flex; flex-wrap:wrap; gap:6px;">`;
-                members.forEach(m => {
-                    html += `<span style="background:var(--bg-color); border:1px solid var(--border-color); padding:4px 10px; border-radius:6px; font-size:0.8rem; font-weight:700;">${m}</span>`;
-                });
-                html += `</div></div>`;
-            }
-        });
-        container.innerHTML = html;
-    };
-    renderTeamBox("teamA", "zellijRosterContent");
-    renderTeamBox("teamB", "iznikRosterContent");
-}
-
-function initPosterBuilder(isBackgroundSync = false) {
-    const catSelect = document.getElementById("resCatSelect");
-    const progSelect = document.getElementById("resProgSelect");
-    if (!catSelect || !progSelect) return;
-    if (isBackgroundSync && isPosterBuilderInitialized) return;
-    onResultCategoryChange();
-    isPosterBuilderInitialized = true;
-}
-
-function onResultCategoryChange() {
-    const catSelect = document.getElementById("resCatSelect");
-    const progSelect = document.getElementById("resProgSelect");
-    if (!catSelect || !progSelect) return;
-    const catVal = catSelect.value || "Senior";
-    const cKey = normalizeCategoryKey(catVal);
-
-    const progs = normalizeProgramsData(appData.programs);
-    const catPrograms = progs[cKey] || { onStage: [], offStage: [], sports: [] };
-    const allProgs = [...(catPrograms.onStage || []), ...(catPrograms.offStage || []), ...(catPrograms.sports || [])];
-
-    progSelect.innerHTML = "<option value=''>-- പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക --</option>";
-    allProgs.forEach(p => {
-        const opt = document.createElement("option");
-        opt.value = p;
-        opt.textContent = p;
-        progSelect.appendChild(opt);
-    });
-
-    const teams = normalizeTeamsData(appData.teams);
-    const rosterKey = cKey === "general" ? "senior" : cKey;
-    const combined = [
-        ...(teams.teamA[rosterKey] || []).map(s => ({ name: s.replace(/(\(C\)|\(Vc\))/g, "").trim(), team: "teamA", label: `🔴 ${s} (ZELLIJ)` })),
-        ...(teams.teamB[rosterKey] || []).map(s => ({ name: s.replace(/(\(C\)|\(Vc\))/g, "").trim(), team: "teamB", label: `🔵 ${s} (IZNIK)` }))
-    ];
-
-    [1, 2, 3].forEach(rank => {
-        const sel = document.getElementById(`selWinner${rank}`);
-        if (sel) {
-            sel.innerHTML = "<option value=''>-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>";
-            combined.forEach(st => {
-                const winOpt = document.createElement("option");
-                winOpt.value = `${st.name}|${st.team}`;
-                winOpt.textContent = st.label;
-                sel.appendChild(winOpt);
-            });
-        }
-    });
-    updatePosterPreview();
-}
-
-function onWinnerStudentSelect(rank) {
-    const sel = document.getElementById(`selWinner${rank}`);
-    if (!sel || !sel.value) return;
-    const [name, teamKey] = sel.value.split("|");
-    if (document.getElementById(`win${rank}Name`)) document.getElementById(`win${rank}Name`).value = name;
-    if (document.getElementById(`win${rank}Team`)) document.getElementById(`win${rank}Team`).value = teamKey;
-    updatePosterPreview();
-}
-
-function setPosterTheme(themeClass) {
-    currentPosterTheme = themeClass;
-    const canvas = document.getElementById("posterCanvas");
-    if (canvas) canvas.className = `${currentPosterLayout} ${currentPosterTheme}`;
-}
-
-function setPosterLayout(layoutClass) {
-    currentPosterLayout = layoutClass;
-    const canvas = document.getElementById("posterCanvas");
-    if (canvas) {
-        canvas.className = `${currentPosterLayout} ${currentPosterTheme}`;
-        if (document.getElementById("layoutModel1Container")) document.getElementById("layoutModel1Container").style.display = (layoutClass === "layout-model-1") ? "block" : "none";
-        if (document.getElementById("layoutModel2Container")) document.getElementById("layoutModel2Container").style.display = (layoutClass === "layout-model-2") ? "block" : "none";
-        if (document.getElementById("layoutModel3Container")) document.getElementById("layoutModel3Container").style.display = (layoutClass === "layout-model-3") ? "block" : "none";
-    }
-    updatePosterPreview();
-}
-
-function updatePosterPreview() {
-    const resNo = (document.getElementById("resNoInput")?.value || "01").trim();
-    const cat = document.getElementById("resCatSelect")?.value || "SENIOR";
-    const progDrop = document.getElementById("resProgSelect")?.value || "";
-    const progCustom = (document.getElementById("resProgCustom")?.value || "").trim();
-    const progName = progCustom || progDrop || "മത്സരത്തിന്റെ പേര്";
-
-    const w1Name = (document.getElementById("win1Name")?.value || "Winner 1").trim();
-    const w1Team = formatTeamDisplayName(document.getElementById("win1Team")?.value || "teamA");
-    const w2Name = (document.getElementById("win2Name")?.value || "Winner 2").trim();
-    const w2Team = formatTeamDisplayName(document.getElementById("win2Team")?.value || "teamB");
-    const w3Name = (document.getElementById("win3Name")?.value || "").trim();
-    const w3Team = formatTeamDisplayName(document.getElementById("win3Team")?.value || "teamA");
-
-    ["previewResNo", "previewResNo2", "previewResNo3"].forEach(id => { if (document.getElementById(id)) document.getElementById(id).textContent = String(resNo).padStart(2, "0"); });
-    ["previewCat", "previewCat2", "previewCat3"].forEach(id => { if (document.getElementById(id)) document.getElementById(id).textContent = cat.toUpperCase(); });
-    ["previewProg", "previewProg2", "previewProg3"].forEach(id => { if (document.getElementById(id)) document.getElementById(id).textContent = progName.toUpperCase(); });
-
-    if (document.getElementById("previewWin1Name")) document.getElementById("previewWin1Name").textContent = w1Name;
-    if (document.getElementById("previewWin1Team")) document.getElementById("previewWin1Team").textContent = w1Team;
-    if (document.getElementById("previewWin2Name")) document.getElementById("previewWin2Name").textContent = w2Name;
-    if (document.getElementById("previewWin2Team")) document.getElementById("previewWin2Team").textContent = w2Team;
-    if (document.getElementById("previewWin3Name")) document.getElementById("previewWin3Name").textContent = w3Name;
-    if (document.getElementById("previewWin3Team")) document.getElementById("previewWin3Team").textContent = w3Team;
-    if (document.getElementById("previewWin3Card")) document.getElementById("previewWin3Card").style.display = w3Name ? "flex" : "none";
-}
-
-function downloadResultPoster() {
-    const canvasEl = document.getElementById("posterCanvas");
-    if (!canvasEl || typeof html2canvas === "undefined") {
-        alert("ഡൗൺലോഡ് ടൂൾ ലഭ്യമായില്ല!");
-        return;
-    }
-    const resNo = (document.getElementById("resNoInput")?.value || "01").trim();
-    html2canvas(canvasEl, { scale: 3, useCORS: true, backgroundColor: null })
-        .then(canvas => {
-            const link = document.createElement("a");
-            link.download = `EID-E-IRSHAD-Result-${resNo}.png`;
-            link.href = canvas.toDataURL("image/png");
-            link.click();
-        });
-}
-
-function publishResultToSite() {
-    if (!isAdmin) { alert("അഡ്മിൻ ലോഗിൻ ചെയ്യുക!"); return; }
-    const resNo = (document.getElementById("resNoInput")?.value || "01").trim();
-    const category = document.getElementById("resCatSelect")?.value || "Senior";
-    const prog = (document.getElementById("resProgCustom")?.value || document.getElementById("resProgSelect")?.value || "").trim();
-    const w1Name = (document.getElementById("win1Name")?.value || "").trim();
-    const w2Name = (document.getElementById("win2Name")?.value || "").trim();
-    const w3Name = (document.getElementById("win3Name")?.value || "").trim();
-
-    if (!prog || !w1Name) {
-        alert("പ്രോഗ്രാമിന്റെ പേരും ഒന്നാം സ്ഥാനക്കാരന്റെ പേരും നൽകണം!");
-        return;
-    }
-
-    const newResult = {
-        id: "res_" + Date.now(),
-        resNo,
-        category,
-        program: prog,
-        win1Name: w1Name, win1Team: document.getElementById("win1Team")?.value || "teamA",
-        win2Name: w2Name, win2Team: document.getElementById("win2Team")?.value || "teamB",
-        win3Name: w3Name, win3Team: document.getElementById("win3Team")?.value || "teamA",
-        timestamp: Date.now()
-    };
-
-    let clonedData = JSON.parse(JSON.stringify(appData));
-    clonedData.results.unshift(newResult);
-
-    const cKey = buildCellKey(normalizeCategoryKey(category), prog);
-    if (clonedData.matrixScores && clonedData.matrixScores[cKey]) {
-        delete clonedData.matrixScores[cKey];
-    }
-
-    saveAppData(false, clonedData, (success) => {
-        alert("ഫലം പ്രസിദ്ധീകരിച്ചു! നിയമപ്രകാരമുള്ള പോയിന്റ് സ്കോർബോർഡിൽ തനിയെ ആഡ് ആയിട്ടുണ്ട്.");
-        if (success && typeof confetti === "function") {
-            confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
-        }
-    });
-}
-
-function deleteResult(resultId) {
-    if (!isAdmin) return;
-    if (confirm("ഈ ഫലം നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?")) {
-        let clonedData = JSON.parse(JSON.stringify(appData));
-        clonedData.results = clonedData.results.filter(r => r.id !== resultId);
-        saveAppData(false, clonedData);
-    }
-}
-
-function renderPublishedResults() {
-    const container = document.getElementById("publishedResultsContainer");
-    if (!container) return;
-    const list = appData.results || [];
-    if (list.length === 0) {
-        container.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding:30px; color:var(--text-muted);'>ഇതുവരെ ഫലങ്ങളൊന്നും പ്രസിദ്ധീകരിച്ചിട്ടില്ല.</div>";
-        return;
-    }
-    container.innerHTML = "";
-    list.forEach((res, idx) => {
-        const card = document.createElement("div");
-        card.className = "result-card";
-        card.innerHTML = `
-            <div class="result-card-head">
-                <div>
-                    <span style="font-size:0.75rem; background:#fbbf24; color:#0f172a; padding:2px 8px; border-radius:4px; font-weight:800;">RESULT #${res.resNo || (idx + 1)} • ${res.category || ''}</span>
-                    <h3 style="margin:6px 0 0; font-size:1.05rem;">${res.program}</h3>
-                </div>
-                ${isAdmin ? `<button class="btn-action-sm" onclick="deleteResult('${res.id}')">🗑️</button>` : ""}
-            </div>
-            ${res.win1Name ? `<div class="winner-row"><span>🥇 ${res.win1Name}</span><span class="${resolveTeamKey(res.win1Team) === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(res.win1Team)}</span></div>` : ""}
-            ${res.win2Name ? `<div class="winner-row"><span>🥈 ${res.win2Name}</span><span class="${resolveTeamKey(res.win2Team) === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(res.win2Team)}</span></div>` : ""}
-            ${res.win3Name ? `<div class="winner-row"><span>🥉 ${res.win3Name}</span><span class="${resolveTeamKey(res.win3Team) === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(res.win3Team)}</span></div>` : ""}
-        `;
-        container.appendChild(card);
     });
 }
 
