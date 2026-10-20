@@ -15,7 +15,6 @@
 
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Unique Reference Poster Styles for Model 1, 2, and 3 */
         #posterCanvas {
             width: 100%;
             max-width: 420px;
@@ -103,7 +102,7 @@
 
     <div class="container" style="max-width: 1050px; margin: 25px auto;">
         <h1 class="page-title">രഫറൻസ് മോഡൽ പോസ്റ്റർ മേക്കർ</h1>
-        <p class="page-subtitle">ഓട്ടോമാറ്റിക് റിസൾട്ട് നമ്പറും പ്രോഗ്രാം ലിസ്റ്റിൽ നിന്നും എളുപ്പത്തിൽ പോസ്റ്റർ നിർമ്മിക്കാം</p>
+        <p class="page-subtitle">കാറ്റഗറിയും സെക്ഷനും (On-Stage/Off-Stage) തിരഞ്ഞെടുത്ത് എളുപ്പത്തിൽ പോസ്റ്റർ നിർമ്മിക്കാം</p>
 
         <div class="builder-section admin-only" data-display="block">
             <h3 style="margin: 0 0 15px; font-family:'Montserrat',sans-serif; font-size:1.15rem; font-weight:900; color:var(--accent-gold);">
@@ -136,9 +135,19 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>സബ് ടൈറ്റിൽ (ഉദാ: SENIOR - ON STAGE):</label>
-                        <input type="text" id="resSubTitleInput" class="form-control" value="SENIOR - ON STAGE" oninput="updatePosterPreview()">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                        <div class="form-group">
+                            <label>Section:</label>
+                            <select id="resSectionSelect" class="form-control" onchange="onResultCategoryChange(); updatePosterPreview();">
+                                <option value="onStage">On-Stage</option>
+                                <option value="offStage">Off-Stage</option>
+                                <option value="sports">Sports</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>സബ് ടൈറ്റിൽ (Subtitle):</label>
+                            <input type="text" id="resSubTitleInput" class="form-control" value="SENIOR - ON STAGE" oninput="updatePosterPreview()">
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -161,12 +170,12 @@
                         </select>
                         <div style="display:grid; grid-template-columns: 1fr 130px; gap:8px; margin-bottom:6px;">
                             <input type="text" id="win1Name" class="form-control" placeholder="വിദ്യാർത്ഥിയുടെ പേര്" oninput="updatePosterPreview()">
-                            <select id="win1Team" class="form-control" onchange="onWinnerStudentSelectTeam(1)">
+                            <select id="win1Team" class="form-control" onchange="updatePosterPreview()">
                                 <option value="teamA">🔴 ZELLIJ</option>
                                 <option value="teamB">🔵 IZNIK</option>
                             </select>
                         </div>
-                        <input type="text" id="win1Sub" class="form-control" placeholder="ടീം / സ്ഥാപനം (ഉദാ: Team ZELLIJ)" oninput="updatePosterPreview()">
+                        <input type="text" id="win1Sub" class="form-control" placeholder="ടീം / സ്ഥാപനം" oninput="updatePosterPreview()">
                     </div>
 
                     <!-- Winner 2 -->
@@ -177,7 +186,7 @@
                         </select>
                         <div style="display:grid; grid-template-columns: 1fr 130px; gap:8px; margin-bottom:6px;">
                             <input type="text" id="win2Name" class="form-control" placeholder="വിദ്യാർത്ഥിയുടെ പേര്" oninput="updatePosterPreview()">
-                            <select id="win2Team" class="form-control" onchange="onWinnerStudentSelectTeam(2)">
+                            <select id="win2Team" class="form-control" onchange="updatePosterPreview()">
                                 <option value="teamB">🔵 IZNIK</option>
                                 <option value="teamA">🔴 ZELLIJ</option>
                             </select>
@@ -193,7 +202,7 @@
                         </select>
                         <div style="display:grid; grid-template-columns: 1fr 130px; gap:8px; margin-bottom:6px;">
                             <input type="text" id="win3Name" class="form-control" placeholder="വിദ്യാർത്ഥിയുടെ പേര്" oninput="updatePosterPreview()">
-                            <select id="win3Team" class="form-control" onchange="onWinnerStudentSelectTeam(3)">
+                            <select id="win3Team" class="form-control" onchange="updatePosterPreview()">
                                 <option value="teamA">🔴 ZELLIJ</option>
                                 <option value="teamB">🔵 IZNIK</option>
                             </select>
@@ -336,24 +345,22 @@
             }
         }
 
-        function onWinnerStudentSelectTeam(rank) {
-            updatePosterPreview();
-        }
-
-        // Override onResultCategoryChange to ensure dynamic clean student selection
         function onResultCategoryChange() {
             const catSelect = document.getElementById("resCatSelect");
+            const secSelect = document.getElementById("resSectionSelect");
             const progSelect = document.getElementById("resProgSelect");
-            if (!catSelect || !progSelect) return;
+            if (!catSelect || !secSelect || !progSelect) return;
+
             const catVal = catSelect.value || "Senior";
+            const secVal = secSelect.value || "onStage";
             const cKey = normalizeCategoryKey(catVal);
 
             const progs = normalizeProgramsData(appData.programs);
             const catPrograms = progs[cKey] || { onStage: [], offStage: [], sports: [] };
-            const allProgs = [...(catPrograms.onStage || []), ...(catPrograms.offStage || []), ...(catPrograms.sports || [])];
+            const sectionProgs = catPrograms[secVal] || [];
 
             progSelect.innerHTML = "<option value=''>-- പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക --</option>";
-            allProgs.forEach(p => {
+            sectionProgs.forEach(p => {
                 const opt = document.createElement("option");
                 opt.value = p;
                 opt.textContent = p;
@@ -370,7 +377,7 @@
             [1, 2, 3].forEach(rank => {
                 const sel = document.getElementById(`selWinner${rank}`);
                 if (sel) {
-                    sel.innerHTML = "<option value=''>-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>";
+                    sel.innerHTML = "<option value='-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --'></option>";
                     combined.forEach(st => {
                         const winOpt = document.createElement("option");
                         winOpt.value = `${st.name}|${st.team}`;
@@ -379,6 +386,12 @@
                     });
                 }
             });
+
+            const subTitleInput = document.getElementById("resSubTitleInput");
+            if (subTitleInput) {
+                subTitleInput.value = `${catVal.toUpperCase()} - ${secVal === 'onStage' ? 'ON STAGE' : secVal === 'offStage' ? 'OFF STAGE' : 'SPORTS'}`;
+            }
+
             updatePosterPreview();
         }
 
@@ -388,9 +401,55 @@
             const [name, teamKey] = sel.value.split("|");
             const nameInput = document.getElementById(`win${rank}Name`);
             const teamSelect = document.getElementById(`win${rank}Team`);
+            const subInput = document.getElementById(`win${rank}Sub`);
+            
             if (nameInput) nameInput.value = name;
             if (teamSelect) teamSelect.value = teamKey;
+            if (subInput) subInput.value = formatTeamDisplayName(teamKey);
+
             updatePosterPreview();
+        }
+
+        function publishResultToSite() {
+            if (!isAdmin) { alert("അഡ്മിൻ ലോഗിൻ ചെയ്യുക!"); return; }
+            const resNo = getNextAutoResultNo();
+            const category = document.getElementById("resCatSelect")?.value || "Senior";
+            const prog = (document.getElementById("resProgCustom")?.value || document.getElementById("resProgSelect")?.value || "").trim();
+            const w1Name = (document.getElementById("win1Name")?.value || "").trim();
+            const w2Name = (document.getElementById("win2Name")?.value || "").trim();
+            const w3Name = (document.getElementById("win3Name")?.value || "").trim();
+
+            if (!prog || !w1Name) {
+                alert("പ്രോഗ്രാമിന്റെ പേരും ഒന്നാം സ്ഥാനക്കാരന്റെ പേരും നൽകണം!");
+                return;
+            }
+
+            const newResult = {
+                id: "res_" + Date.now(),
+                resNo,
+                category,
+                program: prog,
+                win1Name: w1Name, win1Team: document.getElementById("win1Team")?.value || "teamA",
+                win2Name: w2Name, win2Team: document.getElementById("win2Team")?.value || "teamB",
+                win3Name: w3Name, win3Team: document.getElementById("win3Team")?.value || "teamA",
+                timestamp: Date.now()
+            };
+
+            let clonedData = JSON.parse(JSON.stringify(appData));
+            clonedData.results.unshift(newResult);
+
+            const cKey = buildCellKey(normalizeCategoryKey(category), prog);
+            if (clonedData.matrixScores && clonedData.matrixScores[cKey]) {
+                delete clonedData.matrixScores[cKey];
+            }
+
+            saveAppData(false, clonedData, (success) => {
+                alert("ഫലം വിജയകരമായി പ്രസിദ്ധീകരിച്ചു! സ്കോർബോർഡിൽ പോയിന്റ് തനിയെ ആഡ് ആയിട്ടുണ്ട്.");
+                if (typeof confetti === "function") {
+                    confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+                }
+                onResultCategoryChange();
+            });
         }
     </script>
 </body>
