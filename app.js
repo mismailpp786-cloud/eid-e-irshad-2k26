@@ -10,6 +10,8 @@ const firebaseConfig = {
 let db = null;
 let auth = null;
 let unsubscribeFirestore = null;
+let autoRefreshCountdown = 30;
+let activeMatrixCategoryFilter = "all";
 
 const GROUP_EVENTS_LIST = [
     "സംഘഗാനം", "ബുർദ", "ഖവാലി", "സ്പോട്ട് മാഗസിൻ", "സയൻസ് പ്രൊജക്ട്",
@@ -55,6 +57,8 @@ const defaultData = {
         }
     },
     results: [],
+    matrixScores: {},
+    pointPreset: "5-3-1",
     manualScoreOverride: { enabled: false, teamA: 0, teamB: 0 },
     poll: { zellij: 12, iznik: 15 }
 };
@@ -65,6 +69,13 @@ let currentPosterTheme = "theme-green";
 let currentPosterLayout = "layout-model-1";
 let isPosterBuilderInitialized = false;
 let currentProgramCat = "senior";
+let computedCategoryTotals = {
+    senior: { teamA: 0, teamB: 0 },
+    junior: { teamA: 0, teamB: 0 },
+    subjunior: { teamA: 0, teamB: 0 },
+    general: { teamA: 0, teamB: 0 }
+};
+let computedGrandTotals = { teamA: 0, teamB: 0 };
 
 function cleanStringArray(arr, fallbackArr) {
     if (!Array.isArray(arr) || arr.length === 0) return [...(fallbackArr || [])];
@@ -123,6 +134,14 @@ function mergeLoadedData(incoming) {
     appData.programs = normalizeProgramsData(incoming.programs);
     appData.teams = normalizeTeamsData(incoming.teams);
     if (Array.isArray(incoming.results)) appData.results = incoming.results;
+    if (incoming.matrixScores && typeof incoming.matrixScores === "object") {
+        appData.matrixScores = incoming.matrixScores;
+    }
+    if (incoming.pointPreset) {
+        appData.pointPreset = incoming.pointPreset;
+    } else {
+        appData.pointPreset = "5-3-1";
+    }
     if (incoming.manualScoreOverride && typeof incoming.manualScoreOverride === "object") {
         appData.manualScoreOverride = {
             enabled: Boolean(incoming.manualScoreOverride.enabled),
@@ -185,6 +204,69 @@ function initFirebaseAndLoad() {
     }
 }
 
+function forceRefreshFromCloud() {
+    if (db) {
+        db.collection("fiesta2k26").doc("mainData").get()
+            .then((docSnap) => {
+                if (docSnap.exists) {
+                    mergeLoadedData(docSnap.data());
+                    localStorage.setItem("eid_irshad_app_data_v2", JSON.stringify(appData));
+                    renderAll(true);
+                }
+            })
+            .catch(() => {});
+    } else {
+        const cached = localStorage.getItem("eid_irshad_app_data_v2");
+        if (cached) {
+            try { mergeLoadedData(JSON.parse(cached)); renderAll(true); } catch (e) {}
+        }
+    }
+}
+
+function startAutoRefreshCycle() {
+    setInterval(() => {
+        autoRefreshCountdown--;
+        if (autoRefreshCountdown <= 0) {
+            forceRefreshFromCloud();
+            autoRefreshCountdown = 30;
+        }
+        const timerEl = document.getElementById("autoRefreshTimerText");
+        if (timerEl) {
+            timerEl.textContent = `🔄 Sync in: ${autoRefreshCountdown}s`;
+        }
+    }, 1000);
+
+    window.addEventListener("storage", (e) => {
+        if (e.key === "eid_irshad_app_data_v2" && e.newValue) {
+            try {
+                mergeLoadedData(JSON.parse(e.newValue));
+                renderAll(true);
+            } catch (err) {}
+        }
+    });
+}
+
+function toggleTvFullscreenMode() {
+    document.body.classList.toggle("tv-live-mode");
+    const isTv = document.body.classList.contains("tv-live-mode");
+    const btn = document.getElementById("tvModeBtn");
+    if (btn) {
+        btn.textContent = isTv ? "❌ Exit TV Mode" : "📺 Fullscreen TV Mode";
+    }
+    if (isTv && document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+    } else if (!isTv && document.fullscreenElement && document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+    }
+}
+
+function filterMatrixView(catKey, btnEl) {
+    activeMatrixCategoryFilter = catKey;
+    document.querySelectorAll(".cat-jump-btn").forEach(b => b.classList.remove("active"));
+    if (btnEl) btnEl.classList.add("active");
+    renderMasterScoreMatrix();
+}
+
 function saveAppData(isPublicAction = false, updatedPayload = null, callback = null) {
     const dataToSave = updatedPayload ? updatedPayload : appData;
 
@@ -201,16 +283,13 @@ function saveAppData(isPublicAction = false, updatedPayload = null, callback = n
     if (db) {
         db.collection("fiesta2k26").doc("mainData").set(dataToSave, { merge: true })
             .then(() => {
-                if (!isPublicAction) alert("ഡാറ്റ ഫയർബേസിലേക്ക് വിജയകരമായി സേവ് ചെയ്തു!");
                 if (typeof callback === "function") callback(true);
             })
             .catch((err) => {
                 console.warn("Firestore write warning:", err.message);
-                if (!isPublicAction) alert("ഡാറ്റ സേവ് ചെയ്തു!");
                 if (typeof callback === "function") callback(true);
             });
     } else {
-        if (!isPublicAction) alert("ഡാറ്റ സേവ് ചെയ്തു!");
         if (typeof callback === "function") callback(true);
     }
 }
@@ -228,7 +307,8 @@ function renderAll(isBackgroundSync = false) {
 }
 
 function applySavedTheme() {
-    const savedTheme = localStorage.getItem("eid_theme") || "light";
+    const defaultMode = document.getElementById("masterScoreMatrixContainer") ? "dark" : "light";
+    const savedTheme = localStorage.getItem("eid_theme") || defaultMode;
     document.documentElement.setAttribute("data-theme", savedTheme);
     const btn = document.getElementById("themeToggleBtn");
     if (btn) btn.textContent = savedTheme === "dark" ? "☀️ Light" : "🌙 Dark";
@@ -385,6 +465,64 @@ function formatTeamDisplayName(teamKeyOrStr) {
     return teamKeyOrStr || "";
 }
 
+function normalizeCategoryKey(rawCat) {
+    const c = String(rawCat || "senior").toLowerCase();
+    if (c.includes("sub")) return "subjunior";
+    if (c.includes("junior")) return "junior";
+    if (c.includes("general")) return "general";
+    return "senior";
+}
+
+function getPointsMapForEvent(progName, isGroupFlag) {
+    const preset = appData.pointPreset || "5-3-1";
+    if (preset === "10-5-3") {
+        return { 1: 10, 2: 5, 3: 3 };
+    }
+    const groupMode = isGroupFlag === true || GROUP_EVENTS_LIST.includes(progName);
+    return groupMode ? { 1: 10, 2: 6, 3: 3 } : { 1: 5, 2: 3, 3: 1 };
+}
+
+function buildCellKey(catKey, progName) {
+    return `${catKey}__${String(progName || "").trim()}`;
+}
+
+function getProgramScoresForCell(catKey, progName) {
+    const cellKey = buildCellKey(catKey, progName);
+    const manualEntry = appData.matrixScores && appData.matrixScores[cellKey];
+    if (manualEntry && (Array.isArray(manualEntry.teamA) || Array.isArray(manualEntry.teamB))) {
+        return {
+            teamA: (manualEntry.teamA || []).map(Number).filter(n => !isNaN(n) && n > 0),
+            teamB: (manualEntry.teamB || []).map(Number).filter(n => !isNaN(n) && n > 0),
+            isManual: true
+        };
+    }
+
+    let scoresA = [];
+    let scoresB = [];
+    const targetProg = String(progName || "").trim().toLowerCase();
+
+    (appData.results || []).forEach(res => {
+        const rCat = normalizeCategoryKey(res.category);
+        const rProg = String(res.program || "").trim().toLowerCase();
+        if (rCat === catKey && rProg === targetProg) {
+            const ptsMap = getPointsMapForEvent(res.program, res.isGroup);
+            const addRankScore = (nameVal, teamVal, rank, customPts) => {
+                if (!nameVal && !teamVal) return;
+                const tKey = resolveTeamKey(teamVal);
+                const pt = customPts !== undefined ? Number(customPts) : ptsMap[rank];
+                if (!pt) return;
+                if (tKey === "teamA") scoresA.push(pt);
+                if (tKey === "teamB") scoresB.push(pt);
+            };
+            if (res.win1Name) addRankScore(res.win1Name, res.win1Team, 1, res.win1Pts);
+            if (res.win2Name) addRankScore(res.win2Name, res.win2Team, 2, res.win2Pts);
+            if (res.win3Name) addRankScore(res.win3Name, res.win3Team, 3, res.win3Pts);
+        }
+    });
+
+    return { teamA: scoresA, teamB: scoresB, isManual: false };
+}
+
 function updateLiveScoreboard() {
     let totals = { teamA: 0, teamB: 0 };
     let catScores = {
@@ -398,30 +536,60 @@ function updateLiveScoreboard() {
         teamB: { first: 0, second: 0, third: 0 }
     };
 
+    const progs = normalizeProgramsData(appData.programs);
+    const countedKeys = new Set();
+
+    ["senior", "junior", "subjunior", "general"].forEach(catKey => {
+        const cObj = progs[catKey] || { onStage: [], offStage: [], sports: [] };
+        const allCatProgs = [...(cObj.onStage || []), ...(cObj.offStage || []), ...(cObj.sports || [])];
+        allCatProgs.forEach(pName => {
+            const cKey = buildCellKey(catKey, pName);
+            if (countedKeys.has(cKey)) return;
+            countedKeys.add(cKey);
+            const cellScores = getProgramScoresForCell(catKey, pName);
+            cellScores.teamA.forEach(v => {
+                const val = Number(v) || 0;
+                totals.teamA += val;
+                catScores[catKey].teamA += val;
+            });
+            cellScores.teamB.forEach(v => {
+                const val = Number(v) || 0;
+                totals.teamB += val;
+                catScores[catKey].teamB += val;
+            });
+        });
+    });
+
     (appData.results || []).forEach(res => {
-        const groupMode = res.isGroup === true || GROUP_EVENTS_LIST.includes(res.program);
-        const ptsMap = groupMode ? { 1: 10, 2: 6, 3: 3 } : { 1: 5, 2: 3, 3: 1 };
-        const rawCat = String(res.category || "senior").toLowerCase();
-        let cKey = "senior";
-        if (rawCat.includes("sub")) cKey = "subjunior";
-        else if (rawCat.includes("junior")) cKey = "junior";
-        else if (rawCat.includes("general")) cKey = "general";
+        const rCat = normalizeCategoryKey(res.category);
+        const cKey = buildCellKey(rCat, res.program);
+        if (!countedKeys.has(cKey)) {
+            countedKeys.add(cKey);
+            const cellScores = getProgramScoresForCell(rCat, res.program);
+            cellScores.teamA.forEach(v => {
+                const val = Number(v) || 0;
+                totals.teamA += val;
+                catScores[rCat].teamA += val;
+            });
+            cellScores.teamB.forEach(v => {
+                const val = Number(v) || 0;
+                totals.teamB += val;
+                catScores[rCat].teamB += val;
+            });
+        }
 
-        const processWinner = (nameStr, teamStr, rank) => {
-            if (!nameStr && !res[`win${rank}Team`]) return;
-            const tKey = resolveTeamKey(teamStr);
-            if (tKey && ptsMap[rank]) {
-                totals[tKey] += ptsMap[rank];
-                catScores[cKey][tKey] += ptsMap[rank];
-                if (rank === 1) medals[tKey].first++;
-                if (rank === 2) medals[tKey].second++;
-                if (rank === 3) medals[tKey].third++;
-            }
-        };
-
-        if (res.win1Name || res.win1Team) processWinner(res.win1Name, res.win1Team, 1);
-        if (res.win2Name || res.win2Team) processWinner(res.win2Name, res.win2Team, 2);
-        if (res.win3Name || res.win3Team) processWinner(res.win3Name, res.win3Team, 3);
+        if (res.win1Name) {
+            const t1 = resolveTeamKey(res.win1Team);
+            if (t1) medals[t1].first++;
+        }
+        if (res.win2Name) {
+            const t2 = resolveTeamKey(res.win2Team);
+            if (t2) medals[t2].second++;
+        }
+        if (res.win3Name) {
+            const t3 = resolveTeamKey(res.win3Team);
+            if (t3) medals[t3].third++;
+        }
     });
 
     if (appData.manualScoreOverride && appData.manualScoreOverride.enabled) {
@@ -429,34 +597,41 @@ function updateLiveScoreboard() {
         totals.teamB = Number(appData.manualScoreOverride.teamB) || 0;
     }
 
+    computedCategoryTotals = catScores;
+    computedGrandTotals = totals;
+
     if (document.getElementById("ptsA")) document.getElementById("ptsA").textContent = totals.teamA;
     if (document.getElementById("ptsB")) document.getElementById("ptsB").textContent = totals.teamB;
     const grand = totals.teamA + totals.teamB;
     if (document.getElementById("barA")) document.getElementById("barA").style.width = (grand > 0 ? (totals.teamA / grand) * 100 : 50) + "%";
     if (document.getElementById("barB")) document.getElementById("barB").style.width = (grand > 0 ? (totals.teamB / grand) * 100 : 50) + "%";
 
-    // Detailed Scoreboard Page Elements (points.html)
     if (document.getElementById("bigPtsA")) document.getElementById("bigPtsA").textContent = totals.teamA;
     if (document.getElementById("bigPtsB")) document.getElementById("bigPtsB").textContent = totals.teamB;
-    if (document.getElementById("medalsA")) document.getElementById("medalsA").textContent = `🥇 ${medals.teamA.first}  🥈 ${medals.teamA.second}  🥉 ${medals.teamA.third}`;
-    if (document.getElementById("medalsB")) document.getElementById("medalsB").textContent = `🥇 ${medals.teamB.first}  🥈 ${medals.teamB.second}  🥉 ${medals.teamB.third}`;
+    if (document.getElementById("medalsA")) document.getElementById("medalsA").textContent = `🥇 ${medals.teamA.first}   🥈 ${medals.teamA.second}   🥉 ${medals.teamA.third}`;
+    if (document.getElementById("medalsB")) document.getElementById("medalsB").textContent = `🥇 ${medals.teamB.first}   🥈 ${medals.teamB.second}   🥉 ${medals.teamB.third}`;
 
-    const breakdownBody = document.getElementById("categoryScoreTableBody");
-    if (breakdownBody) {
-        const labels = {
-            senior: "Senior Category",
-            junior: "Junior Category",
-            subjunior: "Sub Junior Category",
-            general: "General Category"
-        };
-        breakdownBody.innerHTML = ["senior", "junior", "subjunior", "general"].map(k => `
-            <tr>
-                <td style="padding:10px; border-bottom:1px solid var(--border-color); font-weight:700;">${labels[k]}</td>
-                <td style="padding:10px; border-bottom:1px solid var(--border-color); text-align:center; color:var(--zellij-red); font-weight:800;">${catScores[k].teamA}</td>
-                <td style="padding:10px; border-bottom:1px solid var(--border-color); text-align:center; color:var(--iznik-blue); font-weight:800;">${catScores[k].teamB}</td>
-            </tr>
+    const summaryStrip = document.getElementById("categorySummaryStrip");
+    if (summaryStrip) {
+        const catMeta = [
+            { key: "senior", label: "🎓 SENIOR TOTAL" },
+            { key: "junior", label: "📘 JUNIOR TOTAL" },
+            { key: "subjunior", label: "🌱 SUB JUNIOR TOTAL" },
+            { key: "general", label: "🌟 GENERAL TOTAL" }
+        ];
+        summaryStrip.innerHTML = catMeta.map(cm => `
+            <div class="cat-summary-box">
+                <h4><span>${cm.label}</span></h4>
+                <div class="cat-summary-scores">
+                    <span style="color:#ef4444;">🔴 ZELLIJ: ${catScores[cm.key].teamA}</span>
+                    <span style="color:#3b82f6;">🔵 IZNIK: ${catScores[cm.key].teamB}</span>
+                </div>
+            </div>
         `).join("");
     }
+
+    const presetSel = document.getElementById("pointPresetSelect");
+    if (presetSel) presetSel.value = appData.pointPreset || "5-3-1";
 
     const manualCheck = document.getElementById("manualScoreToggle");
     const manualInA = document.getElementById("manualPtsAInput");
@@ -466,6 +641,182 @@ function updateLiveScoreboard() {
         if (manualInA) manualInA.value = totals.teamA;
         if (manualInB) manualInB.value = totals.teamB;
     }
+
+    renderMasterScoreMatrix();
+}
+
+function renderMasterScoreMatrix() {
+    const container = document.getElementById("masterScoreMatrixContainer");
+    if (!container) return;
+
+    const progs = normalizeProgramsData(appData.programs);
+    const categoriesConfig = [
+        { key: "senior", title: "SENIOR", icon: "🎓" },
+        { key: "junior", title: "JUNIOR", icon: "📘" },
+        { key: "subjunior", title: "SUB JUNIOR", icon: "🌱" },
+        { key: "general", title: "GENERAL", icon: "🌟" }
+    ];
+
+    const subSections = [
+        { key: "onStage", short: "ON-STAGE", label: "ON-STAGE (സ്റ്റേജ് മത്സരങ്ങൾ)" },
+        { key: "offStage", short: "OFF-STAGE", label: "OFF-STAGE (ഓഫ്-സ്റ്റേജ് മത്സരങ്ങൾ)" },
+        { key: "sports", short: "SPORTS", label: "SPORTS (സ്പോർട്സ് മത്സരങ്ങൾ)" }
+    ];
+
+    let fullHtml = "";
+
+    categoriesConfig.forEach(cat => {
+        if (activeMatrixCategoryFilter !== "all" && activeMatrixCategoryFilter !== cat.key) return;
+        const catData = progs[cat.key] || { onStage: [], offStage: [], sports: [] };
+        const catFullA = computedCategoryTotals[cat.key]?.teamA || 0;
+        const catFullB = computedCategoryTotals[cat.key]?.teamB || 0;
+
+        subSections.forEach(sub => {
+            const progList = catData[sub.key] || [];
+            if (progList.length === 0) return;
+
+            let secTotalA = 0;
+            let secTotalB = 0;
+
+            let headerColsHtml = "";
+            let rowACellsHtml = "";
+            let rowBCellsHtml = "";
+
+            progList.forEach(pName => {
+                const isGrp = GROUP_EVENTS_LIST.includes(pName);
+                const cellData = getProgramScoresForCell(cat.key, pName);
+                const sumA = cellData.teamA.reduce((a, b) => a + b, 0);
+                const sumB = cellData.teamB.reduce((a, b) => a + b, 0);
+                secTotalA += sumA;
+                secTotalB += sumB;
+
+                const stackAHtml = cellData.teamA.length > 0
+                    ? `<div class="score-pill-stack">${cellData.teamA.map(n => `<span class="stacked-score-badge badge-team-a">${n}</span>`).join("")}</div>`
+                    : `<span class="empty-dash">·</span>`;
+
+                const stackBHtml = cellData.teamB.length > 0
+                    ? `<div class="score-pill-stack">${cellData.teamB.map(n => `<span class="stacked-score-badge badge-team-b">${n}</span>`).join("")}</div>`
+                    : `<span class="empty-dash">·</span>`;
+
+                const safeCat = cat.key.replace(/'/g, "\\'");
+                const safeProg = pName.replace(/'/g, "\\'");
+                const clickAttr = isAdmin ? `onclick="openCellScoreModal('${safeCat}', '${safeProg}')"` : "";
+                const clickClass = isAdmin ? "admin-clickable" : "";
+                const activeClassA = cellData.teamA.length > 0 ? "has-score-a" : "";
+                const activeClassB = cellData.teamB.length > 0 ? "has-score-b" : "";
+
+                headerColsHtml += `<th class="prog-vert-header" title="${pName}">${pName}${isGrp ? ' <span class="group-tag-dot" title="Group Event (10, 6, 3)"></span>' : ''}</th>`;
+                rowACellsHtml += `<td class="score-stack-cell ${activeClassA} ${clickClass}" ${clickAttr}>${stackAHtml}</td>`;
+                rowBCellsHtml += `<td class="score-stack-cell ${activeClassB} ${clickClass}" ${clickAttr}>${stackBHtml}</td>`;
+            });
+
+            fullHtml += `
+                <div class="matrix-section-card">
+                    <div class="matrix-section-header">
+                        <h3 class="matrix-section-title">${cat.icon} ${cat.title} — ${sub.label}</h3>
+                        <div class="section-sub-score">
+                            <span class="sub-pill-a">🔴 ${sub.short}: ${secTotalA}</span>
+                            <span class="sub-pill-b">🔵 ${sub.short}: ${secTotalB}</span>
+                            <span class="sub-pill-cat">🏆 ${cat.title} TOTAL — 🔴 ${catFullA} | 🔵 ${catFullB}</span>
+                        </div>
+                    </div>
+                    <div class="matrix-scroll-wrapper">
+                        <table class="score-matrix-table">
+                            <thead>
+                                <tr>
+                                    <th class="sticky-col">${cat.title}<br><span style="font-size:0.65rem; color:var(--accent-gold);">${sub.short}</span></th>
+                                    ${headerColsHtml}
+                                    <th class="sec-total-header">${sub.short} TOTAL</th>
+                                    <th class="cat-total-header">${cat.title} FULL SCORE</th>
+                                    <th class="sticky-right-col">GRAND TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="sticky-col team-name-cell" style="color:#ef4444;">🔴 Team A<br><span style="font-size:0.68rem; color:var(--text-muted);">ZELLIJ</span></td>
+                                    ${rowACellsHtml}
+                                    <td class="sec-total-cell" style="color:#10b981;">${secTotalA}</td>
+                                    <td class="cat-total-cell" style="color:#ef4444;">${catFullA}</td>
+                                    <td class="sticky-right-col grand-total-cell" style="color:#f87171;">${computedGrandTotals.teamA}</td>
+                                </tr>
+                                <tr>
+                                    <td class="sticky-col team-name-cell" style="color:#3b82f6;">🔵 Team B<br><span style="font-size:0.68rem; color:var(--text-muted);">IZNIK</span></td>
+                                    ${rowBCellsHtml}
+                                    <td class="sec-total-cell" style="color:#10b981;">${secTotalB}</td>
+                                    <td class="cat-total-cell" style="color:#3b82f6;">${catFullB}</td>
+                                    <td class="sticky-right-col grand-total-cell" style="color:#60a5fa;">${computedGrandTotals.teamB}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        });
+    });
+
+    container.innerHTML = fullHtml;
+}
+
+function openCellScoreModal(catKey, progName) {
+    if (!isAdmin) return;
+    const modal = document.getElementById("cellScoreModal");
+    if (!modal) return;
+    const cellKey = buildCellKey(catKey, progName);
+    const current = getProgramScoresForCell(catKey, progName);
+
+    document.getElementById("editCellKey").value = cellKey;
+    document.getElementById("cellModalTitle").textContent = `${catKey.toUpperCase()} — ${progName}`;
+    document.getElementById("editCellTeamA").value = current.teamA.join(", ");
+    document.getElementById("editCellTeamB").value = current.teamB.join(", ");
+    modal.style.display = "flex";
+}
+
+function closeCellScoreModal() {
+    const modal = document.getElementById("cellScoreModal");
+    if (modal) modal.style.display = "none";
+}
+
+function parseMarksString(str) {
+    if (!str) return [];
+    return String(str)
+        .split(/[\s,]+/)
+        .map(s => Number(s.trim()))
+        .filter(n => !isNaN(n) && n > 0);
+}
+
+function saveCellScoreModal() {
+    if (!isAdmin) return;
+    const cellKey = document.getElementById("editCellKey").value;
+    if (!cellKey) return;
+    const marksA = parseMarksString(document.getElementById("editCellTeamA").value);
+    const marksB = parseMarksString(document.getElementById("editCellTeamB").value);
+
+    let cloned = JSON.parse(JSON.stringify(appData));
+    if (!cloned.matrixScores) cloned.matrixScores = {};
+    cloned.matrixScores[cellKey] = { teamA: marksA, teamB: marksB };
+
+    closeCellScoreModal();
+    saveAppData(false, cloned);
+}
+
+function clearCellScoreModal() {
+    if (!isAdmin) return;
+    const cellKey = document.getElementById("editCellKey").value;
+    if (!cellKey) return;
+
+    let cloned = JSON.parse(JSON.stringify(appData));
+    if (cloned.matrixScores && cloned.matrixScores[cellKey]) {
+        delete cloned.matrixScores[cellKey];
+    }
+    closeCellScoreModal();
+    saveAppData(false, cloned);
+}
+
+function changePointPreset(val) {
+    if (!isAdmin) return;
+    let cloned = JSON.parse(JSON.stringify(appData));
+    cloned.pointPreset = val;
+    saveAppData(false, cloned);
 }
 
 function saveManualScoreFromUI() {
@@ -479,7 +830,9 @@ function saveManualScoreFromUI() {
 
     let cloned = JSON.parse(JSON.stringify(appData));
     cloned.manualScoreOverride = { enabled, teamA: ptsA, teamB: ptsB };
-    saveAppData(false, cloned);
+    saveAppData(false, cloned, () => {
+        alert("പോയിന്റുകൾ സേവ് ചെയ്തു!");
+    });
 }
 
 function resetProgramsToDefault() {
@@ -489,7 +842,9 @@ function resetProgramsToDefault() {
     }
     let cloned = JSON.parse(JSON.stringify(appData));
     cloned.programs = JSON.parse(JSON.stringify(defaultData.programs));
-    saveAppData(false, cloned);
+    saveAppData(false, cloned, () => {
+        alert("പ്രോഗ്രാം ലിസ്റ്റ് പുനഃസ്ഥാപിച്ചു!");
+    });
 }
 
 function updatePollUI() {
@@ -647,10 +1002,7 @@ function onResultCategoryChange() {
     const progSelect = document.getElementById("resProgSelect");
     if (!catSelect || !progSelect) return;
     const catVal = catSelect.value || "Senior";
-    let cKey = "senior";
-    if (catVal.toLowerCase().includes("sub")) cKey = "subjunior";
-    else if (catVal.toLowerCase().includes("junior")) cKey = "junior";
-    else if (catVal.toLowerCase().includes("general")) cKey = "general";
+    const cKey = normalizeCategoryKey(catVal);
 
     const progs = normalizeProgramsData(appData.programs);
     const catPrograms = progs[cKey] || { onStage: [], offStage: [], sports: [] };
@@ -760,7 +1112,7 @@ function publishResultToSite() {
     if (!isAdmin) { alert("അഡ്മിൻ ലോഗിൻ ചെയ്യുക!"); return; }
     const resNo = (document.getElementById("resNoInput")?.value || "01").trim();
     const category = document.getElementById("resCatSelect")?.value || "Senior";
-    const prog = document.getElementById("resProgCustom")?.value || document.getElementById("resProgSelect")?.value || "Event";
+    const prog = (document.getElementById("resProgCustom")?.value || document.getElementById("resProgSelect")?.value || "").trim();
     const w1Name = (document.getElementById("win1Name")?.value || "").trim();
     const w2Name = (document.getElementById("win2Name")?.value || "").trim();
     const w3Name = (document.getElementById("win3Name")?.value || "").trim();
@@ -772,7 +1124,9 @@ function publishResultToSite() {
 
     const newResult = {
         id: "res_" + Date.now(),
-        resNo, category, program: prog,
+        resNo,
+        category,
+        program: prog,
         win1Name: w1Name, win1Team: document.getElementById("win1Team")?.value || "teamA",
         win2Name: w2Name, win2Team: document.getElementById("win2Team")?.value || "teamB",
         win3Name: w3Name, win3Team: document.getElementById("win3Team")?.value || "teamA",
@@ -781,7 +1135,14 @@ function publishResultToSite() {
 
     let clonedData = JSON.parse(JSON.stringify(appData));
     clonedData.results.unshift(newResult);
+
+    const cKey = buildCellKey(normalizeCategoryKey(category), prog);
+    if (clonedData.matrixScores && clonedData.matrixScores[cKey]) {
+        delete clonedData.matrixScores[cKey];
+    }
+
     saveAppData(false, clonedData, (success) => {
+        alert("ഫലം പ്രസിദ്ധീകരിച്ചു! നിയമപ്രകാരമുള്ള പോയിന്റ് സ്കോർബോർഡിൽ തനിയെ ആഡ് ആയിട്ടുണ്ട്.");
         if (success && typeof confetti === "function") {
             confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
         }
@@ -812,7 +1173,7 @@ function renderPublishedResults() {
         card.innerHTML = `
             <div class="result-card-head">
                 <div>
-                    <span style="font-size:0.75rem; background:#fbbf24; color:#0f172a; padding:2px 8px; border-radius:4px; font-weight:800;">RESULT #${res.resNo || (idx + 1)}</span>
+                    <span style="font-size:0.75rem; background:#fbbf24; color:#0f172a; padding:2px 8px; border-radius:4px; font-weight:800;">RESULT #${res.resNo || (idx + 1)} • ${res.category || ''}</span>
                     <h3 style="margin:6px 0 0; font-size:1.05rem;">${res.program}</h3>
                 </div>
                 ${isAdmin ? `<button class="btn-action-sm" onclick="deleteResult('${res.id}')">🗑️</button>` : ""}
@@ -830,4 +1191,5 @@ window.addEventListener("DOMContentLoaded", () => {
     initFirebaseAndLoad();
     updateCountdown();
     setInterval(updateCountdown, 1000);
+    startAutoRefreshCycle();
 });
