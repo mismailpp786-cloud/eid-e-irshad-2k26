@@ -66,6 +66,78 @@ let currentPosterLayout = "layout-model-1";
 let isPosterBuilderInitialized = false;
 let currentProgramCat = "senior";
 
+function cleanStringArray(arr, fallbackArr) {
+    if (!Array.isArray(arr) || arr.length === 0) return [...(fallbackArr || [])];
+    const cleaned = arr.map(item => {
+        if (typeof item === "string") {
+            return item.includes("[object Object]") ? "" : item.trim();
+        }
+        if (item && typeof item === "object") {
+            return String(item.name || item.title || item.program || item.label || item.text || "").trim();
+        }
+        return "";
+    }).filter(Boolean);
+    return cleaned.length > 0 ? cleaned : [...(fallbackArr || [])];
+}
+
+function normalizeProgramsData(rawPrograms) {
+    const norm = JSON.parse(JSON.stringify(defaultData.programs));
+    if (!rawPrograms || typeof rawPrograms !== "object") return norm;
+
+    ["senior", "junior", "subjunior", "general"].forEach(cat => {
+        const src = rawPrograms[cat] || {};
+        const def = defaultData.programs[cat];
+        const rawOn = src.onStage || src.onstage || src.stage || [];
+        const rawOff = src.offStage || src.offstage || src.off || [];
+        const rawSp = src.sports || src.Sports || [];
+
+        norm[cat] = {
+            onStage: cleanStringArray(rawOn, def.onStage),
+            offStage: cat === "general" ? cleanStringArray(rawOff, []) : cleanStringArray(rawOff, def.offStage),
+            sports: cleanStringArray(rawSp, def.sports)
+        };
+    });
+    return norm;
+}
+
+function normalizeTeamsData(rawTeams) {
+    const norm = JSON.parse(JSON.stringify(defaultData.teams));
+    if (!rawTeams || typeof rawTeams !== "object") return norm;
+    ["teamA", "teamB"].forEach(tKey => {
+        const src = rawTeams[tKey] || {};
+        const def = defaultData.teams[tKey];
+        norm[tKey] = {
+            name: src.name || def.name,
+            shortName: src.shortName || def.shortName,
+            color: src.color || def.color,
+            senior: cleanStringArray(src.senior, def.senior),
+            junior: cleanStringArray(src.junior, def.junior),
+            subjunior: cleanStringArray(src.subjunior, def.subjunior)
+        };
+    });
+    return norm;
+}
+
+function mergeLoadedData(incoming) {
+    if (!incoming || typeof incoming !== "object") return;
+    appData.programs = normalizeProgramsData(incoming.programs);
+    appData.teams = normalizeTeamsData(incoming.teams);
+    if (Array.isArray(incoming.results)) appData.results = incoming.results;
+    if (incoming.manualScoreOverride && typeof incoming.manualScoreOverride === "object") {
+        appData.manualScoreOverride = {
+            enabled: Boolean(incoming.manualScoreOverride.enabled),
+            teamA: Number(incoming.manualScoreOverride.teamA) || 0,
+            teamB: Number(incoming.manualScoreOverride.teamB) || 0
+        };
+    }
+    if (incoming.poll && typeof incoming.poll === "object") {
+        appData.poll = {
+            zellij: Number(incoming.poll.zellij) || 0,
+            iznik: Number(incoming.poll.iznik) || 0
+        };
+    }
+}
+
 function initFirebaseAndLoad() {
     const cached = localStorage.getItem("eid_irshad_app_data_v2");
     if (cached) {
@@ -111,15 +183,6 @@ function initFirebaseAndLoad() {
             console.warn("Firebase initialization error:", err);
         }
     }
-}
-
-function mergeLoadedData(incoming) {
-    if (!incoming || typeof incoming !== "object") return;
-    if (incoming.programs) appData.programs = incoming.programs;
-    if (incoming.teams) appData.teams = incoming.teams;
-    if (Array.isArray(incoming.results)) appData.results = incoming.results;
-    if (incoming.manualScoreOverride) appData.manualScoreOverride = incoming.manualScoreOverride;
-    if (incoming.poll) appData.poll = incoming.poll;
 }
 
 function saveAppData(isPublicAction = false, updatedPayload = null, callback = null) {
@@ -324,21 +387,46 @@ function formatTeamDisplayName(teamKeyOrStr) {
 
 function updateLiveScoreboard() {
     let totals = { teamA: 0, teamB: 0 };
+    let catScores = {
+        senior: { teamA: 0, teamB: 0 },
+        junior: { teamA: 0, teamB: 0 },
+        subjunior: { teamA: 0, teamB: 0 },
+        general: { teamA: 0, teamB: 0 }
+    };
+    let medals = {
+        teamA: { first: 0, second: 0, third: 0 },
+        teamB: { first: 0, second: 0, third: 0 }
+    };
+
     (appData.results || []).forEach(res => {
         const groupMode = res.isGroup === true || GROUP_EVENTS_LIST.includes(res.program);
         const ptsMap = groupMode ? { 1: 10, 2: 6, 3: 3 } : { 1: 5, 2: 3, 3: 1 };
-        const processWinner = (teamStr, rank) => {
+        const rawCat = String(res.category || "senior").toLowerCase();
+        let cKey = "senior";
+        if (rawCat.includes("sub")) cKey = "subjunior";
+        else if (rawCat.includes("junior")) cKey = "junior";
+        else if (rawCat.includes("general")) cKey = "general";
+
+        const processWinner = (nameStr, teamStr, rank) => {
+            if (!nameStr && !res[`win${rank}Team`]) return;
             const tKey = resolveTeamKey(teamStr);
-            if (tKey && ptsMap[rank]) totals[tKey] += ptsMap[rank];
+            if (tKey && ptsMap[rank]) {
+                totals[tKey] += ptsMap[rank];
+                catScores[cKey][tKey] += ptsMap[rank];
+                if (rank === 1) medals[tKey].first++;
+                if (rank === 2) medals[tKey].second++;
+                if (rank === 3) medals[tKey].third++;
+            }
         };
-        if (res.win1Team) processWinner(res.win1Team, 1);
-        if (res.win2Team) processWinner(res.win2Team, 2);
-        if (res.win3Team) processWinner(res.win3Team, 3);
+
+        if (res.win1Name || res.win1Team) processWinner(res.win1Name, res.win1Team, 1);
+        if (res.win2Name || res.win2Team) processWinner(res.win2Name, res.win2Team, 2);
+        if (res.win3Name || res.win3Team) processWinner(res.win3Name, res.win3Team, 3);
     });
 
     if (appData.manualScoreOverride && appData.manualScoreOverride.enabled) {
-        totals.teamA = appData.manualScoreOverride.teamA;
-        totals.teamB = appData.manualScoreOverride.teamB;
+        totals.teamA = Number(appData.manualScoreOverride.teamA) || 0;
+        totals.teamB = Number(appData.manualScoreOverride.teamB) || 0;
     }
 
     if (document.getElementById("ptsA")) document.getElementById("ptsA").textContent = totals.teamA;
@@ -346,6 +434,62 @@ function updateLiveScoreboard() {
     const grand = totals.teamA + totals.teamB;
     if (document.getElementById("barA")) document.getElementById("barA").style.width = (grand > 0 ? (totals.teamA / grand) * 100 : 50) + "%";
     if (document.getElementById("barB")) document.getElementById("barB").style.width = (grand > 0 ? (totals.teamB / grand) * 100 : 50) + "%";
+
+    // Detailed Scoreboard Page Elements (points.html)
+    if (document.getElementById("bigPtsA")) document.getElementById("bigPtsA").textContent = totals.teamA;
+    if (document.getElementById("bigPtsB")) document.getElementById("bigPtsB").textContent = totals.teamB;
+    if (document.getElementById("medalsA")) document.getElementById("medalsA").textContent = `🥇 ${medals.teamA.first}  🥈 ${medals.teamA.second}  🥉 ${medals.teamA.third}`;
+    if (document.getElementById("medalsB")) document.getElementById("medalsB").textContent = `🥇 ${medals.teamB.first}  🥈 ${medals.teamB.second}  🥉 ${medals.teamB.third}`;
+
+    const breakdownBody = document.getElementById("categoryScoreTableBody");
+    if (breakdownBody) {
+        const labels = {
+            senior: "Senior Category",
+            junior: "Junior Category",
+            subjunior: "Sub Junior Category",
+            general: "General Category"
+        };
+        breakdownBody.innerHTML = ["senior", "junior", "subjunior", "general"].map(k => `
+            <tr>
+                <td style="padding:10px; border-bottom:1px solid var(--border-color); font-weight:700;">${labels[k]}</td>
+                <td style="padding:10px; border-bottom:1px solid var(--border-color); text-align:center; color:var(--zellij-red); font-weight:800;">${catScores[k].teamA}</td>
+                <td style="padding:10px; border-bottom:1px solid var(--border-color); text-align:center; color:var(--iznik-blue); font-weight:800;">${catScores[k].teamB}</td>
+            </tr>
+        `).join("");
+    }
+
+    const manualCheck = document.getElementById("manualScoreToggle");
+    const manualInA = document.getElementById("manualPtsAInput");
+    const manualInB = document.getElementById("manualPtsBInput");
+    if (manualCheck && document.activeElement !== manualInA && document.activeElement !== manualInB) {
+        manualCheck.checked = Boolean(appData.manualScoreOverride && appData.manualScoreOverride.enabled);
+        if (manualInA) manualInA.value = totals.teamA;
+        if (manualInB) manualInB.value = totals.teamB;
+    }
+}
+
+function saveManualScoreFromUI() {
+    if (!isAdmin) {
+        alert("അഡ്മിൻ ലോഗിൻ ചെയ്യുക!");
+        return;
+    }
+    const enabled = document.getElementById("manualScoreToggle")?.checked || false;
+    const ptsA = Number(document.getElementById("manualPtsAInput")?.value) || 0;
+    const ptsB = Number(document.getElementById("manualPtsBInput")?.value) || 0;
+
+    let cloned = JSON.parse(JSON.stringify(appData));
+    cloned.manualScoreOverride = { enabled, teamA: ptsA, teamB: ptsB };
+    saveAppData(false, cloned);
+}
+
+function resetProgramsToDefault() {
+    if (!isAdmin) {
+        alert("അഡ്മിൻ ലോഗിൻ ചെയ്യുക!");
+        return;
+    }
+    let cloned = JSON.parse(JSON.stringify(appData));
+    cloned.programs = JSON.parse(JSON.stringify(defaultData.programs));
+    saveAppData(false, cloned);
 }
 
 function updatePollUI() {
@@ -385,7 +529,7 @@ function handleGlobalSearch(event, query) {
     Object.keys(appData.programs || {}).forEach(cat => {
         const cData = appData.programs[cat];
         [...(cData.onStage || []), ...(cData.offStage || []), ...(cData.sports || [])].forEach(p => {
-            if (p.toLowerCase().includes(q)) {
+            if (String(p).toLowerCase().includes(q)) {
                 matches.push({ text: `📋 ${p} (${cat.toUpperCase()})`, link: "programs.html" });
             }
         });
@@ -396,7 +540,7 @@ function handleGlobalSearch(event, query) {
         if (!t) return;
         ["senior", "junior", "subjunior"].forEach(sec => {
             (t[sec] || []).forEach(member => {
-                if (member.toLowerCase().includes(q)) {
+                if (String(member).toLowerCase().includes(q)) {
                     matches.push({ text: `👤 ${member} — ${t.name}`, link: "teams.html" });
                 }
             });
@@ -420,13 +564,28 @@ function handleGlobalSearch(event, query) {
 
 function switchProgramTab(catKey) {
     currentProgramCat = catKey;
-    const catData = (appData.programs && appData.programs[catKey]) || { onStage: [], offStage: [], sports: [] };
+    const progs = normalizeProgramsData(appData.programs);
+    const catData = progs[catKey] || defaultData.programs[catKey] || { onStage: [], offStage: [], sports: [] };
+
+    ["senior", "junior", "subjunior", "general"].forEach(k => {
+        const btn = document.getElementById("tabBtn_" + k);
+        if (btn) {
+            if (k === catKey) {
+                btn.style.background = "var(--accent-gold)";
+                btn.style.color = "#0f172a";
+            } else {
+                btn.style.background = "var(--card-bg)";
+                btn.style.color = "var(--text-color)";
+            }
+        }
+    });
+
     const fillList = (elementId, items) => {
         const el = document.getElementById(elementId);
         if (!el) return;
         el.innerHTML = "";
         if (!items || items.length === 0) {
-            el.innerHTML = "<li style='color:var(--text-muted); font-weight:normal;'>മത്സരങ്ങൾ ലഭ്യമല്ല</li>";
+            el.innerHTML = "<li style='color:var(--text-muted); font-weight:normal;'>ഈ വിഭാഗത്തിൽ മത്സരങ്ങൾ ഇല്ല</li>";
             return;
         }
         items.forEach(item => {
@@ -435,6 +594,7 @@ function switchProgramTab(catKey) {
             el.appendChild(li);
         });
     };
+
     fillList("listOnStage", catData.onStage);
     fillList("listOffStage", catData.offStage);
     fillList("listSports", catData.sports);
@@ -442,10 +602,11 @@ function switchProgramTab(catKey) {
 
 function renderTeamsRoster() {
     if (!appData || !appData.teams) return;
+    const teams = normalizeTeamsData(appData.teams);
     const renderTeamBox = (teamKey, containerId) => {
         const container = document.getElementById(containerId);
         if (!container) return;
-        const team = appData.teams[teamKey];
+        const team = teams[teamKey];
         if (!team) return;
 
         let html = `<p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Short Name: <strong>${team.shortName}</strong></p>`;
@@ -491,7 +652,8 @@ function onResultCategoryChange() {
     else if (catVal.toLowerCase().includes("junior")) cKey = "junior";
     else if (catVal.toLowerCase().includes("general")) cKey = "general";
 
-    const catPrograms = appData.programs[cKey] || { onStage: [], offStage: [], sports: [] };
+    const progs = normalizeProgramsData(appData.programs);
+    const catPrograms = progs[cKey] || { onStage: [], offStage: [], sports: [] };
     const allProgs = [...(catPrograms.onStage || []), ...(catPrograms.offStage || []), ...(catPrograms.sports || [])];
 
     progSelect.innerHTML = "<option value=''>-- പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക --</option>";
@@ -502,10 +664,11 @@ function onResultCategoryChange() {
         progSelect.appendChild(opt);
     });
 
+    const teams = normalizeTeamsData(appData.teams);
     const rosterKey = cKey === "general" ? "senior" : cKey;
     const combined = [
-        ...(appData.teams.teamA[rosterKey] || []).map(s => ({ name: s.replace(/(\(C\)|\(Vc\))/g, "").trim(), team: "teamA", label: `🔴 ${s} (ZELLIJ)` })),
-        ...(appData.teams.teamB[rosterKey] || []).map(s => ({ name: s.replace(/(\(C\)|\(Vc\))/g, "").trim(), team: "teamB", label: `🔵 ${s} (IZNIK)` }))
+        ...(teams.teamA[rosterKey] || []).map(s => ({ name: s.replace(/(\(C\)|\(Vc\))/g, "").trim(), team: "teamA", label: `🔴 ${s} (ZELLIJ)` })),
+        ...(teams.teamB[rosterKey] || []).map(s => ({ name: s.replace(/(\(C\)|\(Vc\))/g, "").trim(), team: "teamB", label: `🔵 ${s} (IZNIK)` }))
     ];
 
     [1, 2, 3].forEach(rank => {
