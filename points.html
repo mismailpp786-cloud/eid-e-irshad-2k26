@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ml" data-theme="light">
+<html lang="ml" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scoreboard & Points — EID-E IRSHAD 2K26</title>
+    <title>Live Master Scoreboard — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- Firebase SDKs -->
@@ -12,11 +12,457 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <link rel="stylesheet" href="style.css">
+    <style>
+        .live-status-bar {
+            background: linear-gradient(90deg, #064e3b, #047857, #065f46);
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: 1px solid #10b981;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+        }
+        .live-dot-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 0.88rem;
+        }
+        .live-pulse-dot {
+            width: 12px;
+            height: 12px;
+            background: #ef4444;
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            animation: pulseLive 1.5s infinite;
+        }
+        @keyframes pulseLive {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .tv-mode-btn {
+            background: #fbbf24;
+            color: #0f172a;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-weight: 900;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.78rem;
+            cursor: pointer;
+        }
+
+        /* Giant Broadcast Score Banner */
+        .broadcast-score-banner {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 16px;
+            align-items: center;
+            background: var(--header-bg);
+            color: #ffffff;
+            padding: 18px 20px;
+            border-radius: 18px;
+            border: 2px solid var(--accent-gold);
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-lg);
+        }
+        .team-score-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 12px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .team-score-box.zellij-box { border-left: 6px solid #ef4444; }
+        .team-score-box.iznik-box { border-right: 6px solid #3b82f6; }
+        .team-badge-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 900;
+        }
+        .team-giant-pts {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.3rem;
+            font-weight: 900;
+            line-height: 1.05;
+            margin: 5px 0;
+            color: #fbbf24;
+        }
+        .team-medal-pills {
+            font-size: 0.84rem;
+            font-weight: 800;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 4px 12px;
+            border-radius: 20px;
+            color: #e2e8f0;
+        }
+        .vs-center-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .vs-circle {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            color: #0f172a;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Category Full Score Summary Strip */
+        .cat-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .cat-summary-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: 12px;
+            padding: 12px 14px;
+            box-shadow: var(--shadow-md);
+        }
+        .cat-summary-box h4 {
+            margin: 0 0 8px 0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 900;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+        }
+        .cat-summary-scores {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1rem;
+        }
+
+        /* Matrix Section Card */
+        .matrix-section-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-top: 4px solid var(--accent-gold);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .matrix-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .matrix-section-title {
+            font-size: 1.05rem;
+            font-weight: 900;
+            margin: 0;
+            font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
+        }
+        .section-sub-score {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 900;
+        }
+        .sub-pill-a {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+        .sub-pill-b {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+        .sub-pill-cat {
+            background: rgba(245, 158, 11, 0.18);
+            color: var(--accent-gold);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+
+        /* Responsive Table with Left & Right Sticky Columns */
+        .matrix-scroll-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+        }
+        .score-matrix-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: max-content;
+            min-width: 100%;
+            background: var(--card-bg);
+        }
+        .score-matrix-table th,
+        .score-matrix-table td {
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+            vertical-align: middle;
+        }
+        /* Sticky Left Column (Team Name) */
+        .score-matrix-table th.sticky-col,
+        .score-matrix-table td.sticky-col {
+            position: sticky;
+            left: 0;
+            z-index: 5;
+            background: var(--card-bg);
+            border-right: 3px solid var(--accent-gold);
+            min-width: 115px;
+            max-width: 135px;
+        }
+        .score-matrix-table th.sticky-col {
+            z-index: 6;
+            background: var(--bg-color);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 0.78rem;
+            padding: 10px 8px;
+        }
+        .score-matrix-table th.prog-vert-header {
+            height: 160px;
+            min-width: 48px;
+            max-width: 56px;
+            padding: 10px 4px;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            font-size: 0.84rem;
+            font-weight: 800;
+            line-height: 1.2;
+            white-space: nowrap;
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+        .group-tag-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            background: #f59e0b;
+            border-radius: 50%;
+            margin-top: 4px;
+        }
+
+        /* Right-Side Total Columns (Section Total, Category Full Score, Grand Total) */
+        .score-matrix-table th.sec-total-header {
+            height: 160px;
+            min-width: 58px;
+            padding: 10px 6px;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            font-size: 0.8rem;
+            font-weight: 900;
+            font-family: 'Montserrat', sans-serif;
+            background: rgba(16, 185, 129, 0.14);
+            color: #10b981;
+            border-left: 2px solid #10b981;
+        }
+        .score-matrix-table th.cat-total-header {
+            height: 160px;
+            min-width: 64px;
+            padding: 10px 6px;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            font-size: 0.84rem;
+            font-weight: 900;
+            font-family: 'Montserrat', sans-serif;
+            background: rgba(245, 158, 11, 0.22);
+            color: var(--accent-gold);
+            border-left: 2px solid var(--accent-gold);
+        }
+        /* Sticky Right-Most Column for Full Score visibility */
+        .score-matrix-table th.sticky-right-col,
+        .score-matrix-table td.sticky-right-col {
+            position: sticky;
+            right: 0;
+            z-index: 5;
+            border-left: 3px solid var(--accent-gold);
+        }
+        .score-matrix-table th.sticky-right-col {
+            z-index: 6;
+            height: 160px;
+            min-width: 66px;
+            padding: 10px 6px;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            font-size: 0.85rem;
+            font-weight: 900;
+            font-family: 'Montserrat', sans-serif;
+            background: #1e293b;
+            color: #fbbf24;
+        }
+
+        .score-matrix-table td.team-name-cell {
+            font-weight: 900;
+            font-size: 0.92rem;
+            padding: 12px 10px;
+            font-family: 'Montserrat', sans-serif;
+            text-align: left;
+            white-space: nowrap;
+        }
+        .score-matrix-table td.score-stack-cell {
+            padding: 6px 4px;
+            min-height: 72px;
+            height: 72px;
+            vertical-align: middle;
+        }
+        .score-matrix-table td.score-stack-cell.has-score-a { background: rgba(239, 68, 68, 0.06); }
+        .score-matrix-table td.score-stack-cell.has-score-b { background: rgba(59, 130, 246, 0.06); }
+        .score-matrix-table td.score-stack-cell.admin-clickable { cursor: pointer; }
+        .score-matrix-table td.score-stack-cell.admin-clickable:hover { background: rgba(245, 158, 11, 0.22); }
+
+        .score-pill-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        .stacked-score-badge {
+            display: inline-block;
+            min-width: 28px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 0.86rem;
+            line-height: 1.2;
+        }
+        .badge-team-a { background: #ef4444; color: #ffffff; }
+        .badge-team-b { background: #3b82f6; color: #ffffff; }
+        .empty-dash { color: var(--text-muted); opacity: 0.3; font-size: 0.75rem; font-weight: 700; }
+
+        .score-matrix-table td.sec-total-cell {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.15rem;
+            padding: 10px 8px;
+            background: rgba(16, 185, 129, 0.08);
+            border-left: 2px solid #10b981;
+        }
+        .score-matrix-table td.cat-total-cell {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.25rem;
+            padding: 10px 8px;
+            background: rgba(245, 158, 11, 0.14);
+            border-left: 2px solid var(--accent-gold);
+        }
+        .score-matrix-table td.grand-total-cell {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.3rem;
+            padding: 10px 8px;
+            background: #0f172a;
+        }
+
+        /* Category Filter Bar */
+        .category-filter-bar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 8px;
+            z-index: 25;
+            background: var(--bg-color);
+            padding: 8px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+        }
+        .cat-jump-btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-weight: 800;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
+        }
+        .cat-jump-btn.active,
+        .cat-jump-btn:hover {
+            border-color: var(--accent-gold);
+            background: var(--accent-gold);
+            color: #0f172a;
+        }
+
+        body.tv-live-mode .top-nav-bar,
+        body.tv-live-mode footer {
+            display: none !important;
+        }
+        body.tv-live-mode .container {
+            max-width: 98vw !important;
+            margin: 10px auto !important;
+        }
+
+        @media (max-width: 680px) {
+            .broadcast-score-banner { grid-template-columns: 1fr 1fr; padding: 14px; gap: 10px; }
+            .vs-center-badge { display: none; }
+            .team-giant-pts { font-size: 2.3rem; }
+            .team-badge-title { font-size: 0.92rem; }
+            .score-matrix-table th.sticky-col,
+            .score-matrix-table td.sticky-col {
+                min-width: 90px;
+                max-width: 102px;
+                padding: 8px 6px;
+            }
+            .score-matrix-table th.prog-vert-header {
+                height: 135px;
+                min-width: 40px;
+                font-size: 0.76rem;
+            }
+            .score-matrix-table th.sticky-right-col {
+                height: 135px;
+                min-width: 54px;
+            }
+        }
+    </style>
 </head>
 <body>
 
     <div id="adminBar" class="admin-bar">
-        <span>⚙️ Admin Mode Active (Scoreboard Control)</span>
+        <span>⚙️ Admin Mode Active ( പട്ടികയിലെ ഏത് കള്ളിയിലും ക്ലിക്ക് ചെയ്ത് മാർക്ക് മാറ്റാം )</span>
         <div class="admin-actions">
             <button class="btn-backup" onclick="exportBackupJSON()">📥 Backup JSON</button>
             <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
@@ -25,83 +471,122 @@
 
     <div class="top-nav-bar">
         <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
-        <span class="nav-page-title">📊 LIVE SCOREBOARD & POINTS</span>
-        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
+        <span class="nav-page-title">📊 LIVE BROADCAST SCOREBOARD</span>
+        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">☀️ Light</button>
     </div>
 
-    <div class="container" style="max-width: 880px; margin: 30px auto;">
-        <h1 class="page-title">തത്സമയ പോയിന്റ് നിലവാരം</h1>
-        <p class="page-subtitle">Team ZELLIJ, Team IZNIK എന്നിവയുടെ മത്സര പോയിന്റുകളും ലീഡർബോർഡും</p>
-
-        <!-- Big Team Score Cards -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-bottom: 20px;">
-            <div class="card" style="text-align: center; border-top: 5px solid var(--zellij-red); margin-bottom: 0;">
-                <h2 style="margin: 0; color: var(--zellij-red); font-family: 'Montserrat', sans-serif;">🔴 Team ZELLIJ</h2>
-                <div id="bigPtsA" style="font-size: 3.2rem; font-weight: 900; font-family: 'Montserrat', sans-serif; margin: 8px 0;">0</div>
-                <div id="medalsA" style="font-size: 0.9rem; font-weight: 800; color: var(--text-muted);">🥇 0  🥈 0  🥉 0</div>
+    <div class="container" style="max-width: 1320px; margin: 18px auto;">
+        
+        <!-- Live Broadcast Status Bar -->
+        <div class="live-status-bar">
+            <div class="live-dot-wrap">
+                <span class="live-pulse-dot"></span>
+                <span>LIVE SCOREBOARD • EID-E IRSHAD 2K26</span>
             </div>
-
-            <div class="card" style="text-align: center; border-top: 5px solid var(--iznik-blue); margin-bottom: 0;">
-                <h2 style="margin: 0; color: var(--iznik-blue); font-family: 'Montserrat', sans-serif;">🔵 Team IZNIK</h2>
-                <div id="bigPtsB" style="font-size: 3.2rem; font-weight: 900; font-family: 'Montserrat', sans-serif; margin: 8px 0;">0</div>
-                <div id="medalsB" style="font-size: 0.9rem; font-weight: 800; color: var(--text-muted);">🥇 0  🥈 0  🥉 0</div>
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <span id="autoRefreshTimerText" style="font-size: 0.8rem; font-weight: 800; font-family: 'Montserrat', sans-serif;">🔄 Sync in: 30s</span>
+                <button class="tv-mode-btn" onclick="toggleTvFullscreenMode()" id="tvModeBtn">📺 Fullscreen TV Mode</button>
             </div>
         </div>
 
-        <!-- Progress Bar -->
-        <div class="team-progress-card">
-            <div class="progress-header" style="font-size: 1rem;">
+        <!-- Giant Broadcast Grand Total Score Banner -->
+        <div class="broadcast-score-banner">
+            <div class="team-score-box zellij-box">
+                <div class="team-badge-title" style="color: #f87171;">🔴 TEAM A — ZELLIJ</div>
+                <div class="team-giant-pts" id="bigPtsA">0</div>
+                <div class="team-medal-pills" id="medalsA">🥇 0 &nbsp; 🥈 0 &nbsp; 🥉 0</div>
+            </div>
+
+            <div class="vs-center-badge">
+                <div class="vs-circle">VS</div>
+                <span style="font-size: 0.7rem; font-weight: 800; color: #fbbf24; letter-spacing: 1px;">GRAND TOTAL</span>
+            </div>
+
+            <div class="team-score-box iznik-box">
+                <div class="team-badge-title" style="color: #60a5fa;">🔵 TEAM B — IZNIK</div>
+                <div class="team-giant-pts" id="bigPtsB">0</div>
+                <div class="team-medal-pills" id="medalsB">🥇 0 &nbsp; 🥈 0 &nbsp; 🥉 0</div>
+            </div>
+        </div>
+
+        <!-- Category-Wise Full Score Summary Cards (Senior, Junior, Sub Junior, General) -->
+        <div class="cat-summary-grid" id="categorySummaryStrip"></div>
+
+        <!-- Visual Progress Bar -->
+        <div class="team-progress-card" style="margin-bottom: 18px;">
+            <div class="progress-header" style="font-size: 0.9rem;">
                 <span style="color: var(--zellij-red);">🔴 Team ZELLIJ: <span id="ptsA">0</span> Pts</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">📌 Single: 5, 3, 1 | Group (🟠): 10, 6, 3</span>
                 <span style="color: var(--iznik-blue);"><span id="ptsB">0</span> Pts :Team IZNIK 🔵</span>
             </div>
-            <div class="progress-bar-container" style="height: 18px; margin-top: 10px;">
+            <div class="progress-bar-container" style="height: 14px; margin-top: 8px;">
                 <div id="barA" class="progress-zellij" style="width: 50%;"></div>
                 <div id="barB" class="progress-iznik" style="width: 50%;"></div>
             </div>
         </div>
 
-        <!-- Admin Manual Score Control -->
-        <div class="card admin-only" data-display="block" style="border: 2px solid var(--accent-gold);">
-            <h3 style="margin-top: 0; color: var(--accent-gold);">⚙️ Admin Scoreboard Control (പോയിന്റ് എഡിറ്റർ)</h3>
-            <label style="display: flex; align-items: center; gap: 8px; font-weight: 800; margin-bottom: 12px; cursor: pointer;">
+        <!-- Admin Controls -->
+        <div class="card admin-only" data-display="block" style="border: 2px solid var(--accent-gold); margin-bottom: 20px;">
+            <h3 style="margin-top: 0; color: var(--accent-gold);">⚙️ Admin Score Settings</h3>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); margin-bottom: 12px;">
+                <label style="font-weight: 800; font-size: 0.85rem;">Point System Rule:</label>
+                <select id="pointPresetSelect" class="form-control" style="max-width: 340px;" onchange="changePointPreset(this.value)">
+                    <option value="5-3-1">Official Rules (Single: 5, 3, 1 | Group: 10, 6, 3)</option>
+                    <option value="10-5-3">Custom 10-5-3 (All Events: 10, 5, 3)</option>
+                </select>
+            </div>
+
+            <label style="display: flex; align-items: center; gap: 8px; font-weight: 800; margin-bottom: 10px; cursor: pointer; font-size: 0.85rem;">
                 <input type="checkbox" id="manualScoreToggle">
-                Manual Score Override ഉപയോഗിക്കുക (റിസൾട്ടിന് പുറമെ നേരിട്ട് പോയിന്റ് നൽകാൻ ടിക് ചെയ്യുക)
+                Grand Total Manual Override (ആകെ പോയിന്റ് നേരിട്ട് മാറ്റാൻ മാത്രം ടിക് ചെയ്യുക)
             </label>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end;">
                 <div>
-                    <label style="font-size: 0.85rem; font-weight: 800;">🔴 Team ZELLIJ Points:</label>
+                    <label style="font-size: 0.78rem; font-weight: 800;">🔴 Team A Total:</label>
                     <input type="number" id="manualPtsAInput" class="form-control" value="0">
                 </div>
                 <div>
-                    <label style="font-size: 0.85rem; font-weight: 800;">🔵 Team IZNIK Points:</label>
+                    <label style="font-size: 0.78rem; font-weight: 800;">🔵 Team B Total:</label>
                     <input type="number" id="manualPtsBInput" class="form-control" value="0">
                 </div>
+                <button class="btn-submit" style="background: #059669; color: #fff; margin: 0; width: auto; padding: 11px 20px;" onclick="saveManualScoreFromUI()">💾 Save</button>
             </div>
-            <button class="btn-submit" style="background: #059669; color: #fff; margin-top: 12px;" onclick="saveManualScoreFromUI()">💾 പോയിന്റുകൾ സേവ് ചെയ്യുക</button>
         </div>
 
-        <!-- Category Breakdown Table -->
-        <div class="card">
-            <h3 style="margin-top: 0;">📈 കാറ്റഗറി തിരിച്ചുള്ള പോയിന്റുകൾ (Category Breakdown)</h3>
-            <table style="width: 100%; border-collapse: collapse; font-size: 0.92rem;">
-                <thead>
-                    <tr style="background: var(--bg-color);">
-                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--border-color);">Category</th>
-                        <th style="padding: 10px; text-align: center; border-bottom: 2px solid var(--border-color); color: var(--zellij-red);">🔴 ZELLIJ</th>
-                        <th style="padding: 10px; text-align: center; border-bottom: 2px solid var(--border-color); color: var(--iznik-blue);">🔵 IZNIK</th>
-                    </tr>
-                </thead>
-                <tbody id="categoryScoreTableBody"></tbody>
-            </table>
+        <!-- Category Filter Bar -->
+        <div class="category-filter-bar">
+            <button class="cat-jump-btn active" onclick="filterMatrixView('all', this)">🌐 All Categories</button>
+            <button class="cat-jump-btn" onclick="filterMatrixView('senior', this)">🎓 Senior</button>
+            <button class="cat-jump-btn" onclick="filterMatrixView('junior', this)">📘 Junior</button>
+            <button class="cat-jump-btn" onclick="filterMatrixView('subjunior', this)">🌱 Sub Junior</button>
+            <button class="cat-jump-btn" onclick="filterMatrixView('general', this)">🌟 General</button>
         </div>
 
-        <div class="card">
-            <div class="card-header"><h3>📌 പോയിന്റ് കണക്കാക്കുന്ന വിധം</h3></div>
-            <div class="rules-body" style="padding-top: 10px;">
-                <ul style="line-height: 1.8; font-weight: 700; margin: 0; padding-left: 20px;">
-                    <li><strong>സ്റ്റേജേതര / സ്റ്റേജ് മത്സരങ്ങൾ (Single):</strong> ഒന്നാം സ്ഥാനം - 5 പോയിന്റ്, രണ്ടാം സ്ഥാനം - 3 പോയിന്റ്, മൂന്നാം സ്ഥാനം - 1 പോയിന്റ്.</li>
-                    <li><strong>ഗ്രൂപ്പ് മത്സരങ്ങൾ (Group Events):</strong> ഒന്നാം സ്ഥാനം - 10 പോയിന്റ്, രണ്ടാം സ്ഥാനം - 6 പോയിന്റ്, മൂന്നാം സ്ഥാനം - 3 പോയിന്റ്.</li>
-                </ul>
+        <!-- Master Score Matrix Container -->
+        <div id="masterScoreMatrixContainer"></div>
+
+    </div>
+
+    <!-- Modal for Admin Direct Cell Score Editing -->
+    <div id="cellScoreModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeCellScoreModal()">&times;</span>
+            <h3 id="cellModalTitle" style="margin: 0 0 6px; font-weight: 900; color: var(--accent-gold);">Edit Program Marks</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0 0 14px;">
+                ഒന്നിലധികം സ്ഥാനങ്ങൾ ഒരേ ടീമിന് ലഭിച്ചാൽ കോമ (<code>,</code>) ഇട്ട് നൽകുക (ഉദാ: Single ആണെങ്കിൽ <code>5, 1</code> അല്ലെങ്കിൽ Group ആണെങ്കിൽ <code>10, 3</code>).
+            </p>
+            <input type="hidden" id="editCellKey">
+            <div class="form-group">
+                <label style="color: var(--zellij-red);">🔴 Team A (ZELLIJ) Marks:</label>
+                <input type="text" id="editCellTeamA" class="form-control" placeholder="ഉദാ: 5, 1">
+            </div>
+            <div class="form-group">
+                <label style="color: var(--iznik-blue);">🔵 Team B (IZNIK) Marks:</label>
+                <input type="text" id="editCellTeamB" class="form-control" placeholder="ഉദാ: 3">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 14px;">
+                <button class="btn-submit" style="background: #059669; color: #fff; margin: 0;" onclick="saveCellScoreModal()">💾 Save Marks</button>
+                <button class="btn-submit" style="background: #dc2626; color: #fff; margin: 0;" onclick="clearCellScoreModal()">🗑️ Reset to Auto</button>
             </div>
         </div>
     </div>
