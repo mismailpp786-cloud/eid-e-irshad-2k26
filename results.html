@@ -18,15 +18,15 @@
 <body>
 
     <div id="adminBar" class="admin-bar">
-        <span>⚙️ Admin Mode Active (Reference Style Poster Maker)</span>
+        <span>⚙️ Admin Mode Active (Reference Poster Maker)</span>
         <div class="admin-actions">
-            <button class="btn-backup" onclick="exportBackupJSON()">📥 Backup JSON</button>
+            <button class="btn-backup" onclick="exportBackupJSON()">📥 Backup</button>
             <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
         </div>
     </div>
 
     <div class="top-nav-bar">
-        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
+        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back</button>
         <span class="nav-page-title">🏆 OFFICIAL RESULT POSTER MAKER</span>
         <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
     </div>
@@ -67,8 +67,13 @@
                     </div>
 
                     <div class="form-group">
+                        <label>സബ് ടൈറ്റിൽ (ഉദാ: HIGHER SECONDARY GIRLS):</label>
+                        <input type="text" id="resSubTitleInput" class="form-control" value="HIGHER SECONDARY GIRLS" oninput="updatePosterPreview()">
+                    </div>
+
+                    <div class="form-group">
                         <label>മത്സര ഇനം (Program Name):</label>
-                        <select id="resProgSelect" class="form-control" onchange="updatePosterPreview()">
+                        <select id="resProgSelect" class="form-control" onchange="onProgramDropdownSelect()">
                             <option value="">-- പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക --</option>
                         </select>
                     </div>
@@ -194,5 +199,61 @@
 
     <footer>&copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM</footer>
     <script src="app.js"></script>
+    <script>
+        // Additional UI binders for Poster Switcher & Preview
+        function setPosterLayout(layoutClass) {
+            currentPosterLayout = layoutClass;
+            const canvas = document.getElementById("posterCanvas");
+            if (canvas) {
+                canvas.className = layoutClass;
+            }
+        }
+
+        function onProgramDropdownSelect() {
+            const drop = document.getElementById("resProgSelect");
+            const custom = document.getElementById("resProgCustom");
+            if (drop && custom && drop.value) {
+                custom.value = drop.value;
+            }
+            updatePosterPreview();
+        }
+
+        function updatePosterPreview() {
+            const resNo = (document.getElementById("resNoInput")?.value || "111").trim();
+            const subTitle = (document.getElementById("resSubTitleInput")?.value || "HIGHER SECONDARY GIRLS").trim();
+            const progCustom = (document.getElementById("resProgCustom")?.value || "").trim();
+            const progDrop = document.getElementById("resProgSelect")?.value || "";
+            const progName = progCustom || progDrop || "ARABIC CALLIGRAPHY";
+
+            const w1Name = (document.getElementById("win1Name")?.value || "").trim();
+            const w1Sub = (document.getElementById("win1Sub")?.value || "").trim();
+            const w1TeamKey = document.getElementById("win1Team")?.value || "teamA";
+            const w1TeamName = formatTeamDisplayName(w1TeamKey);
+
+            const w2Name = (document.getElementById("win2Name")?.value || "").trim();
+            const w2Sub = (document.getElementById("win2Sub")?.value || "").trim();
+            const w2TeamKey = document.getElementById("win2Team")?.value || "teamB";
+            const w2TeamName = formatTeamDisplayName(w2TeamKey);
+
+            const w3Name = (document.getElementById("win3Name")?.value || "").trim();
+            const w3Sub = (document.getElementById("win3Sub")?.value || "").trim();
+            const w3TeamKey = document.getElementById("win3Team")?.value || "teamA";
+            const w3TeamName = formatTeamDisplayName(w3TeamKey);
+
+            if (document.getElementById("previewResNo")) document.getElementById("previewResNo").textContent = String(resNo).padStart(3, "0");
+            if (document.getElementById("previewCat")) document.getElementById("previewCat").textContent = subTitle.toUpperCase();
+            if (document.getElementById("previewProg")) document.getElementById("previewProg").textContent = progName.toUpperCase();
+
+            if (document.getElementById("previewWin1Name")) document.getElementById("previewWin1Name").textContent = w1Name;
+            if (document.getElementById("previewWin1Sub")) document.getElementById("previewWin1Sub.innerHTML") || (document.getElementById("previewWin1Sub").innerHTML = `${w1Sub} &bull; <span>${w1TeamName}</span>`);
+
+            if (document.getElementById("previewWin2Name")) document.getElementById("previewWin2Name").textContent = w2Name;
+            if (document.getElementById("previewWin2Sub")) document.getElementById("previewWin2Sub").innerHTML = `${w2Sub} &bull; <span>${w2TeamName}</span>`;
+
+            if (document.getElementById("previewWin3Name")) document.getElementById("previewWin3Name").textContent = w3Name;
+            if (document.getElementById("previewWin3Sub")) document.getElementById("previewWin3Sub").innerHTML = `${w3Sub} &bull; <span>${w3TeamName}</span>`;
+            if (document.getElementById("previewWin3Card")) document.getElementById("previewWin3Card").style.display = w3Name ? "flex" : "none";
+        }
+    </script>
 </body>
 </html>
