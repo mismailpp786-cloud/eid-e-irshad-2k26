@@ -13,21 +13,25 @@
 
     <link rel="stylesheet" href="style.css">
     <style>
+        body {
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
         .live-status-bar {
             background: #131c31;
             color: #ffffff;
-            padding: 4px 10px;
-            border-radius: 6px;
+            padding: 3px 8px;
+            border-radius: 4px;
             border: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 4px;
-            font-size: 0.72rem;
+            margin-bottom: 3px;
+            font-size: 0.68rem;
         }
         .live-pulse-dot {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             background: #ef4444;
             border-radius: 50%;
             display: inline-block;
@@ -43,11 +47,11 @@
             background: #fbbf24;
             color: #0f172a;
             border: none;
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 2px 5px;
+            border-radius: 3px;
             font-weight: 900;
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             cursor: pointer;
         }
 
@@ -55,32 +59,32 @@
         .broadcast-score-banner {
             display: grid;
             grid-template-columns: 1fr auto 1fr;
-            gap: 6px;
+            gap: 4px;
             align-items: center;
             background: var(--card-bg);
             color: var(--text-color);
-            padding: 4px 10px;
-            border-radius: 6px;
+            padding: 3px 8px;
+            border-radius: 5px;
             border: 1px solid var(--border-color);
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
         .team-score-box {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 3px 6px;
-            border-radius: 5px;
+            padding: 2px 6px;
+            border-radius: 4px;
             background: var(--bg-color);
             border: 1px solid var(--border-color);
         }
         .team-score-box.zellij-box { border-left: 3px solid #ef4444; }
         .team-score-box.iznik-box { border-left: 3px solid #3b82f6; }
-        .team-badge-title { font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 900; }
-        .team-giant-pts { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 900; color: var(--accent-gold); }
+        .team-badge-title { font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 900; }
+        .team-giant-pts { font-family: 'Montserrat', sans-serif; font-size: 0.95rem; font-weight: 900; color: var(--accent-gold); }
         .vs-circle {
-            width: 22px; height: 22px; border-radius: 50%;
+            width: 18px; height: 18px; border-radius: 50%;
             background: var(--accent-gold); color: #0f172a;
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.62rem;
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.55rem;
             display: flex; align-items: center; justify-content: center;
         }
 
@@ -88,20 +92,20 @@
         .matrix-section-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 4px 6px;
-            margin-bottom: 5px;
+            border-radius: 5px;
+            padding: 3px 5px;
+            margin-bottom: 4px;
         }
         .matrix-section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2px;
-            padding-bottom: 2px;
+            margin-bottom: 1px;
+            padding-bottom: 1px;
             border-bottom: 1px solid var(--border-color);
         }
         .matrix-section-title {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 900;
             margin: 0;
             font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
@@ -109,9 +113,9 @@
         }
         .section-sub-score {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.62rem;
+            font-size: 0.58rem;
             font-weight: 900;
         }
 
@@ -125,7 +129,7 @@
             border-spacing: 0;
             width: 100%;
             background: var(--card-bg);
-            font-size: 0.58rem;
+            font-size: 0.55rem;
         }
         .score-matrix-table th,
         .score-matrix-table td {
@@ -141,52 +145,53 @@
             z-index: 5;
             background: var(--card-bg);
             border-right: 2px solid var(--accent-gold);
-            width: 68px;
-            min-width: 68px;
+            width: 60px;
+            min-width: 60px;
         }
         .score-matrix-table th.sticky-col {
             z-index: 6;
             background: var(--bg-color);
             font-family: 'Montserrat', sans-serif;
             font-weight: 900;
-            font-size: 0.52rem;
-            padding: 2px 1px;
+            font-size: 0.48rem;
+            padding: 1px;
         }
         .score-matrix-table th.cat-group-banner {
             background: rgba(245, 158, 11, 0.18);
             color: var(--accent-gold);
             font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
             font-weight: 900;
-            font-size: 0.6rem;
-            padding: 2px;
+            font-size: 0.55rem;
+            padding: 1px;
             text-align: center;
             border-right: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
+            height: 18px;
         }
         .score-matrix-table th.prog-vert-header {
-            height: 105px; /* Increased height so off-stage program names fit nicely */
-            padding: 3px 1px;
+            height: 72px; /* Reduced height so everything fits vertically on screen */
+            padding: 2px 1px;
             writing-mode: vertical-rl;
             transform: rotate(180deg);
-            font-size: 0.58rem;
+            font-size: 0.52rem;
             font-weight: 700;
-            line-height: 1.05;
+            line-height: 1;
             white-space: nowrap;
             background: var(--bg-color);
             color: var(--text-color);
         }
         .group-tag-dot {
-            display: inline-block; width: 3px; height: 3px; background: #f59e0b; border-radius: 50%; margin-top: 2px;
+            display: inline-block; width: 2px; height: 2px; background: #f59e0b; border-radius: 50%; margin-top: 1px;
         }
         .score-matrix-table th.sec-total-header,
         .score-matrix-table th.sticky-right-col {
-            height: 105px;
-            width: 36px;
-            min-width: 36px;
-            padding: 3px 1px;
+            height: 72px;
+            width: 32px;
+            min-width: 32px;
+            padding: 2px 1px;
             writing-mode: vertical-rl;
             transform: rotate(180deg);
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             font-weight: 900;
             font-family: 'Montserrat', sans-serif;
         }
@@ -200,44 +205,44 @@
             background: #0f172a;
             color: #fbbf24;
             border-left: 2px solid var(--accent-gold);
-            width: 40px;
-            min-width: 40px;
+            width: 36px;
+            min-width: 36px;
         }
         .score-matrix-table th.sticky-right-col { z-index: 6; }
 
         .score-matrix-table td.team-name-cell {
             font-weight: 900;
-            font-size: 0.6rem;
-            padding: 3px 2px;
+            font-size: 0.55rem;
+            padding: 2px 1px;
             font-family: 'Montserrat', sans-serif;
             text-align: left;
             white-space: nowrap;
         }
         .score-matrix-table td.score-stack-cell {
-            padding: 2px 1px;
-            min-height: 44px; /* Increased height to easily fit 1st, 2nd, 3rd stacked score badges */
-            height: 44px;
+            padding: 1px;
+            min-height: 34px;
+            height: 34px;
             vertical-align: middle;
         }
         .score-matrix-table td.score-stack-cell.admin-clickable { cursor: pointer; }
         .score-matrix-table td.score-stack-cell.admin-clickable:hover { background: rgba(245, 158, 11, 0.15); }
 
         .score-pill-stack {
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
         }
         .stacked-score-badge {
-            display: inline-block; min-width: 16px; padding: 1px 3px; border-radius: 2px;
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.55rem;
+            display: inline-block; min-width: 14px; padding: 1px 2px; border-radius: 2px;
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.5rem;
         }
         .badge-team-a { background: #ef4444; color: #ffffff; }
         .badge-team-b { background: #3b82f6; color: #ffffff; }
-        .empty-dash { color: var(--text-muted); opacity: 0.3; font-size: 0.5rem; }
+        .empty-dash { color: var(--text-muted); opacity: 0.3; font-size: 0.45rem; }
 
         .score-matrix-table td.sec-total-cell {
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.68rem; padding: 2px 1px; background: rgba(16, 185, 129, 0.06);
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.62rem; padding: 1px; background: rgba(16, 185, 129, 0.06);
         }
         .score-matrix-table td.grand-total-cell {
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.74rem; padding: 2px 1px; background: #0f172a;
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.68rem; padding: 1px; background: #0f172a;
         }
 
         /* TV Fullscreen Mode */
@@ -247,11 +252,11 @@
             display: none !important;
         }
         body.tv-live-mode .container {
-            max-width: 99vw !important;
+            max-width: 99.5vw !important;
             margin: 2px auto !important;
         }
         body.tv-live-mode .matrix-section-card {
-            padding: 3px 5px;
+            padding: 2px 4px;
             margin-bottom: 3px;
         }
     </style>
@@ -281,7 +286,7 @@
                 <span style="font-weight: 800;">LIVE SCOREBOARD • EID-E IRSHAD 2K26</span>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-                <span id="autoRefreshTimerText" style="font-size: 0.62rem; font-weight: 800; font-family: 'Montserrat', sans-serif;">🔄 30s</span>
+                <span id="autoRefreshTimerText" style="font-size: 0.6rem; font-weight: 800; font-family: 'Montserrat', sans-serif;">🔄 30s</span>
                 <button class="tv-mode-btn" onclick="toggleTvFullscreenMode()" id="tvModeBtn">❌ Exit TV</button>
             </div>
         </div>
@@ -291,7 +296,7 @@
             <div class="team-score-box zellij-box">
                 <div>
                     <div class="team-badge-title" style="color: #f87171;">🔴 ZELLIJ</div>
-                    <div style="font-size: 0.55rem; font-weight: 700; color: var(--text-muted);" id="medalsA">🥇0 🥈0 🥉0</div>
+                    <div style="font-size: 0.5rem; font-weight: 700; color: var(--text-muted);" id="medalsA">🥇0 🥈0 🥉0</div>
                 </div>
                 <div class="team-giant-pts" id="bigPtsA">0</div>
             </div>
@@ -301,23 +306,23 @@
             <div class="team-score-box iznik-box">
                 <div>
                     <div class="team-badge-title" style="color: #60a5fa;">🔵 IZNIK</div>
-                    <div style="font-size: 0.55rem; font-weight: 700; color: var(--text-muted);" id="medalsB">🥇0 🥈0 🥉0</div>
+                    <div style="font-size: 0.5rem; font-weight: 700; color: var(--text-muted);" id="medalsB">🥇0 🥈0 🥉0</div>
                 </div>
                 <div class="team-giant-pts" id="bigPtsB">0</div>
             </div>
         </div>
 
         <!-- Admin Quick Controls -->
-        <div class="card admin-only" data-display="block" style="border: 1px solid var(--accent-gold); margin-bottom: 4px; padding: 6px;">
-            <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap; font-size: 0.72rem;">
-                <select id="pointPresetSelect" class="form-control" style="max-width: 220px; padding: 2px;" onchange="changePointPreset(this.value)">
+        <div class="card admin-only" data-display="block" style="border: 1px solid var(--accent-gold); margin-bottom: 3px; padding: 4px;">
+            <div style="display: flex; gap: 5px; align-items: center; flex-wrap: wrap; font-size: 0.68rem;">
+                <select id="pointPresetSelect" class="form-control" style="max-width: 200px; padding: 2px;" onchange="changePointPreset(this.value)">
                     <option value="5-3-1">Rules (Single: 5,3,1 | Group: 10,6,3)</option>
                     <option value="10-5-3">Custom (All: 10,5,3)</option>
                 </select>
                 <label style="font-weight: 700;"><input type="checkbox" id="manualScoreToggle"> Override</label>
-                <input type="number" id="manualPtsAInput" class="form-control" style="width: 55px; padding: 2px;" value="0">
-                <input type="number" id="manualPtsBInput" class="form-control" style="width: 55px; padding: 2px;" value="0">
-                <button class="btn-submit" style="background: #059669; color: #fff; margin: 0; width: auto; padding: 2px 8px;" onclick="saveManualScoreFromUI()">Save</button>
+                <input type="number" id="manualPtsAInput" class="form-control" style="width: 50px; padding: 2px;" value="0">
+                <input type="number" id="manualPtsBInput" class="form-control" style="width: 50px; padding: 2px;" value="0">
+                <button class="btn-submit" style="background: #059669; color: #fff; margin: 0; width: auto; padding: 2px 6px;" onclick="saveManualScoreFromUI()">Save</button>
             </div>
         </div>
 
