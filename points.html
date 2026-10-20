@@ -5,19 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scoreboard & Points — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <div id="adminBar" class="admin-bar">
+        <span>⚙️ Admin Mode Active (Scoreboard Control)</span>
+        <div class="admin-actions">
+            <button class="btn-backup" onclick="exportBackupJSON()">📥 Backup JSON</button>
+            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
+        </div>
+    </div>
+
     <div class="top-nav-bar">
         <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
         <span class="nav-page-title">📊 LIVE SCOREBOARD & POINTS</span>
         <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
     </div>
-    <div class="container" style="max-width: 850px; margin: 30px auto;">
+
+    <div class="container" style="max-width: 880px; margin: 30px auto;">
         <h1 class="page-title">തത്സമയ പോയിന്റ് നിലവാരം</h1>
         <p class="page-subtitle">Team ZELLIJ, Team IZNIK എന്നിവയുടെ മത്സര പോയിന്റുകളും ലീഡർബോർഡും</p>
 
-        <div class="team-progress-card" style="margin-top: 25px;">
+        <!-- Big Team Score Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-bottom: 20px;">
+            <div class="card" style="text-align: center; border-top: 5px solid var(--zellij-red); margin-bottom: 0;">
+                <h2 style="margin: 0; color: var(--zellij-red); font-family: 'Montserrat', sans-serif;">🔴 Team ZELLIJ</h2>
+                <div id="bigPtsA" style="font-size: 3.2rem; font-weight: 900; font-family: 'Montserrat', sans-serif; margin: 8px 0;">0</div>
+                <div id="medalsA" style="font-size: 0.9rem; font-weight: 800; color: var(--text-muted);">🥇 0  🥈 0  🥉 0</div>
+            </div>
+
+            <div class="card" style="text-align: center; border-top: 5px solid var(--iznik-blue); margin-bottom: 0;">
+                <h2 style="margin: 0; color: var(--iznik-blue); font-family: 'Montserrat', sans-serif;">🔵 Team IZNIK</h2>
+                <div id="bigPtsB" style="font-size: 3.2rem; font-weight: 900; font-family: 'Montserrat', sans-serif; margin: 8px 0;">0</div>
+                <div id="medalsB" style="font-size: 0.9rem; font-weight: 800; color: var(--text-muted);">🥇 0  🥈 0  🥉 0</div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="team-progress-card">
             <div class="progress-header" style="font-size: 1rem;">
                 <span style="color: var(--zellij-red);">🔴 Team ZELLIJ: <span id="ptsA">0</span> Pts</span>
                 <span style="color: var(--iznik-blue);"><span id="ptsB">0</span> Pts :Team IZNIK 🔵</span>
@@ -28,17 +60,56 @@
             </div>
         </div>
 
-        <div class="card" style="margin-top: 25px;">
+        <!-- Admin Manual Score Control -->
+        <div class="card admin-only" data-display="block" style="border: 2px solid var(--accent-gold);">
+            <h3 style="margin-top: 0; color: var(--accent-gold);">⚙️ Admin Scoreboard Control (പോയിന്റ് എഡിറ്റർ)</h3>
+            <label style="display: flex; align-items: center; gap: 8px; font-weight: 800; margin-bottom: 12px; cursor: pointer;">
+                <input type="checkbox" id="manualScoreToggle">
+                Manual Score Override ഉപയോഗിക്കുക (റിസൾട്ടിന് പുറമെ നേരിട്ട് പോയിന്റ് നൽകാൻ ടിക് ചെയ്യുക)
+            </label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                    <label style="font-size: 0.85rem; font-weight: 800;">🔴 Team ZELLIJ Points:</label>
+                    <input type="number" id="manualPtsAInput" class="form-control" value="0">
+                </div>
+                <div>
+                    <label style="font-size: 0.85rem; font-weight: 800;">🔵 Team IZNIK Points:</label>
+                    <input type="number" id="manualPtsBInput" class="form-control" value="0">
+                </div>
+            </div>
+            <button class="btn-submit" style="background: #059669; color: #fff; margin-top: 12px;" onclick="saveManualScoreFromUI()">💾 പോയിന്റുകൾ സേവ് ചെയ്യുക</button>
+        </div>
+
+        <!-- Category Breakdown Table -->
+        <div class="card">
+            <h3 style="margin-top: 0;">📈 കാറ്റഗറി തിരിച്ചുള്ള പോയിന്റുകൾ (Category Breakdown)</h3>
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.92rem;">
+                <thead>
+                    <tr style="background: var(--bg-color);">
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--border-color);">Category</th>
+                        <th style="padding: 10px; text-align: center; border-bottom: 2px solid var(--border-color); color: var(--zellij-red);">🔴 ZELLIJ</th>
+                        <th style="padding: 10px; text-align: center; border-bottom: 2px solid var(--border-color); color: var(--iznik-blue);">🔵 IZNIK</th>
+                    </tr>
+                </thead>
+                <tbody id="categoryScoreTableBody"></tbody>
+            </table>
+        </div>
+
+        <div class="card">
             <div class="card-header"><h3>📌 പോയിന്റ് കണക്കാക്കുന്ന വിധം</h3></div>
             <div class="rules-body" style="padding-top: 10px;">
                 <ul style="line-height: 1.8; font-weight: 700; margin: 0; padding-left: 20px;">
-                    <li><strong>സ്റ്റേജേതര / സ്റ്റേജ് മത്സരങ്ങൾ:</strong> ഒന്നാം സ്ഥാനം - 5 പോയിന്റ്, രണ്ടാം സ്ഥാനം - 3 പോയിന്റ്, മൂന്നാം സ്ഥാനം - 1 പോയിന്റ്.</li>
-                    <li><strong>ഗ്രൂപ്പ് മത്സരങ്ങൾ:</strong> ഒന്നാം സ്ഥാനം - 10 പോയിന്റ്, രണ്ടാം സ്ഥാനം - 6 പോയിന്റ്, മൂന്നാം സ്ഥാനം - 3 പോയിന്റ്.</li>
+                    <li><strong>സ്റ്റേജേതര / സ്റ്റേജ് മത്സരങ്ങൾ (Single):</strong> ഒന്നാം സ്ഥാനം - 5 പോയിന്റ്, രണ്ടാം സ്ഥാനം - 3 പോയിന്റ്, മൂന്നാം സ്ഥാനം - 1 പോയിന്റ്.</li>
+                    <li><strong>ഗ്രൂപ്പ് മത്സരങ്ങൾ (Group Events):</strong> ഒന്നാം സ്ഥാനം - 10 പോയിന്റ്, രണ്ടാം സ്ഥാനം - 6 പോയിന്റ്, മൂന്നാം സ്ഥാനം - 3 പോയിന്റ്.</li>
                 </ul>
             </div>
         </div>
     </div>
-    <footer>&copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM</footer>
+
+    <footer>
+        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM &bull; Rahmaniyya Arabic College
+    </footer>
+
     <script src="app.js"></script>
 </body>
 </html>
