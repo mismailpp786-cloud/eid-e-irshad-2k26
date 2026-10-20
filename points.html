@@ -89,8 +89,8 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            padding: 5px 8px;
-            margin-bottom: 6px;
+            padding: 4px 6px;
+            margin-bottom: 5px;
         }
         .matrix-section-header {
             display: flex;
@@ -101,7 +101,7 @@
             border-bottom: 1px solid var(--border-color);
         }
         .matrix-section-title {
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 900;
             margin: 0;
             font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
@@ -111,7 +111,7 @@
             display: flex;
             gap: 8px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             font-weight: 900;
         }
 
@@ -125,7 +125,7 @@
             border-spacing: 0;
             width: 100%;
             background: var(--card-bg);
-            font-size: 0.6rem;
+            font-size: 0.58rem;
         }
         .score-matrix-table th,
         .score-matrix-table td {
@@ -141,15 +141,15 @@
             z-index: 5;
             background: var(--card-bg);
             border-right: 2px solid var(--accent-gold);
-            width: 70px;
-            min-width: 70px;
+            width: 68px;
+            min-width: 68px;
         }
         .score-matrix-table th.sticky-col {
             z-index: 6;
             background: var(--bg-color);
             font-family: 'Montserrat', sans-serif;
             font-weight: 900;
-            font-size: 0.55rem;
+            font-size: 0.52rem;
             padding: 2px 1px;
         }
         .score-matrix-table th.cat-group-banner {
@@ -157,20 +157,20 @@
             color: var(--accent-gold);
             font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
             font-weight: 900;
-            font-size: 0.62rem;
+            font-size: 0.6rem;
             padding: 2px;
             text-align: center;
             border-right: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
         }
         .score-matrix-table th.prog-vert-header {
-            height: 68px;
-            padding: 2px 1px;
+            height: 105px; /* Increased height so off-stage program names fit nicely */
+            padding: 3px 1px;
             writing-mode: vertical-rl;
             transform: rotate(180deg);
-            font-size: 0.56rem;
+            font-size: 0.58rem;
             font-weight: 700;
-            line-height: 1;
+            line-height: 1.05;
             white-space: nowrap;
             background: var(--bg-color);
             color: var(--text-color);
@@ -180,10 +180,10 @@
         }
         .score-matrix-table th.sec-total-header,
         .score-matrix-table th.sticky-right-col {
-            height: 68px;
-            width: 38px;
-            min-width: 38px;
-            padding: 2px 1px;
+            height: 105px;
+            width: 36px;
+            min-width: 36px;
+            padding: 3px 1px;
             writing-mode: vertical-rl;
             transform: rotate(180deg);
             font-size: 0.6rem;
@@ -200,33 +200,33 @@
             background: #0f172a;
             color: #fbbf24;
             border-left: 2px solid var(--accent-gold);
-            width: 42px;
-            min-width: 42px;
+            width: 40px;
+            min-width: 40px;
         }
         .score-matrix-table th.sticky-right-col { z-index: 6; }
 
         .score-matrix-table td.team-name-cell {
             font-weight: 900;
-            font-size: 0.62rem;
+            font-size: 0.6rem;
             padding: 3px 2px;
             font-family: 'Montserrat', sans-serif;
             text-align: left;
             white-space: nowrap;
         }
         .score-matrix-table td.score-stack-cell {
-            padding: 1px;
-            min-height: 32px;
-            height: 32px;
+            padding: 2px 1px;
+            min-height: 44px; /* Increased height to easily fit 1st, 2nd, 3rd stacked score badges */
+            height: 44px;
             vertical-align: middle;
         }
         .score-matrix-table td.score-stack-cell.admin-clickable { cursor: pointer; }
         .score-matrix-table td.score-stack-cell.admin-clickable:hover { background: rgba(245, 158, 11, 0.15); }
 
         .score-pill-stack {
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
         }
         .stacked-score-badge {
-            display: inline-block; min-width: 15px; padding: 1px 2px; border-radius: 2px;
+            display: inline-block; min-width: 16px; padding: 1px 3px; border-radius: 2px;
             font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.55rem;
         }
         .badge-team-a { background: #ef4444; color: #ffffff; }
@@ -234,10 +234,10 @@
         .empty-dash { color: var(--text-muted); opacity: 0.3; font-size: 0.5rem; }
 
         .score-matrix-table td.sec-total-cell {
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.7rem; padding: 2px 1px; background: rgba(16, 185, 129, 0.06);
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.68rem; padding: 2px 1px; background: rgba(16, 185, 129, 0.06);
         }
         .score-matrix-table td.grand-total-cell {
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.76rem; padding: 2px 1px; background: #0f172a;
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.74rem; padding: 2px 1px; background: #0f172a;
         }
 
         /* TV Fullscreen Mode */
@@ -251,8 +251,8 @@
             margin: 2px auto !important;
         }
         body.tv-live-mode .matrix-section-card {
-            padding: 3px 6px;
-            margin-bottom: 4px;
+            padding: 3px 5px;
+            margin-bottom: 3px;
         }
     </style>
 </head>
@@ -272,7 +272,7 @@
         <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">☀️ Light</button>
     </div>
 
-    <div class="container" style="max-width: 1200px; margin: 6px auto;">
+    <div class="container" style="max-width: 1200px; margin: 4px auto;">
         
         <!-- Live Status Bar -->
         <div class="live-status-bar">
@@ -280,8 +280,8 @@
                 <span class="live-pulse-dot"></span>
                 <span style="font-weight: 800;">LIVE SCOREBOARD • EID-E IRSHAD 2K26</span>
             </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span id="autoRefreshTimerText" style="font-size: 0.65rem; font-weight: 800; font-family: 'Montserrat', sans-serif;">🔄 30s</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <span id="autoRefreshTimerText" style="font-size: 0.62rem; font-weight: 800; font-family: 'Montserrat', sans-serif;">🔄 30s</span>
                 <button class="tv-mode-btn" onclick="toggleTvFullscreenMode()" id="tvModeBtn">❌ Exit TV</button>
             </div>
         </div>
@@ -291,7 +291,7 @@
             <div class="team-score-box zellij-box">
                 <div>
                     <div class="team-badge-title" style="color: #f87171;">🔴 ZELLIJ</div>
-                    <div style="font-size: 0.6rem; font-weight: 700; color: var(--text-muted);" id="medalsA">🥇0 🥈0 🥉0</div>
+                    <div style="font-size: 0.55rem; font-weight: 700; color: var(--text-muted);" id="medalsA">🥇0 🥈0 🥉0</div>
                 </div>
                 <div class="team-giant-pts" id="bigPtsA">0</div>
             </div>
@@ -301,23 +301,23 @@
             <div class="team-score-box iznik-box">
                 <div>
                     <div class="team-badge-title" style="color: #60a5fa;">🔵 IZNIK</div>
-                    <div style="font-size: 0.6rem; font-weight: 700; color: var(--text-muted);" id="medalsB">🥇0 🥈0 🥉0</div>
+                    <div style="font-size: 0.55rem; font-weight: 700; color: var(--text-muted);" id="medalsB">🥇0 🥈0 🥉0</div>
                 </div>
                 <div class="team-giant-pts" id="bigPtsB">0</div>
             </div>
         </div>
 
         <!-- Admin Quick Controls -->
-        <div class="card admin-only" data-display="block" style="border: 1px solid var(--accent-gold); margin-bottom: 6px; padding: 8px;">
-            <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap; font-size: 0.75rem;">
-                <select id="pointPresetSelect" class="form-control" style="max-width: 240px; padding: 3px;" onchange="changePointPreset(this.value)">
+        <div class="card admin-only" data-display="block" style="border: 1px solid var(--accent-gold); margin-bottom: 4px; padding: 6px;">
+            <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap; font-size: 0.72rem;">
+                <select id="pointPresetSelect" class="form-control" style="max-width: 220px; padding: 2px;" onchange="changePointPreset(this.value)">
                     <option value="5-3-1">Rules (Single: 5,3,1 | Group: 10,6,3)</option>
                     <option value="10-5-3">Custom (All: 10,5,3)</option>
                 </select>
                 <label style="font-weight: 700;"><input type="checkbox" id="manualScoreToggle"> Override</label>
-                <input type="number" id="manualPtsAInput" class="form-control" style="width: 60px; padding: 3px;" value="0">
-                <input type="number" id="manualPtsBInput" class="form-control" style="width: 60px; padding: 3px;" value="0">
-                <button class="btn-submit" style="background: #059669; color: #fff; margin: 0; width: auto; padding: 3px 8px;" onclick="saveManualScoreFromUI()">Save</button>
+                <input type="number" id="manualPtsAInput" class="form-control" style="width: 55px; padding: 2px;" value="0">
+                <input type="number" id="manualPtsBInput" class="form-control" style="width: 55px; padding: 2px;" value="0">
+                <button class="btn-submit" style="background: #059669; color: #fff; margin: 0; width: auto; padding: 2px 8px;" onclick="saveManualScoreFromUI()">Save</button>
             </div>
         </div>
 
@@ -340,9 +340,9 @@
                 <label style="color: var(--iznik-blue);">🔵 Team B Marks:</label>
                 <input type="text" id="editCellTeamB" class="form-control" placeholder="3">
             </div>
-            <div style="display: flex; gap: 8px; margin-top: 8px;">
-                <button class="btn-submit" style="background: #059669; color: #fff; margin: 0; padding: 5px;" onclick="saveCellScoreModal()">Save</button>
-                <button class="btn-submit" style="background: #dc2626; color: #fff; margin: 0; padding: 5px;" onclick="clearCellScoreModal()">Reset</button>
+            <div style="display: flex; gap: 8px; margin-top: 6px;">
+                <button class="btn-submit" style="background: #059669; color: #fff; margin: 0; padding: 4px;" onclick="saveCellScoreModal()">Save</button>
+                <button class="btn-submit" style="background: #dc2626; color: #fff; margin: 0; padding: 4px;" onclick="clearCellScoreModal()">Reset</button>
             </div>
         </div>
     </div>
