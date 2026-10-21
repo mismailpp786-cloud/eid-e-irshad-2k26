@@ -61,22 +61,37 @@
         .matrix-reg-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             white-space: nowrap;
         }
         .matrix-reg-table th, .matrix-reg-table td {
             border: 1px solid var(--border-color);
-            padding: 10px 12px;
+            padding: 8px 10px;
             text-align: center;
         }
         .matrix-reg-table th {
             background: var(--bg-color);
             font-weight: 900;
             font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
+            position: sticky;
+            top: 0;
+            z-index: 5;
         }
         .matrix-reg-table td:nth-child(2) {
             text-align: left;
             font-weight: 800;
+            position: sticky;
+            left: 0;
+            background: var(--card-bg);
+            z-index: 4;
+            border-right: 2px solid var(--accent-gold);
+        }
+        .matrix-reg-table th:nth-child(2) {
+            position: sticky;
+            left: 0;
+            background: var(--bg-color);
+            z-index: 6;
+            border-right: 2px solid var(--accent-gold);
         }
         .tick-icon {
             color: #059669;
@@ -115,8 +130,9 @@
         @media print {
             body { background: #fff !important; color: #000 !important; }
             .admin-only, .top-nav-bar, .reg-header-bar button, footer { display: none !important; }
-            .matrix-reg-table { border: 1px solid #000; }
-            .matrix-reg-table th, .matrix-reg-table td { border: 1px solid #000; color: #000; }
+            .table-responsive { overflow: visible !important; box-shadow: none !important; border: none !important; }
+            .matrix-reg-table { border: 1px solid #000; width: 100% !important; font-size: 7pt !important; }
+            .matrix-reg-table th, .matrix-reg-table td { border: 1px solid #000; color: #000; padding: 4px !important; }
         }
     </style>
 </head>
@@ -133,9 +149,9 @@
     <div class="reg-header-bar">
         <div>
             <span style="font-size: 0.7rem; font-weight: 800; color: #fbbf24; font-family: 'Montserrat', sans-serif;">TEAM EVENT REGISTER</span>
-            <h2 style="margin: 0; font-weight: 900; font-family: 'Montserrat', sans-serif;">STAGE & OFFSTAGE MATRIX</h2>
+            <h2 style="margin: 0; font-weight: 900; font-family: 'Montserrat', sans-serif;">FESTIVAL REGISTRATION MATRIX</h2>
         </div>
-        <div style="display: flex; gap: 8px; align-items: center;">
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <select id="teamSelectTab" class="form-control" style="padding: 6px 12px; font-weight: 800;" onchange="renderRegistrationMatrix()">
                 <option value="teamA">🔴 Team ZELLIJ</option>
                 <option value="teamB">🔵 Team IZNIK</option>
@@ -144,13 +160,14 @@
                 <option value="senior">Senior</option>
                 <option value="junior">Junior</option>
                 <option value="subjunior">Sub Junior</option>
+                <option value="general">General</option>
             </select>
             <button class="btn-action-sm" style="background:#fbbf24; color:#0f172a; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer;" onclick="window.print()">🖨️ Print / PDF</button>
             <button class="back-home-btn" onclick="location.href='index.html'" style="margin:0;">⬅️ Back</button>
         </div>
     </div>
 
-    <div class="container" style="max-width: 1200px; margin: 20px auto;">
+    <div class="container" style="max-width: 1250px; margin: 20px auto;">
         
         <!-- Summary Stats -->
         <div class="stats-grid">
@@ -160,7 +177,7 @@
             </div>
             <div class="stat-card">
                 <div class="num" id="statEventsCount">0</div>
-                <div class="label">മത്സരങ്ങൾ (Events)</div>
+                <div class="label">മത്സരങ്ങൾ (Events - Arts & Sports)</div>
             </div>
             <div class="stat-card">
                 <div class="num" id="statTotalTicks">0</div>
@@ -219,12 +236,18 @@
         function renderRegistrationMatrix() {
             const { teamKey, catKey } = getActiveTeamAndCat();
             const teams = normalizeTeamsData(appData.teams);
-            const teamObj = teams[teamKey] || { name: "", senior: [], junior: [], subjunior: [] };
+            const teamObj = teams[teamKey] || { name: "", senior: [], junior: [], subjunior: [], general: [] };
             const students = teamObj[catKey] || [];
 
             const progs = normalizeProgramsData(appData.programs);
             const catProgs = progs[catKey] || { onStage: [], offStage: [], sports: [] };
-            const allEvents = [...(catProgs.onStage || []), ...(catProgs.offStage || [])];
+            
+            // Includes On-Stage, Off-Stage, and Sports programs fully
+            const allEvents = [
+                ...(catProgs.onStage || []), 
+                ...(catProgs.offStage || []), 
+                ...(catProgs.sports || [])
+            ];
 
             // Stats update
             if (document.getElementById("statStudentsCount")) document.getElementById("statStudentsCount").textContent = students.length;
@@ -380,7 +403,7 @@
 
             let cloned = JSON.parse(JSON.stringify(appData));
             if (!cloned.registrations) cloned.registrations = {};
-            if (!cloned.registrations[teamKey]) cloned.registrations[teamKey] = {};
+            if (!cloned.registrations[teamKey]) cloned.registrations.registrations = {};
             cloned.registrations[teamKey][catKey] = newCatRegMap;
 
             saveAppData(false, cloned, () => {
