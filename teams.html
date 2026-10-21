@@ -3,66 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teams & Members — EID-E IRSHAD 2K26</title>
+    <title>Teams & Student Rosters — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <link rel="stylesheet" href="style.css">
+    <style>
+        .roster-grid-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        .student-roster-badge {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+        }
+        .student-info-main {
+            font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
+            font-weight: 800;
+            font-size: 0.88rem;
+        }
+        .student-pts-pill {
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 900;
+        }
+        .team-box-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 22px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-md);
+        }
+        .team-box-card.zellij { border-top: 5px solid #ef4444; }
+        .team-box-card.iznik { border-top: 5px solid #3b82f6; }
+    </style>
 </head>
 <body>
+
+    <div id="adminBar" class="admin-bar">
+        <span>⚙️ Admin Mode Active (Teams & Rosters)</span>
+        <div class="admin-actions">
+            <button class="btn-backup" onclick="exportBackupJSON()">📥 Backup</button>
+            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
+        </div>
+    </div>
+
     <div class="top-nav-bar">
         <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
         <span class="nav-page-title">👥 FESTIVAL TEAMS & ROSTERS</span>
         <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
     </div>
-    <div class="container" style="max-width: 950px; margin: 30px auto;">
-        <h1 class="page-title">ടീമുകളും അംഗങ്ങളും</h1>
-        <p class="page-subtitle">Team ZELLIJ, Team IZNIK എന്നിവയിലെ സീനിയർ, ജൂനിയർ, സബ് ജൂനിയർ പ്രതിഭകൾ</p>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
-            <div class="card" style="border-top: 5px solid var(--zellij-red);">
-                <h2 style="color: var(--zellij-red); font-family: 'Montserrat', sans-serif; margin-top: 0;">🔴 Team ZELLIJ</h2>
-                <div id="zellijRosterContent"></div>
-            </div>
-            <div class="card" style="border-top: 5px solid var(--iznik-blue);">
-                <h2 style="color: var(--iznik-blue); font-family: 'Montserrat', sans-serif; margin-top: 0;">🔵 Team IZNIK</h2>
-                <div id="iznikRosterContent"></div>
-            </div>
-        </div>
+
+    <div class="container" style="max-width: 1050px; margin: 25px auto;">
+        <h1 class="page-title">ടീമുകളും അംഗങ്ങളും & വ്യക്തിഗത സ്കോറുകളും</h1>
+        <p class="page-subtitle">Team ZELLIJ, Team Iznik എന്നിവയിലെ അംഗങ്ങളും അവർക്ക് മത്സരങ്ങളിൽ ലഭിച്ച പോയിന്റുകളും</p>
+
+        <div id="teamsRosterContainer"></div>
     </div>
+
     <footer>&copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM</footer>
     <script src="app.js"></script>
     <script>
-        function renderTeamsRoster() {
-            if (typeof appData === 'undefined' || !appData.teams) return;
-            const renderTeamBox = (teamKey, containerId) => {
-                const container = document.getElementById(containerId);
-                if (!container) return;
-                const team = appData.teams[teamKey];
-                if (!team) return;
-                let html = `<p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Short Name: <strong>${team.shortName}</strong></p>`;
-                const sections = [
-                    { key: 'senior', label: 'Senior Roster' },
-                    { key: 'junior', label: 'Junior Roster' },
-                    { key: 'subjunior', label: 'Sub Junior Roster' }
+        window.addEventListener("DOMContentLoaded", () => {
+            setTimeout(() => {
+                renderTeamsRosterWithPoints();
+            }, 300);
+        });
+
+        function calculateStudentPointsAndMedals(studentFullName) {
+            const cleanTargetName = studentFullName.replace(/(\(C\)|\(Vc\))/g, "").trim().toLowerCase();
+            let totalPts = 0;
+            let goldCount = 0;
+            let silverCount = 0;
+            let bronzeCount = 0;
+
+            const results = appData.results || [];
+            results.forEach(res => {
+                const w1 = (res.win1Name || "").replace(/(\(C\)|\(Vc\))/g, "").trim().toLowerCase();
+                const w2 = (res.win2Name || "").replace(/(\(C\)|\(Vc\))/g, "").trim().toLowerCase();
+                const w3 = (res.win3Name || "").replace(/(\(C\)|\(Vc\))/g, "").trim().toLowerCase();
+
+                const isGroup = GROUP_EVENTS_LIST.includes(res.program);
+                const ptsMap = isGroup ? { 1: 10, 2: 6, 3: 3 } : { 1: 5, 2: 3, 3: 1 };
+
+                if (w1 === cleanTargetName) {
+                    totalPts += ptsMap[1];
+                    goldCount++;
+                }
+                if (w2 === cleanTargetName) {
+                    totalPts += ptsMap[2];
+                    silverCount++;
+                }
+                if (w3 === cleanTargetName) {
+                    totalPts += ptsMap[3];
+                    bronzeCount++;
+                }
+            });
+
+            return { totalPts, goldCount, silverCount, bronzeCount };
+        }
+
+        function renderTeamsRosterWithPoints() {
+            const container = document.getElementById("teamsRosterContainer");
+            if (!container) return;
+
+            const teams = normalizeTeamsData(appData.teams);
+            
+            const renderTeamSection = (teamKey, teamTitle, teamColorClass, accentColor) => {
+                const teamObj = teams[teamKey] || { name: teamTitle, senior: [], junior: [], subjunior: [], general: [] };
+                
+                const cats = [
+                    { key: "senior", label: "Senior Roster" },
+                    { key: "junior", label: "Junior Roster" },
+                    { key: "subjunior", label: "Sub Junior Roster" },
+                    { key: "general", label: "General Roster" }
                 ];
-                sections.forEach(sec => {
-                    const members = team[sec.key] || [];
-                    if (members.length > 0) {
-                        html += `<div style="margin-bottom:12px;">
-                            <h4 style="margin:0 0 5px; font-size:0.9rem; color:var(--accent-gold);">${sec.label}</h4>
-                            <div style="display:flex; flex-wrap:wrap; gap:6px;">`;
-                        members.forEach(m => {
-                            html += `<span style="background:var(--bg-color); border:1px solid var(--border-color); padding:4px 10px; border-radius:6px; font-size:0.8rem; font-weight:700;">${m}</span>`;
+
+                let catsHtml = "";
+                cats.forEach(c => {
+                    const studentList = teamObj[c.key] || [];
+                    if (studentList.length > 0) {
+                        let badgesHtml = "";
+                        studentList.forEach(stName => {
+                            const stats = calculateStudentPointsAndMedals(stName);
+                            let medalStr = "";
+                            if (stats.goldCount > 0) medalStr += `🥇${stats.goldCount} `;
+                            if (stats.silverCount > 0) medalStr += `🥈${stats.silverCount} `;
+                            if (stats.bronzeCount > 0) medalStr += `🥉${stats.bronzeCount} `;
+
+                            badgesHtml += `
+                                <div class="student-roster-badge">
+                                    <span class="student-info-main">${stName}</span>
+                                    <div style="display:flex; align-items:center; gap:6px;">
+                                        ${medalStr ? `<span style="font-size:0.7rem; font-weight:800;">${medalStr}</span>` : ""}
+                                        <span class="student-pts-pill" title="Total Points">${stats.totalPts} Pts</span>
+                                    </div>
+                                </div>
+                            `;
                         });
-                        html += `</div></div>`;
+
+                        catsHtml += `
+                            <div style="margin-bottom: 14px;">
+                                <h4 style="font-family:'Montserrat',sans-serif; font-size:0.85rem; font-weight:900; color:${accentColor}; margin: 0 0 6px;">${c.label}</h4>
+                                <div class="roster-grid-box">${badgesHtml}</div>
+                            </div>
+                        `;
                     }
                 });
-                container.innerHTML = html;
+
+                return `
+                    <div class="team-box-card ${teamColorClass}">
+                        <h2 style="font-family:'Montserrat',sans-serif; font-size:1.4rem; font-weight:900; color:${accentColor}; margin: 0 0 4px;">${teamTitle}</h2>
+                        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:16px;">Short Name: <strong>${teamKey === 'teamA' ? 'ZELLIJ' : 'IZNIK'}</strong></p>
+                        ${catsHtml || "<p style='color:var(--text-muted);'>അംഗങ്ങളാരും ചേർക്കപ്പെട്ടിട്ടില്ല.</p>"}
+                    </div>
+                `;
             };
-            renderTeamBox('teamA', 'zellijRosterContent');
-            renderTeamBox('teamB', 'iznikRosterContent');
+
+            container.innerHTML = renderTeamSection("teamA", "🔴 Team ZELLIJ", "zellij", "#ef4444") +
+                                  renderTeamSection("teamB", "🔵 Team IZNIK", "iznik", "#3b82f6");
         }
-        window.addEventListener("DOMContentLoaded", () => {
-            setTimeout(() => { renderTeamsRoster(); }, 200);
-        });
     </script>
 </body>
 </html>
