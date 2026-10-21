@@ -35,7 +35,10 @@
     <div class="top-nav-bar">
         <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back to Home</button>
         <span class="nav-page-title">👥 FESTIVAL TEAMS & ROSTERS</span>
-        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
+        <div style="display:flex; gap:8px;">
+            <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
+            <button class="admin-top-btn" onclick="openAdminLoginModal()" id="adminLoginBtn">🔐 Admin</button>
+        </div>
     </div>
 
     <div class="container" style="max-width: 1050px; margin: 25px auto;">
@@ -54,13 +57,12 @@
         function calculateStudentPointsAndMedals(studentFullName) {
             const cleanTargetName = studentFullName.replace(/(\(C\)|\(Vc\))/g, "").trim().toLowerCase();
             let totalPts = 0, goldCount = 0, silverCount = 0, bronzeCount = 0;
-            const results = appData.results || [];
+            const results = Array.isArray(appData.results) ? appData.results : [];
             results.forEach(res => {
                 const w1 = (res.win1Name || "").replace(/(\(C\)|\(Vc\))/g, "").trim().toLowerCase();
                 const w2 = (res.win2Name || "").replace(/(\(C\)|\(Vc\))/g, "").trim().toLowerCase();
                 const w3 = (res.win3Name || "").replace(/(\(C\)|\(Vc\))/g, "").trim().toLowerCase();
-                const isGroup = GROUP_EVENTS_LIST.includes(res.program);
-                const ptsMap = isGroup ? { 1: 10, 2: 6, 3: 3 } : { 1: 5, 2: 3, 3: 1 };
+                const ptsMap = getPointsMapForProgram(res.program);
                 if (w1 === cleanTargetName) { totalPts += ptsMap[1]; goldCount++; }
                 if (w2 === cleanTargetName) { totalPts += ptsMap[2]; silverCount++; }
                 if (w3 === cleanTargetName) { totalPts += ptsMap[3]; bronzeCount++; }
