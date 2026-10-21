@@ -1,4 +1,4 @@
-// Firebase Configuration & Initialization (from Screenshot 40)
+// Firebase Configuration & Initialization (From your Firebase Console)
 const firebaseConfig = {
     apiKey: "AIzaSyBJ7gW3JRCvYIft5v4-4nxhE1AVPrpTDmw",
     authDomain: "eid-e-irshad-2k26.firebaseapp.com",
