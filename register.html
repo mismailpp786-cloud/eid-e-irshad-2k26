@@ -14,19 +14,19 @@
     <link rel="stylesheet" href="style.css">
     <style>
         .reg-header-bar {
-            background: var(--header-bg);
+            background: #0f172a;
             color: #fff;
             padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 3px solid var(--accent-gold);
+            border-bottom: 3px solid #fbbf24;
             flex-wrap: wrap;
             gap: 10px;
         }
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 12px;
             margin: 15px 0 20px;
         }
@@ -42,7 +42,7 @@
             font-family: 'Montserrat', sans-serif;
             font-size: 1.5rem;
             font-weight: 900;
-            color: var(--accent-gold);
+            color: #fbbf24;
         }
         .stat-card .label {
             font-size: 0.75rem;
@@ -70,7 +70,8 @@
             text-align: center;
         }
         .matrix-reg-table th {
-            background: var(--bg-color);
+            background: #f8fafc;
+            color: #0f172a;
             font-weight: 900;
             font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
             position: sticky;
@@ -82,16 +83,16 @@
             font-weight: 800;
             position: sticky;
             left: 0;
-            background: var(--card-bg);
+            background: #ffffff;
             z-index: 4;
-            border-right: 2px solid var(--accent-gold);
+            border-right: 2px solid #fbbf24;
         }
         .matrix-reg-table th:nth-child(2) {
             position: sticky;
             left: 0;
-            background: var(--bg-color);
+            background: #f8fafc;
             z-index: 6;
-            border-right: 2px solid var(--accent-gold);
+            border-right: 2px solid #fbbf24;
         }
         .tick-icon {
             color: #059669;
@@ -99,16 +100,16 @@
             font-size: 1.1rem;
         }
         .admin-edit-section {
-            background: var(--card-bg);
-            border: 2px solid var(--accent-gold);
+            background: #ffffff;
+            border: 2px solid #059669;
             border-radius: 14px;
             padding: 20px;
             margin-top: 30px;
             box-shadow: var(--shadow-md);
         }
         .student-row-box {
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
             border-radius: 10px;
             padding: 14px;
             margin-bottom: 15px;
@@ -126,10 +127,11 @@
             align-items: center;
             gap: 6px;
             cursor: pointer;
-            background: var(--card-bg);
-            padding: 5px 8px;
+            background: #ffffff;
+            padding: 6px 10px;
             border-radius: 6px;
-            border: 1px solid var(--border-color);
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
         }
         @media print {
             @page { size: landscape; margin: 10mm; }
@@ -154,27 +156,28 @@
 
     <div class="reg-header-bar">
         <div>
-            <span style="font-size: 0.7rem; font-weight: 800; color: #fbbf24; font-family: 'Montserrat', sans-serif;" id="headerTeamTitle">TEAM EVENT REGISTER</span>
-            <h2 style="margin: 0; font-weight: 900; font-family: 'Montserrat', sans-serif;" id="headerSectionTitle">FESTIVAL REGISTRATION MATRIX</h2>
+            <span style="font-size: 0.7rem; font-weight: 800; color: #fbbf24; font-family: 'Montserrat', sans-serif;" id="headerTeamTitle">TEAM B - EVENT REGISTER</span>
+            <h2 style="margin: 0; font-weight: 900; font-family: 'Montserrat', sans-serif;" id="headerSectionTitle">STAGE & OFFSTAGE</h2>
         </div>
         <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <select id="teamSelectTab" class="form-control" style="padding: 6px 12px; font-weight: 800;" onchange="renderRegistrationMatrix()">
+            <select id="teamSelectTab" class="form-control" style="padding: 6px 12px; font-weight: 800; background:#fff; color:#0f172a;" onchange="renderRegistrationMatrix()">
                 <option value="teamA">🔴 Team ZELLIJ</option>
-                <option value="teamB">🔵 Team IZNIK</option>
+                <option value="teamB" selected>🔵 Team IZNIK</option>
             </select>
-            <select id="regCatSelectTab" class="form-control" style="padding: 6px 12px; font-weight: 800;" onchange="renderRegistrationMatrix()">
-                <option value="senior">Senior</option>
-                <option value="junior">Junior</option>
-                <option value="subjunior">Sub Junior</option>
-                <option value="general">General</option>
+            <select id="regListSelectTab" class="form-control" style="padding: 6px 12px; font-weight: 800; background:#fff; color:#0f172a;" onchange="onListDropdownChange()">
+                <option value="senior_onStage">Senior Stage</option>
+                <option value="senior_offStage">Senior Off-Stage</option>
+                <option value="junior_onStage">Junior Stage</option>
+                <option value="junior_offStage">Junior Off-Stage</option>
+                <option value="subjunior_onStage">Sub Junior Stage</option>
+                <option value="subjunior_offStage">Sub Junior Off-Stage</option>
+                <option value="general_onStage">General Stage</option>
+                <option value="general_offStage">General Off-Stage</option>
+                <option value="senior_sports">Senior Sports</option>
+                <option value="junior_sports">Junior Sports</option>
             </select>
-            <select id="regSectionSelectTab" class="form-control" style="padding: 6px 12px; font-weight: 800;" onchange="renderRegistrationMatrix()">
-                <option value="onStage">🎭 Stage</option>
-                <option value="offStage">🎨 Off-Stage</option>
-                <option value="sports">⚽ Sports</option>
-            </select>
-            <button class="btn-action-sm" style="background:#fbbf24; color:#0f172a; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer;" onclick="window.print()">🖨️ Print / PDF</button>
-            <button class="back-home-btn" onclick="location.href='index.html'" style="margin:0;">⬅️ Back</button>
+            <button class="btn-action-sm" style="background:#ffffff; color:#0f172a; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer;" onclick="window.print()">Print / PDF</button>
+            <button class="back-home-btn" onclick="location.href='index.html'" style="background:#059669; color:#fff; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer; margin:0;">Back</button>
         </div>
     </div>
 
@@ -188,7 +191,7 @@
             </div>
             <div class="stat-card">
                 <div class="num" id="statEventsCount">0</div>
-                <div class="label">മത്സരങ്ങൾ (Events in Section)</div>
+                <div class="label">മത്സരങ്ങൾ (Events)</div>
             </div>
             <div class="stat-card">
                 <div class="num" id="statTotalTicks">0</div>
@@ -197,6 +200,9 @@
         </div>
 
         <!-- Public / View Table Matrix -->
+        <div style="font-weight:900; margin-bottom:6px; font-family:'Montserrat',sans-serif;">മത്സരങ്ങളുടെ ലിസ്റ്റ്</div>
+        <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">വിഭാഗം മാറ്റി പ്രോഗ്രാമും ടിക്ക് മാർക്കുകളും കാണാം.</div>
+        
         <div class="table-responsive">
             <table class="matrix-reg-table" id="registrationMatrixTable">
                 <thead>
@@ -211,19 +217,43 @@
             </table>
         </div>
 
-        <!-- Admin Dashboard for Managing Students & Event Registrations -->
+        <!-- Admin Dashboard for Managing Students & Event Registrations (Protected by isAdmin) -->
         <div class="admin-only admin-edit-section" data-display="block">
-            <h3 style="margin:0 0 12px; color:var(--accent-gold); font-weight:900;">🛠️ Admin Dashboard: Student Event Registrations</h3>
-            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;">തിരഞ്ഞെടുത്ത കാറ്റഗറിയിലെയും സെക്ഷനിലെയും മത്സരങ്ങൾക്ക് നേരെ ടിക്ക് (✔) നൽകി മാറ്റങ്ങൾ സേവ് ചെയ്യുക.</p>
+            <h3 style="margin:0 0 6px; color:#0f172a; font-weight:900;">Admin Dashboard</h3>
+            <p style="font-size:0.78rem; color:#64748b; margin-bottom:12px;">ലിസ്റ്റ് തിരഞ്ഞെടുക്കുക, പേരുകൾ, മത്സരങ്ങൾ, ടിക്ക് മാർക്കുകൾ എന്നിവ തിരുത്തി Save All Changes അമർത്തുക.</p>
             
-            <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
-                <input type="text" id="newStudentNameInput" class="form-control" placeholder="പുതിയ വിദ്യാർത്ഥിയുടെ പേര് ചേർക്കുക..." style="max-width:320px;">
-                <button class="prog-add-btn" style="background:#059669; color:#fff;" onclick="addNewStudentToTeam()">➕ വിദ്യാർത്ഥിയെ ചേർക്കുക</button>
+            <div class="form-group" style="max-width:280px; margin-bottom:15px;">
+                <label style="font-weight:800; font-size:0.8rem;">തിരഞ്ഞെടുക്കേണ്ട ലിസ്റ്റ്:</label>
+                <select id="adminListSelectTab" class="form-control" style="font-weight:800;" onchange="syncAdminDropdownToMain()">
+                    <option value="senior_onStage">Senior Stage</option>
+                    <option value="senior_offStage">Senior Off-Stage</option>
+                    <option value="junior_onStage">Junior Stage</option>
+                    <option value="junior_offStage">Junior Off-Stage</option>
+                    <option value="subjunior_onStage">Sub Junior Stage</option>
+                    <option value="subjunior_offStage">Sub Junior Off-Stage</option>
+                    <option value="general_onStage">General Stage</option>
+                    <option value="general_offStage">General Off-Stage</option>
+                    <option value="senior_sports">Senior Sports</option>
+                    <option value="junior_sports">Junior Sports</option>
+                </select>
+            </div>
+
+            <div style="font-weight:900; margin-bottom:8px;">മത്സരങ്ങൾ</div>
+            <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+                <input type="text" id="newEventNameInput" class="form-control" placeholder="പുതിയ മത്സരത്തിന്റെ പേര്..." style="max-width:280px;">
+                <button class="prog-add-btn" style="background:#059669; color:#fff;" onclick="addNewEventToSection()">Add Event</button>
+            </div>
+            <div id="adminEventsListContainer" style="display:flex; flex-direction:column; gap:6px; margin-bottom:20px;"></div>
+
+            <div style="font-weight:900; margin-bottom:8px;">വിദ്യാർത്ഥികൾ</div>
+            <div style="display:flex; gap:8px; margin-bottom:15px; flex-wrap:wrap;">
+                <input type="text" id="newStudentNameInput" class="form-control" placeholder="വിദ്യാർത്ഥിയുടെ പേര്..." style="max-width:280px;">
+                <button class="prog-add-btn" style="background:#059669; color:#fff;" onclick="addNewStudentToTeam()">Add Student</button>
             </div>
 
             <div id="adminStudentEditorContainer"></div>
 
-            <button class="btn-submit" style="background:#059669; color:#fff; margin-top:20px; padding:12px; font-size:1rem;" onclick="saveAllRegistrationsToCloud()">💾 Save All Changes (മാറ്റങ്ങൾ സേവ് ചെയ്യുക)</button>
+            <button class="btn-submit" style="background:#059669; color:#fff; margin-top:20px; padding:12px; font-size:1rem; font-weight:900;" onclick="saveAllRegistrationsToCloud()">Save All Changes</button>
         </div>
 
     </div>
@@ -239,10 +269,26 @@
         });
 
         function getActiveFilters() {
-            const teamKey = document.getElementById("teamSelectTab")?.value || "teamA";
-            const catKey = document.getElementById("regCatSelectTab")?.value || "senior";
-            const secKey = document.getElementById("regSectionSelectTab")?.value || "onStage";
+            const teamKey = document.getElementById("teamSelectTab")?.value || "teamB";
+            const combinedVal = document.getElementById("regListSelectTab")?.value || "senior_onStage";
+            const parts = combinedVal.split("_");
+            const catKey = parts[0]; // senior, junior, subjunior, general
+            const secKey = parts[1]; // onStage, offStage, sports
             return { teamKey, catKey, secKey };
+        }
+
+        function onListDropdownChange() {
+            const val = document.getElementById("regListSelectTab")?.value;
+            const adminSel = document.getElementById("adminListSelectTab");
+            if (adminSel) adminSel.value = val;
+            renderRegistrationMatrix();
+        }
+
+        function syncAdminDropdownToMain() {
+            const val = document.getElementById("adminListSelectTab")?.value;
+            const mainSel = document.getElementById("regListSelectTab");
+            if (mainSel) mainSel.value = val;
+            renderRegistrationMatrix();
         }
 
         function renderRegistrationMatrix() {
@@ -252,14 +298,8 @@
             const students = teamObj[catKey] || [];
 
             const progs = normalizeProgramsData(appData.programs);
-            const catProgs = progs[catKey] || { onStage: [], offStage: [], sports: [] };
-            const sectionEvents = catProgs[secKey] || [];
-
-            // Update Header Titles
-            const secNameMap = { onStage: "STAGE EVENTS", offStage: "OFF-STAGE EVENTS", sports: "SPORTS EVENTS" };
-            if (document.getElementById("headerSectionTitle")) {
-                document.getElementById("headerSectionTitle").textContent = `${catKey.toUpperCase()} - ${secNameMap[secKey]}`;
-            }
+            if (!progs[catKey]) progs[catKey] = { onStage: [], offStage: [], sports: [] };
+            const sectionEvents = progs[catKey][secKey] || [];
 
             // Stats update
             if (document.getElementById("statStudentsCount")) document.getElementById("statStudentsCount").textContent = students.length;
@@ -286,7 +326,7 @@
             const bodyRow = document.getElementById("matrixBodyRow");
             if (bodyRow) {
                 if (students.length === 0) {
-                    bodyRow.innerHTML = `<tr><td colspan="${sectionEvents.length + 2}" style="padding:25px; color:var(--text-muted);">ഈ കാറ്റഗറിയിൽ വിദ്യാർത്ഥികൾ ആരുമില്ല. താഴെ അഡ്മിൻ ഡാഷ്‌ബോർഡ് വഴി പുതിയ വിദ്യാർത്ഥികളെ ചേർക്കാം.</td></tr>`;
+                    bodyRow.innerHTML = `<tr><td colspan="${sectionEvents.length + 2}" style="padding:25px; color:var(--text-muted);">ഈ വിഭാഗത്തിൽ വിദ്യാർത്ഥികൾ ആരുമില്ല.</td></tr>`;
                 } else {
                     let bHtml = "";
                     students.forEach((stName, idx) => {
@@ -306,20 +346,32 @@
             if (document.getElementById("statTotalTicks")) document.getElementById("statTotalTicks").textContent = totalTicksCount;
 
             // Render Admin Editor if Admin
-            renderAdminStudentEditor(students, sectionEvents, regMap);
+            renderAdminDashboard(students, sectionEvents, regMap, catKey, secKey);
         }
 
-        function renderAdminStudentEditor(students, sectionEvents, regMap) {
+        function renderAdminDashboard(students, sectionEvents, regMap, catKey, secKey) {
             const container = document.getElementById("adminStudentEditorContainer");
-            if (!container) return;
+            const eventsCont = document.getElementById("adminEventsListContainer");
+            if (!container || !eventsCont) return;
 
             if (!isAdmin) {
-                container.innerHTML = "";
                 return;
             }
 
+            // Render Events list with Remove buttons
+            let evHtml = "";
+            sectionEvents.forEach((evName, idx) => {
+                evHtml += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:var(--card-bg); padding:6px 12px; border:1px solid var(--border-color); border-radius:6px;">
+                        <span>${evName}</span>
+                        <button type="button" class="btn-action-sm" style="background:#dc2626; color:#fff; border:none; padding:3px 8px; border-radius:4px; cursor:pointer;" onclick="removeEventFromSection('${catKey}', '${secKey}', ${idx})">Remove</button>
+                    </div>
+                `;
+            });
+            eventsCont.innerHTML = evHtml || "<span style='font-size:0.75rem; color:var(--text-muted);'>മത്സരങ്ങളൊന്നും ചേർത്തിട്ടില്ല.</span>";
+
             if (students.length === 0) {
-                container.innerHTML = "<p style='color:var(--text-muted);'>വിദ്യാർത്ഥികൾ ആരുമില്ല. പുതിയ വിദ്യാർത്ഥിയെ മുകളിൽ ചേർക്കാം.</p>";
+                container.innerHTML = "<p style='color:var(--text-muted); font-size:0.8rem;'>ഈ വിഭാഗത്തിൽ വിദ്യാർത്ഥികളില്ല.</p>";
                 return;
             }
 
@@ -342,8 +394,8 @@
                 html += `
                     <div class="student-row-box">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                            <strong style="font-family:'Montserrat',sans-serif;">${idx + 1}. ${stName}</strong>
-                            <button class="btn-action-sm" style="background:#dc2626; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removeStudentFromTeam('${cleanName}')">🗑️ Remove</button>
+                            <strong style="font-family:'Montserrat',sans-serif; font-size:0.88rem;">${idx + 1}. ${stName}</strong>
+                            <button type="button" class="btn-action-sm" style="background:#dc2626; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removeStudentFromTeam('${cleanName}')">Remove</button>
                         </div>
                         <div class="student-events-grid">
                             ${checkboxesHtml}
@@ -355,81 +407,8 @@
             container.innerHTML = html;
         }
 
-        function addNewStudentToTeam() {
+        function addNewEventToSection() {
             if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
-            const input = document.getElementById("newStudentNameInput");
-            if (!input || !input.value.trim()) { alert("വിദ്യാർത്ഥിയുടെ പേര് നൽകുക!"); return; }
-            const nameVal = input.value.trim();
-
-            const { teamKey, catKey } = getActiveFilters();
-            let cloned = JSON.parse(JSON.stringify(appData));
-            if (!cloned.teams) cloned.teams = JSON.parse(JSON.stringify(defaultData.teams));
-
-            let teamsObj = normalizeTeamsData(cloned.teams);
-            if (!teamsObj[teamKey][catKey].includes(nameVal)) {
-                teamsObj[teamKey][catKey].push(nameVal);
-                cloned.teams = teamsObj;
-                saveAppData(false, cloned, () => {
-                    input.value = "";
-                    renderRegistrationMatrix();
-                    alert("വിദ്യാർത്ഥിയെ വിജയകരമായി ചേർത്തു!");
-                });
-            } else {
-                alert("ഈ പേരിലുള്ള വിദ്യാർത്ഥി ഇതിനകം പട്ടികയിലുണ്ട്!");
-            }
-        }
-
-        function removeStudentFromTeam(cleanName) {
-            if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
-            if (confirm(`"${cleanName}" എന്ന വിദ്യാർത്ഥിയെ നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?`)) {
-                const { teamKey, catKey } = getActiveFilters();
-                let cloned = JSON.parse(JSON.stringify(appData));
-                let teamsObj = normalizeTeamsData(cloned.teams);
-
-                teamsObj[teamKey][catKey] = teamsObj[teamKey][catKey].filter(s => s.replace(/(\(C\)|\(Vc\))/g, "").trim() !== cleanName);
-                cloned.teams = teamsObj;
-                saveAppData(false, cloned, () => {
-                    renderRegistrationMatrix();
-                });
-            }
-        }
-
-        function saveAllRegistrationsToCloud() {
-            if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
-            const { teamKey, catKey, secKey } = getActiveFilters();
-            const normalizedTeams = normalizeTeamsData(appData.teams);
-            const students = normalizedTeams[teamKey][catKey] || [];
-
-            if (!appData.registrations) appData.registrations = {};
-            if (!appData.registrations[teamKey]) appData.registrations[teamKey] = {};
-            if (!appData.registrations[teamKey][catKey]) appData.registrations[teamKey][catKey] = {};
-            
-            let existingCatMap = appData.registrations[teamKey][catKey];
-
-            students.forEach((stName, idx) => {
-                const cleanName = stName.replace(/(\(C\)|\(Vc\))/g, "").trim();
-                const checkedBoxes = document.querySelectorAll(`.reg_chk_${idx}:checked`);
-                
-                const progs = normalizeProgramsData(appData.programs);
-                const currentSecEvents = progs[catKey][secKey] || [];
-
-                if (!existingCatMap[cleanName]) existingCatMap[cleanName] = [];
-                
-                // Remove existing events of this section to replace with newly checked ones
-                existingCatMap[cleanName] = existingCatMap[cleanName].filter(ev => !currentSecEvents.includes(ev));
-
-                // Add newly checked
-                checkedBoxes.forEach(chk => {
-                    if (!existingCatMap[cleanName].includes(chk.value)) {
-                        existingCatMap[cleanName].push(chk.value);
-                    }
-                });
-
-                if (existingCatMap[cleanName].length === 0) {
-                    delete existingCatMap[cleanName];
-                }
-            });
-
-            let cloned = JSON.parse(JSON.stringify(appData));
-            if (!cloned.registrations) cloned.registrations = {};
-            if (!cloned.registrations[teamKey]) clone
+            const input = document.getElementById("newEventNameInput");
+            if (!input || !input.value.trim()) { alert("മത്സരത്തിന്റെ പേര് നൽകുക!"); return; }
+            const evName 
