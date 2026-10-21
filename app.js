@@ -7,6 +7,7 @@ if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 const db = firebase.firestore();
+const auth = firebase.auth();
 
 let appData = {
     teams: {
@@ -24,31 +25,42 @@ let appData = {
 };
 
 let isAdmin = false;
-const ADMIN_PASSCODE = "1234"; // Adjust passcode if needed
 
 window.addEventListener("DOMContentLoaded", () => {
-    checkAdminStatus();
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            isAdmin = true;
+            document.body.classList.add("admin-mode");
+            const adminBar = document.getElementById("adminBar");
+            if (adminBar) adminBar.style.display = "flex";
+        } else {
+            isAdmin = false;
+            document.body.classList.remove("admin-mode");
+            const adminBar = document.getElementById("adminBar");
+            if (adminBar) adminBar.style.display = "none";
+        }
+    });
     loadAppDataFromCloud();
 });
 
-function checkAdminStatus() {
-    const adminSession = localStorage.getItem("eid_admin_logged");
-    if (adminSession === "true") {
-        isAdmin = true;
-        document.body.classList.add("admin-mode");
-        const adminBar = document.getElementById("adminBar");
-        if (adminBar) adminBar.style.display = "flex";
-    } else {
-        isAdmin = false;
-        document.body.classList.remove("admin-mode");
-        const adminBar = document.getElementById("adminBar");
-        if (adminBar) adminBar.style.display = "none";
-    }
-}
-
 function openAdminLoginModal() {
     const modal = document.getElementById("adminLoginModal");
-    if (modal) modal.style.display = "flex";
+    if (modal) {
+        modal.innerHTML = `
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeAdminLoginModal()">&times;</span>
+                <h3 style="margin: 0 0 12px; font-weight: 900; color: var(--accent-gold);">🔐 Admin Gmail Login</h3>
+                <div class="form-group">
+                    <label>Admin Email:</label>
+                    <input type="email" id="adminEmailInput" class="form-control" placeholder="Gmail നൽകുക" style="margin-bottom:10px;">
+                    <label>Password:</label>
+                    <input type="password" id="adminPassInput" class="form-control" placeholder="പാസ്‌വേഡ് നൽകുക">
+                </div>
+                <button class="btn-submit" onclick="submitAdminLogin()">Login</button>
+            </div>
+        `;
+        modal.style.display = "flex";
+    }
 }
 
 function closeAdminLoginModal() {
@@ -57,27 +69,36 @@ function closeAdminLoginModal() {
 }
 
 function submitAdminLogin() {
-    const input = document.getElementById("adminPassInput");
-    if (!input) return;
-    if (input.value === ADMIN_PASSCODE) {
-        localStorage.setItem("eid_admin_logged", "true");
-        isAdmin = true;
-        input.value = "";
-        closeAdminLoginModal();
-        checkAdminStatus();
-        alert("അഡ്മിൻ ലോഗിൻ വിജയം!");
-        location.reload();
-    } else {
-        alert("തെറ്റായ പാസ്‌വേഡ്!");
+    const emailInput = document.getElementById("adminEmailInput");
+    const passInput = document.getElementById("adminPassInput");
+    
+    if (!emailInput || !passInput) return;
+    const email = emailInput.value.trim();
+    const password = passInput.value.trim();
+
+    if (!email || !password) {
+        alert("ദയവായി ജിമെയിലും പാസ്‌വേഡും നൽകുക!");
+        return;
     }
+
+    auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            closeAdminLoginModal();
+            alert("അഡ്മിൻ ലോഗിൻ വിജയം!");
+            location.reload();
+        })
+        .catch((error) => {
+            alert("ലോഗിൻ പരാജയപ്പെട്ടു: " + error.message);
+        });
 }
 
 function logoutAdmin() {
-    localStorage.removeItem("eid_admin_logged");
-    isAdmin = false;
-    checkAdminStatus();
-    alert("അഡ്മിൻ മോഡ് ലോഗ്ഔട്ട് ചെയ്തു.");
-    location.reload();
+    auth.signOut().then(() => {
+        alert("അഡ്മിൻ മോഡ് ലോഗ്ഔട്ട് ചെയ്തു.");
+        location.reload();
+    }).catch((error) => {
+        console.error("Sign out error", error);
+    });
 }
 
 function loadAppDataFromCloud() {
