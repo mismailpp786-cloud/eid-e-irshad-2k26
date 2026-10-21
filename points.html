@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ml" data-theme="dark">
+<html lang="ml" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Master Scoreboard — EID-E IRSHAD 2K26</title>
+    <title>Live Scoreboard & TV Mode — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- Firebase SDKs -->
@@ -13,255 +13,61 @@
 
     <link rel="stylesheet" href="style.css">
     <style>
-        body {
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-        .live-status-bar {
-            background: #131c31;
-            color: #ffffff;
-            padding: 3px 8px;
-            border-radius: 4px;
-            border: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3px;
-            font-size: 0.68rem;
-        }
-        .live-pulse-dot {
-            width: 5px;
-            height: 5px;
-            background: #ef4444;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 4px;
-            animation: pulseLive 1.5s infinite;
-        }
-        @keyframes pulseLive {
-            0% { transform: scale(0.95); opacity: 1; }
-            70% { transform: scale(1.4); opacity: 0.4; }
-            100% { transform: scale(0.95); opacity: 1; }
-        }
-        .tv-mode-btn {
-            background: #fbbf24;
-            color: #0f172a;
-            border: none;
-            padding: 2px 5px;
-            border-radius: 3px;
-            font-weight: 900;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.6rem;
-            cursor: pointer;
-        }
-
-        /* Grand Total Score Banner */
-        .broadcast-score-banner {
+        .scoreboard-hero {
             display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            gap: 4px;
-            align-items: center;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .team-score-card {
             background: var(--card-bg);
-            color: var(--text-color);
-            padding: 3px 8px;
-            border-radius: 5px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 3px;
-        }
-        .team-score-box {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 2px 6px;
-            border-radius: 4px;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-        }
-        .team-score-box.zellij-box { border-left: 3px solid #ef4444; }
-        .team-score-box.iznik-box { border-left: 3px solid #3b82f6; }
-        .team-badge-title { font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 900; }
-        .team-giant-pts { font-family: 'Montserrat', sans-serif; font-size: 0.95rem; font-weight: 900; color: var(--accent-gold); }
-        .vs-circle {
-            width: 18px; height: 18px; border-radius: 50%;
-            background: var(--accent-gold); color: #0f172a;
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.55rem;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        /* Matrix Section Card */
-        .matrix-section-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            padding: 3px 5px;
-            margin-bottom: 4px;
-        }
-        .matrix-section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1px;
-            padding-bottom: 1px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .matrix-section-title {
-            font-size: 0.7rem;
-            font-weight: 900;
-            margin: 0;
-            font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
-            color: var(--accent-gold);
-        }
-        .section-sub-score {
-            display: flex;
-            gap: 6px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.58rem;
-            font-weight: 900;
-        }
-
-        /* Table Layout */
-        .matrix-scroll-wrapper {
-            width: 100%;
-            overflow-x: hidden;
-        }
-        .score-matrix-table {
-            border-collapse: separate;
-            border-spacing: 0;
-            width: 100%;
-            background: var(--card-bg);
-            font-size: 0.55rem;
-        }
-        .score-matrix-table th,
-        .score-matrix-table td {
-            border-right: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 25px;
             text-align: center;
-            vertical-align: middle;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
         }
-        .score-matrix-table th.sticky-col,
-        .score-matrix-table td.sticky-col {
-            position: sticky;
-            left: 0;
-            z-index: 5;
+        .team-score-card.zellij { border-color: var(--zellij-red); }
+        .team-score-card.iznik { border-color: var(--iznik-blue); }
+        .team-score-card .score-num {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin: 10px 0;
+        }
+        .team-score-card.zellij .score-num { color: var(--zellij-red); }
+        .team-score-card.iznik .score-num { color: var(--iznik-blue); }
+        .results-table-box {
+            width: 100%;
+            overflow-x: auto;
             background: var(--card-bg);
-            border-right: 2px solid var(--accent-gold);
-            width: 60px;
-            min-width: 60px;
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 30px;
         }
-        .score-matrix-table th.sticky-col {
-            z-index: 6;
-            background: var(--bg-color);
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 900;
-            font-size: 0.48rem;
-            padding: 1px;
-        }
-        .score-matrix-table th.cat-group-banner {
-            background: rgba(245, 158, 11, 0.18);
-            color: var(--accent-gold);
-            font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
-            font-weight: 900;
-            font-size: 0.55rem;
-            padding: 1px;
-            text-align: center;
-            border-right: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-            height: 18px;
-        }
-        .score-matrix-table th.prog-vert-header {
-            height: 72px; /* Reduced height so everything fits vertically on screen */
-            padding: 2px 1px;
-            writing-mode: vertical-rl;
-            transform: rotate(180deg);
-            font-size: 0.52rem;
-            font-weight: 700;
-            line-height: 1;
-            white-space: nowrap;
-            background: var(--bg-color);
-            color: var(--text-color);
-        }
-        .group-tag-dot {
-            display: inline-block; width: 2px; height: 2px; background: #f59e0b; border-radius: 50%; margin-top: 1px;
-        }
-        .score-matrix-table th.sec-total-header,
-        .score-matrix-table th.sticky-right-col {
-            height: 72px;
-            width: 32px;
-            min-width: 32px;
-            padding: 2px 1px;
-            writing-mode: vertical-rl;
-            transform: rotate(180deg);
-            font-size: 0.55rem;
-            font-weight: 900;
-            font-family: 'Montserrat', sans-serif;
-        }
-        .score-matrix-table th.sec-total-header { background: rgba(16, 185, 129, 0.1); color: #10b981; }
-        
-        .score-matrix-table th.sticky-right-col,
-        .score-matrix-table td.sticky-right-col {
-            position: sticky;
-            right: 0;
-            z-index: 5;
-            background: #0f172a;
-            color: #fbbf24;
-            border-left: 2px solid var(--accent-gold);
-            width: 36px;
-            min-width: 36px;
-        }
-        .score-matrix-table th.sticky-right-col { z-index: 6; }
-
-        .score-matrix-table td.team-name-cell {
-            font-weight: 900;
-            font-size: 0.55rem;
-            padding: 2px 1px;
-            font-family: 'Montserrat', sans-serif;
-            text-align: left;
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
             white-space: nowrap;
         }
-        .score-matrix-table td.score-stack-cell {
-            padding: 1px;
-            min-height: 34px;
-            height: 34px;
-            vertical-align: middle;
+        .results-table th, .results-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
+            text-align: center;
         }
-        .score-matrix-table td.score-stack-cell.admin-clickable { cursor: pointer; }
-        .score-matrix-table td.score-stack-cell.admin-clickable:hover { background: rgba(245, 158, 11, 0.15); }
-
-        .score-pill-stack {
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
-        }
-        .stacked-score-badge {
-            display: inline-block; min-width: 14px; padding: 1px 2px; border-radius: 2px;
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.5rem;
-        }
-        .badge-team-a { background: #ef4444; color: #ffffff; }
-        .badge-team-b { background: #3b82f6; color: #ffffff; }
-        .empty-dash { color: var(--text-muted); opacity: 0.3; font-size: 0.45rem; }
-
-        .score-matrix-table td.sec-total-cell {
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.62rem; padding: 1px; background: rgba(16, 185, 129, 0.06);
-        }
-        .score-matrix-table td.grand-total-cell {
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.68rem; padding: 1px; background: #0f172a;
-        }
-
-        /* TV Fullscreen Mode */
-        body.tv-live-mode .top-nav-bar,
-        body.tv-live-mode footer,
-        body.tv-live-mode .admin-only {
-            display: none !important;
-        }
-        body.tv-live-mode .container {
-            max-width: 99.5vw !important;
-            margin: 2px auto !important;
-        }
-        body.tv-live-mode .matrix-section-card {
-            padding: 2px 4px;
-            margin-bottom: 3px;
+        .results-table th {
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-weight: 900;
+            font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
         }
     </style>
 </head>
-<body class="tv-live-mode">
+<body>
 
     <div id="adminBar" class="admin-bar">
         <span>⚙️ Admin Mode Active</span>
@@ -271,211 +77,103 @@
         </div>
     </div>
 
-    <div class="top-nav-bar">
-        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back</button>
-        <span class="nav-page-title">📊 LIVE MASTER SCOREBOARD</span>
-        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">☀️ Light</button>
+    <div class="top-nav-bar" style="display:flex; justify-content:space-between; align-items:center; padding:12px 20px; background:var(--card-bg); border-bottom:1px solid var(--border-color);">
+        <button class="back-home-btn" onclick="location.href='index.html'" style="background:var(--accent-gold); color:#0f172a; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer;">⬅️ Home</button>
+        <span class="nav-page-title" style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.1rem;">📊 LIVE MASTER SCOREBOARD</span>
+        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
     </div>
 
-    <div class="container" style="max-width: 1200px; margin: 4px auto;">
+    <div class="container" style="max-width: 1100px; margin: 30px auto;">
         
-        <!-- Live Status Bar -->
-        <div class="live-status-bar">
-            <div>
-                <span class="live-pulse-dot"></span>
-                <span style="font-weight: 800;">LIVE SCOREBOARD • EID-E IRSHAD 2K26</span>
+        <!-- Score Cards Grid -->
+        <div class="scoreboard-hero">
+            <div class="team-score-card zellij">
+                <h3 style="font-family:'Montserrat',sans-serif; font-weight:900; color:var(--zellij-red); margin:0;">🔴 TEAM ZELLIJ</h3>
+                <div class="score-num" id="totalScoreA">0</div>
+                <p style="margin:0; font-size:0.8rem; color:var(--text-muted); font-weight:800;">Total Points</p>
             </div>
-            <div style="display: flex; align-items: center; gap: 6px;">
-                <span id="autoRefreshTimerText" style="font-size: 0.6rem; font-weight: 800; font-family: 'Montserrat', sans-serif;">🔄 30s</span>
-                <button class="tv-mode-btn" onclick="toggleTvFullscreenMode()" id="tvModeBtn">❌ Exit TV</button>
-            </div>
-        </div>
-
-        <!-- Grand Total Score Banner -->
-        <div class="broadcast-score-banner">
-            <div class="team-score-box zellij-box">
-                <div>
-                    <div class="team-badge-title" style="color: #f87171;">🔴 ZELLIJ</div>
-                    <div style="font-size: 0.5rem; font-weight: 700; color: var(--text-muted);" id="medalsA">🥇0 🥈0 🥉0</div>
-                </div>
-                <div class="team-giant-pts" id="bigPtsA">0</div>
-            </div>
-
-            <div class="vs-circle">VS</div>
-
-            <div class="team-score-box iznik-box">
-                <div>
-                    <div class="team-badge-title" style="color: #60a5fa;">🔵 IZNIK</div>
-                    <div style="font-size: 0.5rem; font-weight: 700; color: var(--text-muted);" id="medalsB">🥇0 🥈0 🥉0</div>
-                </div>
-                <div class="team-giant-pts" id="bigPtsB">0</div>
+            <div class="team-score-card iznik">
+                <h3 style="font-family:'Montserrat',sans-serif; font-weight:900; color:var(--iznik-blue); margin:0;">🔵 TEAM IZNIK</h3>
+                <div class="score-num" id="totalScoreB">0</div>
+                <p style="margin:0; font-size:0.8rem; color:var(--text-muted); font-weight:800;">Total Points</p>
             </div>
         </div>
 
-        <!-- Admin Quick Controls -->
-        <div class="card admin-only" data-display="block" style="border: 1px solid var(--accent-gold); margin-bottom: 3px; padding: 4px;">
-            <div style="display: flex; gap: 5px; align-items: center; flex-wrap: wrap; font-size: 0.68rem;">
-                <select id="pointPresetSelect" class="form-control" style="max-width: 200px; padding: 2px;" onchange="changePointPreset(this.value)">
-                    <option value="5-3-1">Rules (Single: 5,3,1 | Group: 10,6,3)</option>
-                    <option value="10-5-3">Custom (All: 10,5,3)</option>
-                </select>
-                <label style="font-weight: 700;"><input type="checkbox" id="manualScoreToggle"> Override</label>
-                <input type="number" id="manualPtsAInput" class="form-control" style="width: 50px; padding: 2px;" value="0">
-                <input type="number" id="manualPtsBInput" class="form-control" style="width: 50px; padding: 2px;" value="0">
-                <button class="btn-submit" style="background: #059669; color: #fff; margin: 0; width: auto; padding: 2px 6px;" onclick="saveManualScoreFromUI()">Save</button>
-            </div>
-        </div>
+        <div class="section-heading">🏆 പ്രഖ്യാപിച്ച മത്സര ഫലങ്ങൾ & പോയിന്റുകൾ</div>
 
-        <!-- Master Score Matrix Container (3 Boxes: On-Stage, Off-Stage, Sports) -->
-        <div id="masterScoreMatrixContainer"></div>
+        <div class="results-table-box">
+            <table class="results-table" id="liveResultsTable">
+                <thead>
+                    <tr>
+                        <th>മത്സരം (Program)</th>
+                        <th>വിഭാഗം (Category)</th>
+                        <th>ഒന്നാം സ്ഥാനം (1st Place)</th>
+                        <th>രണ്ടാം സ്ഥാനം (2nd Place)</th>
+                        <th>മൂന്നാം സ്ഥാനം (3rd Place)</th>
+                    </tr>
+                </thead>
+                <tbody id="liveResultsBody">
+                    <tr>
+                        <td colspan="5" style="padding:25px; color:var(--text-muted);">ഫലങ്ങൾ ഇതുവരെ പ്രഖ്യാപിച്ചിട്ടില്ല.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
     </div>
 
-    <!-- Modal for Admin Cell Score Editing -->
-    <div id="cellScoreModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeCellScoreModal()">&times;</span>
-            <h3 id="cellModalTitle" style="margin: 0 0 6px; font-weight: 900; color: var(--accent-gold);">Edit Marks</h3>
-            <input type="hidden" id="editCellKey">
-            <div class="form-group">
-                <label style="color: var(--zellij-red);">🔴 Team A Marks:</label>
-                <input type="text" id="editCellTeamA" class="form-control" placeholder="5, 1">
-            </div>
-            <div class="form-group">
-                <label style="color: var(--iznik-blue);">🔵 Team B Marks:</label>
-                <input type="text" id="editCellTeamB" class="form-control" placeholder="3">
-            </div>
-            <div style="display: flex; gap: 8px; margin-top: 6px;">
-                <button class="btn-submit" style="background: #059669; color: #fff; margin: 0; padding: 4px;" onclick="saveCellScoreModal()">Save</button>
-                <button class="btn-submit" style="background: #dc2626; color: #fff; margin: 0; padding: 4px;" onclick="clearCellScoreModal()">Reset</button>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        &copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM
-    </footer>
-
+    <footer>&copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM</footer>
     <script src="app.js"></script>
     <script>
-        function renderMasterScoreMatrix() {
-            const container = document.getElementById("masterScoreMatrixContainer");
-            if (!container) return;
+        // Hook into data load to render live score table
+        function updateUIOnDataLoad() {
+            renderLiveScoreboardView();
+        }
 
-            const progs = normalizeProgramsData(appData.programs);
-            
-            let onStageGroups = [];
-            let offStageGroups = [];
-            let sportsGroups = [];
+        window.addEventListener("DOMContentLoaded", () => {
+            setTimeout(() => { renderLiveScoreboardView(); }, 400);
+        });
 
-            const categoriesOrder = [
-                { key: "senior", label: "SENIOR" },
-                { key: "junior", label: "JUNIOR" },
-                { key: "subjunior", label: "SUB JUNIOR" },
-                { key: "general", label: "GENERAL" }
-            ];
+        function renderLiveScoreboardView() {
+            let ptsA = 0, ptsB = 0;
+            const results = appData.results || [];
+            const resultsArray = Array.isArray(results) ? results : Object.values(results);
+            const tbody = document.getElementById("liveResultsBody");
 
-            categoriesOrder.forEach(cat => {
-                const cObj = progs[cat.key] || { onStage: [], offStage: [], sports: [] };
+            resultsArray.forEach(res => {
+                const isGroup = GROUP_EVENTS_LIST.includes(res.program);
+                const ptsMap = isGroup ? { 1: 10, 2: 6, 3: 3 } : { 1: 5, 2: 3, 3: 1 };
                 
-                if ((cObj.onStage || []).length > 0) {
-                    onStageGroups.push({ catLabel: cat.label, programs: cObj.onStage, catKey: cat.key });
-                }
-                if ((cObj.offStage || []).length > 0) {
-                    offStageGroups.push({ catLabel: cat.label, programs: cObj.offStage, catKey: cat.key });
-                }
-                if ((cObj.sports || []).length > 0) {
-                    sportsGroups.push({ catLabel: cat.label, programs: cObj.sports, catKey: cat.key });
-                }
+                if (res.team1 === "teamA") ptsA += ptsMap[1];
+                if (res.team1 === "teamB") ptsB += ptsMap[1];
+                if (res.team2 === "teamA") ptsA += ptsMap[2];
+                if (res.team2 === "teamB") ptsB += ptsMap[2];
+                if (res.team3 === "teamA") ptsA += ptsMap[3];
+                if (res.team3 === "teamB") ptsB += ptsMap[3];
             });
 
-            const renderGroupedBoxTable = (boxTitle, groupsData) => {
-                if (groupsData.length === 0) return "";
+            if (document.getElementById("totalScoreA")) document.getElementById("totalScoreA").textContent = ptsA;
+            if (document.getElementById("totalScoreB")) document.getElementById("totalScoreB").textContent = ptsB;
 
-                let secTotalA = 0;
-                let secTotalB = 0;
-                let catBannersHtml = `<th class="sticky-col">TEAMS</th>`;
-                let headerColsHtml = "";
-                let rowACellsHtml = "";
-                let rowBCellsHtml = "";
-
-                groupsData.forEach(grp => {
-                    catBannersHtml += `<th colspan="${grp.programs.length}" class="cat-group-banner">${grp.catLabel}</th>`;
-                    
-                    grp.programs.forEach(pName => {
-                        const isGrp = GROUP_EVENTS_LIST.includes(pName);
-                        const cellData = getProgramScoresForCell(grp.catKey, pName);
-                        const sumA = cellData.teamA.reduce((a, b) => a + b, 0);
-                        const sumB = cellData.teamB.reduce((a, b) => a + b, 0);
-                        secTotalA += sumA;
-                        secTotalB += sumB;
-
-                        const stackAHtml = cellData.teamA.length > 0
-                            ? `<div class="score-pill-stack">${cellData.teamA.map(n => `<span class="stacked-score-badge badge-team-a">${n}</span>`).join("")}</div>`
-                            : `<span class="empty-dash">·</span>`;
-
-                        const stackBHtml = cellData.teamB.length > 0
-                            ? `<div class="score-pill-stack">${cellData.teamB.map(n => `<span class="stacked-score-badge badge-team-b">${n}</span>`).join("")}</div>`
-                            : `<span class="empty-dash">·</span>`;
-
-                        const safeCat = grp.catKey.replace(/'/g, "\\'");
-                        const safeProg = pName.replace(/'/g, "\\'");
-                        const clickAttr = isAdmin ? `onclick="openCellScoreModal('${safeCat}', '${safeProg}')"` : "";
-                        const clickClass = isAdmin ? "admin-clickable" : "";
-
-                        headerColsHtml += `<th class="prog-vert-header" title="${pName}">${pName}${isGrp ? ' <span class="group-tag-dot" title="Group"></span>' : ''}</th>`;
-                        rowACellsHtml += `<td class="score-stack-cell ${clickClass}" ${clickAttr}>${stackAHtml}</td>`;
-                        rowBCellsHtml += `<td class="score-stack-cell ${clickClass}" ${clickAttr}>${stackBHtml}</td>`;
+            if (tbody) {
+                if (resultsArray.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="padding:25px; color:var(--text-muted);">ഫലങ്ങൾ ഇതുവരെ പ്രഖ്യാപിച്ചിട്ടില്ല.</td></tr>`;
+                } else {
+                    let html = "";
+                    resultsArray.slice().reverse().forEach(res => {
+                        html += `
+                            <tr>
+                                <td style="font-weight:900;">${res.program || ""}</td>
+                                <td><span style="background:rgba(251,191,36,0.15); padding:3px 8px; border-radius:6px; font-weight:800; font-size:0.75rem;">${res.category || ""}</span></td>
+                                <td>${res.win1Name || "—"} <br><small style="color:var(--text-muted);">${res.team1 === 'teamA' ? '🔴 ZELLIJ' : (res.team1 === 'teamB' ? '🔵 IZNIK' : '')}</small></td>
+                                <td>${res.win2Name || "—"} <br><small style="color:var(--text-muted);">${res.team2 === 'teamA' ? '🔴 ZELLIJ' : (res.team2 === 'teamB' ? '🔵 IZNIK' : '')}</small></td>
+                                <td>${res.win3Name || "—"} <br><small style="color:var(--text-muted);">${res.team3 === 'teamA' ? '🔴 ZELLIJ' : (res.team3 === 'teamB' ? '🔵 IZNIK' : '')}</small></td>
+                            </tr>
+                        `;
                     });
-                });
-
-                catBannersHtml += `<th class="sec-total-header">TOTAL</th><th class="sticky-right-col">GRAND</th>`;
-
-                return `
-                    <div class="matrix-section-card">
-                        <div class="matrix-section-header">
-                            <h3 class="matrix-section-title">✨ ${boxTitle}</h3>
-                            <div class="section-sub-score">
-                                <span style="color:#ef4444;">🔴 ZELLIJ: ${secTotalA}</span>
-                                <span style="color:#3b82f6;">🔵 IZNIK: ${secTotalB}</span>
-                            </div>
-                        </div>
-                        <div class="matrix-scroll-wrapper">
-                            <table class="score-matrix-table">
-                                <thead>
-                                    <tr>
-                                        ${catBannersHtml}
-                                    </tr>
-                                    <tr>
-                                        <th class="sticky-col">PROGRAMS</th>
-                                        ${headerColsHtml}
-                                        <th class="sec-total-header">--</th>
-                                        <th class="sticky-right-col">--</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="sticky-col team-name-cell" style="color:#ef4444;">🔴 ZELLIJ</td>
-                                        ${rowACellsHtml}
-                                        <td class="sec-total-cell" style="color:#10b981;">${secTotalA}</td>
-                                        <td class="sticky-right-col grand-total-cell" style="color:#f87171;">${computedGrandTotals.teamA}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="sticky-col team-name-cell" style="color:#3b82f6;">🔵 IZNIK</td>
-                                        ${rowBCellsHtml}
-                                        <td class="sec-total-cell" style="color:#10b981;">${secTotalB}</td>
-                                        <td class="sticky-right-col grand-total-cell" style="color:#60a5fa;">${computedGrandTotals.teamB}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                `;
-            };
-
-            container.innerHTML = renderGroupedBoxTable("ON-STAGE EVENTS (സ്റ്റേജ് മത്സരങ്ങൾ)", onStageGroups) +
-                                  renderGroupedBoxTable("OFF-STAGE EVENTS (ഓഫ്-സ്റ്റേജ് മത്സരങ്ങൾ)", offStageGroups) +
-                                  renderGroupedBoxTable("SPORTS EVENTS (സ്പോർട്സ് മത്സരങ്ങൾ)", sportsGroups);
+                    tbody.innerHTML = html;
+                }
+            }
         }
     </script>
 </body>
