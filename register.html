@@ -66,7 +66,7 @@
         }
         .matrix-reg-table th, .matrix-reg-table td {
             border: 1px solid var(--border-color);
-            padding: 8px 10px;
+            padding: 9px 12px;
             text-align: center;
         }
         .matrix-reg-table th {
@@ -110,29 +110,35 @@
             background: var(--bg-color);
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 12px;
+            padding: 14px;
+            margin-bottom: 15px;
         }
         .student-events-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 6px;
-            margin-top: 8px;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
         }
         .student-events-grid label {
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             cursor: pointer;
+            background: var(--card-bg);
+            padding: 5px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
         }
         @media print {
-            body { background: #fff !important; color: #000 !important; }
+            @page { size: landscape; margin: 10mm; }
+            body { background: #fff !important; color: #000 !important; font-size: 9pt !important; }
             .admin-only, .top-nav-bar, .reg-header-bar button, footer { display: none !important; }
             .table-responsive { overflow: visible !important; box-shadow: none !important; border: none !important; }
-            .matrix-reg-table { border: 1px solid #000; width: 100% !important; font-size: 7pt !important; }
-            .matrix-reg-table th, .matrix-reg-table td { border: 1px solid #000; color: #000; padding: 4px !important; }
+            .matrix-reg-table { border: 1px solid #000; width: 100% !important; }
+            .matrix-reg-table th, .matrix-reg-table td { border: 1px solid #000; color: #000; padding: 5px !important; }
+            .matrix-reg-table td:nth-child(2), .matrix-reg-table th:nth-child(2) { position: static !important; background: transparent !important; border-right: 1px solid #000 !important; }
         }
     </style>
 </head>
@@ -148,8 +154,8 @@
 
     <div class="reg-header-bar">
         <div>
-            <span style="font-size: 0.7rem; font-weight: 800; color: #fbbf24; font-family: 'Montserrat', sans-serif;">TEAM EVENT REGISTER</span>
-            <h2 style="margin: 0; font-weight: 900; font-family: 'Montserrat', sans-serif;">FESTIVAL REGISTRATION MATRIX</h2>
+            <span style="font-size: 0.7rem; font-weight: 800; color: #fbbf24; font-family: 'Montserrat', sans-serif;" id="headerTeamTitle">TEAM EVENT REGISTER</span>
+            <h2 style="margin: 0; font-weight: 900; font-family: 'Montserrat', sans-serif;" id="headerSectionTitle">FESTIVAL REGISTRATION MATRIX</h2>
         </div>
         <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <select id="teamSelectTab" class="form-control" style="padding: 6px 12px; font-weight: 800;" onchange="renderRegistrationMatrix()">
@@ -161,6 +167,11 @@
                 <option value="junior">Junior</option>
                 <option value="subjunior">Sub Junior</option>
                 <option value="general">General</option>
+            </select>
+            <select id="regSectionSelectTab" class="form-control" style="padding: 6px 12px; font-weight: 800;" onchange="renderRegistrationMatrix()">
+                <option value="onStage">🎭 Stage</option>
+                <option value="offStage">🎨 Off-Stage</option>
+                <option value="sports">⚽ Sports</option>
             </select>
             <button class="btn-action-sm" style="background:#fbbf24; color:#0f172a; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer;" onclick="window.print()">🖨️ Print / PDF</button>
             <button class="back-home-btn" onclick="location.href='index.html'" style="margin:0;">⬅️ Back</button>
@@ -177,7 +188,7 @@
             </div>
             <div class="stat-card">
                 <div class="num" id="statEventsCount">0</div>
-                <div class="label">മത്സരങ്ങൾ (Events - Arts & Sports)</div>
+                <div class="label">മത്സരങ്ങൾ (Events in Section)</div>
             </div>
             <div class="stat-card">
                 <div class="num" id="statTotalTicks">0</div>
@@ -201,9 +212,9 @@
         </div>
 
         <!-- Admin Dashboard for Managing Students & Event Registrations -->
-        <div class="admin-only admin-alt-box" data-display="block" style="background:var(--card-bg); border:1px solid var(--accent-gold); border-radius:12px; padding:20px;">
+        <div class="admin-only admin-edit-section" data-display="block">
             <h3 style="margin:0 0 12px; color:var(--accent-gold); font-weight:900;">🛠️ Admin Dashboard: Student Event Registrations</h3>
-            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;">ഓരോ വിദ്യാർത്ഥിയും പങ്കെടുക്കുന്ന മത്സരങ്ങൾക്ക് നേരെ ടിക്ക് (✔) നൽകി 'Save All Changes' ക്ലിക്ക് ചെയ്യുക.</p>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;">തിരഞ്ഞെടുത്ത കാറ്റഗറിയിലെയും സെക്ഷനിലെയും മത്സരങ്ങൾക്ക് നേരെ ടിക്ക് (✔) നൽകി മാറ്റങ്ങൾ സേവ് ചെയ്യുക.</p>
             
             <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
                 <input type="text" id="newStudentNameInput" class="form-control" placeholder="പുതിയ വിദ്യാർത്ഥിയുടെ പേര് ചേർക്കുക..." style="max-width:320px;">
@@ -227,31 +238,32 @@
             }, 300);
         });
 
-        function getActiveTeamAndCat() {
+        function getActiveFilters() {
             const teamKey = document.getElementById("teamSelectTab")?.value || "teamA";
             const catKey = document.getElementById("regCatSelectTab")?.value || "senior";
-            return { teamKey, catKey };
+            const secKey = document.getElementById("regSectionSelectTab")?.value || "onStage";
+            return { teamKey, catKey, secKey };
         }
 
         function renderRegistrationMatrix() {
-            const { teamKey, catKey } = getActiveTeamAndCat();
+            const { teamKey, catKey, secKey } = getActiveFilters();
             const teams = normalizeTeamsData(appData.teams);
             const teamObj = teams[teamKey] || { name: "", senior: [], junior: [], subjunior: [], general: [] };
             const students = teamObj[catKey] || [];
 
             const progs = normalizeProgramsData(appData.programs);
             const catProgs = progs[catKey] || { onStage: [], offStage: [], sports: [] };
-            
-            // Includes On-Stage, Off-Stage, and Sports programs fully
-            const allEvents = [
-                ...(catProgs.onStage || []), 
-                ...(catProgs.offStage || []), 
-                ...(catProgs.sports || [])
-            ];
+            const sectionEvents = catProgs[secKey] || [];
+
+            // Update Header Titles
+            const secNameMap = { onStage: "STAGE EVENTS", offStage: "OFF-STAGE EVENTS", sports: "SPORTS EVENTS" };
+            if (document.getElementById("headerSectionTitle")) {
+                document.getElementById("headerSectionTitle").textContent = `${catKey.toUpperCase()} - ${secNameMap[secKey]}`;
+            }
 
             // Stats update
             if (document.getElementById("statStudentsCount")) document.getElementById("statStudentsCount").textContent = students.length;
-            if (document.getElementById("statEventsCount")) document.getElementById("statEventsCount").textContent = allEvents.length;
+            if (document.getElementById("statEventsCount")) document.getElementById("statEventsCount").textContent = sectionEvents.length;
 
             let totalTicksCount = 0;
             if (!appData.registrations) appData.registrations = {};
@@ -264,7 +276,7 @@
             const headerRow = document.getElementById("matrixHeaderRow");
             if (headerRow) {
                 let hHtml = `<th>No</th><th>Name</th>`;
-                allEvents.forEach(ev => {
+                sectionEvents.forEach(ev => {
                     hHtml += `<th>${ev}</th>`;
                 });
                 headerRow.innerHTML = hHtml;
@@ -274,13 +286,13 @@
             const bodyRow = document.getElementById("matrixBodyRow");
             if (bodyRow) {
                 if (students.length === 0) {
-                    bodyRow.innerHTML = `<tr><td colspan="${allEvents.length + 2}" style="padding:25px; color:var(--text-muted);">വിദ്യാർത്ഥികൾ ആരുമില്ല.</td></tr>`;
+                    bodyRow.innerHTML = `<tr><td colspan="${sectionEvents.length + 2}" style="padding:25px; color:var(--text-muted);">വിദ്യാർത്ഥികൾ ആരുമില്ല.</td></tr>`;
                 } else {
                     let bHtml = "";
                     students.forEach((stName, idx) => {
                         const cleanName = stName.replace(/(\(C\)|\(Vc\))/g, "").trim();
                         bHtml += `<tr><td>${idx + 1}</td><td>${stName}</td>`;
-                        allEvents.forEach(ev => {
+                        sectionEvents.forEach(ev => {
                             const isChecked = regMap[cleanName] && regMap[cleanName].includes(ev);
                             if (isChecked) totalTicksCount++;
                             bHtml += `<td>${isChecked ? '<span class="tick-icon">✔</span>' : '<span style="color:var(--text-muted); opacity:0.3;">·</span>'}</td>`;
@@ -294,10 +306,10 @@
             if (document.getElementById("statTotalTicks")) document.getElementById("statTotalTicks").textContent = totalTicksCount;
 
             // Render Admin Editor if Admin
-            renderAdminStudentEditor(students, allEvents, regMap);
+            renderAdminStudentEditor(students, sectionEvents, regMap);
         }
 
-        function renderAdminStudentEditor(students, allEvents, regMap) {
+        function renderAdminStudentEditor(students, sectionEvents, regMap) {
             const container = document.getElementById("adminStudentEditorContainer");
             if (!container) return;
 
@@ -317,7 +329,7 @@
                 const studentCheckedEvents = regMap[cleanName] || [];
 
                 let checkboxesHtml = "";
-                allEvents.forEach(ev => {
+                sectionEvents.forEach(ev => {
                     const isChecked = studentCheckedEvents.includes(ev);
                     checkboxesHtml += `
                         <label>
@@ -349,7 +361,7 @@
             if (!input || !input.value.trim()) { alert("വിദ്യാർത്ഥിയുടെ പേര് നൽകുക!"); return; }
             const nameVal = input.value.trim();
 
-            const { teamKey, catKey } = getActiveTeamAndCat();
+            const { teamKey, catKey } = getActiveFilters();
             let cloned = JSON.parse(JSON.stringify(appData));
             const teams = normalizeTeamsData(cloned.teams);
 
@@ -369,7 +381,7 @@
         function removeStudentFromTeam(cleanName) {
             if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
             if (confirm(`"${cleanName}" എന്ന വിദ്യാർത്ഥിയെ നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?`)) {
-                const { teamKey, catKey } = getActiveTeamAndCat();
+                const { teamKey, catKey } = getActiveFilters();
                 let cloned = JSON.parse(JSON.stringify(appData));
                 const teams = normalizeTeamsData(cloned.teams);
 
@@ -383,34 +395,45 @@
 
         function saveAllRegistrationsToCloud() {
             if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
-            const { teamKey, catKey } = getActiveTeamAndCat();
+            const { teamKey, catKey } = getActiveFilters();
             const teams = normalizeTeamsData(appData.teams);
             const students = teams[teamKey][catKey] || [];
 
             if (!appData.registrations) appData.registrations = {};
             if (!appData.registrations[teamKey]) appData.registrations[teamKey] = {};
+            if (!appData.registrations[teamKey][catKey]) appData.registrations[teamKey][catKey] = {};
             
-            let newCatRegMap = {};
+            let existingCatMap = appData.registrations[teamKey][catKey];
+
             students.forEach((stName, idx) => {
                 const cleanName = stName.replace(/(\(C\)|\(Vc\))/g, "").trim();
                 const checkedBoxes = document.querySelectorAll(`.reg_chk_${idx}:checked`);
-                let evList = [];
-                checkedBoxes.forEach(chk => evList.push(chk.value));
-                if (evList.length > 0) {
-                    newCatRegMap[cleanName] = evList;
+                
+                const { secKey } = getActiveFilters();
+                const progs = normalizeProgramsData(appData.programs);
+                const currentSecEvents = progs[catKey][secKey] || [];
+
+                if (!existingCatMap[cleanName]) existingCatMap[cleanName] = [];
+                
+                // Remove existing events of this section to replace with newly checked ones
+                existingCatMap[cleanName] = existingCatMap[cleanName].filter(ev => !currentSecEvents.includes(ev));
+
+                // Add newly checked
+                checkedBoxes.forEach(chk => {
+                    if (!existingCatMap[cleanName].includes(chk.value)) {
+                        existingCatMap[cleanName].push(chk.value);
+                    }
+                });
+
+                if (existingCatMap[cleanName].length === 0) {
+                    delete existingCatMap[cleanName];
                 }
             });
 
             let cloned = JSON.parse(JSON.stringify(appData));
             if (!cloned.registrations) cloned.registrations = {};
-            if (!cloned.registrations[teamKey]) cloned.registrations.registrations = {};
-            cloned.registrations[teamKey][catKey] = newCatRegMap;
+            if (!cloned.registrations[teamKey]) cloned.registrations[teamKey] = {};
+            cloned.registrations[teamKey][catKey] = existingCatMap;
 
             saveAppData(false, cloned, () => {
-                alert("എല്ലാ രജിസ്ട്രേഷൻ മാറ്റങ്ങളും വിജയകരമായി സേവ് ചെയ്തു!");
-                renderRegistrationMatrix();
-            });
-        }
-    </script>
-</body>
-</html>
+                alert("എല്ലാ രജിസ്ട്രേഷൻ മാറ്റങ്ങളും വിജയകരമായി സേവ
