@@ -1,4 +1,4 @@
-// Firebase Configuration & Initialization
+// Firebase Configuration & Initialization Safety Check
 const firebaseConfig = {
     apiKey: "YOUR_FIREBASE_API_KEY",
     authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
@@ -30,6 +30,7 @@ let appData = {
 };
 
 let isAdmin = false;
+let GROUP_EVENTS_LIST = [];
 
 window.addEventListener("DOMContentLoaded", () => {
     auth.onAuthStateChanged((user) => {
@@ -45,27 +46,17 @@ window.addEventListener("DOMContentLoaded", () => {
             if (adminBar) adminBar.style.display = "none";
         }
     });
-    loadAppDataFromCloud();
+
+    initRealtimeSync();
+
+    const savedTheme = localStorage.getItem("eid_theme") || "light";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    updateThemeToggleButton(savedTheme);
 });
 
 function openAdminLoginModal() {
     const modal = document.getElementById("adminLoginModal");
-    if (modal) {
-        modal.innerHTML = `
-            <div class="modal-content">
-                <span class="close-btn" onclick="closeAdminLoginModal()">&times;</span>
-                <h3 style="margin: 0 0 12px; font-weight: 900; color: var(--accent-gold);">🔐 Admin Gmail Login</h3>
-                <div class="form-group">
-                    <label>Admin Email:</label>
-                    <input type="email" id="adminEmailInput" class="form-control" placeholder="Gmail നൽകുക" style="margin-bottom:10px;">
-                    <label>Password:</label>
-                    <input type="password" id="adminPassInput" class="form-control" placeholder="പാസ്‌വേഡ് നൽകുക">
-                </div>
-                <button class="btn-submit" onclick="submitAdminLogin()">Login</button>
-            </div>
-        `;
-        modal.style.display = "flex";
-    }
+    if (modal) modal.style.display = "flex";
 }
 
 function closeAdminLoginModal() {
@@ -87,7 +78,7 @@ function submitAdminLogin() {
     }
 
     auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
+        .then(() => {
             closeAdminLoginModal();
             alert("അഡ്മിൻ ലോഗിൻ വിജയം!");
             location.reload();
@@ -106,20 +97,27 @@ function logoutAdmin() {
     });
 }
 
-function loadAppDataFromCloud() {
-    db.collection("festival").doc("mainData").get().then((doc) => {
+function initRealtimeSync() {
+    db.collection("festival").doc("mainData").onSnapshot((doc) => {
         if (doc.exists) {
             appData = doc.data();
             if (!appData.registrations) appData.registrations = {};
+            if (!appData.results) appData.results = {};
+            
+            calculateAndDisplayHomeScores();
             if (typeof updateUIOnDataLoad === "function") updateUIOnDataLoad();
             if (typeof renderRegistrationMatrix === "function") renderRegistrationMatrix();
         }
-    }).catch((err) => {
-        console.log("Cloud load error:", err);
+    }, (err) => {
+        console.error("Realtime sync error:", err);
     });
 }
 
 function saveAppData(showAlert = true, customData = null, callback = null) {
+    if (!isAdmin) {
+        alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!");
+        return;
+    }
     const dataToSave = customData || appData;
     db.collection("festival").doc("mainData").set(dataToSave).then(() => {
         if (showAlert) alert("മാറ്റങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
@@ -128,6 +126,64 @@ function saveAppData(showAlert = true, customData = null, callback = null) {
         console.error("Save error:", err);
         if (showAlert) alert("സേവ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു!");
     });
+}
+
+function calculateAndDisplayHomeScores() {
+    let ptsA = 0, ptsB = 0;
+    const results = appData.results || [];
+    const resultsArray = Array.isArray(results) ? results : Object.values(results);
+
+    resultsArray.forEach(res => {
+        if (!res || !res.program) return;
+        const isGroup = GROUP_EVENTS_LIST.includes(res.program);
+        const ptsMap = isGroup ? { 1: 10, 2: 6, 3: 3 } : { 1: 5, 2: 3, 3: 1 };
+        
+        if (res.team1 === "teamA") ptsA += ptsMap[1];
+        if (res.team1 === "teamB") ptsB += ptsMap[1];
+        if (res.team2 === "teamA") ptsA += ptsMap[2];
+        if (res.team2 === "teamB") ptsB += ptsMap[2];
+        if (res.team3 === "teamA") ptsA += ptsMap[3];
+        if (res.team3 === "teamB") ptsB += ptsMap[3];
+    });
+
+    updateIndexScoreboard(ptsA, ptsB);
+}
+
+function updateIndexScoreboard(ptsA, ptsB) {
+    const validPtsA = Number(ptsA);
+    const validPtsB = Number(ptsB);
+
+    const finalPtsA = Number.isFinite(validPtsA) && validPtsA >= 0 ? validPtsA : 0;
+    const finalPtsB = Number.isFinite(validPtsB) && validPtsB >= 0 ? validPtsB : 0;
+
+    const elPtsA = document.getElementById("homePtsA");
+    const elPtsB = document.getElementById("homePtsB");
+    const elBarA = document.getElementById("homeBarA");
+    const elBarB = document.getElementById("homeBarB");
+
+    if (elPtsA) elPtsA.textContent = finalPtsA;
+    if (elPtsB) elPtsB.textContent = finalPtsB;
+
+    const total = finalPtsA + finalPtsB;
+    let pctA = 50, pctB = 50;
+
+    if (total > 0 && Number.isFinite(total)) {
+        pctA = (finalPtsA / total) * 100;
+        pctB = (finalPtsB / total) * 100;
+    }
+
+    if (elBarA) elBarA.style.width = pctA + "%";
+    if (elBarB) elBarB.style.width = pctB + "%";
+}
+
+function exportBackupJSON() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", "eid_irshad_backup.json");
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
 }
 
 function normalizeTeamsData(teams) {
@@ -140,17 +196,18 @@ function normalizeProgramsData(programs) {
     return programs;
 }
 
-const GROUP_EVENTS_LIST = [];
-
 function toggleTheme() {
     const html = document.documentElement;
     const current = html.getAttribute("data-theme");
     const next = current === "dark" ? "light" : "dark";
     html.setAttribute("data-theme", next);
     localStorage.setItem("eid_theme", next);
+    updateThemeToggleButton(next);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    const savedTheme = localStorage.getItem("eid_theme") || "light";
-    document.documentElement.setAttribute("data-theme", savedTheme);
-});
+function updateThemeToggleButton(theme) {
+    const btn = document.getElementById("themeToggleBtn");
+    if (btn) {
+        btn.textContent = theme === "dark" ? "☀️ Light" : "🌙 Dark";
+    }
+}
