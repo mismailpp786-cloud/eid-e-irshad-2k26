@@ -28,6 +28,7 @@
             overflow: hidden;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
             text-align: left;
+            box-sizing: border-box;
         }
         #posterCanvas.layout-model-1 {
             background: linear-gradient(135deg, #047857 0%, #065f46 60%, #022c22 100%);
@@ -93,16 +94,20 @@
     <div class="top-nav-bar">
         <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back</button>
         <span class="nav-page-title">🏆 OFFICIAL RESULT STUDIO & GENERATOR</span>
-        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
+        <div style="display:flex; gap:8px;">
+            <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
+            <button class="admin-top-btn" onclick="openAdminLoginModal()" id="adminLoginBtn">🔐 Admin</button>
+        </div>
     </div>
 
     <div class="container" style="max-width: 1050px; margin: 25px auto;">
         <h1 class="page-title">ഫല പ്രഖ്യാപന സ്റ്റുഡിയോ</h1>
         <p class="page-subtitle">മത്സര ഫലങ്ങൾ പ്രസിദ്ധീകരിക്കാനും പോസ്റ്ററുകൾ നിർമ്മിക്കാനുമുള്ള സംവിധാനം</p>
 
-        <div class="builder-section admin-only" data-display="block">
+        <!-- Poster Studio Builder -->
+        <div class="builder-section">
             <h3 style="margin: 0 0 15px; font-family:'Montserrat',sans-serif; font-size:1.15rem; font-weight:900; color:var(--accent-gold);">
-                🛠️ Poster Design & Layout Switcher
+                🛠️ Poster Design & Result Publisher
             </h3>
             <input type="hidden" id="editingResultId" value="">
             <div class="builder-grid">
@@ -110,16 +115,16 @@
                     <div class="form-group">
                         <label>ഡിസൈൻ ശൈലി (Layout Model):</label>
                         <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 10px;">
-                            <button id="modelBtn1" class="btn-action-sm" style="background:#065f46; color:#fff; padding:8px 12px; font-weight:800;" onclick="setPosterLayout('layout-model-1')">Model 1 (Green)</button>
-                            <button id="modelBtn2" class="btn-action-sm" style="background:#581c87; color:#fff; padding:8px 12px; font-weight:800;" onclick="setPosterLayout('layout-model-2')">Model 2 (Maroon)</button>
-                            <button id="modelBtn3" class="btn-action-sm" style="background:#78350f; color:#fff; padding:8px 12px; font-weight:800;" onclick="setPosterLayout('layout-model-3')">Model 3 (Brown)</button>
+                            <button type="button" id="modelBtn1" class="btn-action-sm" style="background:#065f46; color:#fff; padding:8px 12px; font-weight:800;" onclick="setPosterLayout('layout-model-1')">Model 1 (Green)</button>
+                            <button type="button" id="modelBtn2" class="btn-action-sm" style="background:#581c87; color:#fff; padding:8px 12px; font-weight:800;" onclick="setPosterLayout('layout-model-2')">Model 2 (Maroon)</button>
+                            <button type="button" id="modelBtn3" class="btn-action-sm" style="background:#78350f; color:#fff; padding:8px 12px; font-weight:800;" onclick="setPosterLayout('layout-model-3')">Model 3 (Brown)</button>
                         </div>
                     </div>
 
                     <div style="display:grid; grid-template-columns: 100px 1fr; gap:10px;">
                         <div class="form-group">
                             <label>Result No:</label>
-                            <input type="text" id="resNoInput" class="form-control" readonly style="background:var(--bg-color); font-weight:900; color:var(--accent-gold);" value="01">
+                            <input type="text" id="resNoInput" class="form-control" style="font-weight:900; color:var(--accent-gold);" value="01" oninput="updatePosterPreview()">
                         </div>
                         <div class="form-group">
                             <label>Category:</label>
@@ -204,15 +209,15 @@
                         </div>
                     </div>
 
-                    <div style="display:flex; gap:10px; margin-top:18px;">
-                        <button class="btn-submit" style="background:#2563eb; color:#fff; margin-top:0;" onclick="downloadResultPoster()">📥 PNG ഡൗൺലോഡ് ചെയ്യുക</button>
-                        <button class="btn-submit" style="background:#059669; color:#fff; margin-top:0;" onclick="publishResultToSite()">🚀 സൈറ്റിൽ പ്രസിദ്ധീകരിക്കുക</button>
+                    <div style="display:flex; gap:10px; margin-top:18px; flex-wrap:wrap;">
+                        <button type="button" class="btn-submit" style="background:#2563eb; color:#fff; flex:1;" onclick="downloadResultPoster()">📥 PNG ഡൗൺലോഡ് ചെയ്യുക</button>
+                        <button type="button" class="btn-submit" style="background:#059669; color:#fff; flex:1;" onclick="publishResultToSite()">🚀 സൈറ്റിൽ പ്രസിദ്ധീകരിക്കുക</button>
                     </div>
                 </div>
 
                 <!-- Live Poster Preview Box -->
                 <div class="poster-preview-wrapper">
-                    <span style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin-bottom:8px; font-family:'Montserrat',sans-serif;">📱 REFERENCE STYLE POSTER PREVIEW (1:1)</span>
+                    <span style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin-bottom:8px; font-family:'Montserrat',sans-serif;">📱 LIVE POSTER PREVIEW (1:1)</span>
                     
                     <div id="posterCanvas" class="layout-model-1">
                         <div class="ref-top-header">
@@ -308,9 +313,8 @@
         }
 
         function updatePosterPreview() {
-            const autoNo = getNextAutoResultNo();
             const resInput = document.getElementById("resNoInput");
-            if (resInput) resInput.value = autoNo;
+            const resNo = (resInput && resInput.value) ? resInput.value : getNextAutoResultNo();
 
             const subTitle = (document.getElementById("resSubTitleInput")?.value || "SENIOR - ON STAGE").trim();
             const progCustom = (document.getElementById("resProgCustom")?.value || "").trim();
@@ -329,7 +333,7 @@
             const w3TeamKey = document.getElementById("win3Team")?.value || "teamA";
             const w3TeamName = formatTeamDisplayName(w3TeamKey);
 
-            if (document.getElementById("previewResNo")) document.getElementById("previewResNo").textContent = autoNo;
+            if (document.getElementById("previewResNo")) document.getElementById("previewResNo").textContent = resNo;
             if (document.getElementById("previewCat")) document.getElementById("previewCat").textContent = subTitle.toUpperCase();
             if (document.getElementById("previewProg")) document.getElementById("previewProg").textContent = progName.toUpperCase();
 
@@ -394,6 +398,10 @@
             if (subTitleInput) {
                 subTitleInput.value = `${catVal.toUpperCase()} - ${secVal === 'onStage' ? 'ON STAGE' : secVal === 'offStage' ? 'OFF STAGE' : 'SPORTS'}`;
             }
+            const resInput = document.getElementById("resNoInput");
+            if (resInput && !document.getElementById("editingResultId")?.value) {
+                resInput.value = getNextAutoResultNo();
+            }
 
             updatePosterPreview();
         }
@@ -412,9 +420,13 @@
         }
 
         function publishResultToSite() {
-            if (!isAdmin) { alert("അഡ്മിൻ ലോഗിൻ ചെയ്യുക!"); return; }
+            if (!isAdmin) {
+                alert("ഫലം പ്രസിദ്ധീകരിക്കാൻ അഡ്മിൻ ലോഗിൻ ആവശ്യമാണ്!");
+                openAdminLoginModal();
+                return;
+            }
             const editingId = document.getElementById("editingResultId")?.value;
-            const resNo = getNextAutoResultNo();
+            const resNo = document.getElementById("resNoInput")?.value || getNextAutoResultNo();
             const category = document.getElementById("resCatSelect")?.value || "Senior";
             const prog = (document.getElementById("resProgCustom")?.value || document.getElementById("resProgSelect")?.value || "").trim();
             const w1Name = (document.getElementById("win1Name")?.value || "").trim();
@@ -426,7 +438,6 @@
                 return;
             }
 
-            // Check if same program result already exists (prevent duplicates unless editing)
             const existingList = appData.results || [];
             const isDuplicate = existingList.some(r => {
                 if (editingId && r.id === editingId) return false;
@@ -435,22 +446,27 @@
             });
 
             if (isDuplicate) {
-                alert("ഈ മത്സരത്തിന്റെ ഫലം ഇതിനകം പ്രസിദ്ധീകരിച്ചിട്ടുണ്ട്! വീണ്ടും പ്രസിദ്ധീകരിക്കാൻ കഴിയില്ല.");
+                alert("ഈ മത്സരത്തിന്റെ ഫലം ഇതിനകം പ്രസിദ്ധീകരിച്ചിട്ടുണ്ട്!");
                 return;
             }
+
+            const t1 = document.getElementById("win1Team")?.value || "teamA";
+            const t2 = document.getElementById("win2Team")?.value || "teamB";
+            const t3 = document.getElementById("win3Team")?.value || "teamA";
 
             const newResult = {
                 id: editingId ? editingId : ("res_" + Date.now()),
                 resNo,
                 category,
                 program: prog,
-                win1Name: w1Name, win1Team: document.getElementById("win1Team")?.value || "teamA",
-                win2Name: w2Name, win2Team: document.getElementById("win2Team")?.value || "teamB",
-                win3Name: w3Name, win3Team: document.getElementById("win3Team")?.value || "teamA",
+                win1Name: w1Name, win1Team: t1, team1: t1,
+                win2Name: w2Name, win2Team: t2, team2: t2,
+                win3Name: w3Name, win3Team: t3, team3: t3,
                 timestamp: Date.now()
             };
 
             let clonedData = JSON.parse(JSON.stringify(appData));
+            if (!Array.isArray(clonedData.results)) clonedData.results = [];
             if (editingId) {
                 clonedData.results = clonedData.results.filter(r => r.id !== editingId);
             }
@@ -462,11 +478,15 @@
             }
 
             document.getElementById("editingResultId").value = "";
-            saveAppData(false, clonedData, (success) => {
+            saveAppData(false, clonedData, () => {
                 alert("ഫലം വിജയകരമായി പ്രസിദ്ധീകരിച്ചു! സ്കോർബോർഡിൽ പോയിന്റ് തനിയെ ആഡ് ആയിട്ടുണ്ട്.");
                 if (typeof confetti === "function") {
                     confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
                 }
+                document.getElementById("resProgCustom").value = "";
+                document.getElementById("win1Name").value = "";
+                document.getElementById("win2Name").value = "";
+                document.getElementById("win3Name").value = "";
                 onResultCategoryChange();
                 renderPublishedResults();
             });
@@ -484,15 +504,14 @@
             }
             document.getElementById("resProgCustom").value = found.program || "";
             document.getElementById("win1Name").value = found.win1Name || "";
-            document.getElementById("win1Team").value = found.win1Team || "teamA";
+            document.getElementById("win1Team").value = resolveTeamKey(found.win1Team || found.team1);
             document.getElementById("win2Name").value = found.win2Name || "";
-            document.getElementById("win2Team").value = found.win2Team || "teamB";
+            document.getElementById("win2Team").value = resolveTeamKey(found.win2Team || found.team2);
             document.getElementById("win3Name").value = found.win3Name || "";
-            document.getElementById("win3Team").value = found.win3Team || "teamA";
+            document.getElementById("win3Team").value = resolveTeamKey(found.win3Team || found.team3);
 
             updatePosterPreview();
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            alert("ഫലം എഡിറ്റിംഗിനായി ലോഡ് ചെയ്തു. മാറ്റങ്ങൾ വരുത്തി വീണ്ടും 'സൈറ്റിൽ പ്രസിദ്ധീകരിക്കുക' ക്ലിക്ക് ചെയ്യുക.");
         }
 
         function deleteResult(resultId) {
@@ -502,7 +521,7 @@
             }
             if (confirm("ഈ ഫലം നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?")) {
                 let clonedData = JSON.parse(JSON.stringify(appData));
-                clonedData.results = clonedData.results.filter(r => r.id !== resultId);
+                clonedData.results = (clonedData.results || []).filter(r => r.id !== resultId);
                 saveAppData(false, clonedData, () => {
                     alert("ഫലം വിജയകരമായി നീക്കം ചെയ്തു!");
                     renderPublishedResults();
@@ -513,13 +532,17 @@
         function renderPublishedResults() {
             const container = document.getElementById("publishedResultsContainer");
             if (!container) return;
-            const list = appData.results || [];
+            const list = Array.isArray(appData.results) ? appData.results : [];
             if (list.length === 0) {
-                container.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding:30px; color:var(--text-muted);'>ഇതുവരെ ഫലങ്ങളൊന്നും പ്രസിദ്ധീകരിച്ചിട്ടില്ല.</div>";
+                container.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding:30px; color:var(--text-muted); background:var(--card-bg); border-radius:12px; border:1px solid var(--border-color);'>ഇതുവരെ ഫലങ്ങളൊന്നും പ്രസിദ്ധീകരിച്ചിട്ടില്ല.</div>";
                 return;
             }
             container.innerHTML = "";
             list.forEach((res, idx) => {
+                const t1 = resolveTeamKey(res.win1Team || res.team1);
+                const t2 = resolveTeamKey(res.win2Team || res.team2);
+                const t3 = resolveTeamKey(res.win3Team || res.team3);
+
                 const card = document.createElement("div");
                 card.className = "result-card";
                 card.innerHTML = `
@@ -529,13 +552,13 @@
                             <h3 style="margin:6px 0 0; font-size:1.05rem;">${res.program}</h3>
                         </div>
                         <div style="display:flex; gap:6px;">
-                            ${isAdmin ? `<button class="btn-action-sm" style="background:#2563eb; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="editResult('${res.id}')">✏️ Edit</button>` : ""}
-                            ${isAdmin ? `<button class="btn-action-sm" style="background:#dc2626; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="deleteResult('${res.id}')">🗑️ Delete</button>` : ""}
+                            ${isAdmin ? `<button class="btn-action-sm" style="background:#2563eb; color:#fff;" onclick="editResult('${res.id}')">✏️ Edit</button>` : ""}
+                            ${isAdmin ? `<button class="btn-action-sm" style="background:#dc2626; color:#fff;" onclick="deleteResult('${res.id}')">🗑️ Delete</button>` : ""}
                         </div>
                     </div>
-                    ${res.win1Name ? `<div class="winner-row"><span>🥇 ${res.win1Name}</span><span class="${resolveTeamKey(res.win1Team) === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(res.win1Team)}</span></div>` : ""}
-                    ${res.win2Name ? `<div class="winner-row"><span>🥈 ${res.win2Name}</span><span class="${resolveTeamKey(res.win2Team) === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(res.win2Team)}</span></div>` : ""}
-                    ${res.win3Name ? `<div class="winner-row"><span>🥉 ${res.win3Name}</span><span class="${resolveTeamKey(res.win3Team) === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(res.win3Team)}</span></div>` : ""}
+                    ${res.win1Name ? `<div class="winner-row"><span>🥇 ${res.win1Name}</span><span class="${t1 === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(t1)}</span></div>` : ""}
+                    ${res.win2Name ? `<div class="winner-row"><span>🥈 ${res.win2Name}</span><span class="${t2 === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(t2)}</span></div>` : ""}
+                    ${res.win3Name ? `<div class="winner-row"><span>🥉 ${res.win3Name}</span><span class="${t3 === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(t3)}</span></div>` : ""}
                 `;
                 container.appendChild(card);
             });
