@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Results Studio & Poster Generator — EID-E IRSHAD 2K26</title>
+    <title>Results & Generator — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -13,35 +15,69 @@
 
     <link rel="stylesheet" href="style.css">
     <style>
-        .result-form-card {
-            background: var(--card-bg);
-            border: 2px solid var(--accent-gold);
+        #posterCanvas {
+            width: 100%;
+            max-width: 420px;
+            aspect-ratio: 1 / 1;
             border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 30px;
-            box-shadow: var(--shadow-md);
-        }
-        .result-item-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: var(--shadow-sm);
+            padding: 22px;
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            text-align: left;
         }
-        .winner-badge {
-            font-size: 0.85rem;
-            font-weight: 800;
-            padding: 4px 10px;
-            border-radius: 6px;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
+        #posterCanvas.layout-model-1 {
+            background: linear-gradient(135deg, #047857 0%, #065f46 60%, #022c22 100%);
+            color: #ffffff;
+            border: 3px solid #fbbf24;
         }
+        #posterCanvas.layout-model-1 .ref-result-num-box { background: #022c22; border: 2px solid #fbbf24; }
+        #posterCanvas.layout-model-1 .ref-win-card { background: rgba(0, 0, 0, 0.45); border-left: 4px solid #fbbf24; }
+
+        #posterCanvas.layout-model-2 {
+            background: linear-gradient(135deg, #581c87 0%, #3b0764 60%, #1e1b4b 100%);
+            color: #ffffff;
+            border: 3px solid #f43f5e;
+        }
+        #posterCanvas.layout-model-2 .ref-result-num-box { background: #1e1b4b; border: 2px solid #f43f5e; }
+        #posterCanvas.layout-model-2 .ref-win-card { background: rgba(0, 0, 0, 0.5); border-radius: 20px; border: 1px solid rgba(244, 63, 94, 0.4); }
+        #posterCanvas.layout-model-2 .ref-rank-badge { background: #f43f5e; color: #ffffff; }
+
+        #posterCanvas.layout-model-3 {
+            background: linear-gradient(135deg, #78350f 0%, #451a03 60%, #1c0f03 100%);
+            color: #ffffff;
+            border: 3px solid #d97706;
+        }
+        #posterCanvas.layout-model-3 .ref-result-num-box { background: #1c0f03; border: 2px solid #d97706; }
+        #posterCanvas.layout-model-3 .ref-win-card { background: #ffffff; color: #0f172a; border-radius: 8px; }
+        #posterCanvas.layout-model-3 .ref-win-name { color: #0f172a; }
+        #posterCanvas.layout-model-3 .ref-win-sub { color: #b45309; }
+        #posterCanvas.layout-model-3 .ref-rank-badge { background: #d97706; color: #ffffff; }
+
+        .ref-top-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px; }
+        .ref-brand-txt { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.82rem; color: #fbbf24; }
+        .ref-sub-brand { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.55rem; opacity: 0.8; text-align: right; }
+
+        .ref-center-banner { display: flex; align-items: center; gap: 12px; margin: 8px 0; }
+        .ref-result-num-box { padding: 6px 10px; border-radius: 10px; text-align: center; flex-shrink: 0; min-width: 65px; }
+        .ref-result-hash { display: block; font-family: 'Montserrat', sans-serif; font-size: 0.52rem; font-weight: 800; opacity: 0.85; color: #fbbf24; }
+        .ref-result-digits { font-family: 'Montserrat', sans-serif; font-size: 1.6rem; font-weight: 900; color: #ffffff; line-height: 1; }
+
+        .ref-prog-meta { flex: 1; }
+        .ref-cat-title { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; font-weight: 900; background: #fbbf24; color: #0f172a; display: inline-block; padding: 2px 7px; border-radius: 4px; margin-bottom: 3px; }
+        .ref-prog-title { font-family: 'Anek Malayalam', 'Montserrat', sans-serif; font-size: 1.05rem; font-weight: 900; line-height: 1.2; }
+
+        .ref-winners-container { display: flex; flex-direction: column; gap: 6px; margin: 6px 0; }
+        .ref-win-card { padding: 7px 10px; display: flex; align-items: center; gap: 10px; }
+        .ref-rank-badge { width: 22px; height: 22px; background: #fbbf24; color: #0f172a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.7rem; flex-shrink: 0; }
+        .ref-win-details { flex: 1; }
+        .ref-win-name { font-family: 'Montserrat', 'Anek Malayalam', sans-serif; font-weight: 900; font-size: 0.88rem; line-height: 1.2; }
+        .ref-win-sub { font-family: 'Montserrat', sans-serif; font-size: 0.64rem; font-weight: 700; opacity: 0.9; color: #fbbf24; }
+
+        .ref-footer-bar { font-family: 'Montserrat', sans-serif; font-size: 0.58rem; opacity: 0.8; border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 5px; display: flex; justify-content: space-between; }
     </style>
 </head>
 <body>
@@ -54,159 +90,455 @@
         </div>
     </div>
 
-    <div class="top-nav-bar" style="display:flex; justify-content:space-between; align-items:center; padding:12px 20px; background:var(--card-bg); border-bottom:1px solid var(--border-color);">
-        <button class="back-home-btn" onclick="location.href='index.html'" style="background:var(--accent-gold); color:#0f172a; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer;">⬅️ Home</button>
-        <span class="nav-page-title" style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.1rem;">🏆 RESULTS STUDIO & POSTER</span>
+    <div class="top-nav-bar">
+        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back</button>
+        <span class="nav-page-title">🏆 OFFICIAL RESULT STUDIO & GENERATOR</span>
         <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
     </div>
 
-    <div class="container" style="max-width: 1000px; margin: 30px auto;">
-        
-        <div class="admin-only result-form-card" data-display="block">
-            <h3 style="margin:0 0 12px; font-weight:900; color:var(--accent-gold);">📝 പുതിയ മത്സര ഫലം പ്രഖ്യാപിക്കുക</h3>
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 15px;">
-                <div class="form-group">
-                    <label>മത്സരത്തിന്റെ പേര് (Program):</label>
-                    <input type="text" id="resProgramInput" class="form-control" placeholder="ഉദാ: മാപ്പിളപ്പാട്ട്">
+    <div class="container" style="max-width: 1050px; margin: 25px auto;">
+        <h1 class="page-title">ഫല പ്രഖ്യാപന സ്റ്റുഡിയോ</h1>
+        <p class="page-subtitle">മത്സര ഫലങ്ങൾ പ്രസിദ്ധീകരിക്കാനും പോസ്റ്ററുകൾ നിർമ്മിക്കാനുമുള്ള സംവിധാനം</p>
+
+        <div class="builder-section admin-only" data-display="block">
+            <h3 style="margin: 0 0 15px; font-family:'Montserrat',sans-serif; font-size:1.15rem; font-weight:900; color:var(--accent-gold);">
+                🛠️ Poster Design & Layout Switcher
+            </h3>
+            <input type="hidden" id="editingResultId" value="">
+            <div class="builder-grid">
+                <div>
+                    <div class="form-group">
+                        <label>ഡിസൈൻ ശൈലി (Layout Model):</label>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 10px;">
+                            <button id="modelBtn1" class="btn-action-sm" style="background:#065f46; color:#fff; padding:8px 12px; font-weight:800;" onclick="setPosterLayout('layout-model-1')">Model 1 (Green)</button>
+                            <button id="modelBtn2" class="btn-action-sm" style="background:#581c87; color:#fff; padding:8px 12px; font-weight:800;" onclick="setPosterLayout('layout-model-2')">Model 2 (Maroon)</button>
+                            <button id="modelBtn3" class="btn-action-sm" style="background:#78350f; color:#fff; padding:8px 12px; font-weight:800;" onclick="setPosterLayout('layout-model-3')">Model 3 (Brown)</button>
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 100px 1fr; gap:10px;">
+                        <div class="form-group">
+                            <label>Result No:</label>
+                            <input type="text" id="resNoInput" class="form-control" readonly style="background:var(--bg-color); font-weight:900; color:var(--accent-gold);" value="01">
+                        </div>
+                        <div class="form-group">
+                            <label>Category:</label>
+                            <select id="resCatSelect" class="form-control" onchange="onResultCategoryChange(); updatePosterPreview();">
+                                <option value="Senior">Senior</option>
+                                <option value="Junior">Junior</option>
+                                <option value="Sub Junior">Sub Junior</option>
+                                <option value="General">General</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                        <div class="form-group">
+                            <label>Section:</label>
+                            <select id="resSectionSelect" class="form-control" onchange="onResultCategoryChange(); updatePosterPreview();">
+                                <option value="onStage">On-Stage</option>
+                                <option value="offStage">Off-Stage</option>
+                                <option value="sports">Sports</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>സബ് ടൈറ്റിൽ (Subtitle):</label>
+                            <input type="text" id="resSubTitleInput" class="form-control" value="SENIOR - ON STAGE" oninput="updatePosterPreview()">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>മത്സര ഇനം തിരഞ്ഞെടുക്കുക (Program List):</label>
+                        <select id="resProgSelect" class="form-control" onchange="onProgramDropdownSelect()">
+                            <option value="">-- പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>അല്ലെങ്കിൽ പുതിയ പേര് ടൈപ്പ് ചെയ്യുക:</label>
+                        <input type="text" id="resProgCustom" class="form-control" placeholder="ഉദാ: ARABIC CALLIGRAPHY" oninput="updatePosterPreview()">
+                    </div>
+
+                    <!-- Winner 1 -->
+                    <div class="winner-input-box">
+                        <h5>🥇 ഒന്നാം സ്ഥാനം (First Place)</h5>
+                        <select id="selWinner1" class="form-control" style="font-size:0.8rem; padding:6px; margin-bottom:6px;" onchange="onWinnerStudentSelect(1)">
+                            <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
+                        </select>
+                        <div style="display:grid; grid-template-columns: 1fr 130px; gap:8px; margin-bottom:6px;">
+                            <input type="text" id="win1Name" class="form-control" placeholder="വിദ്യാർത്ഥിയുടെ പേര്" oninput="updatePosterPreview()">
+                            <select id="win1Team" class="form-control" onchange="updatePosterPreview()">
+                                <option value="teamA">🔴 ZELLIJ</option>
+                                <option value="teamB">🔵 IZNIK</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Winner 2 -->
+                    <div class="winner-input-box">
+                        <h5>🥈 രണ്ടാം സ്ഥാനം (Second Place)</h5>
+                        <select id="selWinner2" class="form-control" style="font-size:0.8rem; padding:6px; margin-bottom:6px;" onchange="onWinnerStudentSelect(2)">
+                            <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
+                        </select>
+                        <div style="display:grid; grid-template-columns: 1fr 130px; gap:8px; margin-bottom:6px;">
+                            <input type="text" id="win2Name" class="form-control" placeholder="വിദ്യാർത്ഥിയുടെ പേര്" oninput="updatePosterPreview()">
+                            <select id="win2Team" class="form-control" onchange="updatePosterPreview()">
+                                <option value="teamB">🔵 IZNIK</option>
+                                <option value="teamA">🔴 ZELLIJ</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Winner 3 -->
+                    <div class="winner-input-box">
+                        <h5>🥉 മൂന്നാം സ്ഥാനം (Third Place)</h5>
+                        <select id="selWinner3" class="form-control" style="font-size:0.8rem; padding:6px; margin-bottom:6px;" onchange="onWinnerStudentSelect(3)">
+                            <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
+                        </select>
+                        <div style="display:grid; grid-template-columns: 1fr 130px; gap:8px; margin-bottom:6px;">
+                            <input type="text" id="win3Name" class="form-control" placeholder="വിദ്യാർത്ഥിയുടെ പേര്" oninput="updatePosterPreview()">
+                            <select id="win3Team" class="form-control" onchange="updatePosterPreview()">
+                                <option value="teamA">🔴 ZELLIJ</option>
+                                <option value="teamB">🔵 IZNIK</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; gap:10px; margin-top:18px;">
+                        <button class="btn-submit" style="background:#2563eb; color:#fff; margin-top:0;" onclick="downloadResultPoster()">📥 PNG ഡൗൺലോഡ് ചെയ്യുക</button>
+                        <button class="btn-submit" style="background:#059669; color:#fff; margin-top:0;" onclick="publishResultToSite()">🚀 സൈറ്റിൽ പ്രസിദ്ധീകരിക്കുക</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>വിഭാഗം (Category):</label>
-                    <select id="resCategoryInput" class="form-control">
-                        <option value="Senior">Senior</option>
-                        <option value="Junior">Junior</option>
-                        <option value="Sub Junior">Sub Junior</option>
-                        <option value="General">General</option>
-                    </select>
+
+                <!-- Live Poster Preview Box -->
+                <div class="poster-preview-wrapper">
+                    <span style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin-bottom:8px; font-family:'Montserrat',sans-serif;">📱 REFERENCE STYLE POSTER PREVIEW (1:1)</span>
+                    
+                    <div id="posterCanvas" class="layout-model-1">
+                        <div class="ref-top-header">
+                            <div class="ref-brand-txt">EID-E IRSHAD 2K26</div>
+                            <div class="ref-sub-brand">RAHMANIYYA ARABIC COLLEGE</div>
+                        </div>
+
+                        <div class="ref-center-banner">
+                            <div class="ref-result-num-box">
+                                <span class="ref-result-hash">#RESULT</span>
+                                <span class="ref-result-digits" id="previewResNo">01</span>
+                            </div>
+                            <div class="ref-prog-meta">
+                                <div class="ref-cat-title" id="previewCat">SENIOR - ON STAGE</div>
+                                <div class="ref-prog-title" id="previewProg">മത്സരത്തിന്റെ പേര്</div>
+                            </div>
+                        </div>
+
+                        <div class="ref-winners-container">
+                            <div class="ref-win-card">
+                                <div class="ref-rank-badge">1</div>
+                                <div class="ref-win-details">
+                                    <div class="ref-win-name" id="previewWin1Name">-</div>
+                                    <div class="ref-win-sub" id="previewWin1Sub">Team ZELLIJ</div>
+                                </div>
+                            </div>
+
+                            <div class="ref-win-card">
+                                <div class="ref-rank-badge">2</div>
+                                <div class="ref-win-details">
+                                    <div class="ref-win-name" id="previewWin2Name">-</div>
+                                    <div class="ref-win-sub" id="previewWin2Sub">Team IZNIK</div>
+                                </div>
+                            </div>
+
+                            <div class="ref-win-card" id="previewWin3Card">
+                                <div class="ref-rank-badge">3</div>
+                                <div class="ref-win-details">
+                                    <div class="ref-win-name" id="previewWin3Name">-</div>
+                                    <div class="ref-win-sub" id="previewWin3Sub">Team ZELLIJ</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ref-footer-bar">
+                            <span>EID-E IRSHAD CAMPUS FEST 2K26</span>
+                            <span>IRSHADUNNASIHEEN</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 20px;">
-                <div style="background:rgba(251,191,36,0.08); padding:12px; border-radius:10px; border:1px solid var(--accent-gold);">
-                    <label style="font-weight:900; font-size:0.82rem; color:var(--accent-gold);">🥇 ഒന്നാം സ്ഥാനം (1st Place):</label>
-                    <input type="text" id="resWin1Name" class="form-control" placeholder="വിദ്യാർത്ഥിയുടെ പേര്" style="margin-top:6px; margin-bottom:8px;">
-                    <select id="resWin1Team" class="form-control">
-                        <option value="teamA">🔴 Team ZELLIJ</option>
-                        <option value="teamB">🔵 Team IZNIK</option>
-                    </select>
-                </div>
-                <div style="background:rgba(148,163,184,0.08); padding:12px; border-radius:10px; border:1px solid var(--border-color);">
-                    <label style="font-weight:900; font-size:0.82rem;">🥈 രണ്ടാം സ്ഥാനം (2nd Place):</label>
-                    <input type="text" id="resWin2Name" class="form-control" placeholder="വിദ്യാർത്ഥിയുടെ പേര്" style="margin-top:6px; margin-bottom:8px;">
-                    <select id="resWin2Team" class="form-control">
-                        <option value="teamA">🔴 Team ZELLIJ</option>
-                        <option value="teamB">🔵 Team IZNIK</option>
-                    </select>
-                </div>
-                <div style="background:rgba(217,119,6,0.08); padding:12px; border-radius:10px; border:1px solid #d97706;">
-                    <label style="font-weight:900; font-size:0.82rem; color:#d97706;">🥉 മൂന്നാം സ്ഥാനം (3rd Place):</label>
-                    <input type="text" id="resWin3Name" class="form-control" placeholder="വിദ്യാർത്ഥിയുടെ പേര്" style="margin-top:6px; margin-bottom:8px;">
-                    <select id="resWin3Team" class="form-control">
-                        <option value="teamA">🔴 Team ZELLIJ</option>
-                        <option value="teamB">🔵 Team IZNIK</option>
-                    </select>
-                </div>
-            </div>
-
-            <button class="btn-submit" onclick="publishNewResult()">Publish Result</button>
         </div>
 
-        <div class="section-heading">📢 പ്രഖ്യാപിച്ച ഫലങ്ങളുടെ ലിസ്റ്റ്</div>
-        <div id="resultsListContainer">
-            <p style="color:var(--text-muted);">ഫലങ്ങൾ ലോഡ് ചെയ്യുന്നു...</p>
-        </div>
-
+        <h2 style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.2rem; margin: 30px 0 15px;">🏆 Published Results (പ്രസിദ്ധീകരിച്ച ഫലങ്ങൾ)</h2>
+        <div class="results-grid" id="publishedResultsContainer"></div>
     </div>
 
     <footer>&copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM</footer>
     <script src="app.js"></script>
     <script>
-        function updateUIOnDataLoad() {
-            renderResultsStudioList();
-        }
-
         window.addEventListener("DOMContentLoaded", () => {
-            setTimeout(() => { renderResultsStudioList(); }, 300);
+            setTimeout(() => {
+                onResultCategoryChange();
+                renderPublishedResults();
+            }, 300);
         });
 
-        function publishNewResult() {
-            if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
-            
-            const program = document.getElementById("resProgramInput")?.value.trim();
-            const category = document.getElementById("resCategoryInput")?.value;
-            const webWin1Name = document.getElementById("resWin1Name")?.value.trim();
-            const team1 = document.getElementById("resWin1Team")?.value;
-            const win2Name = document.getElementById("resWin2Name")?.value.trim();
-            const team2 = document.getElementById("resWin2Team")?.value;
-            const win3Name = document.getElementById("resWin3Name")?.value.trim();
-            const team3 = document.getElementById("resWin3Team")?.value;
+        function setPosterLayout(layoutClass) {
+            currentPosterLayout = layoutClass;
+            const canvas = document.getElementById("posterCanvas");
+            if (canvas) {
+                canvas.className = layoutClass;
+            }
+        }
 
-            if (!program || !webWin1Name) {
-                alert("മത്സരത്തിന്റെ പേരും ഒന്നാം സ്ഥാനക്കാരന്റെ പേരും നിർബന്ധമായും നൽകുക!");
+        function onProgramDropdownSelect() {
+            const drop = document.getElementById("resProgSelect");
+            const custom = document.getElementById("resProgCustom");
+            if (drop && custom && drop.value) {
+                custom.value = drop.value;
+            }
+            updatePosterPreview();
+        }
+
+        function getNextAutoResultNo() {
+            const editingId = document.getElementById("editingResultId")?.value;
+            if (editingId) {
+                const found = (appData.results || []).find(r => r.id === editingId);
+                if (found && found.resNo) return found.resNo;
+            }
+            const list = appData.results || [];
+            return String(list.length + 1).padStart(2, "0");
+        }
+
+        function updatePosterPreview() {
+            const autoNo = getNextAutoResultNo();
+            const resInput = document.getElementById("resNoInput");
+            if (resInput) resInput.value = autoNo;
+
+            const subTitle = (document.getElementById("resSubTitleInput")?.value || "SENIOR - ON STAGE").trim();
+            const progCustom = (document.getElementById("resProgCustom")?.value || "").trim();
+            const progDrop = document.getElementById("resProgSelect")?.value || "";
+            const progName = progCustom || progDrop || "മത്സരത്തിന്റെ പേര്";
+
+            const w1Name = (document.getElementById("win1Name")?.value || "").trim();
+            const w1TeamKey = document.getElementById("win1Team")?.value || "teamA";
+            const w1TeamName = formatTeamDisplayName(w1TeamKey);
+
+            const w2Name = (document.getElementById("win2Name")?.value || "").trim();
+            const w2TeamKey = document.getElementById("win2Team")?.value || "teamB";
+            const w2TeamName = formatTeamDisplayName(w2TeamKey);
+
+            const w3Name = (document.getElementById("win3Name")?.value || "").trim();
+            const w3TeamKey = document.getElementById("win3Team")?.value || "teamA";
+            const w3TeamName = formatTeamDisplayName(w3TeamKey);
+
+            if (document.getElementById("previewResNo")) document.getElementById("previewResNo").textContent = autoNo;
+            if (document.getElementById("previewCat")) document.getElementById("previewCat").textContent = subTitle.toUpperCase();
+            if (document.getElementById("previewProg")) document.getElementById("previewProg").textContent = progName.toUpperCase();
+
+            if (document.getElementById("previewWin1Name")) document.getElementById("previewWin1Name").textContent = w1Name || "-";
+            if (document.getElementById("previewWin1Sub")) document.getElementById("previewWin1Sub").textContent = w1TeamName;
+
+            if (document.getElementById("previewWin2Name")) document.getElementById("previewWin2Name").textContent = w2Name || "-";
+            if (document.getElementById("previewWin2Sub")) document.getElementById("previewWin2Sub").textContent = w2TeamName;
+
+            if (document.getElementById("previewWin3Name")) document.getElementById("previewWin3Name").textContent = w3Name || "-";
+            if (document.getElementById("previewWin3Sub")) document.getElementById("previewWin3Sub").textContent = w3TeamName;
+            
+            const w3Card = document.getElementById("previewWin3Card");
+            if (w3Card) {
+                w3Card.style.display = w3Name ? "flex" : "none";
+            }
+        }
+
+        function onResultCategoryChange() {
+            const catSelect = document.getElementById("resCatSelect");
+            const secSelect = document.getElementById("resSectionSelect");
+            const progSelect = document.getElementById("resProgSelect");
+            if (!catSelect || !secSelect || !progSelect) return;
+
+            const catVal = catSelect.value || "Senior";
+            const secVal = secSelect.value || "onStage";
+            const cKey = normalizeCategoryKey(catVal);
+
+            const progs = normalizeProgramsData(appData.programs);
+            const catPrograms = progs[cKey] || { onStage: [], offStage: [], sports: [] };
+            const sectionProgs = catPrograms[secVal] || [];
+
+            progSelect.innerHTML = "<option value=''>-- പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക --</option>";
+            sectionProgs.forEach(p => {
+                const opt = document.createElement("option");
+                opt.value = p;
+                opt.textContent = p;
+                progSelect.appendChild(opt);
+            });
+
+            const teams = normalizeTeamsData(appData.teams);
+            const rosterKey = cKey === "general" ? "senior" : cKey;
+            const combined = [
+                ...(teams.teamA[rosterKey] || []).map(s => ({ name: s.replace(/(\(C\)|\(Vc\))/g, "").trim(), team: "teamA", label: `🔴 ${s} (ZELLIJ)` })),
+                ...(teams.teamB[rosterKey] || []).map(s => ({ name: s.replace(/(\(C\)|\(Vc\))/g, "").trim(), team: "teamB", label: `🔵 ${s} (IZNIK)` }))
+            ];
+
+            [1, 2, 3].forEach(rank => {
+                const sel = document.getElementById(`selWinner${rank}`);
+                if (sel) {
+                    sel.innerHTML = "<option value=''>-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>";
+                    combined.forEach(st => {
+                        const winOpt = document.createElement("option");
+                        winOpt.value = `${st.name}|${st.team}`;
+                        winOpt.textContent = st.label;
+                        sel.appendChild(winOpt);
+                    });
+                }
+            });
+
+            const subTitleInput = document.getElementById("resSubTitleInput");
+            if (subTitleInput) {
+                subTitleInput.value = `${catVal.toUpperCase()} - ${secVal === 'onStage' ? 'ON STAGE' : secVal === 'offStage' ? 'OFF STAGE' : 'SPORTS'}`;
+            }
+
+            updatePosterPreview();
+        }
+
+        function onWinnerStudentSelect(rank) {
+            const sel = document.getElementById(`selWinner${rank}`);
+            if (!sel || !sel.value) return;
+            const [name, teamKey] = sel.value.split("|");
+            const nameInput = document.getElementById(`win${rank}Name`);
+            const teamSelect = document.getElementById(`win${rank}Team`);
+            
+            if (nameInput) nameInput.value = name;
+            if (teamSelect) teamSelect.value = teamKey;
+
+            updatePosterPreview();
+        }
+
+        function publishResultToSite() {
+            if (!isAdmin) { alert("അഡ്മിൻ ലോഗിൻ ചെയ്യുക!"); return; }
+            const editingId = document.getElementById("editingResultId")?.value;
+            const resNo = getNextAutoResultNo();
+            const category = document.getElementById("resCatSelect")?.value || "Senior";
+            const prog = (document.getElementById("resProgCustom")?.value || document.getElementById("resProgSelect")?.value || "").trim();
+            const w1Name = (document.getElementById("win1Name")?.value || "").trim();
+            const w2Name = (document.getElementById("win2Name")?.value || "").trim();
+            const w3Name = (document.getElementById("win3Name")?.value || "").trim();
+
+            if (!prog || !w1Name) {
+                alert("പ്രോഗ്രാമിന്റെ പേരും ഒന്നാം സ്ഥാനക്കാരന്റെ പേരും നൽകണം!");
+                return;
+            }
+
+            // Check if same program result already exists (prevent duplicates unless editing)
+            const existingList = appData.results || [];
+            const isDuplicate = existingList.some(r => {
+                if (editingId && r.id === editingId) return false;
+                return normalizeCategoryKey(r.category) === normalizeCategoryKey(category) && 
+                       String(r.program).trim().toLowerCase() === String(prog).trim().toLowerCase();
+            });
+
+            if (isDuplicate) {
+                alert("ഈ മത്സരത്തിന്റെ ഫലം ഇതിനകം പ്രസിദ്ധീകരിച്ചിട്ടുണ്ട്! വീണ്ടും പ്രസിദ്ധീകരിക്കാൻ കഴിയില്ല.");
                 return;
             }
 
             const newResult = {
-                id: Date.now().toString(),
-                program,
+                id: editingId ? editingId : ("res_" + Date.now()),
+                resNo,
                 category,
-                win1Name: webWin1Name, team1,
-                win2Name, team2,
-                win3Name, team3,
-                timestamp: new Date().toISOString()
+                program: prog,
+                win1Name: w1Name, win1Team: document.getElementById("win1Team")?.value || "teamA",
+                win2Name: w2Name, win2Team: document.getElementById("win2Team")?.value || "teamB",
+                win3Name: w3Name, win3Team: document.getElementById("win3Team")?.value || "teamA",
+                timestamp: Date.now()
             };
 
-            if (!appData.results) appData.results = [];
-            appData.results.push(newResult);
+            let clonedData = JSON.parse(JSON.stringify(appData));
+            if (editingId) {
+                clonedData.results = clonedData.results.filter(r => r.id !== editingId);
+            }
+            clonedData.results.unshift(newResult);
 
-            saveAppData(true, null, () => {
-                document.getElementById("resProgramInput").value = "";
-                document.getElementById("resWin1Name").value = "";
-                document.getElementById("resWin2Name").value = "";
-                document.getElementById("resWin3Name").value = "";
-                renderResultsStudioList();
+            const cKey = buildCellKey(normalizeCategoryKey(category), prog);
+            if (clonedData.matrixScores && clonedData.matrixScores[cKey]) {
+                delete clonedData.matrixScores[cKey];
+            }
+
+            document.getElementById("editingResultId").value = "";
+            saveAppData(false, clonedData, (success) => {
+                alert("ഫലം വിജയകരമായി പ്രസിദ്ധീകരിച്ചു! സ്കോർബോർഡിൽ പോയിന്റ് തനിയെ ആഡ് ആയിട്ടുണ്ട്.");
+                if (typeof confetti === "function") {
+                    confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+                }
+                onResultCategoryChange();
+                renderPublishedResults();
             });
         }
 
-        function deleteResultEntry(resultId) {
-            if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
-            if (confirm("ഈ ഫലം ഒഴിവാക്കണമെന്ന് ഉറപ്പാണോ?")) {
-                appData.results = (appData.results || []).filter(r => r.id !== resultId);
-                saveAppData(true, null, () => {
-                    renderResultsStudioList();
+        function editResult(resultId) {
+            if (!isAdmin) return;
+            const found = (appData.results || []).find(r => r.id === resultId);
+            if (!found) return;
+
+            document.getElementById("editingResultId").value = found.id;
+            document.getElementById("resNoInput").value = found.resNo || "01";
+            if (found.category) {
+                document.getElementById("resCatSelect").value = found.category;
+            }
+            document.getElementById("resProgCustom").value = found.program || "";
+            document.getElementById("win1Name").value = found.win1Name || "";
+            document.getElementById("win1Team").value = found.win1Team || "teamA";
+            document.getElementById("win2Name").value = found.win2Name || "";
+            document.getElementById("win2Team").value = found.win2Team || "teamB";
+            document.getElementById("win3Name").value = found.win3Name || "";
+            document.getElementById("win3Team").value = found.win3Team || "teamA";
+
+            updatePosterPreview();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            alert("ഫലം എഡിറ്റിംഗിനായി ലോഡ് ചെയ്തു. മാറ്റങ്ങൾ വരുത്തി വീണ്ടും 'സൈറ്റിൽ പ്രസിദ്ധീകരിക്കുക' ക്ലിക്ക് ചെയ്യുക.");
+        }
+
+        function deleteResult(resultId) {
+            if (!isAdmin) {
+                alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!");
+                return;
+            }
+            if (confirm("ഈ ഫലം നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?")) {
+                let clonedData = JSON.parse(JSON.stringify(appData));
+                clonedData.results = clonedData.results.filter(r => r.id !== resultId);
+                saveAppData(false, clonedData, () => {
+                    alert("ഫലം വിജയകരമായി നീക്കം ചെയ്തു!");
+                    renderPublishedResults();
                 });
             }
         }
 
-        function renderResultsStudioList() {
-            const container = document.getElementById("resultsListContainer");
+        function renderPublishedResults() {
+            const container = document.getElementById("publishedResultsContainer");
             if (!container) return;
-
-            const results = appData.results || [];
-            if (results.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-muted); padding:15px; background:var(--card-bg); border-radius:12px; border:1px solid var(--border-color);">ഫലങ്ങൾ ഇതുവരെ പ്രഖ്യാപിച്ചിട്ടില്ല.</p>`;
+            const list = appData.results || [];
+            if (list.length === 0) {
+                container.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding:30px; color:var(--text-muted);'>ഇതുവരെ ഫലങ്ങളൊന്നും പ്രസിദ്ധീകരിച്ചിട്ടില്ല.</div>";
                 return;
             }
-
-            let html = "";
-            results.slice().reverse().forEach(res => {
-                html += `
-                    <div class="result-item-card">
+            container.innerHTML = "";
+            list.forEach((res, idx) => {
+                const card = document.createElement("div");
+                card.className = "result-card";
+                card.innerHTML = `
+                    <div class="result-card-head">
                         <div>
-                            <span style="font-size:0.75rem; font-weight:800; color:var(--accent-gold); font-family:'Montserrat',sans-serif;">${res.category || ""}</span>
-                            <h4 style="margin:2px 0 8px; font-size:1.1rem; font-weight:900;">${res.program || ""}</h4>
-                            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                                <span class="winner-badge" style="border-color:var(--accent-gold);">🥇 ${res.win1Name || "—"} (${res.team1 === 'teamA' ? 'ZELLIJ' : 'IZNIK'})</span>
-                                ${res.win2Name ? `<span class="winner-badge">🥈 ${res.win2Name} (${res.team2 === 'teamA' ? 'ZELLIJ' : 'IZNIK'})</span>` : ""}
-                                ${res.win3Name ? `<span class="winner-badge">🥉 ${res.win3Name} (${res.team3 === 'teamA' ? 'ZELLIJ' : 'IZNIK'})</span>` : ""}
-                            </div>
+                            <span style="font-size:0.75rem; background:#fbbf24; color:#0f172a; padding:2px 8px; border-radius:4px; font-weight:800;">RESULT #${res.resNo || (idx + 1)} • ${res.category || ''}</span>
+                            <h3 style="margin:6px 0 0; font-size:1.05rem;">${res.program}</h3>
                         </div>
-                        <div class="admin-only" style="display:none;">
-                            <button onclick="deleteResultEntry('${res.id}')" style="background:#dc2626; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-weight:900; cursor:pointer;">Delete</button>
+                        <div style="display:flex; gap:6px;">
+                            ${isAdmin ? `<button class="btn-action-sm" style="background:#2563eb; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="editResult('${res.id}')">✏️ Edit</button>` : ""}
+                            ${isAdmin ? `<button class="btn-action-sm" style="background:#dc2626; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="deleteResult('${res.id}')">🗑️ Delete</button>` : ""}
                         </div>
                     </div>
+                    ${res.win1Name ? `<div class="winner-row"><span>🥇 ${res.win1Name}</span><span class="${resolveTeamKey(res.win1Team) === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(res.win1Team)}</span></div>` : ""}
+                    ${res.win2Name ? `<div class="winner-row"><span>🥈 ${res.win2Name}</span><span class="${resolveTeamKey(res.win2Team) === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(res.win2Team)}</span></div>` : ""}
+                    ${res.win3Name ? `<div class="winner-row"><span>🥉 ${res.win3Name}</span><span class="${resolveTeamKey(res.win3Team) === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(res.win3Team)}</span></div>` : ""}
                 `;
+                container.appendChild(card);
             });
-            container.innerHTML = html;
         }
     </script>
 </body>
