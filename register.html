@@ -13,7 +13,10 @@
 
     <link rel="stylesheet" href="style.css">
     <style>
+        body { background: #f8fafc; color: #0f172a; font-family: 'Anek Malayalam', 'Montserrat', sans-serif; }
         .reg-header-bar {
+            background: #065f46;
+            color: #fff;
             padding: 15px 20px;
             display: flex;
             justify-content: space-between;
@@ -21,14 +24,6 @@
             border-bottom: 3px solid #fbbf24;
             flex-wrap: wrap;
             gap: 10px;
-            color: #ffffff;
-            transition: background 0.3s ease;
-        }
-        .reg-header-bar.zellij-theme {
-            background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
-        }
-        .reg-header-bar.iznik-theme {
-            background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%);
         }
         .stats-grid {
             display: grid;
@@ -37,23 +32,23 @@
             margin: 15px 0 20px;
         }
         .stat-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
             border-radius: 12px;
             padding: 14px;
             text-align: center;
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
         .stat-card .num {
             font-family: 'Montserrat', sans-serif;
             font-size: 1.5rem;
             font-weight: 900;
-            color: #059669;
+            color: #065f46;
         }
         .stat-card .label {
             font-size: 0.75rem;
             font-weight: 700;
-            color: var(--text-muted);
+            color: #64748b;
         }
         .table-responsive {
             width: 100%;
@@ -61,7 +56,7 @@
             background: #ffffff;
             border: 1px solid #cbd5e1;
             border-radius: 12px;
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             margin-bottom: 25px;
         }
         .matrix-reg-table {
@@ -91,14 +86,14 @@
             left: 0;
             background: #ffffff;
             z-index: 4;
-            border-right: 2px solid #059669;
+            border-right: 2px solid #065f46;
         }
         .matrix-reg-table th:nth-child(2) {
             position: sticky;
             left: 0;
             background: #f0fdf4;
             z-index: 6;
-            border-right: 2px solid #059669;
+            border-right: 2px solid #065f46;
         }
         .tick-icon {
             color: #059669;
@@ -107,11 +102,11 @@
         }
         .admin-edit-section {
             background: #ffffff;
-            border: 2px solid #059669;
+            border: 2px solid #065f46;
             border-radius: 14px;
             padding: 20px;
             margin-top: 30px;
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
         }
         .student-row-box {
             background: #f8fafc;
@@ -142,7 +137,7 @@
         @media print {
             @page { size: landscape; margin: 10mm; }
             body { background: #fff !important; color: #000 !important; font-size: 9pt !important; }
-            .admin-only, .top-nav-bar, .reg-header-bar button, footer { display: none !important; }
+            .admin-only, .top-nav-bar, .reg-header-bar, footer { display: none !important; }
             .table-responsive { overflow: visible !important; box-shadow: none !important; border: none !important; }
             .matrix-reg-table { border: 1px solid #000; width: 100% !important; }
             .matrix-reg-table th, .matrix-reg-table td { border: 1px solid #000; color: #000; padding: 6px !important; }
@@ -160,63 +155,65 @@
         </div>
     </div>
 
-    <div class="reg-header-bar zellij-theme" id="headerBarTheme">
+    <div class="reg-header-bar">
         <div>
-            <span style="font-size: 0.7rem; font-weight: 800; color: #fbbf24; font-family: 'Montserrat', sans-serif;" id="headerTeamTitle">TEAM ZELLIJ - EVENT REGISTER</span>
+            <span style="font-size: 0.7rem; font-weight: 800; color: #fbbf24; font-family: 'Montserrat', sans-serif;" id="headerTeamTitle">TEAM B - EVENT REGISTER</span>
             <h2 style="margin: 0; font-weight: 900; font-family: 'Montserrat', sans-serif;">STAGE & OFFSTAGE</h2>
         </div>
-        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+        <div style="display: flex; gap: 8px; align-items: center;">
             <select id="teamSelectTab" class="form-control" style="padding: 6px 12px; font-weight: 800; background:#fff; color:#0f172a;" onchange="renderRegistrationMatrix()">
                 <option value="teamA">🔴 Team ZELLIJ</option>
-                <option value="teamB">🔵 Team IZNIK</option>
+                <option value="teamB" selected>🔵 Team IZNIK</option>
             </select>
-            <button class="btn-action-sm" style="background:#ffffff; color:#0f172a; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer;" onclick="window.print()">Print / PDF</button>
-            <button class="back-home-btn" onclick="location.href='index.html'" style="background:#059669; color:#fff; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer; margin:0;">Back</button>
+            <button class="back-home-btn" onclick="location.href='index.html'" style="background:#059669; color:#fff; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer; margin:0;">Admin Dashboard</button>
         </div>
     </div>
 
     <div class="container" style="max-width: 1250px; margin: 20px auto;">
         
+        <div style="font-size: 0.85rem; color: #475569; margin-bottom: 8px;">വിഭാഗം മാറ്റി പേരുകളും ടിക്ക് മാർക്കുകളും കാണാം.</div>
+
         <!-- Search & Dropdown List Selector -->
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 15px;">
             <div style="flex: 1; min-width: 250px;">
-                <input type="text" id="studentSearchInput" class="form-control" placeholder="പേര് തിരയുക..." style="padding: 10px 14px; font-weight: 700;" oninput="renderRegistrationMatrix()">
+                <input type="text" id="studentSearchInput" class="form-control" placeholder="പേര് തിരയുക..." style="padding: 10px 14px; font-weight: 700; background:#fff;" oninput="renderRegistrationMatrix()">
             </div>
-            <div style="display:flex; align-items:center; gap:8px;">
-                <span style="font-weight:900;">ലിസ്റ്റ്:</span>
-                <select id="regListSelectTab" class="form-control" style="font-weight:800; padding:8px 14px;" onchange="onListDropdownChange()">
-                    <option value="senior_onStage">Senior Stage</option>
-                    <option value="senior_offStage">Senior Off-Stage</option>
-                    <option value="junior_onStage">Junior Stage</option>
-                    <option value="junior_offStage">Junior Off-Stage</option>
-                    <option value="subjunior_onStage">Sub Junior Stage</option>
-                    <option value="subjunior_offStage">Sub Junior Off-Stage</option>
-                    <option value="general_onStage">General Stage</option>
-                    <option value="general_offStage">General Off-Stage</option>
-                    <option value="senior_sports">Senior Sports</option>
-                    <option value="junior_sports">Junior Sports</option>
-                </select>
-            </div>
-            <button class="prog-add-btn" style="background:#059669; color:#fff; border:none; padding: 10px 18px; font-weight:900; border-radius:8px; cursor:pointer;" onclick="window.print()">Print / PDF</button>
+            <button class="prog-add-btn" style="background:#065f46; color:#fff; border:none; padding: 10px 20px; font-weight:900; border-radius:8px; cursor:pointer;" onclick="window.print()">Print / PDF</button>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+            <span style="font-weight: 900; font-size: 0.95rem;">ലിസ്റ്റ്:</span>
+            <select id="regListSelectTab" class="form-control" style="font-weight: 800; padding: 8px 14px; max-width: 250px; background:#fff;" onchange="onListDropdownChange()">
+                <option value="senior_onStage">Senior Stage</option>
+                <option value="senior_offStage">Senior Off-Stage</option>
+                <option value="junior_onStage">Junior Stage</option>
+                <option value="junior_offStage">Junior Off-Stage</option>
+                <option value="subjunior_onStage">Sub Junior Stage</option>
+                <option value="subjunior_offStage">Sub Junior Off-Stage</option>
+                <option value="general_onStage">General Stage</option>
+                <option value="general_offStage">General Off-Stage</option>
+                <option value="senior_sports">Senior Sports</option>
+                <option value="junior_sports">Junior Sports</option>
+            </select>
         </div>
 
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="num" id="statStudentsCount">0</div>
-                <div class="label">വിദ്യാർത്ഥികൾ (Students)</div>
+                <div class="label">വിദ്യാർത്ഥികൾ</div>
             </div>
             <div class="stat-card">
                 <div class="num" id="statEventsCount">0</div>
-                <div class="label">മത്സരങ്ങൾ (Events)</div>
+                <div class="label">മത്സരങ്ങൾ</div>
             </div>
             <div class="stat-card">
                 <div class="num" id="statTotalTicks">0</div>
-                <div class="label">ആകെ ടിക്കുകൾ (Total Entries)</div>
+                <div class="label">ആകെ ടിക്കുകൾ</div>
             </div>
         </div>
 
-        <div style="font-weight:900; margin-bottom:6px; font-family:'Montserrat',sans-serif;">മത്സരങ്ങളുടെ ലിസ്റ്റ്</div>
-        <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">വിഭാഗം മാറ്റി പേരുകളും ടിക്ക് മാർക്കുകളും കാണാം.</div>
+        <div style="font-weight:900; margin-bottom:4px; font-family:'Montserrat',sans-serif;">മത്സരങ്ങളുടെ ലിസ്റ്റ്</div>
+        <div style="font-size:0.75rem; color:#64748b; margin-bottom:8px;">ലിസ്റ്റ് തയ്യാറാണ്.</div>
 
         <!-- Public / View Table Matrix -->
         <div class="table-responsive">
@@ -235,8 +232,8 @@
 
         <!-- Admin Dashboard for Managing Students & Event Registrations (Protected by isAdmin) -->
         <div class="admin-only admin-edit-section" data-display="block">
-            <h3 style="margin:0 0 6px; font-weight:900;">Admin Dashboard</h3>
-            <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:12px;">ലിസ്റ്റ് തിരഞ്ഞെടുക്കുക, പേരുകൾ, മത്സരങ്ങൾ, ടിക്ക് മാർക്കുകൾ എന്നിവ തിരുത്തി Save All Changes അമർത്തുക.</p>
+            <h3 style="margin:0 0 6px; font-weight:900; color:#065f46;">Admin Dashboard</h3>
+            <p style="font-size:0.78rem; color:#64748b; margin-bottom:12px;">ലിസ്റ്റ് തിരഞ്ഞെടുക്കുക, പേരുകൾ, മത്സരങ്ങൾ, ടിക്ക് മാർക്കുകൾ എന്നിവ തിരുത്തി Save All Changes അമർത്തുക.</p>
             
             <div class="form-group" style="max-width:280px; margin-bottom:15px;">
                 <label style="font-weight:800; font-size:0.8rem;">തിരഞ്ഞെടുക്കേണ്ട ലിസ്റ്റ്:</label>
@@ -257,19 +254,19 @@
             <div style="font-weight:900; margin-bottom:8px;">മത്സരങ്ങൾ</div>
             <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
                 <input type="text" id="newEventNameInput" class="form-control" placeholder="പുതിയ മത്സരത്തിന്റെ പേര്..." style="max-width:280px;">
-                <button class="prog-add-btn" style="background:#059669; color:#fff;" onclick="addNewEventToSection()">Add Event</button>
+                <button class="prog-add-btn" style="background:#065f46; color:#fff;" onclick="addNewEventToSection()">Add Event</button>
             </div>
             <div id="adminEventsListContainer" style="display:flex; flex-direction:column; gap:6px; margin-bottom:20px;"></div>
 
             <div style="font-weight:900; margin-bottom:8px;">വിദ്യാർത്ഥികൾ</div>
             <div style="display:flex; gap:8px; margin-bottom:15px; flex-wrap:wrap;">
                 <input type="text" id="newStudentNameInput" class="form-control" placeholder="വിദ്യാർത്ഥിയുടെ പേര്..." style="max-width:280px;">
-                <button class="prog-add-btn" style="background:#059669; color:#fff;" onclick="addNewStudentToTeam()">Add Student</button>
+                <button class="prog-add-btn" style="background:#065f46; color:#fff;" onclick="addNewStudentToTeam()">Add Student</button>
             </div>
 
             <div id="adminStudentEditorContainer"></div>
 
-            <button class="btn-submit" style="background:#059669; color:#fff; margin-top:20px; padding:12px; font-size:1rem; font-weight:900;" onclick="saveAllRegistrationsToCloud()">Save All Changes</button>
+            <button class="btn-submit" style="background:#065f46; color:#fff; margin-top:20px; padding:12px; font-size:1rem; font-weight:900;" onclick="saveAllRegistrationsToCloud()">Save All Changes</button>
         </div>
 
     </div>
@@ -285,7 +282,7 @@
         });
 
         function getActiveFilters() {
-            const teamKey = document.getElementById("teamSelectTab")?.value || "teamA";
+            const teamKey = document.getElementById("teamSelectTab")?.value || "teamB";
             const combinedVal = document.getElementById("regListSelectTab")?.value || "senior_onStage";
             const parts = combinedVal.split("_");
             const catKey = parts[0]; 
@@ -310,21 +307,14 @@
         function renderRegistrationMatrix() {
             const { teamKey, catKey, secKey } = getActiveFilters();
             
-            // Dynamic Team Color Theme
-            const headerBar = document.getElementById("headerBarTheme");
-            if (teamKey === 'teamA') {
-                if (headerBar) headerBar.className = "reg-header-bar zellij-theme";
-                if (document.getElementById("headerTeamTitle")) document.getElementById("headerTeamTitle").textContent = "TEAM ZELLIJ - EVENT REGISTER";
-            } else {
-                if (headerBar) headerBar.className = "reg-header-bar iznik-theme";
-                if (document.getElementById("headerTeamTitle")) document.getElementById("headerTeamTitle").textContent = "TEAM IZNIK - EVENT REGISTER";
+            if (document.getElementById("headerTeamTitle")) {
+                document.getElementById("headerTeamTitle").textContent = teamKey === 'teamA' ? "TEAM ZELLIJ - EVENT REGISTER" : "TEAM IZNIK - EVENT REGISTER";
             }
 
             const normalizedTeams = normalizeTeamsData(appData.teams);
             const teamObj = normalizedTeams[teamKey] || { name: "", senior: [], junior: [], subjunior: [], general: [] };
             let students = teamObj[catKey] || [];
 
-            // Search filter
             const searchVal = (document.getElementById("studentSearchInput")?.value || "").trim().toLowerCase();
             if (searchVal) {
                 students = students.filter(s => s.toLowerCase().includes(searchVal));
@@ -356,7 +346,7 @@
             const bodyRow = document.getElementById("matrixBodyRow");
             if (bodyRow) {
                 if (students.length === 0) {
-                    bodyRow.innerHTML = `<tr><td colspan="${sectionEvents.length + 2}" style="padding:25px; color:var(--text-muted);">ഈ വിഭാഗത്തിൽ വിദ്യാർത്ഥികൾ ആരുമില്ല.</td></tr>`;
+                    bodyRow.innerHTML = `<tr><td colspan="${sectionEvents.length + 2}" style="padding:25px; color:#64748b;">ഈ വിഭാഗത്തിൽ വിദ്യാർത്ഥികൾ ആരുമില്ല.</td></tr>`;
                 } else {
                     let bHtml = "";
                     students.forEach((stName, idx) => {
@@ -365,7 +355,7 @@
                         sectionEvents.forEach(ev => {
                             const isChecked = regMap[cleanName] && regMap[cleanName].includes(ev);
                             if (isChecked) totalTicksCount++;
-                            bHtml += `<td>${isChecked ? '<span class="tick-icon">✔</span>' : '<span style="color:var(--text-muted); opacity:0.3;">·</span>'}</td>`;
+                            bHtml += `<td>${isChecked ? '<span class="tick-icon">✔</span>' : '<span style="color:#cbd5e1;">—</span>'}</td>`;
                         });
                         bHtml += `</tr>`;
                     });
@@ -388,20 +378,36 @@
             let evHtml = "";
             sectionEvents.forEach((evName, idx) => {
                 evHtml += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; background:var(--card-bg); padding:6px 12px; border:1px solid var(--border-color); border-radius:6px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:6px 12px; border:1px solid #cbd5e1; border-radius:6px;">
                         <span>${evName}</span>
                         <button type="button" class="btn-action-sm" style="background:#dc2626; color:#fff; border:none; padding:3px 8px; border-radius:4px; cursor:pointer;" onclick="removeEventFromSection('${catKey}', '${secKey}', ${idx})">Remove</button>
                     </div>
                 `;
             });
-            eventsCont.innerHTML = evHtml || "<span style='font-size:0.75rem; color:var(--text-muted);'>മത്സരങ്ങളൊന്നും ചേർത്തിട്ടില്ല.</span>";
+            eventsCont.innerHTML = evHtml || "<span style='font-size:0.75rem; color:#64748b;'>മത്സരങ്ങളൊന്നും ചേർത്തിട്ടില്ല.</span>";
 
             if (students.length === 0) {
-                container.innerHTML = "<p style='color:var(--text-muted); font-size:0.8rem;'>ഈ വിഭാഗത്തിൽ വിദ്യാർത്ഥികളില്ല.</p>";
+                container.innerHTML = "<p style='color:#64748b; font-size:0.8rem;'>ഈ വിഭാഗത്തിൽ വിദ്യാർത്ഥികളില്ല.</p>";
                 return;
             }
 
             let html = "";
             students.forEach((stName, idx) => {
                 const cleanName = stName.replace(/(\(C\)|\(Vc\))/g, "").trim();
-     
+                const studentCheckedEvents = regMap[cleanName] || [];
+
+                let checkboxesHtml = "";
+                sectionEvents.forEach(ev => {
+                    const isChecked = studentCheckedEvents.includes(ev);
+                    checkboxesHtml += `
+                        <label>
+                            <input type="checkbox" class="reg_chk_${idx}" value="${ev}" ${isChecked ? 'checked' : ''}>
+                            ${ev}
+                        </label>
+                    `;
+                });
+
+                html += `
+                    <div class="student-row-box">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                            <strong style="font-family:'Montserrat',sans-serif; font
