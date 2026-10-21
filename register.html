@@ -235,7 +235,7 @@
             setTimeout(() => {
                 if (!appData.registrations) appData.registrations = {};
                 renderRegistrationMatrix();
-            }, 400);
+            }, 500);
         });
 
         function getActiveFilters() {
@@ -247,8 +247,8 @@
 
         function renderRegistrationMatrix() {
             const { teamKey, catKey, secKey } = getActiveFilters();
-            const teams = normalizeTeamsData(appData.teams);
-            const teamObj = teams[teamKey] || { name: "", senior: [], junior: [], subjunior: [], general: [] };
+            const normalizedTeams = normalizeTeamsData(appData.teams);
+            const teamObj = normalizedTeams[teamKey] || { name: "", senior: [], junior: [], subjunior: [], general: [] };
             const students = teamObj[catKey] || [];
 
             const progs = normalizeProgramsData(appData.programs);
@@ -286,7 +286,7 @@
             const bodyRow = document.getElementById("matrixBodyRow");
             if (bodyRow) {
                 if (students.length === 0) {
-                    bodyRow.innerHTML = `<tr><td colspan="${sectionEvents.length + 2}" style="padding:25px; color:var(--text-muted);">ഈ കാറ്റഗറിയിൽ വിദ്യാർത്ഥികൾ ആരുമില്ല. 'teams.html' വഴി വിദ്യാർത്ഥികളെ ചേർക്കുക അല്ലെങ്കിൽ താഴെ അഡ്മിൻ ഡാഷ്‌ബോർഡ് വഴി ചേർക്കാം.</td></tr>`;
+                    bodyRow.innerHTML = `<tr><td colspan="${sectionEvents.length + 2}" style="padding:25px; color:var(--text-muted);">ഈ കാറ്റഗറിയിൽ വിദ്യാർത്ഥികൾ ആരുമില്ല. താഴെ അഡ്മിൻ ഡാഷ്‌ബോർഡ് വഴി പുതിയ വിദ്യാർത്ഥികളെ ചേർക്കാം.</td></tr>`;
                 } else {
                     let bHtml = "";
                     students.forEach((stName, idx) => {
@@ -363,11 +363,12 @@
 
             const { teamKey, catKey } = getActiveFilters();
             let cloned = JSON.parse(JSON.stringify(appData));
-            const teams = normalizeTeamsData(cloned.teams);
+            if (!cloned.teams) cloned.teams = JSON.parse(JSON.stringify(defaultData.teams));
 
-            if (!teams[teamKey][catKey].includes(nameVal)) {
-                teams[teamKey][catKey].push(nameVal);
-                cloned.teams = teams;
+            let teamsObj = normalizeTeamsData(cloned.teams);
+            if (!teamsObj[teamKey][catKey].includes(nameVal)) {
+                teamsObj[teamKey][catKey].push(nameVal);
+                cloned.teams = teamsObj;
                 saveAppData(false, cloned, () => {
                     input.value = "";
                     renderRegistrationMatrix();
@@ -383,10 +384,10 @@
             if (confirm(`"${cleanName}" എന്ന വിദ്യാർത്ഥിയെ നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?`)) {
                 const { teamKey, catKey } = getActiveFilters();
                 let cloned = JSON.parse(JSON.stringify(appData));
-                const teams = normalizeTeamsData(cloned.teams);
+                let teamsObj = normalizeTeamsData(cloned.teams);
 
-                teams[teamKey][catKey] = teams[teamKey][catKey].filter(s => s.replace(/(\(C\)|\(Vc\))/g, "").trim() !== cleanName);
-                cloned.teams = teams;
+                teamsObj[teamKey][catKey] = teamsObj[teamKey][catKey].filter(s => s.replace(/(\(C\)|\(Vc\))/g, "").trim() !== cleanName);
+                cloned.teams = teamsObj;
                 saveAppData(false, cloned, () => {
                     renderRegistrationMatrix();
                 });
@@ -396,8 +397,8 @@
         function saveAllRegistrationsToCloud() {
             if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
             const { teamKey, catKey, secKey } = getActiveFilters();
-            const teams = normalizeTeamsData(appData.teams);
-            const students = teams[teamKey][catKey] || [];
+            const normalizedTeams = normalizeTeamsData(appData.teams);
+            const students = normalizedTeams[teamKey][catKey] || [];
 
             if (!appData.registrations) appData.registrations = {};
             if (!appData.registrations[teamKey]) appData.registrations[teamKey] = {};
@@ -431,7 +432,4 @@
 
             let cloned = JSON.parse(JSON.stringify(appData));
             if (!cloned.registrations) cloned.registrations = {};
-            if (!cloned.registrations[teamKey]) cloned.registrations[teamKey] = {};
-            cloned.registrations[teamKey][catKey] = existingCatMap;
-
-            saveAppDat
+            if (!cloned.registrations[teamKey]) clone
