@@ -14,50 +14,63 @@
     <link rel="stylesheet" href="style.css">
     <style>
         .hero {
-            background: linear-gradient(135deg, #1c0f03 0%, #451a03 50%, #78350f 100%);
+            background: radial-gradient(circle at center, #581c87 0%, #3b0764 50%, #1e1b4b 100%);
             color: #ffffff;
-            padding: 30px 15px 45px;
+            padding: 35px 15px 50px;
             text-align: center;
-            border-bottom: 4px solid var(--accent-gold);
+            border-bottom: 5px solid #fbbf24;
             position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .hero-calligraphy-img {
+            max-height: 55px !important;
+            width: auto !important;
+            max-width: 100% !important;
+            object-fit: contain;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.5));
         }
         .poster-dates-grid {
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin: 20px 0 15px;
+            margin: 18px 0 15px;
             flex-wrap: wrap;
         }
         .poster-date-box {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(251, 191, 36, 0.4);
-            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.45);
+            border: 2px solid #fbbf24;
+            border-radius: 12px;
             padding: 8px 14px;
             text-align: center;
-            min-width: 75px;
+            min-width: 80px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         .poster-date-box .num {
             display: block;
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.3rem;
+            font-size: 1.35rem;
             font-weight: 900;
             color: #fbbf24;
         }
         .poster-date-box .day {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.6rem;
+            font-size: 0.65rem;
             font-weight: 800;
-            opacity: 0.9;
             color: #ffffff;
             text-transform: uppercase;
         }
         .college-address {
-            font-size: 0.78rem;
-            opacity: 0.9;
+            font-size: 0.8rem;
+            opacity: 0.95;
             line-height: 1.5;
-            max-width: 450px;
+            max-width: 480px;
             margin: 0 auto;
             font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
+            background: rgba(0,0,0,0.25);
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
     </style>
 </head>
@@ -82,12 +95,16 @@
         </div>
 
         <div class="hero-content">
-            <div style="font-family: 'Anek Malayalam', sans-serif; font-size: 1.1rem; font-weight: 800; color: #fbbf24; margin-bottom: 5px;">സർഗ്ഗാത്മകത പൂക്കുന്നു</div>
-            <h1 class="main-title" style="font-size: 2.5rem; color: #fbbf24; text-shadow: 0 3px 6px rgba(0,0,0,0.5);">EID-E IRSHAD</h1>
-            <div class="sub-title" style="font-size: 1rem; letter-spacing: 1px;">RAHMANIYYA CAMPUS FIESTA</div>
-            <div class="ribbon" style="background: #b91c1c; font-size: 0.75rem;">IRSHADUNNASIHEEN SAHITHYA SAMAJAM</div>
+            <!-- Calligraphy Image -->
+            <div class="calligraphy-box">
+                <img src="calligraphy.png" alt="സർഗ്ഗാത്മകത പൂക്കുന്നു" class="hero-calligraphy-img">
+            </div>
 
-            <div style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 900; margin-top: 15px; color: #fff;">NOVEMBER 2026</div>
+            <h1 class="main-title" style="font-size: 2.6rem; color: #fbbf24; text-shadow: 0 4px 8px rgba(0,0,0,0.6); letter-spacing: 1px;">EID-E IRSHAD</h1>
+            <div class="sub-title" style="font-size: 1.05rem; letter-spacing: 1.5px; color: #f43f5e;">RAHMANIYYA CAMPUS FIESTA</div>
+            <div class="ribbon" style="background: #b91c1c; font-size: 0.78rem; padding: 5px 16px; border-radius: 6px;">IRSHADUNNASIHEEN SAHITHYA SAMAJAM</div>
+
+            <div style="font-family: 'Montserrat', sans-serif; font-size: 1.15rem; font-weight: 900; margin-top: 15px; color: #fff;">NOVEMBER 2026</div>
             
             <div class="poster-dates-grid">
                 <div class="poster-date-box"><span class="num">27</span><span class="day">Friday</span></div>
@@ -144,6 +161,15 @@
                 <div class="nav-card-info">
                     <h3>Event Register</h3>
                     <p>ടീം തിരിച്ചുള്ള പ്രോഗ്രാം ടിക്ക് മാട്രിക്സ് & PDF</p>
+                </div>
+                <div class="nav-card-arrow">&rarr;</div>
+            </div>
+
+            <div class="nav-card" onclick="location.href='teams.html'">
+                <div style="font-size: 1.8rem;">👥</div>
+                <div class="nav-card-info">
+                    <h3>Teams Roster</h3>
+                    <p>ടീം അംഗങ്ങളുടെയും വിദ്യാർത്ഥികളുടെയും ലിസ്റ്റ്</p>
                 </div>
                 <div class="nav-card-arrow">&rarr;</div>
             </div>
