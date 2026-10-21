@@ -30,6 +30,14 @@
             margin-bottom: 8px;
             filter: drop-shadow(0 3px 6px rgba(0,0,0,0.5));
         }
+        .calligraphy-fallback {
+            font-family: 'Anek Malayalam', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #fbbf24;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
         .poster-dates-grid {
             display: flex;
             justify-content: center;
@@ -76,7 +84,7 @@
 </head>
 <body>
 
-    <div id="adminBar" class="admin-bar">
+    <div id="adminBar" class="admin-bar" style="display: none;">
         <span>⚙️ Admin Mode Active</span>
         <div class="admin-actions">
             <button class="btn-backup" onclick="exportBackupJSON()">📥 Backup JSON</button>
@@ -95,9 +103,10 @@
         </div>
 
         <div class="hero-content">
-            <!-- Calligraphy Image -->
+            <!-- Calligraphy Image with Fallback -->
             <div class="calligraphy-box">
-                <img src="calligraphy.png" alt="സർഗ്ഗാത്മകത പൂക്കുന്നു" class="hero-calligraphy-img">
+                <img src="calligraphy.png" alt="സർഗ്ഗാത്മകത പൂക്കുന്നു" class="hero-calligraphy-img" onerror="this.style.display='none'; document.getElementById('calligraphyFallbackText').style.display='block';">
+                <div id="calligraphyFallbackText" class="calligraphy-fallback" style="display: none;">സർഗ്ഗാത്മകത പൂക്കുന്നു</div>
             </div>
 
             <h1 class="main-title" style="font-size: 2.6rem; color: #fbbf24; text-shadow: 0 4px 8px rgba(0,0,0,0.6); letter-spacing: 1px;">EID-E IRSHAD</h1>
@@ -184,8 +193,10 @@
             <span class="close-btn" onclick="closeAdminLoginModal()">&times;</span>
             <h3 style="margin: 0 0 12px; font-weight: 900; color: var(--accent-gold);">🔐 Admin Login</h3>
             <div class="form-group">
-                <label>Admin Passcode:</label>
-                <input type="password" id="adminPassInput" class="form-control" placeholder="കോഡ് നൽകുക">
+                <label>Admin Email:</label>
+                <input type="email" id="adminEmailInput" class="form-control" placeholder="Gmail നൽകുക" style="margin-bottom:10px;">
+                <label>Password:</label>
+                <input type="password" id="adminPassInput" class="form-control" placeholder="പാസ്‌വേഡ് നൽകുക">
             </div>
             <button class="btn-submit" onclick="submitAdminLogin()">Login</button>
         </div>
