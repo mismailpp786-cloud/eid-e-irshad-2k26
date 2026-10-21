@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ml" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Register & Matrix — EID-E IRSHAD 2K26</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .reg-header-bar {
+            background: var(--header-bg);
+            color: #fff;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--accent-gold);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin: 15px 0 20px;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+        }
+        .stat-card .num {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--accent-gold);
+        }
+        .stat-card .label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 25px;
+        }
+        .matrix-reg-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+        .matrix-reg-table th, .matrix-reg-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: center;
+        }
+        .matrix-reg-table th {
+            background: var(--bg-color);
+            font-weight: 900;
+            font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
+        }
+        .matrix-reg-table td:nth-child(2) {
+            text-align: left;
+            font-weight: 800;
+        }
+        .tick-icon {
+            color: #059669;
+            font-weight: 900;
+            font-size: 1.1rem;
+        }
+        .admin-edit-section {
+            background: var(--card-bg);
+            border: 2px solid var(--accent-gold);
+            border-radius: 14px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: var(--shadow-md);
+        }
+        .student-row-box {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .student-events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .student-events-grid label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        @media print {
+            body { background: #fff !important; color: #000 !important; }
+            .admin-only, .top-nav-bar, .reg-header-bar button, footer { display: none !important; }
+            .matrix-reg-table { border: 1px solid #000; }
+            .matrix-reg-table th, .matrix-reg-table td { border: 1px solid #000; color: #000; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="adminBar" class="admin-bar">
+        <span>⚙️ Admin Mode Active (Event Registration Manager)</span>
+        <div class="admin-actions">
+            <button class="btn-backup" onclick="exportBackupJSON()">📥 Backup</button>
+            <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
+        </div>
+    </div>
+
+    <div class="reg-header-bar">
+        <div>
+            <span style="font-size: 0.7rem; font-weight: 800; color: #fbbf24; font-family: 'Montserrat', sans-serif;">TEAM EVENT REGISTER</span>
+            <h2 style="margin: 0; font-weight: 900; font-family: 'Montserrat', sans-serif;">STAGE & OFFSTAGE MATRIX</h2>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <select id="teamSelectTab" class="form-control" style="padding: 6px 12px; font-weight: 800;" onchange="renderRegistrationMatrix()">
+                <option value="teamA">🔴 Team ZELLIJ</option>
+                <option value="teamB">🔵 Team IZNIK</option>
+            </select>
+            <select id="regCatSelectTab" class="form-control" style="padding: 6px 12px; font-weight: 800;" onchange="renderRegistrationMatrix()">
+                <option value="senior">Senior</option>
+                <option value="junior">Junior</option>
+                <option value="subjunior">Sub Junior</option>
+            </select>
+            <button class="btn-action-sm" style="background:#fbbf24; color:#0f172a; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer;" onclick="window.print()">🖨️ Print / PDF</button>
+            <button class="back-home-btn" onclick="location.href='index.html'" style="margin:0;">⬅️ Back</button>
+        </div>
+    </div>
+
+    <div class="container" style="max-width: 1200px; margin: 20px auto;">
+        
+        <!-- Summary Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="num" id="statStudentsCount">0</div>
+                <div class="label">വിദ്യാർത്ഥികൾ (Students)</div>
+            </div>
+            <div class="stat-card">
+                <div class="num" id="statEventsCount">0</div>
+                <div class="label">മത്സരങ്ങൾ (Events)</div>
+            </div>
+            <div class="stat-card">
+                <div class="num" id="statTotalTicks">0</div>
+                <div class="label">ആകെ രജിസ്ട്രേഷൻസ് (Total Entries)</div>
+            </div>
+        </div>
+
+        <!-- Public / View Table Matrix -->
+        <div class="table-responsive">
+            <table class="matrix-reg-table" id="registrationMatrixTable">
+                <thead>
+                    <tr id="matrixHeaderRow">
+                        <th>No</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody id="matrixBodyRow">
+                    <!-- Dynamic Rows -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Admin Dashboard for Managing Students & Event Registrations -->
+        <div class="admin-only admin-alt-box" data-display="block" style="background:var(--card-bg); border:1px solid var(--accent-gold); border-radius:12px; padding:20px;">
+            <h3 style="margin:0 0 12px; color:var(--accent-gold); font-weight:900;">🛠️ Admin Dashboard: Student Event Registrations</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;">ഓരോ വിദ്യാർത്ഥിയും പങ്കെടുക്കുന്ന മത്സരങ്ങൾക്ക് നേരെ ടിക്ക് (✔) നൽകി 'Save All Changes' ക്ലിക്ക് ചെയ്യുക.</p>
+            
+            <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
+                <input type="text" id="newStudentNameInput" class="form-control" placeholder="പുതിയ വിദ്യാർത്ഥിയുടെ പേര് ചേർക്കുക..." style="max-width:320px;">
+                <button class="prog-add-btn" style="background:#059669; color:#fff;" onclick="addNewStudentToTeam()">➕ വിദ്യാർത്ഥിയെ ചേർക്കുക</button>
+            </div>
+
+            <div id="adminStudentEditorContainer"></div>
+
+            <button class="btn-submit" style="background:#059669; color:#fff; margin-top:20px; padding:12px; font-size:1rem;" onclick="saveAllRegistrationsToCloud()">💾 Save All Changes (മാറ്റങ്ങൾ സേവ് ചെയ്യുക)</button>
+        </div>
+
+    </div>
+
+    <footer>&copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM</footer>
+    <script src="app.js"></script>
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            setTimeout(() => {
+                if (!appData.registrations) appData.registrations = {};
+                renderRegistrationMatrix();
+            }, 300);
+        });
+
+        function getActiveTeamAndCat() {
+            const teamKey = document.getElementById("teamSelectTab")?.value || "teamA";
+            const catKey = document.getElementById("regCatSelectTab")?.value || "senior";
+            return { teamKey, catKey };
+        }
+
+        function renderRegistrationMatrix() {
+            const { teamKey, catKey } = getActiveTeamAndCat();
+            const teams = normalizeTeamsData(appData.teams);
+            const teamObj = teams[teamKey] || { name: "", senior: [], junior: [], subjunior: [] };
+            const students = teamObj[catKey] || [];
+
+            const progs = normalizeProgramsData(appData.programs);
+            const catProgs = progs[catKey] || { onStage: [], offStage: [], sports: [] };
+            const allEvents = [...(catProgs.onStage || []), ...(catProgs.offStage || [])];
+
+            // Stats update
+            if (document.getElementById("statStudentsCount")) document.getElementById("statStudentsCount").textContent = students.length;
+            if (document.getElementById("statEventsCount")) document.getElementById("statEventsCount").textContent = allEvents.length;
+
+            let totalTicksCount = 0;
+            if (!appData.registrations) appData.registrations = {};
+            if (!appData.registrations[teamKey]) appData.registrations[teamKey] = {};
+            if (!appData.registrations[teamKey][catKey]) appData.registrations[teamKey][catKey] = {};
+
+            const regMap = appData.registrations[teamKey][catKey];
+
+            // Render Table Header
+            const headerRow = document.getElementById("matrixHeaderRow");
+            if (headerRow) {
+                let hHtml = `<th>No</th><th>Name</th>`;
+                allEvents.forEach(ev => {
+                    hHtml += `<th>${ev}</th>`;
+                });
+                headerRow.innerHTML = hHtml;
+            }
+
+            // Render Table Body
+            const bodyRow = document.getElementById("matrixBodyRow");
+            if (bodyRow) {
+                if (students.length === 0) {
+                    bodyRow.innerHTML = `<tr><td colspan="${allEvents.length + 2}" style="padding:25px; color:var(--text-muted);">വിദ്യാർത്ഥികൾ ആരുമില്ല.</td></tr>`;
+                } else {
+                    let bHtml = "";
+                    students.forEach((stName, idx) => {
+                        const cleanName = stName.replace(/(\(C\)|\(Vc\))/g, "").trim();
+                        bHtml += `<tr><td>${idx + 1}</td><td>${stName}</td>`;
+                        allEvents.forEach(ev => {
+                            const isChecked = regMap[cleanName] && regMap[cleanName].includes(ev);
+                            if (isChecked) totalTicksCount++;
+                            bHtml += `<td>${isChecked ? '<span class="tick-icon">✔</span>' : '<span style="color:var(--text-muted); opacity:0.3;">·</span>'}</td>`;
+                        });
+                        bHtml += `</tr>`;
+                    });
+                    bodyRow.innerHTML = bHtml;
+                }
+            }
+
+            if (document.getElementById("statTotalTicks")) document.getElementById("statTotalTicks").textContent = totalTicksCount;
+
+            // Render Admin Editor if Admin
+            renderAdminStudentEditor(students, allEvents, regMap);
+        }
+
+        function renderAdminStudentEditor(students, allEvents, regMap) {
+            const container = document.getElementById("adminStudentEditorContainer");
+            if (!container) return;
+
+            if (!isAdmin) {
+                container.innerHTML = "";
+                return;
+            }
+
+            if (students.length === 0) {
+                container.innerHTML = "<p style='color:var(--text-muted);'>വിദ്യാർത്ഥികളെ ചേർക്കുക.</p>";
+                return;
+            }
+
+            let html = "";
+            students.forEach((stName, idx) => {
+                const cleanName = stName.replace(/(\(C\)|\(Vc\))/g, "").trim();
+                const studentCheckedEvents = regMap[cleanName] || [];
+
+                let checkboxesHtml = "";
+                allEvents.forEach(ev => {
+                    const isChecked = studentCheckedEvents.includes(ev);
+                    checkboxesHtml += `
+                        <label>
+                            <input type="checkbox" class="reg_chk_${idx}" value="${ev}" ${isChecked ? 'checked' : ''}>
+                            ${ev}
+                        </label>
+                    `;
+                });
+
+                html += `
+                    <div class="student-row-box">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                            <strong style="font-family:'Montserrat',sans-serif;">${idx + 1}. ${stName}</strong>
+                            <button class="btn-action-sm" style="background:#dc2626; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removeStudentFromTeam('${cleanName}')">🗑️ Remove</button>
+                        </div>
+                        <div class="student-events-grid">
+                            ${checkboxesHtml}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function addNewStudentToTeam() {
+            if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
+            const input = document.getElementById("newStudentNameInput");
+            if (!input || !input.value.trim()) { alert("വിദ്യാർത്ഥിയുടെ പേര് നൽകുക!"); return; }
+            const nameVal = input.value.trim();
+
+            const { teamKey, catKey } = getActiveTeamAndCat();
+            let cloned = JSON.parse(JSON.stringify(appData));
+            const teams = normalizeTeamsData(cloned.teams);
+
+            if (!teams[teamKey][catKey].includes(nameVal)) {
+                teams[teamKey][catKey].push(nameVal);
+                cloned.teams = teams;
+                saveAppData(false, cloned, () => {
+                    input.value = "";
+                    renderRegistrationMatrix();
+                    alert("വിദ്യാർത്ഥിയെ വിജയകരമായി ചേർത്തു!");
+                });
+            } else {
+                alert("ഈ പേരിലുള്ള വിദ്യാർത്ഥി ഇതിനകം പട്ടികയിലുണ്ട്!");
+            }
+        }
+
+        function removeStudentFromTeam(cleanName) {
+            if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
+            if (confirm(`"${cleanName}" എന്ന വിദ്യാർത്ഥിയെ നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?`)) {
+                const { teamKey, catKey } = getActiveTeamAndCat();
+                let cloned = JSON.parse(JSON.stringify(appData));
+                const teams = normalizeTeamsData(cloned.teams);
+
+                teams[teamKey][catKey] = teams[teamKey][catKey].filter(s => s.replace(/(\(C\)|\(Vc\))/g, "").trim() !== cleanName);
+                cloned.teams = teams;
+                saveAppData(false, cloned, () => {
+                    renderRegistrationMatrix();
+                });
+            }
+        }
+
+        function saveAllRegistrationsToCloud() {
+            if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
+            const { teamKey, catKey } = getActiveTeamAndCat();
+            const teams = normalizeTeamsData(appData.teams);
+            const students = teams[teamKey][catKey] || [];
+
+            if (!appData.registrations) appData.registrations = {};
+            if (!appData.registrations[teamKey]) appData.registrations[teamKey] = {};
+            
+            let newCatRegMap = {};
+            students.forEach((stName, idx) => {
+                const cleanName = stName.replace(/(\(C\)|\(Vc\))/g, "").trim();
+                const checkedBoxes = document.querySelectorAll(`.reg_chk_${idx}:checked`);
+                let evList = [];
+                checkedBoxes.forEach(chk => evList.push(chk.value));
+                if (evList.length > 0) {
+                    newCatRegMap[cleanName] = evList;
+                }
+            });
+
+            let cloned = JSON.parse(JSON.stringify(appData));
+            if (!cloned.registrations) cloned.registrations = {};
+            if (!cloned.registrations[teamKey]) cloned.registrations[teamKey] = {};
+            cloned.registrations[teamKey][catKey] = newCatRegMap;
+
+            saveAppData(false, cloned, () => {
+                alert("എല്ലാ രജിസ്ട്രേഷൻ മാറ്റങ്ങളും വിജയകരമായി സേവ് ചെയ്തു!");
+                renderRegistrationMatrix();
+            });
+        }
+    </script>
+</body>
+</html>
