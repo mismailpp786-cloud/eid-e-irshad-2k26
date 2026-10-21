@@ -1,11 +1,11 @@
-// Firebase Configuration & Initialization Safety Check
+// Firebase Configuration & Initialization (from Screenshot 40)
 const firebaseConfig = {
-    apiKey: "YOUR_FIREBASE_API_KEY",
-    authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
-    projectId: "YOUR_FIREBASE_PROJECT_ID",
-    storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_FIREBASE_MESSAGING_SENDER_ID",
-    appId: "YOUR_FIREBASE_APP_ID"
+    apiKey: "AIzaSyBJ7gW3JRCvYIft5v4-4nxhE1AVPrpTDmw",
+    authDomain: "eid-e-irshad-2k26.firebaseapp.com",
+    projectId: "eid-e-irshad-2k26",
+    storageBucket: "eid-e-irshad-2k26.firebasestorage.app",
+    messagingSenderId: "926291213815",
+    appId: "1:926291213815:web:50729ca345f5d6b0d002f2"
 };
 
 if (!firebase.apps.length) {
@@ -97,8 +97,9 @@ function logoutAdmin() {
     });
 }
 
+// Real-time synchronization using correct Firestore path: fiesta2k26 / mainData
 function initRealtimeSync() {
-    db.collection("festival").doc("mainData").onSnapshot((doc) => {
+    db.collection("fiesta2k26").doc("mainData").onSnapshot((doc) => {
         if (doc.exists) {
             appData = doc.data();
             if (!appData.registrations) appData.registrations = {};
@@ -119,7 +120,7 @@ function saveAppData(showAlert = true, customData = null, callback = null) {
         return;
     }
     const dataToSave = customData || appData;
-    db.collection("festival").doc("mainData").set(dataToSave).then(() => {
+    db.collection("fiesta2k26").doc("mainData").set(dataToSave).then(() => {
         if (showAlert) alert("മാറ്റങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!");
         if (callback) callback();
     }).catch((err) => {
