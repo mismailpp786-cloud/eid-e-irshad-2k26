@@ -25,12 +25,8 @@
             color: #ffffff;
             transition: background 0.3s ease;
         }
-        .reg-header-bar.zellij-theme {
-            background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
-        }
-        .reg-header-bar.iznik-theme {
-            background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%);
-        }
+        .reg-header-bar.zellij-theme { background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%); }
+        .reg-header-bar.iznik-theme { background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%); }
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -45,17 +41,8 @@
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
-        .stat-card .num {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: #065f46;
-        }
-        .stat-card .label {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #64748b;
-        }
+        .stat-card .num { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; font-weight: 900; color: #065f46; }
+        .stat-card .label { font-size: 0.75rem; font-weight: 700; color: #64748b; }
         .table-responsive {
             width: 100%;
             overflow-x: auto;
@@ -65,81 +52,16 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             margin-bottom: 25px;
         }
-        .matrix-reg-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-            white-space: nowrap;
-        }
-        .matrix-reg-table th, .matrix-reg-table td {
-            border: 1px solid #cbd5e1;
-            padding: 10px 14px;
-            text-align: center;
-        }
-        .matrix-reg-table th {
-            background: #f0fdf4;
-            color: #065f46;
-            font-weight: 900;
-            font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
-            position: sticky;
-            top: 0;
-            z-index: 5;
-        }
-        .matrix-reg-table td:nth-child(2) {
-            text-align: left;
-            font-weight: 800;
-            position: sticky;
-            left: 0;
-            background: #ffffff;
-            z-index: 4;
-            border-right: 2px solid #065f46;
-        }
-        .matrix-reg-table th:nth-child(2) {
-            position: sticky;
-            left: 0;
-            background: #f0fdf4;
-            z-index: 6;
-            border-right: 2px solid #065f46;
-        }
-        .tick-icon {
-            color: #059669;
-            font-weight: 900;
-            font-size: 1.2rem;
-        }
-        .admin-edit-section {
-            background: #ffffff;
-            border: 2px solid #065f46;
-            border-radius: 14px;
-            padding: 20px;
-            margin-top: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-        }
-        .student-row-box {
-            background: #f8fafc;
-            border: 1px solid #cbd5e1;
-            border-radius: 10px;
-            padding: 14px;
-            margin-bottom: 15px;
-        }
-        .student-events-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .student-events-grid label {
-            font-size: 0.8rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            background: #ffffff;
-            padding: 6px 10px;
-            border-radius: 6px;
-            border: 1px solid #cbd5e1;
-            color: #0f172a;
-        }
+        .matrix-reg-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; white-space: nowrap; }
+        .matrix-reg-table th, .matrix-reg-table td { border: 1px solid #cbd5e1; padding: 10px 14px; text-align: center; }
+        .matrix-reg-table th { background: #f0fdf4; color: #065f46; font-weight: 900; font-family: 'Montserrat', 'Anek Malayalam', sans-serif; position: sticky; top: 0; z-index: 5; }
+        .matrix-reg-table td:nth-child(2) { text-align: left; font-weight: 800; position: sticky; left: 0; background: #ffffff; z-index: 4; border-right: 2px solid #065f46; }
+        .matrix-reg-table th:nth-child(2) { position: sticky; left: 0; background: #f0fdf4; z-index: 6; border-right: 2px solid #065f46; }
+        .tick-icon { color: #059669; font-weight: 900; font-size: 1.2rem; }
+        .admin-edit-section { background: #ffffff; border: 2px solid #065f46; border-radius: 14px; padding: 20px; margin-top: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+        .student-row-box { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px; margin-bottom: 15px; }
+        .student-events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; margin-top: 10px; }
+        .student-events-grid label { font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; gap: 6px; cursor: pointer; background: #ffffff; padding: 6px 10px; border-radius: 6px; border: 1px solid #cbd5e1; color: #0f172a; }
         @media print {
             @page { size: landscape; margin: 10mm; }
             body { background: #fff !important; color: #000 !important; font-size: 9pt !important; }
@@ -177,10 +99,8 @@
     </div>
 
     <div class="container" style="max-width: 1250px; margin: 20px auto;">
-        
         <div style="font-size: 0.85rem; color: #475569; margin-bottom: 8px;">വിഭാഗം മാറ്റി പേരുകളും ടിക്ക് മാർക്കുകളും കാണാം.</div>
 
-        <!-- Search & Dropdown List Selector -->
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 15px;">
             <div style="flex: 1; min-width: 250px;">
                 <input type="text" id="studentSearchInput" class="form-control" placeholder="പേര് തിരയുക..." style="padding: 10px 14px; font-weight: 700; background:#fff;" oninput="renderRegistrationMatrix()">
@@ -205,42 +125,24 @@
         </div>
 
         <div class="stats-grid">
-            <div class="stat-card">
-                <div class="num" id="statStudentsCount">0</div>
-                <div class="label">വിദ്യാർത്ഥികൾ</div>
-            </div>
-            <div class="stat-card">
-                <div class="num" id="statEventsCount">0</div>
-                <div class="label">മത്സരങ്ങൾ</div>
-            </div>
-            <div class="stat-card">
-                <div class="num" id="statTotalTicks">0</div>
-                <div class="label">ആകെ ടിക്കുകൾ</div>
-            </div>
+            <div class="stat-card"><div class="num" id="statStudentsCount">0</div><div class="label">വിദ്യാർത്ഥികൾ</div></div>
+            <div class="stat-card"><div class="num" id="statEventsCount">0</div><div class="label">മത്സരങ്ങൾ</div></div>
+            <div class="stat-card"><div class="num" id="statTotalTicks">0</div><div class="label">ആകെ ടിക്കുകൾ</div></div>
         </div>
 
         <div style="font-weight:900; margin-bottom:4px; font-family:'Montserrat',sans-serif;">മത്സരങ്ങളുടെ ലിസ്റ്റ്</div>
         <div style="font-size:0.75rem; color:#64748b; margin-bottom:8px;">ലിസ്റ്റ് തയ്യാറാണ്.</div>
 
-        <!-- Public / View Table Matrix -->
         <div class="table-responsive">
             <table class="matrix-reg-table" id="registrationMatrixTable">
-                <thead>
-                    <tr id="matrixHeaderRow">
-                        <th>No</th>
-                        <th>Name</th>
-                    </tr>
-                </thead>
-                <tbody id="matrixBodyRow">
-                    <!-- Dynamic Rows -->
-                </tbody>
+                <thead><tr id="matrixHeaderRow"><th>No</th><th>Name</th></tr></thead>
+                <tbody id="matrixBodyRow"></tbody>
             </table>
         </div>
 
-        <!-- Admin Dashboard for Managing Students & Event Registrations (Protected by isAdmin) -->
         <div class="admin-only admin-edit-section" data-display="block">
             <h3 style="margin:0 0 6px; font-weight:900; color:#065f46;">Admin Dashboard</h3>
-            <p style="font-size:0.78rem; color:#64748b; margin-bottom:12px;">ലിസ്റ്റ് തിരഞ്ഞെടുക്കുക, പേരുകൾ, മത്സരങ്ങൾ, ടിക്ക് മാർക്കുകൾ എന്നിവ തിരുത്തി Save All Changes അമർത്തുക[cite: 10].</p>
+            <p style="font-size:0.78rem; color:#64748b; margin-bottom:12px;">ലിസ്റ്റ് തിരഞ്ഞെടുക്കുക, പേരുകൾ, മത്സരങ്ങൾ, ടിക്ക് മാർക്കുകൾ എന്നിവ തിരുത്തി Save All Changes അമർത്തുക.</p>
             
             <div class="form-group" style="max-width:280px; margin-bottom:15px;">
                 <label style="font-weight:800; font-size:0.8rem;">തിരഞ്ഞെടുക്കേണ്ട ലിസ്റ്റ്:</label>
@@ -275,7 +177,6 @@
 
             <button class="btn-submit" style="background:#065f46; color:#fff; margin-top:20px; padding:12px; font-size:1rem; font-weight:900;" onclick="saveAllRegistrationsToCloud()">Save All Changes</button>
         </div>
-
     </div>
 
     <!-- Admin Login Modal -->
@@ -284,8 +185,10 @@
             <span class="close-btn" onclick="closeAdminLoginModal()">&times;</span>
             <h3 style="margin: 0 0 12px; font-weight: 900; color: var(--accent-gold);">🔐 Admin Login</h3>
             <div class="form-group">
-                <label>Admin Passcode:</label>
-                <input type="password" id="adminPassInput" class="form-control" placeholder="കോഡ് നൽകുക">
+                <label>Admin Email:</label>
+                <input type="email" id="adminEmailInput" class="form-control" placeholder="Gmail നൽകുക" style="margin-bottom:10px;">
+                <label>Password:</label>
+                <input type="password" id="adminPassInput" class="form-control" placeholder="പാസ്‌വേഡ് നൽകുക">
             </div>
             <button class="btn-submit" onclick="submitAdminLogin()">Login</button>
         </div>
@@ -305,9 +208,7 @@
             const teamKey = document.getElementById("teamSelectTab")?.value || "teamA";
             const combinedVal = document.getElementById("regListSelectTab")?.value || "senior_onStage";
             const parts = combinedVal.split("_");
-            const catKey = parts[0]; 
-            const secKey = parts[1]; 
-            return { teamKey, catKey, secKey };
+            return { teamKey, catKey: parts[0], secKey: parts[1] };
         }
 
         function onListDropdownChange() {
@@ -341,9 +242,7 @@
             let students = teamObj[catKey] || [];
 
             const searchVal = (document.getElementById("studentSearchInput")?.value || "").trim().toLowerCase();
-            if (searchVal) {
-                students = students.filter(s => s.toLowerCase().includes(searchVal));
-            }
+            if (searchVal) students = students.filter(s => s.toLowerCase().includes(searchVal));
 
             const progs = normalizeProgramsData(appData.programs);
             if (!progs[catKey]) progs[catKey] = { onStage: [], offStage: [], sports: [] };
@@ -362,9 +261,7 @@
             const headerRow = document.getElementById("matrixHeaderRow");
             if (headerRow) {
                 let hHtml = `<th>No</th><th>Name</th>`;
-                sectionEvents.forEach(ev => {
-                    hHtml += `<th>${ev}</th>`;
-                });
+                sectionEvents.forEach(ev => { hHtml += `<th>${ev}</th>`; });
                 headerRow.innerHTML = hHtml;
             }
 
@@ -389,7 +286,6 @@
             }
 
             if (document.getElementById("statTotalTicks")) document.getElementById("statTotalTicks").textContent = totalTicksCount;
-
             renderAdminDashboard(students, sectionEvents, regMap, catKey, secKey);
         }
 
@@ -438,13 +334,10 @@
                             <strong style="font-family:'Montserrat',sans-serif; font-size:0.88rem;">${idx + 1}. ${stName}</strong>
                             <button type="button" class="btn-action-sm" style="background:#dc2626; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removeStudentFromTeam('${cleanName}')">Remove</button>
                         </div>
-                        <div class="student-events-grid">
-                            ${checkboxesHtml}
-                        </div>
+                        <div class="student-events-grid">${checkboxesHtml}</div>
                     </div>
                 `;
             });
-
             container.innerHTML = html;
         }
 
@@ -464,13 +357,8 @@
             if (!progsObj[catKey][secKey].includes(evName)) {
                 progsObj[catKey][secKey].push(evName);
                 cloned.programs = progsObj;
-                saveAppData(false, cloned, () => {
-                    input.value = "";
-                    renderRegistrationMatrix();
-                });
-            } else {
-                alert("ഈ മത്സരം ഇതിനകം പട്ടികയിലുണ്ട്!");
-            }
+                saveAppData(false, cloned, () => { input.value = ""; renderRegistrationMatrix(); });
+            } else { alert("ഈ മത്സരം ഇതിനകം പട്ടികയിലുണ്ട്!"); }
         }
 
         function removeEventFromSection(catKey, secKey, index) {
@@ -481,9 +369,7 @@
                 if (progsObj[catKey] && progsObj[catKey][secKey]) {
                     progsObj[catKey][secKey].splice(index, 1);
                     cloned.programs = progsObj;
-                    saveAppData(false, cloned, () => {
-                        renderRegistrationMatrix();
-                    });
+                    saveAppData(false, cloned, () => { renderRegistrationMatrix(); });
                 }
             }
         }
@@ -496,19 +382,12 @@
 
             const { teamKey, catKey } = getActiveFilters();
             let cloned = JSON.parse(JSON.stringify(appData));
-            if (!cloned.teams) cloned.teams = JSON.parse(JSON.stringify(defaultData.teams));
-
             let teamsObj = normalizeTeamsData(cloned.teams);
             if (!teamsObj[teamKey][catKey].includes(nameVal)) {
                 teamsObj[teamKey][catKey].push(nameVal);
                 cloned.teams = teamsObj;
-                saveAppData(false, cloned, () => {
-                    input.value = "";
-                    renderRegistrationMatrix();
-                });
-            } else {
-                alert("ഈ പേരിലുള്ള വിദ്യാർത്ഥി ഇതിനകം പട്ടികയിലുണ്ട്!");
-            }
+                saveAppData(false, cloned, () => { input.value = ""; renderRegistrationMatrix(); });
+            } else { alert("ഈ പേരിലുള്ള വിദ്യാർത്ഥി ഇതിനകം പട്ടികയിലുണ്ട്!"); }
         }
 
         function removeStudentFromTeam(cleanName) {
@@ -517,12 +396,9 @@
                 const { teamKey, catKey } = getActiveFilters();
                 let cloned = JSON.parse(JSON.stringify(appData));
                 let teamsObj = normalizeTeamsData(cloned.teams);
-
                 teamsObj[teamKey][catKey] = teamsObj[teamKey][catKey].filter(s => s.replace(/(\(C\)|\(Vc\))/g, "").trim() !== cleanName);
                 cloned.teams = teamsObj;
-                saveAppData(false, cloned, () => {
-                    renderRegistrationMatrix();
-                });
+                saveAppData(false, cloned, () => { renderRegistrationMatrix(); });
             }
         }
 
@@ -546,18 +422,13 @@
                 const currentSecEvents = progs[catKey][secKey] || [];
 
                 if (!existingCatMap[cleanName]) existingCatMap[cleanName] = [];
-                
                 existingCatMap[cleanName] = existingCatMap[cleanName].filter(ev => !currentSecEvents.includes(ev));
 
                 checkedBoxes.forEach(chk => {
-                    if (!existingCatMap[cleanName].includes(chk.value)) {
-                        existingCatMap[cleanName].push(chk.value);
-                    }
+                    if (!existingCatMap[cleanName].includes(chk.value)) existingCatMap[cleanName].push(chk.value);
                 });
 
-                if (existingCatMap[cleanName].length === 0) {
-                    delete existingCatMap[cleanName];
-                }
+                if (existingCatMap[cleanName].length === 0) delete existingCatMap[cleanName];
             });
 
             let cloned = JSON.parse(JSON.stringify(appData));
