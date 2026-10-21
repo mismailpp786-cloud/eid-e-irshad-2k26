@@ -15,8 +15,6 @@
     <style>
         body { background: #f8fafc; color: #0f172a; font-family: 'Anek Malayalam', 'Montserrat', sans-serif; }
         .reg-header-bar {
-            background: #065f46;
-            color: #fff;
             padding: 15px 20px;
             display: flex;
             justify-content: space-between;
@@ -24,6 +22,14 @@
             border-bottom: 3px solid #fbbf24;
             flex-wrap: wrap;
             gap: 10px;
+            color: #ffffff;
+            transition: background 0.3s ease;
+        }
+        .reg-header-bar.zellij-theme {
+            background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
+        }
+        .reg-header-bar.iznik-theme {
+            background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%);
         }
         .stats-grid {
             display: grid;
@@ -155,15 +161,15 @@
         </div>
     </div>
 
-    <div class="reg-header-bar">
+    <div class="reg-header-bar zellij-theme" id="headerBarTheme">
         <div>
-            <span style="font-size: 0.7rem; font-weight: 800; color: #fbbf24; font-family: 'Montserrat', sans-serif;" id="headerTeamTitle">TEAM B - EVENT REGISTER</span>
+            <span style="font-size: 0.7rem; font-weight: 800; color: #fbbf24; font-family: 'Montserrat', sans-serif;" id="headerTeamTitle">TEAM ZELLIJ - EVENT REGISTER</span>
             <h2 style="margin: 0; font-weight: 900; font-family: 'Montserrat', sans-serif;">STAGE & OFFSTAGE</h2>
         </div>
         <div style="display: flex; gap: 8px; align-items: center;">
             <select id="teamSelectTab" class="form-control" style="padding: 6px 12px; font-weight: 800; background:#fff; color:#0f172a;" onchange="renderRegistrationMatrix()">
                 <option value="teamA">🔴 Team ZELLIJ</option>
-                <option value="teamB" selected>🔵 Team IZNIK</option>
+                <option value="teamB">🔵 Team IZNIK</option>
             </select>
             <button class="back-home-btn" onclick="openAdminLoginModal()" style="background:#fbbf24; color:#0f172a; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer; margin:0;" id="adminLoginBtn">Admin Login</button>
             <button class="back-home-btn" onclick="location.href='index.html'" style="background:#059669; color:#fff; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer; margin:0;">Back</button>
@@ -234,7 +240,7 @@
         <!-- Admin Dashboard for Managing Students & Event Registrations (Protected by isAdmin) -->
         <div class="admin-only admin-edit-section" data-display="block">
             <h3 style="margin:0 0 6px; font-weight:900; color:#065f46;">Admin Dashboard</h3>
-            <p style="font-size:0.78rem; color:#64748b; margin-bottom:12px;">ലിസ്റ്റ് തിരഞ്ഞെടുക്കുക, പേരുകൾ, മത്സരങ്ങൾ, ടിക്ക് മാർക്കുകൾ എന്നിവ തിരുത്തി Save All Changes അമർത്തുക[span_0](start_span)[span_0](end_span).</p>
+            <p style="font-size:0.78rem; color:#64748b; margin-bottom:12px;">ലിസ്റ്റ് തിരഞ്ഞെടുക്കുക, പേരുകൾ, മത്സരങ്ങൾ, ടിക്ക് മാർക്കുകൾ എന്നിവ തിരുത്തി Save All Changes അമർത്തുക[cite: 10].</p>
             
             <div class="form-group" style="max-width:280px; margin-bottom:15px;">
                 <label style="font-weight:800; font-size:0.8rem;">തിരഞ്ഞെടുക്കേണ്ട ലിസ്റ്റ്:</label>
@@ -296,7 +302,7 @@
         });
 
         function getActiveFilters() {
-            const teamKey = document.getElementById("teamSelectTab")?.value || "teamB";
+            const teamKey = document.getElementById("teamSelectTab")?.value || "teamA";
             const combinedVal = document.getElementById("regListSelectTab")?.value || "senior_onStage";
             const parts = combinedVal.split("_");
             const catKey = parts[0]; 
@@ -321,8 +327,13 @@
         function renderRegistrationMatrix() {
             const { teamKey, catKey, secKey } = getActiveFilters();
             
-            if (document.getElementById("headerTeamTitle")) {
-                document.getElementById("headerTeamTitle").textContent = teamKey === 'teamA' ? "TEAM ZELLIJ - EVENT REGISTER" : "TEAM IZNIK - EVENT REGISTER";
+            const headerBar = document.getElementById("headerBarTheme");
+            if (teamKey === 'teamA') {
+                if (headerBar) headerBar.className = "reg-header-bar zellij-theme";
+                if (document.getElementById("headerTeamTitle")) document.getElementById("headerTeamTitle").textContent = "TEAM ZELLIJ - EVENT REGISTER";
+            } else {
+                if (headerBar) headerBar.className = "reg-header-bar iznik-theme";
+                if (document.getElementById("headerTeamTitle")) document.getElementById("headerTeamTitle").textContent = "TEAM IZNIK - EVENT REGISTER";
             }
 
             const normalizedTeams = normalizeTeamsData(appData.teams);
@@ -407,4 +418,158 @@
 
             let html = "";
             students.forEach((stName, idx) => {
-                const cle
+                const cleanName = stName.replace(/(\(C\)|\(Vc\))/g, "").trim();
+                const studentCheckedEvents = regMap[cleanName] || [];
+
+                let checkboxesHtml = "";
+                sectionEvents.forEach(ev => {
+                    const isChecked = studentCheckedEvents.includes(ev);
+                    checkboxesHtml += `
+                        <label>
+                            <input type="checkbox" class="reg_chk_${idx}" value="${ev}" ${isChecked ? 'checked' : ''}>
+                            ${ev}
+                        </label>
+                    `;
+                });
+
+                html += `
+                    <div class="student-row-box">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                            <strong style="font-family:'Montserrat',sans-serif; font-size:0.88rem;">${idx + 1}. ${stName}</strong>
+                            <button type="button" class="btn-action-sm" style="background:#dc2626; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removeStudentFromTeam('${cleanName}')">Remove</button>
+                        </div>
+                        <div class="student-events-grid">
+                            ${checkboxesHtml}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function addNewEventToSection() {
+            if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
+            const input = document.getElementById("newEventNameInput");
+            if (!input || !input.value.trim()) { alert("മത്സരത്തിന്റെ പേര് നൽകുക!"); return; }
+            const evName = input.value.trim();
+
+            const { catKey, secKey } = getActiveFilters();
+            let cloned = JSON.parse(JSON.stringify(appData));
+            let progsObj = normalizeProgramsData(cloned.programs);
+
+            if (!progsObj[catKey]) progsObj[catKey] = { onStage: [], offStage: [], sports: [] };
+            if (!progsObj[catKey][secKey]) progsObj[catKey][secKey] = [];
+
+            if (!progsObj[catKey][secKey].includes(evName)) {
+                progsObj[catKey][secKey].push(evName);
+                cloned.programs = progsObj;
+                saveAppData(false, cloned, () => {
+                    input.value = "";
+                    renderRegistrationMatrix();
+                });
+            } else {
+                alert("ഈ മത്സരം ഇതിനകം പട്ടികയിലുണ്ട്!");
+            }
+        }
+
+        function removeEventFromSection(catKey, secKey, index) {
+            if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
+            if (confirm("ഈ മത്സരം ഒഴിവാക്കണമെന്ന് ഉറപ്പാണോ?")) {
+                let cloned = JSON.parse(JSON.stringify(appData));
+                let progsObj = normalizeProgramsData(cloned.programs);
+                if (progsObj[catKey] && progsObj[catKey][secKey]) {
+                    progsObj[catKey][secKey].splice(index, 1);
+                    cloned.programs = progsObj;
+                    saveAppData(false, cloned, () => {
+                        renderRegistrationMatrix();
+                    });
+                }
+            }
+        }
+
+        function addNewStudentToTeam() {
+            if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
+            const input = document.getElementById("newStudentNameInput");
+            if (!input || !input.value.trim()) { alert("വിദ്യാർത്ഥിയുടെ പേര് നൽകുക!"); return; }
+            const nameVal = input.value.trim();
+
+            const { teamKey, catKey } = getActiveFilters();
+            let cloned = JSON.parse(JSON.stringify(appData));
+            if (!cloned.teams) cloned.teams = JSON.parse(JSON.stringify(defaultData.teams));
+
+            let teamsObj = normalizeTeamsData(cloned.teams);
+            if (!teamsObj[teamKey][catKey].includes(nameVal)) {
+                teamsObj[teamKey][catKey].push(nameVal);
+                cloned.teams = teamsObj;
+                saveAppData(false, cloned, () => {
+                    input.value = "";
+                    renderRegistrationMatrix();
+                });
+            } else {
+                alert("ഈ പേരിലുള്ള വിദ്യാർത്ഥി ഇതിനകം പട്ടികയിലുണ്ട്!");
+            }
+        }
+
+        function removeStudentFromTeam(cleanName) {
+            if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
+            if (confirm(`"${cleanName}" എന്ന വിദ്യാർത്ഥിയെ നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?`)) {
+                const { teamKey, catKey } = getActiveFilters();
+                let cloned = JSON.parse(JSON.stringify(appData));
+                let teamsObj = normalizeTeamsData(cloned.teams);
+
+                teamsObj[teamKey][catKey] = teamsObj[teamKey][catKey].filter(s => s.replace(/(\(C\)|\(Vc\))/g, "").trim() !== cleanName);
+                cloned.teams = teamsObj;
+                saveAppData(false, cloned, () => {
+                    renderRegistrationMatrix();
+                });
+            }
+        }
+
+        function saveAllRegistrationsToCloud() {
+            if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
+            const { teamKey, catKey, secKey } = getActiveFilters();
+            const normalizedTeams = normalizeTeamsData(appData.teams);
+            const students = normalizedTeams[teamKey][catKey] || [];
+
+            if (!appData.registrations) appData.registrations = {};
+            if (!appData.registrations[teamKey]) appData.registrations[teamKey] = {};
+            if (!appData.registrations[teamKey][catKey]) appData.registrations[teamKey][catKey] = {};
+            
+            let existingCatMap = appData.registrations[teamKey][catKey];
+
+            students.forEach((stName, idx) => {
+                const cleanName = stName.replace(/(\(C\)|\(Vc\))/g, "").trim();
+                const checkedBoxes = document.querySelectorAll(`.reg_chk_${idx}:checked`);
+                
+                const progs = normalizeProgramsData(appData.programs);
+                const currentSecEvents = progs[catKey][secKey] || [];
+
+                if (!existingCatMap[cleanName]) existingCatMap[cleanName] = [];
+                
+                existingCatMap[cleanName] = existingCatMap[cleanName].filter(ev => !currentSecEvents.includes(ev));
+
+                checkedBoxes.forEach(chk => {
+                    if (!existingCatMap[cleanName].includes(chk.value)) {
+                        existingCatMap[cleanName].push(chk.value);
+                    }
+                });
+
+                if (existingCatMap[cleanName].length === 0) {
+                    delete existingCatMap[cleanName];
+                }
+            });
+
+            let cloned = JSON.parse(JSON.stringify(appData));
+            if (!cloned.registrations) cloned.registrations = {};
+            if (!cloned.registrations[teamKey]) cloned.registrations[teamKey] = {};
+            cloned.registrations[teamKey][catKey] = existingCatMap;
+
+            saveAppData(false, cloned, () => {
+                alert("എല്ലാ രജിസ്ട്രേഷൻ മാറ്റങ്ങളും വിജയകരമായി സേവ് ചെയ്തു!");
+                renderRegistrationMatrix();
+            });
+        }
+    </script>
+</body>
+</html>
