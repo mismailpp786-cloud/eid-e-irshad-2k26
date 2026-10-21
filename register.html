@@ -148,7 +148,7 @@
 <body>
 
     <div id="adminBar" class="admin-bar">
-        <span>⚙️ Admin Mode Active (Event Registration Manager)</span>
+        <span>⚙️ Admin Mode Active</span>
         <div class="admin-actions">
             <button class="btn-backup" onclick="exportBackupJSON()">📥 Backup</button>
             <button class="btn-logout" onclick="logoutAdmin()">🚪 Logout</button>
@@ -165,7 +165,8 @@
                 <option value="teamA">🔴 Team ZELLIJ</option>
                 <option value="teamB" selected>🔵 Team IZNIK</option>
             </select>
-            <button class="back-home-btn" onclick="location.href='index.html'" style="background:#059669; color:#fff; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer; margin:0;">Admin Dashboard</button>
+            <button class="back-home-btn" onclick="openAdminLoginModal()" style="background:#fbbf24; color:#0f172a; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer; margin:0;" id="adminLoginBtn">Admin Login</button>
+            <button class="back-home-btn" onclick="location.href='index.html'" style="background:#059669; color:#fff; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer; margin:0;">Back</button>
         </div>
     </div>
 
@@ -269,6 +270,19 @@
             <button class="btn-submit" style="background:#065f46; color:#fff; margin-top:20px; padding:12px; font-size:1rem; font-weight:900;" onclick="saveAllRegistrationsToCloud()">Save All Changes</button>
         </div>
 
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="adminLoginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAdminLoginModal()">&times;</span>
+            <h3 style="margin: 0 0 12px; font-weight: 900; color: var(--accent-gold);">🔐 Admin Login</h3>
+            <div class="form-group">
+                <label>Admin Passcode:</label>
+                <input type="password" id="adminPassInput" class="form-control" placeholder="കോഡ് നൽകുക">
+            </div>
+            <button class="btn-submit" onclick="submitAdminLogin()">Login</button>
+        </div>
     </div>
 
     <footer>&copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM</footer>
@@ -392,22 +406,4 @@
             }
 
             let html = "";
-            students.forEach((stName, idx) => {
-                const cleanName = stName.replace(/(\(C\)|\(Vc\))/g, "").trim();
-                const studentCheckedEvents = regMap[cleanName] || [];
-
-                let checkboxesHtml = "";
-                sectionEvents.forEach(ev => {
-                    const isChecked = studentCheckedEvents.includes(ev);
-                    checkboxesHtml += `
-                        <label>
-                            <input type="checkbox" class="reg_chk_${idx}" value="${ev}" ${isChecked ? 'checked' : ''}>
-                            ${ev}
-                        </label>
-                    `;
-                });
-
-                html += `
-                    <div class="student-row-box">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-        
+            students.forEach((stNam
