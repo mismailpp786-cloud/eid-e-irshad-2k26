@@ -62,7 +62,6 @@
 
     <div class="container" style="max-width: 1000px; margin: 30px auto;">
         
-        <!-- Admin Only Result Entry Form -->
         <div class="admin-only result-form-card" data-display="block">
             <h3 style="margin:0 0 12px; font-weight:900; color:var(--accent-gold);">📝 പുതിയ മത്സര ഫലം പ്രഖ്യാപിക്കുക</h3>
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 15px;">
@@ -81,7 +80,6 @@
                 </div>
             </div>
 
-            <!-- Winners Entry -->
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 20px;">
                 <div style="background:rgba(251,191,36,0.08); padding:12px; border-radius:10px; border:1px solid var(--accent-gold);">
                     <label style="font-weight:900; font-size:0.82rem; color:var(--accent-gold);">🥇 ഒന്നാം സ്ഥാനം (1st Place):</label>
@@ -135,14 +133,14 @@
             
             const program = document.getElementById("resProgramInput")?.value.trim();
             const category = document.getElementById("resCategoryInput")?.value;
-            const win1Name = document.getElementById("resWin1Name")?.value.trim();
+            const webWin1Name = document.getElementById("resWin1Name")?.value.trim();
             const team1 = document.getElementById("resWin1Team")?.value;
             const win2Name = document.getElementById("resWin2Name")?.value.trim();
             const team2 = document.getElementById("resWin2Team")?.value;
             const win3Name = document.getElementById("resWin3Name")?.value.trim();
             const team3 = document.getElementById("resWin3Team")?.value;
 
-            if (!program || !win1Name) {
+            if (!program || !webWin1Name) {
                 alert("മത്സരത്തിന്റെ പേരും ഒന്നാം സ്ഥാനക്കാരന്റെ പേരും നിർബന്ധമായും നൽകുക!");
                 return;
             }
@@ -151,7 +149,7 @@
                 id: Date.now().toString(),
                 program,
                 category,
-                win1Name, team1,
+                win1Name: webWin1Name, team1,
                 win2Name, team2,
                 win3Name, team3,
                 timestamp: new Date().toISOString()
