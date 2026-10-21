@@ -14,8 +14,6 @@
     <link rel="stylesheet" href="style.css">
     <style>
         .reg-header-bar {
-            background: #0f172a;
-            color: #fff;
             padding: 15px 20px;
             display: flex;
             justify-content: space-between;
@@ -23,18 +21,26 @@
             border-bottom: 3px solid #fbbf24;
             flex-wrap: wrap;
             gap: 10px;
+            color: #ffffff;
+            transition: background 0.3s ease;
+        }
+        .reg-header-bar.zellij-theme {
+            background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
+        }
+        .reg-header-bar.iznik-theme {
+            background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%);
         }
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             gap: 12px;
             margin: 15px 0 20px;
         }
         .stat-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 12px;
+            border-radius: 12px;
+            padding: 14px;
             text-align: center;
             box-shadow: var(--shadow-md);
         }
@@ -42,7 +48,7 @@
             font-family: 'Montserrat', sans-serif;
             font-size: 1.5rem;
             font-weight: 900;
-            color: #fbbf24;
+            color: #059669;
         }
         .stat-card .label {
             font-size: 0.75rem;
@@ -52,8 +58,8 @@
         .table-responsive {
             width: 100%;
             overflow-x: auto;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
             border-radius: 12px;
             box-shadow: var(--shadow-md);
             margin-bottom: 25px;
@@ -61,17 +67,17 @@
         .matrix-reg-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.82rem;
+            font-size: 0.85rem;
             white-space: nowrap;
         }
         .matrix-reg-table th, .matrix-reg-table td {
-            border: 1px solid var(--border-color);
-            padding: 9px 12px;
+            border: 1px solid #cbd5e1;
+            padding: 10px 14px;
             text-align: center;
         }
         .matrix-reg-table th {
-            background: #f8fafc;
-            color: #0f172a;
+            background: #f0fdf4;
+            color: #065f46;
             font-weight: 900;
             font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
             position: sticky;
@@ -85,19 +91,19 @@
             left: 0;
             background: #ffffff;
             z-index: 4;
-            border-right: 2px solid #fbbf24;
+            border-right: 2px solid #059669;
         }
         .matrix-reg-table th:nth-child(2) {
             position: sticky;
             left: 0;
-            background: #f8fafc;
+            background: #f0fdf4;
             z-index: 6;
-            border-right: 2px solid #fbbf24;
+            border-right: 2px solid #059669;
         }
         .tick-icon {
             color: #059669;
             font-weight: 900;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
         .admin-edit-section {
             background: #ffffff;
@@ -139,7 +145,7 @@
             .admin-only, .top-nav-bar, .reg-header-bar button, footer { display: none !important; }
             .table-responsive { overflow: visible !important; box-shadow: none !important; border: none !important; }
             .matrix-reg-table { border: 1px solid #000; width: 100% !important; }
-            .matrix-reg-table th, .matrix-reg-table td { border: 1px solid #000; color: #000; padding: 5px !important; }
+            .matrix-reg-table th, .matrix-reg-table td { border: 1px solid #000; color: #000; padding: 6px !important; }
             .matrix-reg-table td:nth-child(2), .matrix-reg-table th:nth-child(2) { position: static !important; background: transparent !important; border-right: 1px solid #000 !important; }
         }
     </style>
@@ -154,27 +160,15 @@
         </div>
     </div>
 
-    <div class="reg-header-bar">
+    <div class="reg-header-bar zellij-theme" id="headerBarTheme">
         <div>
-            <span style="font-size: 0.7rem; font-weight: 800; color: #fbbf24; font-family: 'Montserrat', sans-serif;" id="headerTeamTitle">TEAM B - EVENT REGISTER</span>
-            <h2 style="margin: 0; font-weight: 900; font-family: 'Montserrat', sans-serif;" id="headerSectionTitle">STAGE & OFFSTAGE</h2>
+            <span style="font-size: 0.7rem; font-weight: 800; color: #fbbf24; font-family: 'Montserrat', sans-serif;" id="headerTeamTitle">TEAM ZELLIJ - EVENT REGISTER</span>
+            <h2 style="margin: 0; font-weight: 900; font-family: 'Montserrat', sans-serif;">STAGE & OFFSTAGE</h2>
         </div>
         <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <select id="teamSelectTab" class="form-control" style="padding: 6px 12px; font-weight: 800; background:#fff; color:#0f172a;" onchange="renderRegistrationMatrix()">
                 <option value="teamA">🔴 Team ZELLIJ</option>
-                <option value="teamB" selected>🔵 Team IZNIK</option>
-            </select>
-            <select id="regListSelectTab" class="form-control" style="padding: 6px 12px; font-weight: 800; background:#fff; color:#0f172a;" onchange="onListDropdownChange()">
-                <option value="senior_onStage">Senior Stage</option>
-                <option value="senior_offStage">Senior Off-Stage</option>
-                <option value="junior_onStage">Junior Stage</option>
-                <option value="junior_offStage">Junior Off-Stage</option>
-                <option value="subjunior_onStage">Sub Junior Stage</option>
-                <option value="subjunior_offStage">Sub Junior Off-Stage</option>
-                <option value="general_onStage">General Stage</option>
-                <option value="general_offStage">General Off-Stage</option>
-                <option value="senior_sports">Senior Sports</option>
-                <option value="junior_sports">Junior Sports</option>
+                <option value="teamB">🔵 Team IZNIK</option>
             </select>
             <button class="btn-action-sm" style="background:#ffffff; color:#0f172a; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer;" onclick="window.print()">Print / PDF</button>
             <button class="back-home-btn" onclick="location.href='index.html'" style="background:#059669; color:#fff; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer; margin:0;">Back</button>
@@ -183,7 +177,29 @@
 
     <div class="container" style="max-width: 1250px; margin: 20px auto;">
         
-        <!-- Summary Stats -->
+        <!-- Search & Dropdown List Selector -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 15px;">
+            <div style="flex: 1; min-width: 250px;">
+                <input type="text" id="studentSearchInput" class="form-control" placeholder="പേര് തിരയുക..." style="padding: 10px 14px; font-weight: 700;" oninput="renderRegistrationMatrix()">
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-weight:900;">ലിസ്റ്റ്:</span>
+                <select id="regListSelectTab" class="form-control" style="font-weight:800; padding:8px 14px;" onchange="onListDropdownChange()">
+                    <option value="senior_onStage">Senior Stage</option>
+                    <option value="senior_offStage">Senior Off-Stage</option>
+                    <option value="junior_onStage">Junior Stage</option>
+                    <option value="junior_offStage">Junior Off-Stage</option>
+                    <option value="subjunior_onStage">Sub Junior Stage</option>
+                    <option value="subjunior_offStage">Sub Junior Off-Stage</option>
+                    <option value="general_onStage">General Stage</option>
+                    <option value="general_offStage">General Off-Stage</option>
+                    <option value="senior_sports">Senior Sports</option>
+                    <option value="junior_sports">Junior Sports</option>
+                </select>
+            </div>
+            <button class="prog-add-btn" style="background:#059669; color:#fff; border:none; padding: 10px 18px; font-weight:900; border-radius:8px; cursor:pointer;" onclick="window.print()">Print / PDF</button>
+        </div>
+
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="num" id="statStudentsCount">0</div>
@@ -195,14 +211,14 @@
             </div>
             <div class="stat-card">
                 <div class="num" id="statTotalTicks">0</div>
-                <div class="label">ആകെ രജിസ്ട്രേഷൻസ് (Total Entries)</div>
+                <div class="label">ആകെ ടിക്കുകൾ (Total Entries)</div>
             </div>
         </div>
 
-        <!-- Public / View Table Matrix -->
         <div style="font-weight:900; margin-bottom:6px; font-family:'Montserrat',sans-serif;">മത്സരങ്ങളുടെ ലിസ്റ്റ്</div>
-        <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">വിഭാഗം മാറ്റി പ്രോഗ്രാമും ടിക്ക് മാർക്കുകളും കാണാം.</div>
-        
+        <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">വിഭാഗം മാറ്റി പേരുകളും ടിക്ക് മാർക്കുകളും കാണാം.</div>
+
+        <!-- Public / View Table Matrix -->
         <div class="table-responsive">
             <table class="matrix-reg-table" id="registrationMatrixTable">
                 <thead>
@@ -219,8 +235,8 @@
 
         <!-- Admin Dashboard for Managing Students & Event Registrations (Protected by isAdmin) -->
         <div class="admin-only admin-edit-section" data-display="block">
-            <h3 style="margin:0 0 6px; color:#0f172a; font-weight:900;">Admin Dashboard</h3>
-            <p style="font-size:0.78rem; color:#64748b; margin-bottom:12px;">ലിസ്റ്റ് തിരഞ്ഞെടുക്കുക, പേരുകൾ, മത്സരങ്ങൾ, ടിക്ക് മാർക്കുകൾ എന്നിവ തിരുത്തി Save All Changes അമർത്തുക.</p>
+            <h3 style="margin:0 0 6px; font-weight:900;">Admin Dashboard</h3>
+            <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:12px;">ലിസ്റ്റ് തിരഞ്ഞെടുക്കുക, പേരുകൾ, മത്സരങ്ങൾ, ടിക്ക് മാർക്കുകൾ എന്നിവ തിരുത്തി Save All Changes അമർത്തുക.</p>
             
             <div class="form-group" style="max-width:280px; margin-bottom:15px;">
                 <label style="font-weight:800; font-size:0.8rem;">തിരഞ്ഞെടുക്കേണ്ട ലിസ്റ്റ്:</label>
@@ -269,11 +285,11 @@
         });
 
         function getActiveFilters() {
-            const teamKey = document.getElementById("teamSelectTab")?.value || "teamB";
+            const teamKey = document.getElementById("teamSelectTab")?.value || "teamA";
             const combinedVal = document.getElementById("regListSelectTab")?.value || "senior_onStage";
             const parts = combinedVal.split("_");
-            const catKey = parts[0]; // senior, junior, subjunior, general
-            const secKey = parts[1]; // onStage, offStage, sports
+            const catKey = parts[0]; 
+            const secKey = parts[1]; 
             return { teamKey, catKey, secKey };
         }
 
@@ -293,15 +309,31 @@
 
         function renderRegistrationMatrix() {
             const { teamKey, catKey, secKey } = getActiveFilters();
+            
+            // Dynamic Team Color Theme
+            const headerBar = document.getElementById("headerBarTheme");
+            if (teamKey === 'teamA') {
+                if (headerBar) headerBar.className = "reg-header-bar zellij-theme";
+                if (document.getElementById("headerTeamTitle")) document.getElementById("headerTeamTitle").textContent = "TEAM ZELLIJ - EVENT REGISTER";
+            } else {
+                if (headerBar) headerBar.className = "reg-header-bar iznik-theme";
+                if (document.getElementById("headerTeamTitle")) document.getElementById("headerTeamTitle").textContent = "TEAM IZNIK - EVENT REGISTER";
+            }
+
             const normalizedTeams = normalizeTeamsData(appData.teams);
             const teamObj = normalizedTeams[teamKey] || { name: "", senior: [], junior: [], subjunior: [], general: [] };
-            const students = teamObj[catKey] || [];
+            let students = teamObj[catKey] || [];
+
+            // Search filter
+            const searchVal = (document.getElementById("studentSearchInput")?.value || "").trim().toLowerCase();
+            if (searchVal) {
+                students = students.filter(s => s.toLowerCase().includes(searchVal));
+            }
 
             const progs = normalizeProgramsData(appData.programs);
             if (!progs[catKey]) progs[catKey] = { onStage: [], offStage: [], sports: [] };
             const sectionEvents = progs[catKey][secKey] || [];
 
-            // Stats update
             if (document.getElementById("statStudentsCount")) document.getElementById("statStudentsCount").textContent = students.length;
             if (document.getElementById("statEventsCount")) document.getElementById("statEventsCount").textContent = sectionEvents.length;
 
@@ -312,7 +344,6 @@
 
             const regMap = appData.registrations[teamKey][catKey];
 
-            // Render Table Header
             const headerRow = document.getElementById("matrixHeaderRow");
             if (headerRow) {
                 let hHtml = `<th>No</th><th>Name</th>`;
@@ -322,7 +353,6 @@
                 headerRow.innerHTML = hHtml;
             }
 
-            // Render Table Body
             const bodyRow = document.getElementById("matrixBodyRow");
             if (bodyRow) {
                 if (students.length === 0) {
@@ -345,7 +375,6 @@
 
             if (document.getElementById("statTotalTicks")) document.getElementById("statTotalTicks").textContent = totalTicksCount;
 
-            // Render Admin Editor if Admin
             renderAdminDashboard(students, sectionEvents, regMap, catKey, secKey);
         }
 
@@ -354,11 +383,8 @@
             const eventsCont = document.getElementById("adminEventsListContainer");
             if (!container || !eventsCont) return;
 
-            if (!isAdmin) {
-                return;
-            }
+            if (!isAdmin) return;
 
-            // Render Events list with Remove buttons
             let evHtml = "";
             sectionEvents.forEach((evName, idx) => {
                 evHtml += `
@@ -378,37 +404,4 @@
             let html = "";
             students.forEach((stName, idx) => {
                 const cleanName = stName.replace(/(\(C\)|\(Vc\))/g, "").trim();
-                const studentCheckedEvents = regMap[cleanName] || [];
-
-                let checkboxesHtml = "";
-                sectionEvents.forEach(ev => {
-                    const isChecked = studentCheckedEvents.includes(ev);
-                    checkboxesHtml += `
-                        <label>
-                            <input type="checkbox" class="reg_chk_${idx}" value="${ev}" ${isChecked ? 'checked' : ''}>
-                            ${ev}
-                        </label>
-                    `;
-                });
-
-                html += `
-                    <div class="student-row-box">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                            <strong style="font-family:'Montserrat',sans-serif; font-size:0.88rem;">${idx + 1}. ${stName}</strong>
-                            <button type="button" class="btn-action-sm" style="background:#dc2626; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removeStudentFromTeam('${cleanName}')">Remove</button>
-                        </div>
-                        <div class="student-events-grid">
-                            ${checkboxesHtml}
-                        </div>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
-        }
-
-        function addNewEventToSection() {
-            if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
-            const input = document.getElementById("newEventNameInput");
-            if (!input || !input.value.trim()) { alert("മത്സരത്തിന്റെ പേര് നൽകുക!"); return; }
-            const evName 
+     
