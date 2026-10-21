@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ml" data-theme="light">
+<html lang="ml" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Scoreboard & TV Mode — EID-E IRSHAD 2K26</title>
+    <title>TV Live Scoreboard — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- Firebase SDKs -->
@@ -13,57 +13,89 @@
 
     <link rel="stylesheet" href="style.css">
     <style>
-        .scoreboard-hero {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+        body {
+            background-color: #0b0f19;
+            color: #f8fafc;
         }
-        .team-score-card {
-            background: var(--card-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 20px;
-            padding: 25px;
+        .tv-header {
             text-align: center;
-            box-shadow: var(--shadow-md);
+            padding: 20px 10px;
+            border-bottom: 3px solid #fbbf24;
+            background: linear-gradient(180deg, #1e1b4b 0%, #0b0f19 100%);
+            margin-bottom: 25px;
+        }
+        .tv-scoreboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+        @media(max-width: 768px) {
+            .tv-scoreboard-grid { grid-template-columns: 1fr; }
+        }
+        .tv-team-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 3px solid var(--border-color);
+            border-radius: 24px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
             position: relative;
-            overflow: hidden;
         }
-        .team-score-card.zellij { border-color: var(--zellij-red); }
-        .team-score-card.iznik { border-color: var(--iznik-blue); }
-        .team-score-card .score-num {
+        .tv-team-card.zellij { border-color: #ef4444; background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(30, 41, 59, 0.8) 100%); }
+        .tv-team-card.iznik { border-color: #3b82f6; background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(30, 41, 59, 0.8) 100%); }
+        
+        .tv-team-name {
             font-family: 'Montserrat', sans-serif;
-            font-size: 3.5rem;
+            font-size: 2rem;
             font-weight: 900;
-            margin: 10px 0;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
         }
-        .team-score-card.zellij .score-num { color: var(--zellij-red); }
-        .team-score-card.iznik .score-num { color: var(--iznik-blue); }
-        .results-table-box {
-            width: 100%;
+        .tv-team-card.zellij .tv-team-name { color: #f87171; }
+        .tv-team-card.iznik .tv-team-name { color: #60a5fa; }
+
+        .tv-score-number {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 6rem;
+            font-weight: 900;
+            line-height: 1;
+            margin: 15px 0;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        .tv-team-card.zellij .tv-score-number { color: #ffffff; }
+        .tv-team-card.iznik .tv-score-number { color: #ffffff; }
+
+        .tv-table-box {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid #334155;
+            border-radius: 16px;
             overflow-x: auto;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            margin-bottom: 40px;
         }
-        .results-table {
+        .tv-results-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.9rem;
+            font-size: 1rem;
             white-space: nowrap;
         }
-        .results-table th, .results-table td {
-            border: 1px solid var(--border-color);
-            padding: 12px 16px;
+        .tv-results-table th, .tv-results-table td {
+            border: 1px solid #334155;
+            padding: 16px 20px;
             text-align: center;
         }
-        .results-table th {
-            background: var(--bg-color);
-            color: var(--text-color);
+        .tv-results-table th {
+            background: #0f172a;
+            color: #fbbf24;
             font-weight: 900;
             font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
+            font-size: 1.1rem;
+        }
+        .tv-results-table td {
+            color: #e2e8f0;
+            font-weight: 700;
         }
     </style>
 </head>
@@ -77,43 +109,53 @@
         </div>
     </div>
 
-    <div class="top-nav-bar" style="display:flex; justify-content:space-between; align-items:center; padding:12px 20px; background:var(--card-bg); border-bottom:1px solid var(--border-color);">
-        <button class="back-home-btn" onclick="location.href='index.html'" style="background:var(--accent-gold); color:#0f172a; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer;">⬅️ Home</button>
-        <span class="nav-page-title" style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.1rem;">📊 LIVE MASTER SCOREBOARD</span>
-        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
+    <!-- TV Header Bar -->
+    <div class="tv-header">
+        <div style="display:flex; justify-content:space-between; align-items:center; max-width:1250px; margin:0 auto; padding:0 20px; flex-wrap:wrap; gap:15px;">
+            <button onclick="location.href='index.html'" style="background:#fbbf24; color:#0f172a; border:none; padding:8px 16px; border-radius:8px; font-weight:900; cursor:pointer;">⬅️ Home</button>
+            <div>
+                <h1 style="margin:0; font-family:'Montserrat',sans-serif; font-size:1.8rem; font-weight:900; color:#fbbf24; letter-spacing:1px;">EID-E IRSHAD 2K26</h1>
+                <span style="font-size:0.85rem; color:#94a3b8; font-weight:800; letter-spacing:2px;">LIVE TV BROADCAST SCOREBOARD</span>
+            </div>
+            <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">☀️ Light</button>
+        </div>
     </div>
 
-    <div class="container" style="max-width: 1100px; margin: 30px auto;">
+    <div class="container" style="max-width: 1250px; margin: 0 auto; padding: 0 20px;">
         
-        <div class="scoreboard-hero">
-            <div class="team-score-card zellij">
-                <h3 style="font-family:'Montserrat',sans-serif; font-weight:900; color:var(--zellij-red); margin:0;">🔴 TEAM ZELLIJ</h3>
-                <div class="score-num" id="totalScoreA">0</div>
-                <p style="margin:0; font-size:0.8rem; color:var(--text-muted); font-weight:800;">Total Points</p>
+        <!-- Big TV Score Cards -->
+        <div class="tv-scoreboard-grid">
+            <div class="tv-team-card zellij">
+                <div class="tv-team-name">🔴 TEAM ZELLIJ</div>
+                <div class="tv-score-number" id="totalScoreA">0</div>
+                <div style="font-size: 1rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Total Points</div>
             </div>
-            <div class="team-score-card iznik">
-                <h3 style="font-family:'Montserrat',sans-serif; font-weight:900; color:var(--iznik-blue); margin:0;">🔵 TEAM IZNIK</h3>
-                <div class="score-num" id="totalScoreB">0</div>
-                <p style="margin:0; font-size:0.8rem; color:var(--text-muted); font-weight:800;">Total Points</p>
+            <div class="tv-team-card iznik">
+                <div class="tv-team-name">🔵 TEAM IZNIK</div>
+                <div class="tv-score-number" id="totalScoreB">0</div>
+                <div style="font-size: 1rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Total Points</div>
             </div>
         </div>
 
-        <div class="section-heading">🏆 പ്രഖ്യാപിച്ച മത്സര ഫലങ്ങൾ & പോയിന്റുകൾ</div>
+        <div style="font-family:'Montserrat',sans-serif; font-size:1.3rem; font-weight:900; margin-bottom:15px; color:#fbbf24; display:flex; align-items:center; gap:8px;">
+            <span>🏆</span> തത്സമയ മത്സര ഫലങ്ങളും പോയിന്റുകളും (Latest Results)
+        </div>
 
-        <div class="results-table-box">
-            <table class="results-table" id="liveResultsTable">
+        <!-- TV Results Table -->
+        <div class="tv-table-box">
+            <table class="tv-results-table" id="liveResultsTable">
                 <thead>
                     <tr>
                         <th>മത്സരം (Program)</th>
                         <th>വിഭാഗം (Category)</th>
-                        <th>ഒന്നാം സ്ഥാനം (1st Place)</th>
-                        <th>രണ്ടാം സ്ഥാനം (2nd Place)</th>
-                        <th>മൂന്നാം സ്ഥാനം (3rd Place)</th>
+                        <th>🥇 ഒന്നാം സ്ഥാനം (1st Place)</th>
+                        <th>🥈 രണ്ടാം സ്ഥാനം (2nd Place)</th>
+                        <th>🥉 മൂന്നാം സ്ഥാനം (3rd Place)</th>
                     </tr>
                 </thead>
                 <tbody id="liveResultsBody">
                     <tr>
-                        <td colspan="5" style="padding:25px; color:var(--text-muted);">ഫലങ്ങൾ ഇതുവരെ പ്രഖ്യാപിച്ചിട്ടില്ല.</td>
+                        <td colspan="5" style="padding:35px; color:#94a3b8; font-size:1.1rem;">ഫലങ്ങൾ ഇതുവരെ പ്രഖ്യാപിച്ചിട്ടില്ല.</td>
                     </tr>
                 </tbody>
             </table>
@@ -121,7 +163,7 @@
 
     </div>
 
-    <footer>&copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM</footer>
+    <footer style="color:#94a3b8; border-color:#334155;">&copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM</footer>
     <script src="app.js"></script>
     <script>
         function updateUIOnDataLoad() {
@@ -155,17 +197,17 @@
 
             if (tbody) {
                 if (resultsArray.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" style="padding:25px; color:var(--text-muted);">ഫലങ്ങൾ ഇതുവരെ പ്രഖ്യാപിച്ചിട്ടില്ല.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="5" style="padding:35px; color:#94a3b8; font-size:1.1rem;">ഫലങ്ങൾ ഇതുവരെ പ്രഖ്യാപിച്ചിട്ടില്ല.</td></tr>`;
                 } else {
                     let html = "";
                     resultsArray.slice().reverse().forEach(res => {
                         html += `
                             <tr>
-                                <td style="font-weight:900;">${res.program || ""}</td>
-                                <td><span style="background:rgba(251,191,36,0.15); padding:3px 8px; border-radius:6px; font-weight:800; font-size:0.75rem;">${res.category || ""}</span></td>
-                                <td>${res.win1Name || "—"} <br><small style="color:var(--text-muted);">${res.team1 === 'teamA' ? '🔴 ZELLIJ' : (res.team1 === 'teamB' ? '🔵 IZNIK' : '')}</small></td>
-                                <td>${res.win2Name || "—"} <br><small style="color:var(--text-muted);">${res.team2 === 'teamA' ? '🔴 ZELLIJ' : (res.team2 === 'teamB' ? '🔵 IZNIK' : '')}</small></td>
-                                <td>${res.win3Name || "—"} <br><small style="color:var(--text-muted);">${res.team3 === 'teamA' ? '🔴 ZELLIJ' : (res.team3 === 'teamB' ? '🔵 IZNIK' : '')}</small></td>
+                                <td style="font-weight:900; font-size:1.05rem; color:#f8fafc;">${res.program || ""}</td>
+                                <td><span style="background:rgba(251,191,36,0.2); color:#fbbf24; padding:4px 10px; border-radius:6px; font-weight:800; font-size:0.8rem;">${res.category || ""}</span></td>
+                                <td>${res.win1Name || "—"} <br><small style="color:${res.team1==='teamA'?'#f87171':'#60a5fa'}; font-weight:800;">${res.team1 === 'teamA' ? '🔴 ZELLIJ' : (res.team1 === 'teamB' ? '🔵 IZNIK' : '')}</small></td>
+                                <td>${res.win2Name || "—"} <br><small style="color:${res.team2==='teamA'?'#f87171':'#60a5fa'}; font-weight:800;">${res.team2 === 'teamA' ? '🔴 ZELLIJ' : (res.team2 === 'teamB' ? '🔵 IZNIK' : '')}</small></td>
+                                <td>${res.win3Name || "—"} <br><small style="color:${res.team3==='teamA'?'#f87171':'#60a5fa'}; font-weight:800;">${res.team3 === 'teamA' ? '🔴 ZELLIJ' : (res.team3 === 'teamB' ? '🔵 IZNIK' : '')}</small></td>
                             </tr>
                         `;
                     });
