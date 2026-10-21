@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Results & Generator — EID-E IRSHAD 2K26</title>
+    <title>Event Register & Matrix — EID-E IRSHAD 2K26</title>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -15,69 +13,136 @@
 
     <link rel="stylesheet" href="style.css">
     <style>
-        #posterCanvas {
-            width: 100%;
-            max-width: 420px;
-            aspect-ratio: 1 / 1;
-            border-radius: 16px;
-            padding: 22px;
+        body { background: #f8fafc; color: #0f172a; font-family: 'Anek Malayalam', 'Montserrat', sans-serif; }
+        .reg-header-bar {
+            background: #065f46;
+            color: #fff;
+            padding: 15px 20px;
             display: flex;
-            flex-direction: column;
             justify-content: space-between;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            align-items: center;
+            border-bottom: 3px solid #fbbf24;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin: 15px 0 20px;
+        }
+        .stat-card {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .stat-card .num {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #065f46;
+        }
+        .stat-card .label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #64748b;
+        }
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        .matrix-reg-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+        .matrix-reg-table th, .matrix-reg-table td {
+            border: 1px solid #cbd5e1;
+            padding: 10px 14px;
+            text-align: center;
+        }
+        .matrix-reg-table th {
+            background: #f0fdf4;
+            color: #065f46;
+            font-weight: 900;
+            font-family: 'Montserrat', 'Anek Malayalam', sans-serif;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+        .matrix-reg-table td:nth-child(2) {
             text-align: left;
+            font-weight: 800;
+            position: sticky;
+            left: 0;
+            background: #ffffff;
+            z-index: 4;
+            border-right: 2px solid #065f46;
         }
-        #posterCanvas.layout-model-1 {
-            background: linear-gradient(135deg, #047857 0%, #065f46 60%, #022c22 100%);
-            color: #ffffff;
-            border: 3px solid #fbbf24;
+        .matrix-reg-table th:nth-child(2) {
+            position: sticky;
+            left: 0;
+            background: #f0fdf4;
+            z-index: 6;
+            border-right: 2px solid #065f46;
         }
-        #posterCanvas.layout-model-1 .ref-result-num-box { background: #022c22; border: 2px solid #fbbf24; }
-        #posterCanvas.layout-model-1 .ref-win-card { background: rgba(0, 0, 0, 0.45); border-left: 4px solid #fbbf24; }
-
-        #posterCanvas.layout-model-2 {
-            background: linear-gradient(135deg, #581c87 0%, #3b0764 60%, #1e1b4b 100%);
-            color: #ffffff;
-            border: 3px solid #f43f5e;
+        .tick-icon {
+            color: #059669;
+            font-weight: 900;
+            font-size: 1.2rem;
         }
-        #posterCanvas.layout-model-2 .ref-result-num-box { background: #1e1b4b; border: 2px solid #f43f5e; }
-        #posterCanvas.layout-model-2 .ref-win-card { background: rgba(0, 0, 0, 0.5); border-radius: 20px; border: 1px solid rgba(244, 63, 94, 0.4); }
-        #posterCanvas.layout-model-2 .ref-rank-badge { background: #f43f5e; color: #ffffff; }
-
-        #posterCanvas.layout-model-3 {
-            background: linear-gradient(135deg, #78350f 0%, #451a03 60%, #1c0f03 100%);
-            color: #ffffff;
-            border: 3px solid #d97706;
+        .admin-edit-section {
+            background: #ffffff;
+            border: 2px solid #065f46;
+            border-radius: 14px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
         }
-        #posterCanvas.layout-model-3 .ref-result-num-box { background: #1c0f03; border: 2px solid #d97706; }
-        #posterCanvas.layout-model-3 .ref-win-card { background: #ffffff; color: #0f172a; border-radius: 8px; }
-        #posterCanvas.layout-model-3 .ref-win-name { color: #0f172a; }
-        #posterCanvas.layout-model-3 .ref-win-sub { color: #b45309; }
-        #posterCanvas.layout-model-3 .ref-rank-badge { background: #d97706; color: #ffffff; }
-
-        .ref-top-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px; }
-        .ref-brand-txt { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.82rem; color: #fbbf24; }
-        .ref-sub-brand { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.55rem; opacity: 0.8; text-align: right; }
-
-        .ref-center-banner { display: flex; align-items: center; gap: 12px; margin: 8px 0; }
-        .ref-result-num-box { padding: 6px 10px; border-radius: 10px; text-align: center; flex-shrink: 0; min-width: 65px; }
-        .ref-result-hash { display: block; font-family: 'Montserrat', sans-serif; font-size: 0.52rem; font-weight: 800; opacity: 0.85; color: #fbbf24; }
-        .ref-result-digits { font-family: 'Montserrat', sans-serif; font-size: 1.6rem; font-weight: 900; color: #ffffff; line-height: 1; }
-
-        .ref-prog-meta { flex: 1; }
-        .ref-cat-title { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; font-weight: 900; background: #fbbf24; color: #0f172a; display: inline-block; padding: 2px 7px; border-radius: 4px; margin-bottom: 3px; }
-        .ref-prog-title { font-family: 'Anek Malayalam', 'Montserrat', sans-serif; font-size: 1.05rem; font-weight: 900; line-height: 1.2; }
-
-        .ref-winners-container { display: flex; flex-direction: column; gap: 6px; margin: 6px 0; }
-        .ref-win-card { padding: 7px 10px; display: flex; align-items: center; gap: 10px; }
-        .ref-rank-badge { width: 22px; height: 22px; background: #fbbf24; color: #0f172a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.7rem; flex-shrink: 0; }
-        .ref-win-details { flex: 1; }
-        .ref-win-name { font-family: 'Montserrat', 'Anek Malayalam', sans-serif; font-weight: 900; font-size: 0.88rem; line-height: 1.2; }
-        .ref-win-sub { font-family: 'Montserrat', sans-serif; font-size: 0.64rem; font-weight: 700; opacity: 0.9; color: #fbbf24; }
-
-        .ref-footer-bar { font-family: 'Montserrat', sans-serif; font-size: 0.58rem; opacity: 0.8; border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 5px; display: flex; justify-content: space-between; }
+        .student-row-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 15px;
+        }
+        .student-events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .student-events-grid label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            background: #ffffff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+        }
+        @media print {
+            @page { size: landscape; margin: 10mm; }
+            body { background: #fff !important; color: #000 !important; font-size: 9pt !important; }
+            .admin-only, .top-nav-bar, .reg-header-bar, footer { display: none !important; }
+            .table-responsive { overflow: visible !important; box-shadow: none !important; border: none !important; }
+            .matrix-reg-table { border: 1px solid #000; width: 100% !important; }
+            .matrix-reg-table th, .matrix-reg-table td { border: 1px solid #000; color: #000; padding: 6px !important; }
+            .matrix-reg-table td:nth-child(2), .matrix-reg-table th:nth-child(2) { position: static !important; background: transparent !important; border-right: 1px solid #000 !important; }
+        }
     </style>
 </head>
 <body>
@@ -90,184 +155,134 @@
         </div>
     </div>
 
-    <div class="top-nav-bar">
-        <button class="back-home-btn" onclick="location.href='index.html'">⬅️ Back</button>
-        <span class="nav-page-title">🏆 OFFICIAL RESULT STUDIO & GENERATOR</span>
-        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
+    <div class="reg-header-bar">
+        <div>
+            <span style="font-size: 0.7rem; font-weight: 800; color: #fbbf24; font-family: 'Montserrat', sans-serif;" id="headerTeamTitle">TEAM B - EVENT REGISTER</span>
+            <h2 style="margin: 0; font-weight: 900; font-family: 'Montserrat', sans-serif;">STAGE & OFFSTAGE</h2>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <select id="teamSelectTab" class="form-control" style="padding: 6px 12px; font-weight: 800; background:#fff; color:#0f172a;" onchange="renderRegistrationMatrix()">
+                <option value="teamA">🔴 Team ZELLIJ</option>
+                <option value="teamB" selected>🔵 Team IZNIK</option>
+            </select>
+            <button class="back-home-btn" onclick="openAdminLoginModal()" style="background:#fbbf24; color:#0f172a; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer; margin:0;" id="adminLoginBtn">Admin Login</button>
+            <button class="back-home-btn" onclick="location.href='index.html'" style="background:#059669; color:#fff; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer; margin:0;">Back</button>
+        </div>
     </div>
 
-    <div class="container" style="max-width: 1050px; margin: 25px auto;">
-        <h1 class="page-title">ഫല പ്രഖ്യാപന സ്റ്റുഡിയോ</h1>
-        <p class="page-subtitle">മത്സര ഫലങ്ങൾ പ്രസിദ്ധീകരിക്കാനും പോസ്റ്ററുകൾ നിർമ്മിക്കാനുമുള്ള സംവിധാനം</p>
+    <div class="container" style="max-width: 1250px; margin: 20px auto;">
+        
+        <div style="font-size: 0.85rem; color: #475569; margin-bottom: 8px;">Vibhagam maati perukalum tick markukalum kaanam.</div>
 
-        <div class="builder-section admin-only" data-display="block">
-            <h3 style="margin: 0 0 15px; font-family:'Montserrat',sans-serif; font-size:1.15rem; font-weight:900; color:var(--accent-gold);">
-                🛠️ Poster Design & Layout Switcher
-            </h3>
-            <input type="hidden" id="editingResultId" value="">
-            <div class="builder-grid">
-                <div>
-                    <div class="form-group">
-                        <label>ഡിസൈൻ ശൈലി (Layout Model):</label>
-                        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 10px;">
-                            <button id="modelBtn1" class="btn-action-sm" style="background:#065f46; color:#fff; padding:8px 12px; font-weight:800;" onclick="setPosterLayout('layout-model-1')">Model 1 (Green)</button>
-                            <button id="modelBtn2" class="btn-action-sm" style="background:#581c87; color:#fff; padding:8px 12px; font-weight:800;" onclick="setPosterLayout('layout-model-2')">Model 2 (Maroon)</button>
-                            <button id="modelBtn3" class="btn-action-sm" style="background:#78350f; color:#fff; padding:8px 12px; font-weight:800;" onclick="setPosterLayout('layout-model-3')">Model 3 (Brown)</button>
-                        </div>
-                    </div>
+        <!-- Search & Dropdown List Selector -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 15px;">
+            <div style="flex: 1; min-width: 250px;">
+                <input type="text" id="studentSearchInput" class="form-control" placeholder="Peru theerayuka..." style="padding: 10px 14px; font-weight: 700; background:#fff;" oninput="renderRegistrationMatrix()">
+            </div>
+            <button class="prog-add-btn" style="background:#065f46; color:#fff; border:none; padding: 10px 20px; font-weight:900; border-radius:8px; cursor:pointer;" onclick="window.print()">Print / PDF</button>
+        </div>
 
-                    <div style="display:grid; grid-template-columns: 100px 1fr; gap:10px;">
-                        <div class="form-group">
-                            <label>Result No:</label>
-                            <input type="text" id="resNoInput" class="form-control" readonly style="background:var(--bg-color); font-weight:900; color:var(--accent-gold);" value="01">
-                        </div>
-                        <div class="form-group">
-                            <label>Category:</label>
-                            <select id="resCatSelect" class="form-control" onchange="onResultCategoryChange(); updatePosterPreview();">
-                                <option value="Senior">Senior</option>
-                                <option value="Junior">Junior</option>
-                                <option value="Sub Junior">Sub Junior</option>
-                                <option value="General">General</option>
-                            </select>
-                        </div>
-                    </div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+            <span style="font-weight: 900; font-size: 0.95rem;">List:</span>
+            <select id="regListSelectTab" class="form-control" style="font-weight: 800; padding: 8px 14px; max-width: 250px; background:#fff;" onchange="onListDropdownChange()">
+                <option value="senior_onStage">Senior Stage</option>
+                <option value="senior_offStage">Senior Off-Stage</option>
+                <option value="junior_onStage">Junior Stage</option>
+                <option value="junior_offStage">Junior Off-Stage</option>
+                <option value="subjunior_onStage">Sub Junior Stage</option>
+                <option value="subjunior_offStage">Sub Junior Off-Stage</option>
+                <option value="general_onStage">General Stage</option>
+                <option value="general_offStage">General Off-Stage</option>
+                <option value="senior_sports">Senior Sports</option>
+                <option value="junior_sports">Junior Sports</option>
+            </select>
+        </div>
 
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                        <div class="form-group">
-                            <label>Section:</label>
-                            <select id="resSectionSelect" class="form-control" onchange="onResultCategoryChange(); updatePosterPreview();">
-                                <option value="onStage">On-Stage</option>
-                                <option value="offStage">Off-Stage</option>
-                                <option value="sports">Sports</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>സബ് ടൈറ്റിൽ (Subtitle):</label>
-                            <input type="text" id="resSubTitleInput" class="form-control" value="SENIOR - ON STAGE" oninput="updatePosterPreview()">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>മത്സര ഇനം തിരഞ്ഞെടുക്കുക (Program List):</label>
-                        <select id="resProgSelect" class="form-control" onchange="onProgramDropdownSelect()">
-                            <option value="">-- പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക --</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>അല്ലെങ്കിൽ പുതിയ പേര് ടൈപ്പ് ചെയ്യുക:</label>
-                        <input type="text" id="resProgCustom" class="form-control" placeholder="ഉദാ: ARABIC CALLIGRAPHY" oninput="updatePosterPreview()">
-                    </div>
-
-                    <!-- Winner 1 -->
-                    <div class="winner-input-box">
-                        <h5>🥇 ഒന്നാം സ്ഥാനം (First Place)</h5>
-                        <select id="selWinner1" class="form-control" style="font-size:0.8rem; padding:6px; margin-bottom:6px;" onchange="onWinnerStudentSelect(1)">
-                            <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
-                        </select>
-                        <div style="display:grid; grid-template-columns: 1fr 130px; gap:8px; margin-bottom:6px;">
-                            <input type="text" id="win1Name" class="form-control" placeholder="വിദ്യാർത്ഥിയുടെ പേര്" oninput="updatePosterPreview()">
-                            <select id="win1Team" class="form-control" onchange="updatePosterPreview()">
-                                <option value="teamA">🔴 ZELLIJ</option>
-                                <option value="teamB">🔵 IZNIK</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Winner 2 -->
-                    <div class="winner-input-box">
-                        <h5>🥈 രണ്ടാം സ്ഥാനം (Second Place)</h5>
-                        <select id="selWinner2" class="form-control" style="font-size:0.8rem; padding:6px; margin-bottom:6px;" onchange="onWinnerStudentSelect(2)">
-                            <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
-                        </select>
-                        <div style="display:grid; grid-template-columns: 1fr 130px; gap:8px; margin-bottom:6px;">
-                            <input type="text" id="win2Name" class="form-control" placeholder="വിദ്യാർത്ഥിയുടെ പേര്" oninput="updatePosterPreview()">
-                            <select id="win2Team" class="form-control" onchange="updatePosterPreview()">
-                                <option value="teamB">🔵 IZNIK</option>
-                                <option value="teamA">🔴 ZELLIJ</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Winner 3 -->
-                    <div class="winner-input-box">
-                        <h5>🥉 മൂന്നാം സ്ഥാനം (Third Place)</h5>
-                        <select id="selWinner3" class="form-control" style="font-size:0.8rem; padding:6px; margin-bottom:6px;" onchange="onWinnerStudentSelect(3)">
-                            <option value="">-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>
-                        </select>
-                        <div style="display:grid; grid-template-columns: 1fr 130px; gap:8px; margin-bottom:6px;">
-                            <input type="text" id="win3Name" class="form-control" placeholder="വിദ്യാർത്ഥിയുടെ പേര്" oninput="updatePosterPreview()">
-                            <select id="win3Team" class="form-control" onchange="updatePosterPreview()">
-                                <option value="teamA">🔴 ZELLIJ</option>
-                                <option value="teamB">🔵 IZNIK</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div style="display:flex; gap:10px; margin-top:18px;">
-                        <button class="btn-submit" style="background:#2563eb; color:#fff; margin-top:0;" onclick="downloadResultPoster()">📥 PNG ഡൗൺലോഡ് ചെയ്യുക</button>
-                        <button class="btn-submit" style="background:#059669; color:#fff; margin-top:0;" onclick="publishResultToSite()">🚀 സൈറ്റിൽ പ്രസിദ്ധീകരിക്കുക</button>
-                    </div>
-                </div>
-
-                <!-- Live Poster Preview Box -->
-                <div class="poster-preview-wrapper">
-                    <span style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin-bottom:8px; font-family:'Montserrat',sans-serif;">📱 REFERENCE STYLE POSTER PREVIEW (1:1)</span>
-                    
-                    <div id="posterCanvas" class="layout-model-1">
-                        <div class="ref-top-header">
-                            <div class="ref-brand-txt">EID-E IRSHAD 2K26</div>
-                            <div class="ref-sub-brand">RAHMANIYYA ARABIC COLLEGE</div>
-                        </div>
-
-                        <div class="ref-center-banner">
-                            <div class="ref-result-num-box">
-                                <span class="ref-result-hash">#RESULT</span>
-                                <span class="ref-result-digits" id="previewResNo">01</span>
-                            </div>
-                            <div class="ref-prog-meta">
-                                <div class="ref-cat-title" id="previewCat">SENIOR - ON STAGE</div>
-                                <div class="ref-prog-title" id="previewProg">മത്സരത്തിന്റെ പേര്</div>
-                            </div>
-                        </div>
-
-                        <div class="ref-winners-container">
-                            <div class="ref-win-card">
-                                <div class="ref-rank-badge">1</div>
-                                <div class="ref-win-details">
-                                    <div class="ref-win-name" id="previewWin1Name">-</div>
-                                    <div class="ref-win-sub" id="previewWin1Sub">Team ZELLIJ</div>
-                                </div>
-                            </div>
-
-                            <div class="ref-win-card">
-                                <div class="ref-rank-badge">2</div>
-                                <div class="ref-win-details">
-                                    <div class="ref-win-name" id="previewWin2Name">-</div>
-                                    <div class="ref-win-sub" id="previewWin2Sub">Team IZNIK</div>
-                                </div>
-                            </div>
-
-                            <div class="ref-win-card" id="previewWin3Card">
-                                <div class="ref-rank-badge">3</div>
-                                <div class="ref-win-details">
-                                    <div class="ref-win-name" id="previewWin3Name">-</div>
-                                    <div class="ref-win-sub" id="previewWin3Sub">Team ZELLIJ</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="ref-footer-bar">
-                            <span>EID-E IRSHAD CAMPUS FEST 2K26</span>
-                            <span>IRSHADUNNASIHEEN</span>
-                        </div>
-                    </div>
-                </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="num" id="statStudentsCount">0</div>
+                <div class="label">Vidyarthikal</div>
+            </div>
+            <div class="stat-card">
+                <div class="num" id="statEventsCount">0</div>
+                <div class="label">Malsarangal</div>
+            </div>
+            <div class="stat-card">
+                <div class="num" id="statTotalTicks">0</div>
+                <div class="label">Aake Ticks</div>
             </div>
         </div>
 
-        <h2 style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.2rem; margin: 30px 0 15px;">🏆 Published Results (പ്രസിദ്ധീകരിച്ച ഫലങ്ങൾ)</h2>
-        <div class="results-grid" id="publishedResultsContainer"></div>
+        <div style="font-weight:900; margin-bottom:4px; font-family:'Montserrat',sans-serif;">Malsarangalude List</div>
+        <div style="font-size:0.75rem; color:#64748b; margin-bottom:8px;">List thayaaranu.</div>
+
+        <!-- Public / View Table Matrix -->
+        <div class="table-responsive">
+            <table class="matrix-reg-table" id="registrationMatrixTable">
+                <thead>
+                    <tr id="matrixHeaderRow">
+                        <th>No</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody id="matrixBodyRow">
+                    <!-- Dynamic Rows -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Admin Dashboard for Managing Students & Event Registrations (Protected by isAdmin) -->
+        <div class="admin-only admin-edit-section" data-display="block">
+            <h3 style="margin:0 0 6px; font-weight:900; color:#065f46;">Admin Dashboard</h3>
+            <p style="font-size:0.78rem; color:#64748b; margin-bottom:12px;">List theranjedukkuka, perukal, malsarangal, tick markukal enniva thiruthi Save All Changes amarthuka[cite: 10].</p>
+            
+            <div class="form-group" style="max-width:280px; margin-bottom:15px;">
+                <label style="font-weight:800; font-size:0.8rem;">Theranjedukക്കേണ്ട List:</label>
+                <select id="adminListSelectTab" class="form-control" style="font-weight:800;" onchange="syncAdminDropdownToMain()">
+                    <option value="senior_onStage">Senior Stage</option>
+                    <option value="senior_offStage">Senior Off-Stage</option>
+                    <option value="junior_onStage">Junior Stage</option>
+                    <option value="junior_offStage">Junior Off-Stage</option>
+                    <option value="subjunior_onStage">Sub Junior Stage</option>
+                    <option value="subjunior_offStage">Sub Junior Off-Stage</option>
+                    <option value="general_onStage">General Stage</option>
+                    <option value="general_offStage">General Off-Stage</option>
+                    <option value="senior_sports">Senior Sports</option>
+                    <option value="junior_sports">Junior Sports</option>
+                </select>
+            </div>
+
+            <div style="font-weight:900; margin-bottom:8px;">Malsarangal</div>
+            <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+                <input type="text" id="newEventNameInput" class="form-control" placeholder="Puthiya malsarathinte peru..." style="max-width:280px;">
+                <button class="prog-add-btn" style="background:#065f46; color:#fff;" onclick="addNewEventToSection()">Add Event</button>
+            </div>
+            <div id="adminEventsListContainer" style="display:flex; flex-direction:column; gap:6px; margin-bottom:20px;"></div>
+
+            <div style="font-weight:900; margin-bottom:8px;">Vidyarthikal</div>
+            <div style="display:flex; gap:8px; margin-bottom:15px; flex-wrap:wrap;">
+                <input type="text" id="newStudentNameInput" class="form-control" placeholder="Vidyarthiyude peru..." style="max-width:280px;">
+                <button class="prog-add-btn" style="background:#065f46; color:#fff;" onclick="addNewStudentToTeam()">Add Student</button>
+            </div>
+
+            <div id="adminStudentEditorContainer"></div>
+
+            <button class="btn-submit" style="background:#065f46; color:#fff; margin-top:20px; padding:12px; font-size:1rem; font-weight:900;" onclick="saveAllRegistrationsToCloud()">Save All Changes</button>
+        </div>
+
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="adminLoginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAdminLoginModal()">&times;</span>
+            <h3 style="margin: 0 0 12px; font-weight: 900; color: var(--accent-gold);">🔐 Admin Login</h3>
+            <div class="form-group">
+                <label>Admin Passcode:</label>
+                <input type="password" id="adminPassInput" class="form-control" placeholder="Code nalkuka">
+            </div>
+            <button class="btn-submit" onclick="submitAdminLogin()">Login</button>
+        </div>
     </div>
 
     <footer>&copy; 2026 EID-E IRSHAD &bull; IRSHADUNNASIHEEN SAHITHYA SAMAJAM</footer>
@@ -275,269 +290,273 @@
     <script>
         window.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
-                onResultCategoryChange();
-                renderPublishedResults();
-            }, 300);
+                if (!appData.registrations) appData.registrations = {};
+                renderRegistrationMatrix();
+            }, 500);
         });
 
-        function setPosterLayout(layoutClass) {
-            currentPosterLayout = layoutClass;
-            const canvas = document.getElementById("posterCanvas");
-            if (canvas) {
-                canvas.className = layoutClass;
-            }
+        function getActiveFilters() {
+            const teamKey = document.getElementById("teamSelectTab")?.value || "teamB";
+            const combinedVal = document.getElementById("regListSelectTab")?.value || "senior_onStage";
+            const parts = combinedVal.split("_");
+            const catKey = parts[0]; 
+            const secKey = parts[1]; 
+            return { teamKey, catKey, secKey };
         }
 
-        function onProgramDropdownSelect() {
-            const drop = document.getElementById("resProgSelect");
-            const custom = document.getElementById("resProgCustom");
-            if (drop && custom && drop.value) {
-                custom.value = drop.value;
-            }
-            updatePosterPreview();
+        function onListDropdownChange() {
+            const val = document.getElementById("regListSelectTab")?.value;
+            const adminSel = document.getElementById("adminListSelectTab");
+            if (adminSel) adminSel.value = val;
+            renderRegistrationMatrix();
         }
 
-        function getNextAutoResultNo() {
-            const editingId = document.getElementById("editingResultId")?.value;
-            if (editingId) {
-                const found = (appData.results || []).find(r => r.id === editingId);
-                if (found && found.resNo) return found.resNo;
-            }
-            const list = appData.results || [];
-            return String(list.length + 1).padStart(2, "0");
+        function syncAdminDropdownToMain() {
+            const val = document.getElementById("adminListSelectTab")?.value;
+            const mainSel = document.getElementById("regListSelectTab");
+            if (mainSel) mainSel.value = val;
+            renderRegistrationMatrix();
         }
 
-        function updatePosterPreview() {
-            const autoNo = getNextAutoResultNo();
-            const resInput = document.getElementById("resNoInput");
-            if (resInput) resInput.value = autoNo;
-
-            const subTitle = (document.getElementById("resSubTitleInput")?.value || "SENIOR - ON STAGE").trim();
-            const progCustom = (document.getElementById("resProgCustom")?.value || "").trim();
-            const progDrop = document.getElementById("resProgSelect")?.value || "";
-            const progName = progCustom || progDrop || "മത്സരത്തിന്റെ പേര്";
-
-            const w1Name = (document.getElementById("win1Name")?.value || "").trim();
-            const w1TeamKey = document.getElementById("win1Team")?.value || "teamA";
-            const w1TeamName = formatTeamDisplayName(w1TeamKey);
-
-            const w2Name = (document.getElementById("win2Name")?.value || "").trim();
-            const w2TeamKey = document.getElementById("win2Team")?.value || "teamB";
-            const w2TeamName = formatTeamDisplayName(w2TeamKey);
-
-            const w3Name = (document.getElementById("win3Name")?.value || "").trim();
-            const w3TeamKey = document.getElementById("win3Team")?.value || "teamA";
-            const w3TeamName = formatTeamDisplayName(w3TeamKey);
-
-            if (document.getElementById("previewResNo")) document.getElementById("previewResNo").textContent = autoNo;
-            if (document.getElementById("previewCat")) document.getElementById("previewCat").textContent = subTitle.toUpperCase();
-            if (document.getElementById("previewProg")) document.getElementById("previewProg").textContent = progName.toUpperCase();
-
-            if (document.getElementById("previewWin1Name")) document.getElementById("previewWin1Name").textContent = w1Name || "-";
-            if (document.getElementById("previewWin1Sub")) document.getElementById("previewWin1Sub").textContent = w1TeamName;
-
-            if (document.getElementById("previewWin2Name")) document.getElementById("previewWin2Name").textContent = w2Name || "-";
-            if (document.getElementById("previewWin2Sub")) document.getElementById("previewWin2Sub").textContent = w2TeamName;
-
-            if (document.getElementById("previewWin3Name")) document.getElementById("previewWin3Name").textContent = w3Name || "-";
-            if (document.getElementById("previewWin3Sub")) document.getElementById("previewWin3Sub").textContent = w3TeamName;
+        function renderRegistrationMatrix() {
+            const { teamKey, catKey, secKey } = getActiveFilters();
             
-            const w3Card = document.getElementById("previewWin3Card");
-            if (w3Card) {
-                w3Card.style.display = w3Name ? "flex" : "none";
+            if (document.getElementById("headerTeamTitle")) {
+                document.getElementById("headerTeamTitle").textContent = teamKey === 'teamA' ? "TEAM ZELLIJ - EVENT REGISTER" : "TEAM IZNIK - EVENT REGISTER";
             }
-        }
 
-        function onResultCategoryChange() {
-            const catSelect = document.getElementById("resCatSelect");
-            const secSelect = document.getElementById("resSectionSelect");
-            const progSelect = document.getElementById("resProgSelect");
-            if (!catSelect || !secSelect || !progSelect) return;
+            const normalizedTeams = normalizeTeamsData(appData.teams);
+            const teamObj = normalizedTeams[teamKey] || { name: "", senior: [], junior: [], subjunior: [], general: [] };
+            let students = teamObj[catKey] || [];
 
-            const catVal = catSelect.value || "Senior";
-            const secVal = secSelect.value || "onStage";
-            const cKey = normalizeCategoryKey(catVal);
+            const searchVal = (document.getElementById("studentSearchInput")?.value || "").trim().toLowerCase();
+            if (searchVal) {
+                students = students.filter(s => s.toLowerCase().includes(searchVal));
+            }
 
             const progs = normalizeProgramsData(appData.programs);
-            const catPrograms = progs[cKey] || { onStage: [], offStage: [], sports: [] };
-            const sectionProgs = catPrograms[secVal] || [];
+            if (!progs[catKey]) progs[catKey] = { onStage: [], offStage: [], sports: [] };
+            const sectionEvents = progs[catKey][secKey] || [];
 
-            progSelect.innerHTML = "<option value=''>-- പ്രോഗ്രാം തിരഞ്ഞെടുക്കുക --</option>";
-            sectionProgs.forEach(p => {
-                const opt = document.createElement("option");
-                opt.value = p;
-                opt.textContent = p;
-                progSelect.appendChild(opt);
+            if (document.getElementById("statStudentsCount")) document.getElementById("statStudentsCount").textContent = students.length;
+            if (document.getElementById("statEventsCount")) document.getElementById("statEventsCount").textContent = sectionEvents.length;
+
+            let totalTicksCount = 0;
+            if (!appData.registrations) appData.registrations = {};
+            if (!appData.registrations[teamKey]) appData.registrations[teamKey] = {};
+            if (!appData.registrations[teamKey][catKey]) appData.registrations[teamKey][catKey] = {};
+
+            const regMap = appData.registrations[teamKey][catKey];
+
+            const headerRow = document.getElementById("matrixHeaderRow");
+            if (headerRow) {
+                let hHtml = `<th>No</th><th>Name</th>`;
+                sectionEvents.forEach(ev => {
+                    hHtml += `<th>${ev}</th>`;
+                });
+                headerRow.innerHTML = hHtml;
+            }
+
+            const bodyRow = document.getElementById("matrixBodyRow");
+            if (bodyRow) {
+                if (students.length === 0) {
+                    bodyRow.innerHTML = `<tr><td colspan="${sectionEvents.length + 2}" style="padding:25px; color:#64748b;">Ee vibhagathil vidyarthikal arumilla.</td></tr>`;
+                } else {
+                    let bHtml = "";
+                    students.forEach((stName, idx) => {
+                        const cleanName = stName.replace(/(\(C\)|\(Vc\))/g, "").trim();
+                        bHtml += `<tr><td>${idx + 1}</td><td>${stName}</td>`;
+                        sectionEvents.forEach(ev => {
+                            const isChecked = regMap[cleanName] && regMap[cleanName].includes(ev);
+                            if (isChecked) totalTicksCount++;
+                            bHtml += `<td>${isChecked ? '<span class="tick-icon">✔</span>' : '<span style="color:#cbd5e1;">—</span>'}</td>`;
+                        });
+                        bHtml += `</tr>`;
+                    });
+                    bodyRow.innerHTML = bHtml;
+                }
+            }
+
+            if (document.getElementById("statTotalTicks")) document.getElementById("statTotalTicks").textContent = totalTicksCount;
+
+            renderAdminDashboard(students, sectionEvents, regMap, catKey, secKey);
+        }
+
+        function renderAdminDashboard(students, sectionEvents, regMap, catKey, secKey) {
+            const container = document.getElementById("adminStudentEditorContainer");
+            const eventsCont = document.getElementById("adminEventsListContainer");
+            if (!container || !eventsCont) return;
+
+            if (!isAdmin) return;
+
+            let evHtml = "";
+            sectionEvents.forEach((evName, idx) => {
+                evHtml += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:6px 12px; border:1px solid #cbd5e1; border-radius:6px;">
+                        <span>${evName}</span>
+                        <button type="button" class="btn-action-sm" style="background:#dc2626; color:#fff; border:none; padding:3px 8px; border-radius:4px; cursor:pointer;" onclick="removeEventFromSection('${catKey}', '${secKey}', ${idx})">Remove</button>
+                    </div>
+                `;
+            });
+            eventsCont.innerHTML = evHtml || "<span style='font-size:0.75rem; color:#64748b;'>Malsarangalonnum cherthittilla.</span>";
+
+            if (students.length === 0) {
+                container.innerHTML = "<p style='color:#64748b; font-size:0.8rem;'>Ee vibhagathil vidyarthikalilla.</p>";
+                return;
+            }
+
+            let html = "";
+            students.forEach((stName, idx) => {
+                const cleanName = stName.replace(/(\(C\)|\(Vc\))/g, "").trim();
+                const studentCheckedEvents = regMap[cleanName] || [];
+
+                let checkboxesHtml = "";
+                sectionEvents.forEach(ev => {
+                    const isChecked = studentCheckedEvents.includes(ev);
+                    checkboxesHtml += `
+                        <label>
+                            <input type="checkbox" class="reg_chk_${idx}" value="${ev}" ${isChecked ? 'checked' : ''}>
+                            ${ev}
+                        </label>
+                    `;
+                });
+
+                html += `
+                    <div class="student-row-box">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                            <strong style="font-family:'Montserrat',sans-serif; font-size:0.88rem;">${idx + 1}. ${stName}</strong>
+                            <button type="button" class="btn-action-sm" style="background:#dc2626; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removeStudentFromTeam('${cleanName}')">Remove</button>
+                        </div>
+                        <div class="student-events-grid">
+                            ${checkboxesHtml}
+                        </div>
+                    </div>
+                `;
             });
 
-            const teams = normalizeTeamsData(appData.teams);
-            const rosterKey = cKey === "general" ? "senior" : cKey;
-            const combined = [
-                ...(teams.teamA[rosterKey] || []).map(s => ({ name: s.replace(/(\(C\)|\(Vc\))/g, "").trim(), team: "teamA", label: `🔴 ${s} (ZELLIJ)` })),
-                ...(teams.teamB[rosterKey] || []).map(s => ({ name: s.replace(/(\(C\)|\(Vc\))/g, "").trim(), team: "teamB", label: `🔵 ${s} (IZNIK)` }))
-            ];
+            container.innerHTML = html;
+        }
 
-            [1, 2, 3].forEach(rank => {
-                const sel = document.getElementById(`selWinner${rank}`);
-                if (sel) {
-                    sel.innerHTML = "<option value=''>-- വിദ്യാർത്ഥിയെ തിരഞ്ഞെടുക്കുക --</option>";
-                    combined.forEach(st => {
-                        const winOpt = document.createElement("option");
-                        winOpt.value = `${st.name}|${st.team}`;
-                        winOpt.textContent = st.label;
-                        sel.appendChild(winOpt);
+        function addNewEventToSection() {
+            if (!isAdmin) { alert("Admin anumathi ആവശ്യമാണ്!"); return; }
+            const input = document.getElementById("newEventNameInput");
+            if (!input || !input.value.trim()) { alert("Malsarathinte peru nalkuka!"); return; }
+            const evName = input.value.trim();
+
+            const { catKey, secKey } = getActiveFilters();
+            let cloned = JSON.parse(JSON.stringify(appData));
+            let progsObj = normalizeProgramsData(cloned.programs);
+
+            if (!progsObj[catKey]) progsObj[catKey] = { onStage: [], offStage: [], sports: [] };
+            if (!progsObj[catKey][secKey]) progsObj[catKey][secKey] = [];
+
+            if (!progsObj[catKey][secKey].includes(evName)) {
+                progsObj[catKey][secKey].push(evName);
+                cloned.programs = progsObj;
+                saveAppData(false, cloned, () => {
+                    input.value = "";
+                    renderRegistrationMatrix();
+                });
+            } else {
+                alert("Ee malsaram ithinakam pattikayilundu!");
+            }
+        }
+
+        function removeEventFromSection(catKey, secKey, index) {
+            if (!isAdmin) { alert("Admin anumathi ആവശ്യമാണ്!"); return; }
+            if (confirm("Ee malsaram ozhivakkanamennu urappano?")) {
+                let cloned = JSON.parse(JSON.stringify(appData));
+                let progsObj = normalizeProgramsData(cloned.programs);
+                if (progsObj[catKey] && progsObj[catKey][secKey]) {
+                    progsObj[catKey][secKey].splice(index, 1);
+                    cloned.programs = progsObj;
+                    saveAppData(false, cloned, () => {
+                        renderRegistrationMatrix();
                     });
                 }
-            });
-
-            const subTitleInput = document.getElementById("resSubTitleInput");
-            if (subTitleInput) {
-                subTitleInput.value = `${catVal.toUpperCase()} - ${secVal === 'onStage' ? 'ON STAGE' : secVal === 'offStage' ? 'OFF STAGE' : 'SPORTS'}`;
             }
-
-            updatePosterPreview();
         }
 
-        function onWinnerStudentSelect(rank) {
-            const sel = document.getElementById(`selWinner${rank}`);
-            if (!sel || !sel.value) return;
-            const [name, teamKey] = sel.value.split("|");
-            const nameInput = document.getElementById(`win${rank}Name`);
-            const teamSelect = document.getElementById(`win${rank}Team`);
-            
-            if (nameInput) nameInput.value = name;
-            if (teamSelect) teamSelect.value = teamKey;
+        function addNewStudentToTeam() {
+            if (!isAdmin) { alert("Admin anumathi ആവശ്യമാണ്!"); return; }
+            const input = document.getElementById("newStudentNameInput");
+            if (!input || !input.value.trim()) { alert("Vidyarthiyude peru nalkuka!"); return; }
+            const nameVal = input.value.trim();
 
-            updatePosterPreview();
+            const { teamKey, catKey } = getActiveFilters();
+            let cloned = JSON.parse(JSON.stringify(appData));
+            if (!cloned.teams) cloned.teams = JSON.parse(JSON.stringify(defaultData.teams));
+
+            let teamsObj = normalizeTeamsData(cloned.teams);
+            if (!teamsObj[teamKey][catKey].includes(nameVal)) {
+                teamsObj[teamKey][catKey].push(nameVal);
+                cloned.teams = teamsObj;
+                saveAppData(false, cloned, () => {
+                    input.value = "";
+                    renderRegistrationMatrix();
+                });
+            } else {
+                alert("Ee perulla vidyarthi ithinakam pattikayilundu!");
+            }
         }
 
-        function publishResultToSite() {
-            if (!isAdmin) { alert("അഡ്മിൻ ലോഗിൻ ചെയ്യുക!"); return; }
-            const editingId = document.getElementById("editingResultId")?.value;
-            const resNo = getNextAutoResultNo();
-            const category = document.getElementById("resCatSelect")?.value || "Senior";
-            const prog = (document.getElementById("resProgCustom")?.value || document.getElementById("resProgSelect")?.value || "").trim();
-            const w1Name = (document.getElementById("win1Name")?.value || "").trim();
-            const w2Name = (document.getElementById("win2Name")?.value || "").trim();
-            const w3Name = (document.getElementById("win3Name")?.value || "").trim();
+        function removeStudentFromTeam(cleanName) {
+            if (!isAdmin) { alert("Admin anumathi ആവശ്യമാണ്!"); return; }
+            if (confirm(`"${cleanName}" enna vidyarthiye neekkam cheyyanamennu urappano?`)) {
+                const { teamKey, catKey } = getActiveFilters();
+                let cloned = JSON.parse(JSON.stringify(appData));
+                let teamsObj = normalizeTeamsData(cloned.teams);
 
-            if (!prog || !w1Name) {
-                alert("പ്രോഗ്രാമിന്റെ പേരും ഒന്നാം സ്ഥാനക്കാരന്റെ പേരും നൽകണം!");
-                return;
-            }
-
-            // Check if same program result already exists (prevent duplicates unless editing)
-            const existingList = appData.results || [];
-            const isDuplicate = existingList.some(r => {
-                if (editingId && r.id === editingId) return false;
-                return normalizeCategoryKey(r.category) === normalizeCategoryKey(category) && 
-                       String(r.program).trim().toLowerCase() === String(prog).trim().toLowerCase();
-            });
-
-            if (isDuplicate) {
-                alert("ഈ മത്സരത്തിന്റെ ഫലം ഇതിനകം പ്രസിദ്ധീകരിച്ചിട്ടുണ്ട്! വീണ്ടും പ്രസിദ്ധീകരിക്കാൻ കഴിയില്ല.");
-                return;
-            }
-
-            const newResult = {
-                id: editingId ? editingId : ("res_" + Date.now()),
-                resNo,
-                category,
-                program: prog,
-                win1Name: w1Name, win1Team: document.getElementById("win1Team")?.value || "teamA",
-                win2Name: w2Name, win2Team: document.getElementById("win2Team")?.value || "teamB",
-                win3Name: w3Name, win3Team: document.getElementById("win3Team")?.value || "teamA",
-                timestamp: Date.now()
-            };
-
-            let clonedData = JSON.parse(JSON.stringify(appData));
-            if (editingId) {
-                clonedData.results = clonedData.results.filter(r => r.id !== editingId);
-            }
-            clonedData.results.unshift(newResult);
-
-            const cKey = buildCellKey(normalizeCategoryKey(category), prog);
-            if (clonedData.matrixScores && clonedData.matrixScores[cKey]) {
-                delete clonedData.matrixScores[cKey];
-            }
-
-            document.getElementById("editingResultId").value = "";
-            saveAppData(false, clonedData, (success) => {
-                alert("ഫലം വിജയകരമായി പ്രസിദ്ധീകരിച്ചു! സ്കോർബോർഡിൽ പോയിന്റ് തനിയെ ആഡ് ആയിട്ടുണ്ട്.");
-                if (typeof confetti === "function") {
-                    confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
-                }
-                onResultCategoryChange();
-                renderPublishedResults();
-            });
-        }
-
-        function editResult(resultId) {
-            if (!isAdmin) return;
-            const found = (appData.results || []).find(r => r.id === resultId);
-            if (!found) return;
-
-            document.getElementById("editingResultId").value = found.id;
-            document.getElementById("resNoInput").value = found.resNo || "01";
-            if (found.category) {
-                document.getElementById("resCatSelect").value = found.category;
-            }
-            document.getElementById("resProgCustom").value = found.program || "";
-            document.getElementById("win1Name").value = found.win1Name || "";
-            document.getElementById("win1Team").value = found.win1Team || "teamA";
-            document.getElementById("win2Name").value = found.win2Name || "";
-            document.getElementById("win2Team").value = found.win2Team || "teamB";
-            document.getElementById("win3Name").value = found.win3Name || "";
-            document.getElementById("win3Team").value = found.win3Team || "teamA";
-
-            updatePosterPreview();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            alert("ഫലം എഡിറ്റിംഗിനായി ലോഡ് ചെയ്തു. മാറ്റങ്ങൾ വരുത്തി വീണ്ടും 'സൈറ്റിൽ പ്രസിദ്ധീകരിക്കുക' ക്ലിക്ക് ചെയ്യുക.");
-        }
-
-        function deleteResult(resultId) {
-            if (!isAdmin) {
-                alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!");
-                return;
-            }
-            if (confirm("ഈ ഫലം നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?")) {
-                let clonedData = JSON.parse(JSON.stringify(appData));
-                clonedData.results = clonedData.results.filter(r => r.id !== resultId);
-                saveAppData(false, clonedData, () => {
-                    alert("ഫലം വിജയകരമായി നീക്കം ചെയ്തു!");
-                    renderPublishedResults();
+                teamsObj[teamKey][catKey] = teamsObj[teamKey][catKey].filter(s => s.replace(/(\(C\)|\(Vc\))/g, "").trim() !== cleanName);
+                cloned.teams = teamsObj;
+                saveAppData(false, cloned, () => {
+                    renderRegistrationMatrix();
                 });
             }
         }
 
-        function renderPublishedResults() {
-            const container = document.getElementById("publishedResultsContainer");
-            if (!container) return;
-            const list = appData.results || [];
-            if (list.length === 0) {
-                container.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding:30px; color:var(--text-muted);'>ഇതുവരെ ഫലങ്ങളൊന്നും പ്രസിദ്ധീകരിച്ചിട്ടില്ല.</div>";
-                return;
-            }
-            container.innerHTML = "";
-            list.forEach((res, idx) => {
-                const card = document.createElement("div");
-                card.className = "result-card";
-                card.innerHTML = `
-                    <div class="result-card-head">
-                        <div>
-                            <span style="font-size:0.75rem; background:#fbbf24; color:#0f172a; padding:2px 8px; border-radius:4px; font-weight:800;">RESULT #${res.resNo || (idx + 1)} • ${res.category || ''}</span>
-                            <h3 style="margin:6px 0 0; font-size:1.05rem;">${res.program}</h3>
-                        </div>
-                        <div style="display:flex; gap:6px;">
-                            ${isAdmin ? `<button class="btn-action-sm" style="background:#2563eb; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="editResult('${res.id}')">✏️ Edit</button>` : ""}
-                            ${isAdmin ? `<button class="btn-action-sm" style="background:#dc2626; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="deleteResult('${res.id}')">🗑️ Delete</button>` : ""}
-                        </div>
-                    </div>
-                    ${res.win1Name ? `<div class="winner-row"><span>🥇 ${res.win1Name}</span><span class="${resolveTeamKey(res.win1Team) === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(res.win1Team)}</span></div>` : ""}
-                    ${res.win2Name ? `<div class="winner-row"><span>🥈 ${res.win2Name}</span><span class="${resolveTeamKey(res.win2Team) === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(res.win2Team)}</span></div>` : ""}
-                    ${res.win3Name ? `<div class="winner-row"><span>🥉 ${res.win3Name}</span><span class="${resolveTeamKey(res.win3Team) === 'teamA' ? 'team-badge-a' : 'team-badge-b'}">${formatTeamDisplayName(res.win3Team)}</span></div>` : ""}
-                `;
-                container.appendChild(card);
+        function saveAllRegistrationsToCloud() {
+            if (!isAdmin) { alert("Admin anumathi ആവശ്യമാണ്!"); return; }
+            const { teamKey, catKey, secKey } = getActiveFilters();
+            const normalizedTeams = normalizeTeamsData(appData.teams);
+            const students = normalizedTeams[teamKey][catKey] || [];
+
+            if (!appData.registrations) appData.registrations = {};
+            if (!appData.registrations[teamKey]) appData.registrations[teamKey] = {};
+            if (!appData.registrations[teamKey][catKey]) appData.registrations[teamKey][catKey] = {};
+            
+            let existingCatMap = appData.registrations[teamKey][catKey];
+
+            students.forEach((stName, idx) => {
+                const cleanName = stName.replace(/(\(C\)|\(Vc\))/g, "").trim();
+                const checkedBoxes = document.querySelectorAll(`.reg_chk_${idx}:checked`);
+                
+                const progs = normalizeProgramsData(appData.programs);
+                const currentSecEvents = progs[catKey][secKey] || [];
+
+                if (!existingCatMap[cleanName]) existingCatMap[cleanName] = [];
+                
+                existingCatMap[cleanName] = existingCatMap[cleanName].filter(ev => !currentSecEvents.includes(ev));
+
+                checkedBoxes.forEach(chk => {
+                    if (!existingCatMap[cleanName].includes(chk.value)) {
+                        existingCatMap[cleanName].push(chk.value);
+                    }
+                });
+
+                if (existingCatMap[cleanName].length === 0) {
+                    delete existingCatMap[cleanName];
+                }
+            });
+
+            let cloned = JSON.parse(JSON.stringify(appData));
+            if (!cloned.registrations) cloned.registrations = {};
+            if (!cloned.registrations[teamKey]) cloned.registrations[teamKey] = {};
+            cloned.registrations[teamKey][catKey] = existingCatMap;
+
+            saveAppData(false, cloned, () => {
+                alert("Ella registration mattangalum vijayakaramaayi save cheythu!");
+                renderRegistrationMatrix();
             });
         }
     </script>
