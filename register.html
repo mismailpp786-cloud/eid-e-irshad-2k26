@@ -235,7 +235,7 @@
             setTimeout(() => {
                 if (!appData.registrations) appData.registrations = {};
                 renderRegistrationMatrix();
-            }, 300);
+            }, 400);
         });
 
         function getActiveFilters() {
@@ -286,7 +286,7 @@
             const bodyRow = document.getElementById("matrixBodyRow");
             if (bodyRow) {
                 if (students.length === 0) {
-                    bodyRow.innerHTML = `<tr><td colspan="${sectionEvents.length + 2}" style="padding:25px; color:var(--text-muted);">വിദ്യാർത്ഥികൾ ആരുമില്ല.</td></tr>`;
+                    bodyRow.innerHTML = `<tr><td colspan="${sectionEvents.length + 2}" style="padding:25px; color:var(--text-muted);">ഈ കാറ്റഗറിയിൽ വിദ്യാർത്ഥികൾ ആരുമില്ല. 'teams.html' വഴി വിദ്യാർത്ഥികളെ ചേർക്കുക അല്ലെങ്കിൽ താഴെ അഡ്മിൻ ഡാഷ്‌ബോർഡ് വഴി ചേർക്കാം.</td></tr>`;
                 } else {
                     let bHtml = "";
                     students.forEach((stName, idx) => {
@@ -319,7 +319,7 @@
             }
 
             if (students.length === 0) {
-                container.innerHTML = "<p style='color:var(--text-muted);'>വിദ്യാർത്ഥികളെ ചേർക്കുക.</p>";
+                container.innerHTML = "<p style='color:var(--text-muted);'>വിദ്യാർത്ഥികൾ ആരുമില്ല. പുതിയ വിദ്യാർത്ഥിയെ മുകളിൽ ചേർക്കാം.</p>";
                 return;
             }
 
@@ -395,7 +395,7 @@
 
         function saveAllRegistrationsToCloud() {
             if (!isAdmin) { alert("അഡ്മിൻ അനുമതി ആവശ്യമാണ്!"); return; }
-            const { teamKey, catKey } = getActiveFilters();
+            const { teamKey, catKey, secKey } = getActiveFilters();
             const teams = normalizeTeamsData(appData.teams);
             const students = teams[teamKey][catKey] || [];
 
@@ -409,7 +409,6 @@
                 const cleanName = stName.replace(/(\(C\)|\(Vc\))/g, "").trim();
                 const checkedBoxes = document.querySelectorAll(`.reg_chk_${idx}:checked`);
                 
-                const { secKey } = getActiveFilters();
                 const progs = normalizeProgramsData(appData.programs);
                 const currentSecEvents = progs[catKey][secKey] || [];
 
@@ -435,5 +434,4 @@
             if (!cloned.registrations[teamKey]) cloned.registrations[teamKey] = {};
             cloned.registrations[teamKey][catKey] = existingCatMap;
 
-            saveAppData(false, cloned, () => {
-                alert("എല്ലാ രജിസ്ട്രേഷൻ മാറ്റങ്ങളും വിജയകരമായി സേവ
+            saveAppDat
