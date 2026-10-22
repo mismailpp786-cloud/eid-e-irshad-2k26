@@ -170,7 +170,7 @@
             height: 18px;
         }
         .score-matrix-table th.prog-vert-header {
-            height: 65px;
+            height: 60px;
             padding: 2px 1px;
             writing-mode: vertical-rl;
             transform: rotate(180deg);
@@ -186,7 +186,7 @@
         }
         .score-matrix-table th.sec-total-header,
         .score-matrix-table th.sticky-right-col {
-            height: 65px;
+            height: 60px;
             width: 30px;
             min-width: 30px;
             padding: 2px 1px;
@@ -221,8 +221,8 @@
         }
         .score-matrix-table td.score-stack-cell {
             padding: 1px;
-            min-height: 30px;
-            height: 30px;
+            min-height: 28px;
+            height: 28px;
             vertical-align: middle;
         }
         .score-matrix-table td.score-stack-cell.admin-clickable { cursor: pointer; }
@@ -246,7 +246,7 @@
             font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.65rem; padding: 1px; background: #0f172a;
         }
 
-        /* TV Fullscreen Mode Styling */
+        /* TV Fullscreen Mode Clean Styling */
         body.tv-live-mode {
             height: 100vh;
             overflow: hidden;
@@ -257,7 +257,9 @@
             box-sizing: border-box;
         }
         body.tv-live-mode .top-nav-bar,
-        body.tv-live-mode footer {
+        body.tv-live-mode footer,
+        body.tv-live-mode .live-status-bar,
+        body.tv-live-mode .admin-only {
             display: none !important;
         }
         body.tv-live-mode .container {
@@ -272,10 +274,6 @@
         body.tv-live-mode .matrix-section-card {
             margin-bottom: 2px;
             padding: 3px 6px;
-        }
-        body.tv-live-mode .score-matrix-table th.prog-vert-header,
-        body.tv-live-mode .score-matrix-table th.sec-total-header {
-            height: 55px;
         }
     </style>
 </head>
